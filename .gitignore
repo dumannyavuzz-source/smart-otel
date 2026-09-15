@@ -9,3 +9,7 @@ supabase/.branches/
 
 # Node
 node_modules/
+
+# Uygulama derleme çıktıları
+app/dist/
+app/dev-dist/

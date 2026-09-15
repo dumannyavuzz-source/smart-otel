@@ -1,0 +1,239 @@
+/* Smartotel — sade görünüm
+   Kural (simplicity-rule): en fazla 2 yazı boyutu, 2 renk tonu (ana + vurgu), büyük butonlar, boşluk. */
+
+:root {
+  --ana: #1f4e79;          /* koyu mavi */
+  --ana-acik: #e8eef5;
+  --vurgu: #2e7d32;        /* yeşil — "Oda Hazır" */
+  --zemin: #f4f6f8;
+  --kart: #ffffff;
+  --metin: #1b1b1b;
+  --metin-soluk: #5a6570;
+  --cizgi: #d0d7de;
+
+  --yazi: 1.25rem;         /* 20px — gövde */
+  --baslik: 2rem;          /* 32px — başlık */
+
+  --bosluk: 16px;
+  --kose: 16px;
+  --buton-yukseklik: 72px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--zemin);
+  color: var(--metin);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: var(--yazi);
+  line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- Sayfa iskeleti ---- */
+.sayfa {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  padding: var(--bosluk);
+  padding-bottom: calc(var(--bosluk) + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: var(--bosluk);
+}
+
+.sayfa--orta {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.baslik {
+  display: flex;
+  align-items: center;
+  gap: var(--bosluk);
+}
+
+.baslik h1 {
+  margin: 0;
+  font-size: var(--baslik);
+  line-height: 1.2;
+}
+
+h1, h2 {
+  font-size: var(--baslik);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.soluk { color: var(--metin-soluk); }
+.orta { text-align: center; }
+.esnek { flex: 1; }
+
+/* ---- Butonlar ---- */
+.buton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--buton-yukseklik);
+  padding: 12px 20px;
+  border: 2px solid var(--ana);
+  border-radius: var(--kose);
+  background: var(--kart);
+  color: var(--ana);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.buton:active { transform: scale(0.98); }
+.buton:disabled { opacity: 0.5; cursor: default; }
+
+.buton--ana   { background: var(--ana);   color: #fff; border-color: var(--ana); }
+.buton--vurgu { background: var(--vurgu); color: #fff; border-color: var(--vurgu); }
+
+.buton--geri {
+  width: auto;
+  min-height: 56px;
+  padding: 8px 16px;
+  border-color: var(--cizgi);
+  color: var(--metin);
+  font-weight: 500;
+}
+
+.buton--dev {
+  flex-direction: column;
+  min-height: 40dvh;
+  font-size: var(--baslik);
+  border-radius: 28px;
+}
+
+.buton .ikon { font-size: 1.6em; line-height: 1; }
+.buton--dev .ikon { font-size: 3em; }
+
+.buton-grubu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---- Kontrol listesi satırı ---- */
+.liste {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.satir {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 16px;
+  border: 2px solid var(--cizgi);
+  border-radius: var(--kose);
+  background: var(--kart);
+  color: var(--metin);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.satir--secili {
+  border-color: var(--vurgu);
+  background: #eef7ee;
+}
+
+.kutu {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--cizgi);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  font-weight: 700;
+}
+
+.satir--secili .kutu {
+  background: var(--vurgu);
+  border-color: var(--vurgu);
+  color: #fff;
+}
+
+/* ---- Form ---- */
+.alan {
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 16px;
+  border: 2px solid var(--cizgi);
+  border-radius: var(--kose);
+  background: var(--kart);
+  font: inherit;
+  color: var(--metin);
+}
+
+.alan:focus { outline: 3px solid var(--ana-acik); border-color: var(--ana); }
+
+textarea.alan { min-height: 120px; resize: vertical; }
+
+.sayac {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.sayac .buton { width: 88px; }
+.sayac strong { font-size: var(--baslik); min-width: 3ch; text-align: center; }
+
+/* ---- Kamera ---- */
+.kamera-sayfa {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+.kamera {
+  flex: 1;
+  width: 100%;
+  object-fit: cover;
+}
+
+.kamera-ust, .kamera-alt {
+  padding: var(--bosluk);
+  color: #fff;
+  text-align: center;
+}
+
+.kamera-alt { padding-bottom: calc(var(--bosluk) + env(safe-area-inset-bottom)); }
+.kamera-alt .buton { background: #fff; }
+
+/* ---- Büyük onay işareti ---- */
+.onay {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--vurgu);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 5rem;
+}
+
+/* Oda ekranı: liste uzasa da üç buton hep görünür (alta sabit) */
+.buton-grubu--sabit {
+  position: sticky;
+  bottom: 0;
+  padding-top: 8px;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--zemin);
+}

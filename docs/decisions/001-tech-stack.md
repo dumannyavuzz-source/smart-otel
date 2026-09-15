@@ -74,7 +74,7 @@ Supabase, hazır kiralık bir "Ortak Beyin"dir. İçinde:
 ### 6. QR nasıl çalışır?
 - Her QR'ın içinde bir **bağlantı** vardır: örn. `https://app.smartotel.com/oda/K7M2X9`.
 - Personel uygulamada **"QR Okut"** butonuna basar; kamera açılır, kod telefonda çözülür (internet gerekmez), oda ekranı açılır.
-- Tarayıcının kendi QR okuyucusu (`BarcodeDetector`) varsa o kullanılır; olmayan telefonlarda aynı işi yapan küçük bir yedek kütüphane devreye girer. Kesin paket, kod aşamasında doğrulanır.
+- Tarayıcının kendi QR okuyucusu (`BarcodeDetector`) varsa o kullanılır; olmayan telefonlarda (iPhone) aynı işi yapan küçük yedek kütüphane `jsqr` devreye girer (karar: `003`).
 - **Yedek yol:** Aynı QR telefonun normal kamerasıyla da okunabilir; bağlantı uygulamayı doğru odada açar.
 - **Misafir QR'ı** da bir bağlantıdır; içinde odaya özel, tahmin edilemez bir kod vardır (bkz. `002`).
 
@@ -102,7 +102,7 @@ Supabase, hazır kiralık bir "Ortak Beyin"dir. İçinde:
 | Arayüz | `react`, `react-dom`, `react-router` |
 | Telefonda veri | `dexie` |
 | Ortak Beyin bağlantısı | `@supabase/supabase-js` |
-| QR | tarayıcı `BarcodeDetector` + yedek küçük kütüphane (kod aşamasında seçilir) |
+| QR | tarayıcı `BarcodeDetector` + yedek `jsqr` (seçildi: bkz. `003`) |
 | Derleme / PWA | `vite`, `vite-plugin-pwa`, `typescript` |
 | Test ve düzen | `vitest`, `playwright`, `eslint`, `prettier` |
 
