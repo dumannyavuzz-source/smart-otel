@@ -11,9 +11,29 @@ Arayüz kodu burada değildir.
 | `migrations/…_kurallar.sql` | Kurallar: beyan kilidi, imza, Maker-Checker, iş emri |
 | `migrations/…_kilitler.sql` | Kilitler (RLS): kim neyi görür, neyi yazar |
 | `migrations/…_fotograflar.sql` | Fotoğraf deposu ve kilitleri |
+| `migrations/…_misafir_kapisi.sql` | Misafir yorumunu yazan tek veritabanı fonksiyonu (yalnızca ana anahtar çağırır) |
+| `functions/guest-feedback/` | Misafir Kapısı (Edge Function): `index.ts` ince kabuk, `kapi.ts` saf mantık, `kapi_test.ts` testleri |
 | `tests/guvenlik_denemeleri.sql` | 22 maddelik saldırı denemesi (hepsi reddedilmeli) |
 | `scripts/ana_anahtar_taramasi.sh` | 22. deneme: ana anahtar kodda/git'te var mı? |
-| `config.toml` | Yerel Supabase ayarları (şifre ≥ 8 karakter, fotoğraf ≤ 2 MB, açık kayıt kapalı) |
+| `config.toml` | Yerel Supabase ayarları (şifre ≥ 8 karakter, fotoğraf ≤ 2 MB, açık kayıt kapalı, misafir kapısı anahtarsız) |
+
+## Misafir Kapısı nasıl çalışır?
+
+```
+Misafir sayfası ──POST {oda_kodu, puan, yorum}──▶ guest-feedback (Edge Function)
+                                                     │  biçim/tip/uzunluk denetimi
+                                                     │  ana anahtarla TEK çağrı:
+                                                     ▼
+                                          misafir_yorumu_yaz (veritabanı)
+                                                     │  kod → otel + oda (kapalı oda = yok)
+                                                     │  dakikada en fazla 3 yorum
+                                                     ▼
+                                               guest_feedback 🔏
+```
+
+- Misafir giriş yapmaz, anahtar taşımaz. Kod yanlışsa cevap hep aynıdır: **"Bu bağlantı geçersiz."**
+- Ana anahtar yalnızca sunucuda (`SUPABASE_SERVICE_ROLE_KEY`, Supabase kendisi verir). Kodda, telefonda, git'te yok.
+- Kapının testleri: `deno test supabase/functions/guest-feedback/`
 
 Dayanak belgeler: `docs/decisions/002-database-architecture.md`, `docs/security/001-rls-and-maker-checker.md`.
 

@@ -23,7 +23,7 @@ begin
 end
 $$;
 
-select plan(75);
+select plan(89);
 
 
 -- ---------------------------------------------------------------------
@@ -461,9 +461,106 @@ select is((select count(*)::int from storage.objects
 
 
 -- =====================================================================
--- 18 – 19 · MİSAFİR KAPISI (Edge Function) — henüz yazılmadı
+-- 18 – 19 · MİSAFİR KAPISI (veritabanı tarafı: misafir_yorumu_yaz)
+-- Kabuğun (HTTP) denemeleri: supabase/functions/guest-feedback/kapi_test.ts
 -- =====================================================================
-select skip('18-19. Misafir kapısı (Edge Function) bir sonraki aşamada yazılacak; bu iki deneme o zaman eklenecek', 2);
+select deneme.giris('a0000000-0000-4000-8000-00000000a001');   -- Ayşe
+
+select throws_ok(
+  $$ select public.misafir_yorumu_yaz('0123456789abcdef0123456789abcdef', 5, 'deneme') $$,
+  '42501', null,
+  '18-hazırlık. Giriş yapmış personel bile misafir kapısını doğrudan çağıramaz (yalnızca ana anahtar)');
+
+select deneme.anonim();
+
+select throws_ok(
+  $$ select public.misafir_yorumu_yaz('0123456789abcdef0123456789abcdef', 5, 'deneme') $$,
+  '42501', null,
+  '18-hazırlık. Girişsiz (anon) misafir kapısını doğrudan çağıramaz');
+
+select deneme.ana_anahtar();   -- Edge Function gibi davran
+
+select throws_ok(
+  $$ select public.misafir_yorumu_yaz('00000000000000000000000000000000', 4, 'deneme') $$,
+  null, 'Bu bağlantı geçersiz.',
+  '18. Uydurma oda kodu → "Bu bağlantı geçersiz." — başka bilgi yok');
+
+select throws_ok(
+  $$ select public.misafir_yorumu_yaz('kisa-kod', 4, 'deneme') $$,
+  null, 'Bu bağlantı geçersiz.',
+  '18b. Bozuk biçimli kod → aynı cevap (kodun var olup olmadığı belli olmaz)');
+
+select throws_ok(
+  $$ select public.misafir_yorumu_yaz(
+       (select guest_code from public.rooms where id = 'b0000000-0000-4000-8000-0000000b0201'), 9, 'x') $$,
+  null, 'Puan 1 ile 5 arasında olmalı.',
+  '18c. Puan 1–5 dışında reddedilir');
+
+select throws_ok(
+  $$ select public.misafir_yorumu_yaz(
+       (select guest_code from public.rooms where id = 'b0000000-0000-4000-8000-0000000b0201'), 3, repeat('a', 501)) $$,
+  null, 'Yorum en fazla 500 karakter olabilir.',
+  '18d. 500 karakterden uzun yorum reddedilir');
+
+-- 19: aynı odadan 3 yorum olur, 4. olmaz
+select lives_ok(
+  $$ select public.misafir_yorumu_yaz(
+       (select guest_code from public.rooms where id = 'b0000000-0000-4000-8000-0000000b0201'), 5, '  Harika  ') $$,
+  '19-hazırlık. 1. yorum yazıldı');
+
+select lives_ok(
+  $$ select public.misafir_yorumu_yaz(
+       (select guest_code from public.rooms where id = 'b0000000-0000-4000-8000-0000000b0201'), 4, null) $$,
+  '19-hazırlık. 2. yorum yazıldı (yalnızca puan)');
+
+select lives_ok(
+  $$ select public.misafir_yorumu_yaz(
+       (select guest_code from public.rooms where id = 'b0000000-0000-4000-8000-0000000b0201'), 1, 'Oda kirliydi') $$,
+  '19-hazırlık. 3. yorum yazıldı');
+
+select throws_ok(
+  $$ select public.misafir_yorumu_yaz(
+       (select guest_code from public.rooms where id = 'b0000000-0000-4000-8000-0000000b0201'), 2, 'spam') $$,
+  null, 'Lütfen biraz sonra tekrar deneyin.',
+  '19. Aynı odadan 1 dakikada 4. yorum reddedilir');
+
+select is((select count(*)::int from public.guest_feedback where room_id = 'b0000000-0000-4000-8000-0000000b0201'), 3,
+  '19b. Odada tam 3 yorum var');
+
+select is((select hotel_id from public.guest_feedback where room_id = 'b0000000-0000-4000-8000-0000000b0201' limit 1),
+  'b0000000-0000-4000-8000-000000000001'::uuid,
+  '19c. Yorum doğru otele yazıldı (otel KODDAN bulunur, telefonun sözüyle değil)');
+
+select is((select comment from public.guest_feedback where room_id = 'b0000000-0000-4000-8000-0000000b0201' and rating = 5), 'Harika',
+  '19d. Yorum kırpılmış düz metin olarak saklandı');
+
+-- Kapalı oda ve kod yenileme (002 · A.10: "Kod sızarsa müdür tek dokunuşla yeniler")
+select deneme.cikis();
+update public.rooms set is_active = false where id = 'b0000000-0000-4000-8000-0000000b0201';
+create temp table eski_kod as select guest_code from public.rooms where id = 'a0000000-0000-4000-8000-0000000a0101';
+grant select on eski_kod to public;
+
+select deneme.ana_anahtar();
+
+select throws_ok(
+  $$ select public.misafir_yorumu_yaz(
+       (select guest_code from public.rooms where id = 'b0000000-0000-4000-8000-0000000b0201'), 5, 'x') $$,
+  null, 'Bu bağlantı geçersiz.',
+  '18e. Kapalı odanın kodu geçersiz sayılır');
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a003');   -- Mehmet (müdür)
+
+select lives_ok(
+  $$ update public.rooms set guest_code = replace(gen_random_uuid()::text, '-', '')
+     where id = 'a0000000-0000-4000-8000-0000000a0101' $$,
+  '18f. Müdür odanın misafir kodunu yeniler');
+
+select deneme.ana_anahtar();
+
+select throws_ok(
+  $$ select public.misafir_yorumu_yaz((select guest_code from eski_kod), 5, 'x') $$,
+  null, 'Bu bağlantı geçersiz.',
+  '18g. Eski (sızmış) kod artık geçersiz');
 
 
 -- =====================================================================

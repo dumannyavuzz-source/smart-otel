@@ -413,3 +413,10 @@ enabled = true
 # formatted with uppercase keywords, indent 2, max width 180, trailing commas,
 # and column/key alignment. Set to "null" to emit raw, unformatted SQL.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":180,\"commaStyle\":\"trailing\"}"
+
+# ---------------------------------------------------------------------
+# Misafir Kapısı — misafir giriş yapmaz, anahtar taşımaz; kapı herkese açıktır.
+# Koruma kapının içindedir: biçim doğrulama + spam engeli (dakikada 3) + tek DB fonksiyonu.
+# ---------------------------------------------------------------------
+[functions.guest-feedback]
+verify_jwt = false

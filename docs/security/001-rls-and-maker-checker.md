@@ -210,7 +210,7 @@ Kısa, ama kod aşamasında her biri denetlenir:
 
 | Konu | Kilit |
 |---|---|
-| **Misafir yorumu** | Giriş yok; tek kapı Edge Function. Kod biçimi izin listesiyle doğrulanır; puan **1–5 tam sayı**; yorum **en fazla 500 karakter**, düz metin olarak saklanır, ekrana basılırken kaçış uygulanır. Aynı oda kodundan **dakikada en fazla 3** yorum. Kod yanlışsa cevap hep aynı: "Bu bağlantı geçersiz." — kodun var olup olmadığı **söylenmez.** |
+| **Misafir yorumu** | Giriş yok; tek kapı Edge Function (`guest-feedback`). Kapı anahtar istemez (misafir taşımaz); koruma kapının içindedir. Kod biçimi izin listesiyle doğrulanır; puan **1–5 tam sayı**; yorum **en fazla 500 karakter**, düz metin olarak saklanır, ekrana basılırken kaçış uygulanır. Aynı oda kodundan **dakikada en fazla 3** yorum. Kod yanlışsa veya oda kapalıysa cevap hep aynı: "Bu bağlantı geçersiz." — kodun var olup olmadığı **söylenmez.** Ana anahtarla yapılan **tek iş**, yalnızca ana anahtarın çağırabildiği tek veritabanı fonksiyonudur (`misafir_yorumu_yaz`): kodu doğrular, oteli/odayı bulur, yazar; başka hiçbir tabloya dokunmaz. Aynı denetimler kapıda ve veritabanında **iki kez** yapılır. |
 | **Şifreler** | Supabase Auth saklar (tuzlu özet). En az **8 karakter**. Art arda hatalı girişte bekleme. "Şifremi unuttum" hesabın varlığını ele vermez. Sıfırlama bağlantısı tek kullanımlık. Biz şifre kodu yazmıyoruz. |
 | **Hata mesajları** | Kullanıcı yalnızca **"Bu işlem yapılamadı"** görür. Kilidin veya kuralın adı, tablo adı, sorgu metni ekrana **çıkmaz**; yalnızca sunucu kaydına düşer. |
 | **Kayıt (log)** | Reddedilen her yazma denemesi (kilit veya kural) sunucu kaydında **kim + ne zaman + hangi tablo** ile tutulur. Şifre, kart, kişisel veri log'a yazılmaz. |
