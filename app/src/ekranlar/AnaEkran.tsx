@@ -1,29 +1,30 @@
 // Ana ekran: tek iş, tek buton — "QR Okut". Menü yok.
+// Otelde açık iş varsa teknisyen için ikincil bir kapı görünür: "Açık İşler (3)".
 // Altta yalnızca gerekirse tek satır durum (002 · B.9 — personel görsün).
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { BuyukButon } from '../parcalar/BuyukButon';
 import { kutuDurumu } from '../postaci';
-import { KUTU_DEGISTI_OLAYI, YENI_MEKTUP_OLAYI } from '../olaylar';
+import { acikIsler } from '../isEmirleri';
+import { KUTU_DEGISTI_OLAYI, PAKET_OLAYI, YENI_MEKTUP_OLAYI } from '../olaylar';
 
 type Durum = Awaited<ReturnType<typeof kutuDurumu>>;
 
-function useKutuDurumu(): Durum {
-  const [durum, setDurum] = useState<Durum>({ bekleyen: 0, gonderilemeyen: 0, baskasinin: 0 });
+const OLAYLAR = [YENI_MEKTUP_OLAYI, KUTU_DEGISTI_OLAYI, PAKET_OLAYI];
 
+// Bir sayımı ilk açılışta ve her haberde yenile
+function useSayim<T>(say: () => Promise<T>, baslangic: T): T {
+  const [deger, setDeger] = useState<T>(baslangic);
   useEffect(() => {
-    const say = () => void kutuDurumu().then(setDurum);
-    say();
-    window.addEventListener(YENI_MEKTUP_OLAYI, say);
-    window.addEventListener(KUTU_DEGISTI_OLAYI, say);
-    return () => {
-      window.removeEventListener(YENI_MEKTUP_OLAYI, say);
-      window.removeEventListener(KUTU_DEGISTI_OLAYI, say);
-    };
-  }, []);
-
-  return durum;
+    const yenile = () => void say().then(setDeger);
+    yenile();
+    OLAYLAR.forEach((olay) => window.addEventListener(olay, yenile));
+    return () => OLAYLAR.forEach((olay) => window.removeEventListener(olay, yenile));
+  }, [say]);
+  return deger;
 }
+
+const acikIsSayisi = () => acikIsler().then((isler) => isler.length);
 
 function durumMetni({ bekleyen, gonderilemeyen, baskasinin }: Durum): string {
   if (gonderilemeyen > 0) return `${gonderilemeyen} kayıt gönderilemedi. Müdürünüze haber verin.`;
@@ -34,7 +35,8 @@ function durumMetni({ bekleyen, gonderilemeyen, baskasinin }: Durum): string {
 
 export function AnaEkran() {
   const git = useNavigate();
-  const durum = useKutuDurumu();
+  const durum = useSayim(kutuDurumu, { bekleyen: 0, gonderilemeyen: 0, baskasinin: 0 });
+  const acikIs = useSayim(acikIsSayisi, 0);
 
   return (
     <main className="sayfa sayfa--orta">
@@ -44,6 +46,13 @@ export function AnaEkran() {
           QR Okut
         </BuyukButon>
       </div>
+      {acikIs > 0 && (
+        <div style={{ width: '100%' }}>
+          <BuyukButon ikon="🔧" onClick={() => git('/isler')}>
+            {`Açık İşler (${acikIs})`}
+          </BuyukButon>
+        </div>
+      )}
       <p className="soluk" aria-live="polite">
         {durumMetni(durum)}
       </p>

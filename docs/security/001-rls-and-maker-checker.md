@@ -101,6 +101,7 @@ Beyanlar değişmez; ama bir iş emrinin "kimde?" ve "durumu ne?" bilgisi deği�
 - **Müdür/sahip**, iş **açıkken** tür (acil/normal), son süre ve atananı değiştirebilir.
 - **"Çözdüm"** denince kim + saat veritabanınca yazılır ve satır **kilitlenir**: bir daha kimse değiştiremez. Yani "çözdüm" de bir imzadır.
 - "Çözdüm" imzasını **yalnızca işin atandığı kişi** atar — müdür dahil (müdür bir işi kendisi çözecekse önce kendine atar, sonra çözer). Kimse başkasının adına "çözdüm" diyemez.
+- **Çözüm fotoğrafı** (isteğe bağlı) yalnızca "Çözdüm" derken eklenir; yolu otelin klasöründe olmalı ve fotoğraf depoda bulunmalı (arıza fotoğrafıyla aynı kural).
 
 ### 2.6 "id=5 → id=6" denemesi neden işe yaramaz?
 Uygulama Otel B'nin bir oda kimliğini istese bile kilit önce "üye misin?" sorar. Değilse cevap **boş** döner — "yasak" bile demez. Saldırgan, o kaydın var olup olmadığını dahi öğrenemez.

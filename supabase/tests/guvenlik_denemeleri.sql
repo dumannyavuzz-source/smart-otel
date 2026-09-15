@@ -23,7 +23,7 @@ begin
 end
 $$;
 
-select plan(93);
+select plan(99);
 
 
 -- ---------------------------------------------------------------------
@@ -650,6 +650,44 @@ select throws_ok(
      where issue_report_id = 'f0000000-0000-4000-8000-000000000002' $$,
   null, 'Bu iş emrinde bu değişikliği yapma yetkiniz yok.',
   '20f. Görevli işi başkasına devredemez');
+
+-- Çözüm fotoğrafı (teknisyen "Çözdüm" + isteğe bağlı fotoğraf)
+select throws_ok(
+  $$ update public.work_orders
+     set resolved_photo_path = 'a0000000-0000-4000-8000-000000000001/resolutions/x.jpg'
+     where issue_report_id = 'f0000000-0000-4000-8000-000000000002' $$,
+  null, 'Çözüm fotoğrafı yalnızca "Çözdüm" derken eklenir.',
+  '20g. Çözmeden çözüm fotoğrafı eklenemez');
+
+select throws_ok(
+  $$ update public.work_orders
+     set status = 'resolved', resolved_photo_path = 'a0000000-0000-4000-8000-000000000001/resolutions/yok.jpg'
+     where issue_report_id = 'f0000000-0000-4000-8000-000000000002' $$,
+  null, 'Fotoğraf yüklenmeden çözüm yazılamaz.',
+  '20h. Depoda olmayan fotoğrafla çözüm yazılamaz');
+
+select throws_ok(
+  $$ update public.work_orders
+     set status = 'resolved', resolved_photo_path = 'b0000000-0000-4000-8000-000000000001/deliveries/b-fatura.jpg'
+     where issue_report_id = 'f0000000-0000-4000-8000-000000000002' $$,
+  null, 'Fotoğraf yüklenmeden çözüm yazılamaz.',
+  '20i. Başka otelin fotoğrafıyla çözüm yazılamaz');
+
+select lives_ok(
+  $$ insert into storage.objects (bucket_id, name, owner)
+     values ('photos', 'a0000000-0000-4000-8000-000000000001/resolutions/cozum-w2.jpg',
+             'a0000000-0000-4000-8000-00000000a002') $$,
+  '20j. Ali çözüm fotoğrafını yükler');
+
+select lives_ok(
+  $$ update public.work_orders
+     set status = 'resolved', resolved_photo_path = 'a0000000-0000-4000-8000-000000000001/resolutions/cozum-w2.jpg'
+     where issue_report_id = 'f0000000-0000-4000-8000-000000000002' $$,
+  '20k. Fotoğraf yüklendikten sonra "Çözdüm" + fotoğraf yazılır');
+
+select is((select resolved_by from public.work_orders where issue_report_id = 'f0000000-0000-4000-8000-000000000002'),
+  'a0000000-0000-4000-8000-00000000a002'::uuid,
+  '20l. İmza: çözen = Ali');
 
 
 -- =====================================================================

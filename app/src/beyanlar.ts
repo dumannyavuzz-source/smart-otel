@@ -3,31 +3,40 @@
 //
 // "Kim yazdı" ve "sunucu saati" burada yazılmaz — veritabanı karttan kendisi doldurur (security · 2.8).
 // Telefonun saati bilgi amaçlı ayrıca gider (created_at_device).
-import { EN_FAZLA_BEKLEYEN_FOTOGRAF, telefonDeposu, type BeyanTablosu, type Oda } from './telefonDeposu';
+import { EN_FAZLA_BEKLEYEN_FOTOGRAF, telefonDeposu, type Mektup, type Oda } from './telefonDeposu';
 import { YENI_MEKTUP_OLAYI, haberVer } from './olaylar';
 import { aktifKullanici } from './kullanici';
 
 const EN_UZUN_ACIKLAMA = 500;
 
-interface Ek {
-  fotograf?: Blob;          // varsa mektubun yanında tepside bekler; postacı önce onu yükler
+export interface MektupEki {
+  id?: string;                                   // beyanın kimliği (verilmezse üretilir)
+  fotograf?: { veri: Blob; yol: string };        // mektubun yanında tepside bekler; postacı önce onu yükler
+  islem?: 'guncelle';                            // var olan satırı güncelle (iş emri)
+  kosul?: Record<string, unknown>;               // güncellemede hangi satır
 }
 
-async function gidenKutusunaKoy(tablo: BeyanTablosu, icerik: Record<string, unknown>, ek: Ek = {}): Promise<string> {
+// Her iş ÖNCE telefona yazılır. Beyanlarda satırın kimliği ve telefon saati içeriğe eklenir;
+// güncellemelerde içerik olduğu gibi gider.
+export async function gidenKutusunaKoy(
+  tablo: Mektup['tablo'],
+  icerik: Record<string, unknown>,
+  ek: MektupEki = {},
+): Promise<string> {
   const yazanId = aktifKullanici();
   if (!yazanId) throw new Error('Giriş gerekli.');
 
-  const id = crypto.randomUUID();                 // offline'da bile eşsiz; sunucu tekrarı yok sayar
+  const id = ek.id ?? crypto.randomUUID();       // offline'da bile eşsiz; sunucu tekrarı yok sayar
   const simdi = new Date().toISOString();
-  const fotografYolu = ek.fotograf ? `${String(icerik.hotel_id)}/issues/${id}.jpg` : undefined;
+  const beyan = ek.islem !== 'guncelle';
 
   // Mektup ve fotoğrafı tek seferde yaz: ya ikisi de tepside, ya hiçbiri
   await telefonDeposu.transaction('rw', [telefonDeposu.gidenKutusu, telefonDeposu.fotograflar], async () => {
-    if (ek.fotograf && fotografYolu) {
+    if (ek.fotograf) {
       if ((await telefonDeposu.fotograflar.count()) >= EN_FAZLA_BEKLEYEN_FOTOGRAF) {
         throw new Error('Bekleyen fotoğraf çok. İnternete bağlanın.');
       }
-      await telefonDeposu.fotograflar.add({ yol: fotografYolu, veri: ek.fotograf, olusturuldu: simdi });
+      await telefonDeposu.fotograflar.add({ yol: ek.fotograf.yol, veri: ek.fotograf.veri, olusturuldu: simdi });
     }
     // Sıra numarası: tepsideki en büyük + 1. Saate güvenilmez (aynı milisaniye, geri alınan saat).
     const sonMektup = await telefonDeposu.gidenKutusu.orderBy('sira').last();
@@ -36,10 +45,12 @@ async function gidenKutusunaKoy(tablo: BeyanTablosu, icerik: Record<string, unkn
       sira: (sonMektup?.sira ?? 0) + 1,
       yazanId,
       tablo,
-      icerik: { id, created_at_device: simdi, ...icerik, ...(fotografYolu ? { photo_path: fotografYolu } : {}) },
+      icerik: beyan ? { id, created_at_device: simdi, ...icerik } : icerik,
+      ...(ek.islem ? { islem: ek.islem } : {}),
+      ...(ek.kosul ? { kosul: ek.kosul } : {}),
       olusturuldu: simdi,
       deneme: 0,
-      ...(fotografYolu ? { fotografYolu } : {}),
+      ...(ek.fotograf ? { fotografYolu: ek.fotograf.yol } : {}),
     });
   });
 
@@ -85,6 +96,8 @@ export function sorunAciklamasi(tur: SorunTuru, not: string): string {
 }
 
 export function sorunBildirBeyani(oda: Oda, tur: SorunTuru, not: string, fotograf?: Blob | null): Promise<string> {
+  const id = crypto.randomUUID();
+  const yol = `${oda.hotel_id}/issues/${id}.jpg`;   // depo kuralı: yol otelin klasörüyle başlar
   return gidenKutusunaKoy(
     'issue_reports',
     {
@@ -92,8 +105,9 @@ export function sorunBildirBeyani(oda: Oda, tur: SorunTuru, not: string, fotogra
       room_id: oda.id,
       description: sorunAciklamasi(tur, not),
       severity: tur.severity,
+      ...(fotograf ? { photo_path: yol } : {}),
     },
-    fotograf ? { fotograf } : {},
+    { id, ...(fotograf ? { fotograf: { veri: fotograf, yol } } : {}) },
   );
 }
 

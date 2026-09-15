@@ -10,6 +10,8 @@ import { OdaEkrani } from './ekranlar/OdaEkrani';
 import { EksikVarEkrani } from './ekranlar/EksikVarEkrani';
 import { SorunBildirEkrani } from './ekranlar/SorunBildirEkrani';
 import { TamamEkrani } from './ekranlar/TamamEkrani';
+import { IslerEkrani } from './ekranlar/IslerEkrani';
+import { IsEkrani } from './ekranlar/IsEkrani';
 
 export function App() {
   const oturum = useOturum();
@@ -36,6 +38,8 @@ export function App() {
       <Route path="/oda/:kod" element={<OdaEkrani />} />
       <Route path="/oda/:kod/eksik" element={<EksikVarEkrani />} />
       <Route path="/oda/:kod/sorun" element={<SorunBildirEkrani />} />
+      <Route path="/isler" element={<IslerEkrani />} />
+      <Route path="/is/:id" element={<IsEkrani />} />
       <Route path="/tamam" element={<TamamEkrani />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

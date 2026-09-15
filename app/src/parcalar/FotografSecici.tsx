@@ -7,9 +7,10 @@ interface Ozellikler {
   fotograf: Blob | null;
   onSec: (fotograf: Blob | null) => void;
   onIsleniyor?: (isleniyor: boolean) => void;   // üst ekran bu sırada Gönder'i kapatır
+  kucuk?: boolean;                               // fotoğraf ikincilse (ör. Çözdüm ekranı) küçük buton
 }
 
-export function FotografSecici({ fotograf, onSec, onIsleniyor }: Ozellikler) {
+export function FotografSecici({ fotograf, onSec, onIsleniyor, kucuk = false }: Ozellikler) {
   const girdiRef = useRef<HTMLInputElement>(null);
   const [onizleme, setOnizleme] = useState<string | null>(null);
   const [isleniyor, setIsleniyor] = useState(false);
@@ -71,12 +72,12 @@ export function FotografSecici({ fotograf, onSec, onIsleniyor }: Ozellikler) {
       ) : (
         <button
           type="button"
-          className="buton buton--ana buton--dev"
+          className={kucuk ? 'buton' : 'buton buton--ana buton--dev'}
           onClick={() => girdiRef.current?.click()}
           disabled={isleniyor}
         >
           <span className="ikon" aria-hidden="true">📷</span>
-          <span>{isleniyor ? 'Hazırlanıyor…' : 'Fotoğraf Çek'}</span>
+          <span>{isleniyor ? 'Hazırlanıyor…' : kucuk ? 'Fotoğraf Ekle (isteğe bağlı)' : 'Fotoğraf Çek'}</span>
         </button>
       )}
 

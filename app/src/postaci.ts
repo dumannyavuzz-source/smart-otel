@@ -12,6 +12,7 @@ import { telefonDeposu, type KontrolListesi, type Mektup, type Oda, type Urun } 
 import { ortakBeyin } from './ortakBeyin';
 import { KUTU_DEGISTI_OLAYI, YENI_MEKTUP_OLAYI, cevrimici, haberVer } from './olaylar';
 import { aktifKullanici } from './kullanici';
+import { isEmirleriniIndir } from './isEmirleri';
 
 export type GonderimSonucu =
   | { ok: true }
@@ -24,10 +25,14 @@ const KALICI_HATADA_BEKLEME_MS = 10 * 60 * 1000;
 const KALICI_HATADA_ILK_DENEMELER = 3;             // ilk 3 deneme hemen, sonrası 10 dk arayla
 
 // Gerçek gönderici: Ortak Beyin'e yazar.
+//   Beyan      → yeni satır; aynı UUID varsa sunucu yok sayar (tekrar yok).
+//   Güncelleme → koşula uyan satır güncellenir; uyan yoksa (iş çoktan kapanmış) sessizce geçer.
 export const ortakBeyneGonder: Gonderici = async (mektup) => {
-  const { error } = await ortakBeyin()
-    .from(mektup.tablo)
-    .upsert(mektup.icerik, { onConflict: 'id', ignoreDuplicates: true });
+  const tablo = ortakBeyin().from(mektup.tablo);
+  const { error } =
+    mektup.islem === 'guncelle'
+      ? await tablo.update(mektup.icerik).match(mektup.kosul ?? { id: mektup.id })
+      : await tablo.upsert(mektup.icerik, { onConflict: 'id', ignoreDuplicates: true });
 
   if (!error) return { ok: true };
 
@@ -82,6 +87,13 @@ export async function mektuplariGonder(
       // 2) Sonra kayıt (fotoğrafın yolunu taşır)
       const sonuc = await guvenle(() => gonder(mektup));
       if (sonuc.ok) {
+        await telefonDeposu.gidenKutusu.delete(mektup.id);
+        continue;
+      }
+      // Güncelleme kesin reddedildiyse (iş başkasında / çoktan çözülmüş) sunucu haklıdır: mektup düşer,
+      // liste bir sonraki indirmede gerçeği gösterir. Beyanlar ise asla düşmez.
+      if (sonuc.kalici && mektup.islem === 'guncelle') {
+        console.warn('[postaci] güncelleme reddedildi, sunucu haklı:', sonuc.hata);
         await telefonDeposu.gidenKutusu.delete(mektup.id);
         continue;
       }
@@ -143,24 +155,30 @@ export async function paketiIndir(): Promise<void> {
 }
 
 // Postacıyı işe başlat: açılışta · internet gelince · yeni mektup konunca · açıkken her 30 saniyede
+// İş emirleri listesi ise her 60 saniyede tazelenir (teknisyen yeni işi görsün).
 export function postaciyiBaslat(): () => void {
   const yolaCik = () => void mektuplariGonder();
   const paketiAl = () => void paketiIndir().catch(() => undefined);
+  const isleriAl = () => void isEmirleriniIndir().catch(() => undefined);
   yolaCik();
   paketiAl();
+  isleriAl();
 
   const internetGeldi = () => {
     yolaCik();
     paketiAl();
+    isleriAl();
   };
   window.addEventListener('online', internetGeldi);
   window.addEventListener(YENI_MEKTUP_OLAYI, yolaCik);
   const sayac = window.setInterval(yolaCik, 30_000);
+  const isSayaci = window.setInterval(isleriAl, 60_000);
 
   return () => {
     window.removeEventListener('online', internetGeldi);
     window.removeEventListener(YENI_MEKTUP_OLAYI, yolaCik);
     window.clearInterval(sayac);
+    window.clearInterval(isSayaci);
   };
 }
 

@@ -252,3 +252,31 @@ textarea.alan { min-height: 120px; resize: vertical; }
   border-radius: var(--kose);
   border: 2px solid var(--cizgi);
 }
+
+/* ---- İş emri kartı (trafik lambası sol şeritte; yanında süre yazar) ---- */
+.is-karti {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 12px 16px 12px 20px;
+  border: 2px solid var(--cizgi);
+  border-left-width: 14px;
+  border-radius: var(--kose);
+  background: var(--kart);
+  color: var(--metin);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.isik--yesil   { border-left-color: #2e7d32; }
+.isik--sari    { border-left-color: #f9a825; }
+.isik--kirmizi { border-left-color: #c62828; }
+
+.is-ust {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}

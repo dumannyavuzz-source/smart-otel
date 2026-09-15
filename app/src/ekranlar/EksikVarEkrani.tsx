@@ -43,7 +43,7 @@ export function EksikVarEkrani() {
       replace: true,
       state: {
         mesaj: `Eksik bildirildi: ${adet} × ${secili.name}`,
-        odayaDon: { yol: `/oda/${kod}`, yazi: `Oda ${oda.number}’e Dön` },
+        donus: { yol: `/oda/${kod}`, yazi: `Oda ${oda.number}’e Dön` },
       },
     });
   }

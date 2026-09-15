@@ -28,13 +28,31 @@ export interface Urun {
 
 export type BeyanTablosu = 'room_cleanings' | 'supply_reports' | 'issue_reports';
 
-// Giden kutusundaki bir "mektup" = sunucuya gidecek bir beyan
+// İş emri (teknisyen): arızadan otomatik açılır. "Değişen" tek kutu: kimde? durumu ne?
+export interface IsEmri {
+  id: string;
+  hotel_id: string;
+  room_id: string;
+  oda_no: string;                      // rooms.number (listede göstermek için)
+  aciklama: string;                    // issue_reports.description ("Arıza: TV açılmıyor")
+  severity: 'urgent' | 'normal';
+  due_at: string;                      // son süre (ISO)
+  created_at: string;
+  assigned_to: string | null;          // kimde? (kullanıcı kimliği)
+  status: 'open' | 'in_progress' | 'resolved';
+}
+
+// Giden kutusundaki bir "mektup" = sunucuya gidecek bir iş
+//   islem yoksa   → yeni satır eklenir (beyan). Aynı UUID varsa sunucu yok sayar.
+//   'guncelle'    → var olan satır güncellenir (iş emri: Aldım / Çözdüm). Koşul tutmazsa sunucu neyse o kalır.
 export interface Mektup {
-  id: string;                          // beyanın UUID'si — telefonda üretilir, sunucu tekrarı yok sayar
+  id: string;                          // mektubun UUID'si — telefonda üretilir; beyanda satırın kimliğidir
   sira: number;                        // sıra numarası — gönderim sırası bununla korunur (saate güvenilmez)
-  yazanId: string;                     // beyanı yazan kişi — yalnızca o giriş yapmışken gönderilir
-  tablo: BeyanTablosu;
-  icerik: Record<string, unknown>;     // sunucuya yazılacak satır
+  yazanId: string;                     // mektubu yazan kişi — yalnızca o giriş yapmışken gönderilir
+  tablo: BeyanTablosu | 'work_orders';
+  icerik: Record<string, unknown>;     // sunucuya yazılacak alanlar
+  islem?: 'guncelle';
+  kosul?: Record<string, unknown>;     // güncellemede hangi satır (örn. { id })
   olusturuldu: string;                 // ISO saat (bilgi amaçlı)
   deneme: number;
   sonHata?: string;
@@ -58,6 +76,7 @@ class TelefonDeposu extends Dexie {
   urunler!: EntityTable<Urun, 'id'>;
   gidenKutusu!: EntityTable<Mektup, 'id'>;
   fotograflar!: EntityTable<Fotograf, 'yol'>;
+  isEmirleri!: EntityTable<IsEmri, 'id'>;
 
   constructor() {
     super('smartotel');
@@ -72,6 +91,9 @@ class TelefonDeposu extends Dexie {
     });
     this.version(3).stores({
       gidenKutusu: 'id, sira',
+    });
+    this.version(4).stores({
+      isEmirleri: 'id, hotel_id, due_at',
     });
   }
 }

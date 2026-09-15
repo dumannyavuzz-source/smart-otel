@@ -42,7 +42,7 @@ export function SorunBildirEkrani() {
       replace: true,
       state: {
         mesaj: `Sorun bildirildi: ${tur.etiket}`,
-        odayaDon: { yol: `/oda/${kod}`, yazi: `Oda ${oda.number}’e Dön` },
+        donus: { yol: `/oda/${kod}`, yazi: `Oda ${oda.number}’e Dön` },
       },
     });
   }
