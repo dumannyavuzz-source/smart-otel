@@ -23,7 +23,10 @@ export function QrOkutEkrani() {
           audio: false,
         });
         const video = videoRef.current;
-        if (!video || !calisiyor) return;
+        if (!video || !calisiyor) {
+          akis.getTracks().forEach((iz) => iz.stop());   // kamera açılırken "Geri" basıldı: ışığı söndür
+          return;
+        }
         video.srcObject = akis;
         await video.play();
 

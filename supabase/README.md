@@ -12,6 +12,7 @@ Arayüz kodu burada değildir.
 | `migrations/…_kilitler.sql` | Kilitler (RLS): kim neyi görür, neyi yazar |
 | `migrations/…_fotograflar.sql` | Fotoğraf deposu ve kilitleri |
 | `migrations/…_misafir_kapisi.sql` | Misafir yorumunu yazan tek veritabanı fonksiyonu (yalnızca ana anahtar çağırır) |
+| `migrations/…_ariza_fotografi.sql` | Arıza fotoğrafı kuralı: yol otelin klasöründe, fotoğraf depoda olmalı |
 | `functions/guest-feedback/` | Misafir Kapısı (Edge Function): `index.ts` ince kabuk, `kapi.ts` saf mantık, `kapi_test.ts` testleri |
 | `tests/guvenlik_denemeleri.sql` | 22 maddelik saldırı denemesi (hepsi reddedilmeli) |
 | `scripts/ana_anahtar_taramasi.sh` | 22. deneme: ana anahtar kodda/git'te var mı? |

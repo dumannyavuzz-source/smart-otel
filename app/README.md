@@ -7,8 +7,7 @@ Bu aşamada yalnızca **Kat Görevlisi akışı** vardır.
 
 ```
 Giriş ──▶ Ana Ekran ──▶ QR Okut ──▶ Oda 204 ──┬─▶ Eksik Var ──▶ Ne eksik? ──▶ Kaç tane? ──▶ ✓ ──▶ Oda 204'e Dön
-        (tek buton)   (kamera)    (liste)     ├─▶ Sorun Bildir ──▶ Ne oldu? ──┬─ Böcek var ─────▶ ✓ ──▶ Oda 204'e Dön
-                                              │                             └─ Bir şey bozuk ─▶ Ne bozuk? ─▶ ✓ ──▶ Oda 204'e Dön
+        (tek buton)   (kamera)    (liste)     ├─▶ Sorun Bildir ──▶ Ne oldu? ──▶ 📷 Fotoğraf Çek (+ not) ──▶ Gönder ──▶ ✓ ──▶ Oda 204'e Dön
                                               └─▶ Oda Hazır ─────────────────────────────────────▶ ✓ ──▶ Ana Ekran
 ```
 
@@ -21,13 +20,15 @@ Ekran kararları ve açık sorular: `docs/ux/001-kat-gorevlisi-akisi.md`.
 | Dosya | Ne yapar |
 |---|---|
 | `src/ekranlar/` | Yedi ekran: Giriş, Ana, QR Okut, Oda, Eksik Var, Sorun Bildir, Tamam |
-| `src/parcalar/` | Ortak parçalar: büyük buton, sayfa iskeleti |
-| `src/telefonDeposu.ts` | Telefonun çekmecesi: odalar, kontrol listesi, ürünler, giden kutusu |
-| `src/postaci.ts` | Giden kutusunu sunucuya taşır; vardiya paketini indirir |
-| `src/beyanlar.ts` | Üç beyan: Oda Hazır · Eksik Var · Sorun Bildir |
+| `src/parcalar/` | Ortak parçalar: büyük buton, sayfa iskeleti, fotoğraf çekici |
+| `src/telefonDeposu.ts` | Telefonun çekmecesi: odalar, kontrol listesi, ürünler, giden kutusu, bekleyen fotoğraflar |
+| `src/postaci.ts` | Giden kutusunu sunucuya taşır (önce fotoğraf, sonra kayıt); vardiya paketini indirir |
+| `src/beyanlar.ts` | Üç beyan: Oda Hazır · Eksik Var · Sorun Bildir (fotoğraflı) |
+| `src/fotograf/kucult.ts` | Fotoğrafı telefonda küçültür (1280 px, JPEG) |
 | `src/odalar.ts` | QR kodundan odayı bulur (önce telefon, sonra sunucu) |
 | `src/qr/qrOku.ts` | QR çözme: tarayıcının okuyucusu, yoksa jsQR |
-| `src/oturum.ts` | Giriş var mı? |
+| `src/oturum.ts` | Giriş var mı? (internet yokken de girişli kalır) |
+| `src/kullanici.ts` | Şu an giriş yapmış kişi; beyanlar bu kimlikle etiketlenir (ortak telefon) |
 | `src/ortakBeyin.ts` | Supabase bağlantısı (kapı anahtarıyla) |
 | `src/stil.css` | Sade görünüm: 2 renk, 2 yazı boyutu, büyük butonlar |
 

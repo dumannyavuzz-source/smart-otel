@@ -237,3 +237,18 @@ textarea.alan { min-height: 120px; resize: vertical; }
   padding-bottom: env(safe-area-inset-bottom);
   background: var(--zemin);
 }
+
+/* ---- Fotoğraf ---- */
+.fotograf-blok {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fotograf-onizleme {
+  width: 100%;
+  max-height: 40dvh;
+  object-fit: cover;
+  border-radius: var(--kose);
+  border: 2px solid var(--cizgi);
+}

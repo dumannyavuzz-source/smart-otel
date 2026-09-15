@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router';
 import { Sayfa } from '../parcalar/Sayfa';
 import { BuyukButon } from '../parcalar/BuyukButon';
 import { kontrolListesiniGetir, odayiBul } from '../odalar';
+import { OdaBulunamadi } from '../parcalar/OdaBulunamadi';
 import { odaHazirBeyani } from '../beyanlar';
 import type { Oda } from '../telefonDeposu';
 
@@ -28,6 +29,8 @@ export function OdaEkrani() {
   const [oda, setOda] = useState<Oda | null | undefined>(undefined);   // undefined: aranıyor
   const [maddeler, setMaddeler] = useState<string[]>([]);
   const [tiklenen, setTiklenen] = useState<string[]>(() => tiklenenleriOku(kod));
+  const [gonderiliyor, setGonderiliyor] = useState(false);
+  const [hata, setHata] = useState<string | null>(null);
 
   useEffect(() => {
     let aktif = true;
@@ -52,8 +55,16 @@ export function OdaEkrani() {
   }
 
   async function odaHazir() {
-    if (!oda) return;
-    await odaHazirBeyani(oda, maddeler.filter((m) => tiklenen.includes(m)));
+    if (!oda || gonderiliyor) return;
+    setGonderiliyor(true);
+    setHata(null);
+    try {
+      await odaHazirBeyani(oda, maddeler.filter((m) => tiklenen.includes(m)));
+    } catch {
+      setGonderiliyor(false);
+      setHata('Kaydedilemedi. Tekrar deneyin.');
+      return;
+    }
     tiklenenleriSil(kod);
     git('/tamam', { replace: true, state: { mesaj: `Oda ${oda.number} hazır` } });
   }
@@ -66,13 +77,7 @@ export function OdaEkrani() {
     );
   }
 
-  if (oda === null) {
-    return (
-      <Sayfa baslik="Oda bulunamadı" geri="/">
-        <p>Bu QR bir odaya bağlı değil. Müdürünüze haber verin.</p>
-      </Sayfa>
-    );
-  }
+  if (oda === null) return <OdaBulunamadi />;
 
   return (
     <Sayfa baslik={`Oda ${oda.number}`} altBaslik={oda.floor ? `${oda.floor}. Kat` : undefined} geri="/">
@@ -97,6 +102,8 @@ export function OdaEkrani() {
         </div>
       )}
 
+      {hata && <p className="orta" role="alert">{hata}</p>}
+
       <div className="esnek" />
 
       <div className="buton-grubu buton-grubu--sabit">
@@ -106,7 +113,7 @@ export function OdaEkrani() {
         <BuyukButon ikon="⚠️" onClick={() => git(`/oda/${kod}/sorun`)}>
           Sorun Bildir
         </BuyukButon>
-        <BuyukButon ikon="✅" tur="vurgu" onClick={odaHazir}>
+        <BuyukButon ikon="✅" tur="vurgu" disabled={gonderiliyor} onClick={() => void odaHazir()}>
           Oda Hazır
         </BuyukButon>
       </div>

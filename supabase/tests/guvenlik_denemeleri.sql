@@ -23,7 +23,7 @@ begin
 end
 $$;
 
-select plan(89);
+select plan(93);
 
 
 -- ---------------------------------------------------------------------
@@ -650,6 +650,39 @@ select throws_ok(
      where issue_report_id = 'f0000000-0000-4000-8000-000000000002' $$,
   null, 'Bu iş emrinde bu değişikliği yapma yetkiniz yok.',
   '20f. Görevli işi başkasına devredemez');
+
+
+-- =====================================================================
+-- 4.4 · ARIZA FOTOĞRAFI: önce fotoğraf, sonra kayıt; yol otelin klasöründe
+-- =====================================================================
+select deneme.giris('a0000000-0000-4000-8000-00000000a001');   -- Ayşe
+
+select throws_ok(
+  $$ insert into public.issue_reports (hotel_id, room_id, description, photo_path)
+     values ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-0000000a0101', 'Lamba',
+             'a0000000-0000-4000-8000-000000000001/issues/yok.jpg') $$,
+  null, 'Fotoğraf yüklenmeden arıza kaydı yazılamaz.',
+  '4.4a. Depoda olmayan fotoğrafı işaret eden arıza kaydı reddedilir');
+
+select throws_ok(
+  $$ insert into public.issue_reports (hotel_id, room_id, description, photo_path)
+     values ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-0000000a0101', 'Lamba',
+             'b0000000-0000-4000-8000-000000000001/deliveries/b-fatura.jpg') $$,
+  null, 'Fotoğraf yüklenmeden arıza kaydı yazılamaz.',
+  '4.4b. Başka otelin fotoğrafını işaret eden arıza kaydı reddedilir');
+
+select lives_ok(
+  $$ insert into storage.objects (bucket_id, name, owner)
+     values ('photos', 'a0000000-0000-4000-8000-000000000001/issues/f0000000-0000-4000-8000-000000000009.jpg',
+             'a0000000-0000-4000-8000-00000000a001') $$,
+  '4.4c. Ayşe arıza fotoğrafını kendi otelinin klasörüne yükler');
+
+select lives_ok(
+  $$ insert into public.issue_reports (id, hotel_id, room_id, description, photo_path)
+     values ('f0000000-0000-4000-8000-000000000009', 'a0000000-0000-4000-8000-000000000001',
+             'a0000000-0000-4000-8000-0000000a0101', 'Lamba',
+             'a0000000-0000-4000-8000-000000000001/issues/f0000000-0000-4000-8000-000000000009.jpg') $$,
+  '4.4d. Fotoğraf yüklendikten sonra arıza kaydı yazılır');
 
 
 -- =====================================================================

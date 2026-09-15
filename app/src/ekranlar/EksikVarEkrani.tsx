@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { Sayfa } from '../parcalar/Sayfa';
 import { BuyukButon } from '../parcalar/BuyukButon';
+import { OdaBulunamadi } from '../parcalar/OdaBulunamadi';
 import { odayiBul, urunleriGetir } from '../odalar';
 import { eksikVarBeyani } from '../beyanlar';
 import type { Oda, Urun } from '../telefonDeposu';
@@ -12,10 +13,12 @@ const EN_FAZLA = 99;
 export function EksikVarEkrani() {
   const { kod = '' } = useParams();
   const git = useNavigate();
-  const [oda, setOda] = useState<Oda | null>(null);
+  const [oda, setOda] = useState<Oda | null | undefined>(undefined);   // undefined: aranıyor
   const [urunler, setUrunler] = useState<Urun[]>([]);
   const [secili, setSecili] = useState<Urun | null>(null);
   const [adet, setAdet] = useState(1);
+  const [gonderiliyor, setGonderiliyor] = useState(false);
+  const [hata, setHata] = useState<string | null>(null);
 
   useEffect(() => {
     void (async () => {
@@ -26,8 +29,16 @@ export function EksikVarEkrani() {
   }, [kod]);
 
   async function gonder() {
-    if (!oda || !secili) return;
-    await eksikVarBeyani(oda, secili.id, adet);
+    if (!oda || !secili || gonderiliyor) return;
+    setGonderiliyor(true);
+    setHata(null);
+    try {
+      await eksikVarBeyani(oda, secili.id, adet);
+    } catch {
+      setGonderiliyor(false);
+      setHata('Kaydedilemedi. Tekrar deneyin.');
+      return;
+    }
     git('/tamam', {
       replace: true,
       state: {
@@ -37,12 +48,13 @@ export function EksikVarEkrani() {
     });
   }
 
+  if (oda === null) return <OdaBulunamadi />;
   const odaAdi = oda ? `Oda ${oda.number}` : 'Oda';
 
   if (!secili) {
     return (
       <Sayfa baslik="Ne eksik?" altBaslik={odaAdi} geri={`/oda/${kod}`}>
-        {urunler.length === 0 && <p className="soluk">Ürün listesi henüz yok. İnternete bağlanın.</p>}
+        {oda && urunler.length === 0 && <p className="soluk">Ürün listesi henüz yok. İnternete bağlanın.</p>}
         <div className="buton-grubu">
           {urunler.map((urun) => (
             <BuyukButon key={urun.id} onClick={() => setSecili(urun)}>
@@ -65,8 +77,9 @@ export function EksikVarEkrani() {
           +
         </button>
       </div>
+      {hata && <p className="orta" role="alert">{hata}</p>}
       <div className="esnek" />
-      <BuyukButon ikon="📨" tur="vurgu" onClick={gonder}>
+      <BuyukButon ikon="📨" tur="vurgu" disabled={gonderiliyor} onClick={() => void gonder()}>
         Gönder
       </BuyukButon>
     </Sayfa>

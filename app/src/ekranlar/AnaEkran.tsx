@@ -1,16 +1,18 @@
 // Ana ekran: tek iş, tek buton — "QR Okut". Menü yok.
-// Altta yalnızca gerekirse: "Bekleyen 3 kayıt" (002 · B.9 — personel görsün).
+// Altta yalnızca gerekirse tek satır durum (002 · B.9 — personel görsün).
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { BuyukButon } from '../parcalar/BuyukButon';
-import { telefonDeposu } from '../telefonDeposu';
+import { kutuDurumu } from '../postaci';
 import { KUTU_DEGISTI_OLAYI, YENI_MEKTUP_OLAYI } from '../olaylar';
 
-function useBekleyenSayisi(): number {
-  const [sayi, setSayi] = useState(0);
+type Durum = Awaited<ReturnType<typeof kutuDurumu>>;
+
+function useKutuDurumu(): Durum {
+  const [durum, setDurum] = useState<Durum>({ bekleyen: 0, gonderilemeyen: 0, baskasinin: 0 });
 
   useEffect(() => {
-    const say = () => void telefonDeposu.gidenKutusu.count().then(setSayi);
+    const say = () => void kutuDurumu().then(setDurum);
     say();
     window.addEventListener(YENI_MEKTUP_OLAYI, say);
     window.addEventListener(KUTU_DEGISTI_OLAYI, say);
@@ -20,12 +22,19 @@ function useBekleyenSayisi(): number {
     };
   }, []);
 
-  return sayi;
+  return durum;
+}
+
+function durumMetni({ bekleyen, gonderilemeyen, baskasinin }: Durum): string {
+  if (gonderilemeyen > 0) return `${gonderilemeyen} kayıt gönderilemedi. Müdürünüze haber verin.`;
+  if (bekleyen > 0) return `${bekleyen} bildirim internet gelince gönderilecek`;
+  if (baskasinin > 0) return `Başka kullanıcının ${baskasinin} bekleyen kaydı var`;
+  return ' ';
 }
 
 export function AnaEkran() {
   const git = useNavigate();
-  const bekleyen = useBekleyenSayisi();
+  const durum = useKutuDurumu();
 
   return (
     <main className="sayfa sayfa--orta">
@@ -36,7 +45,7 @@ export function AnaEkran() {
         </BuyukButon>
       </div>
       <p className="soluk" aria-live="polite">
-        {bekleyen > 0 ? `${bekleyen} bildirim internet gelince gönderilecek` : ' '}
+        {durumMetni(durum)}
       </p>
     </main>
   );
