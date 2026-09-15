@@ -64,7 +64,7 @@ Giriş yapmayan **misafir** ve bizim **Smartotel ekibimiz** rol değildir; ikisi
 | Kutu | Okuma | Ekleme | Değiştirme | Silme |
 |---|---|---|---|---|
 | `hotels` | üye | — (Smartotel ekibi, kayıt altında) | owner: ad, saat dilimi | — |
-| `memberships` | staff: yalnızca kendi satırı · manager/owner: otelin tümü | owner: manager + staff ekler · manager: yalnızca staff ekler | owner/manager — ama **kendi rolünü kimse değiştiremez** | owner/manager — ama **kendini kimse silemez** |
+| `memberships` | staff: yalnızca kendi satırı · manager/owner: otelin tümü | owner: manager + staff ekler · manager: yalnızca staff ekler | — (rol değişikliği = çıkar + yeniden ekle; **kendi rolünü kimse değiştiremez**) | owner/manager — ama **kendini kimse silemez** |
 | `rooms` | üye | manager/owner | manager/owner (misafir kodunu yenileme dahil) | — (oda "kapalı" işaretlenir) |
 | `checklist_templates` | üye | manager/owner | manager/owner | — (pasif işaretlenir) |
 | `products`, `suppliers` | üye | manager/owner | manager/owner | — (pasif işaretlenir) |
@@ -72,7 +72,7 @@ Giriş yapmayan **misafir** ve bizim **Smartotel ekibimiz** rol değildir; ikisi
 | `supply_reports` 🔏 | üye | üye | — | — |
 | `issue_reports` 🔏 | üye | üye | — | — |
 | `work_orders` | üye | kural açar (arıza bildirilince otomatik) · manager/owner elle | staff: yalnızca "Aldım" ve "Çözdüm" (bkz. 2.5) · manager/owner: tür, süre, atanan — **iş açıkken** | — |
-| `purchase_requests` | staff: kendi talepleri · manager/owner: tümü | üye | — (durumu **kural** günceller, el değmez) | — |
+| `purchase_requests` | staff: kendi talepleri + **onaylanmış** talepler (teslim alabilmek için) · manager/owner: tümü | üye | — (durumu **kural** günceller, el değmez) | — |
 | `approvals` 🔏 | manager/owner | manager/owner + Maker-Checker kuralları (Bölüm 3) | — | — |
 | `deliveries` 🔏 | staff: kendi teslimleri · manager/owner: tümü | üye + Maker-Checker kuralları (Bölüm 3) | — | — |
 | `guest_feedback` 🔏 | manager/owner | — (yalnızca misafir Edge Function'ı, ana anahtarla) | — | — |
@@ -100,6 +100,7 @@ Beyanlar değişmez; ama bir iş emrinin "kimde?" ve "durumu ne?" bilgisi deği�
 - **Görevli** yalnızca iki şey yapabilir: sahipsiz bir işi **"Aldım"** (atanan = kendisi) ve kendi işini **"Çözdüm"**. Başka hiçbir alana dokunamaz.
 - **Müdür/sahip**, iş **açıkken** tür (acil/normal), son süre ve atananı değiştirebilir.
 - **"Çözdüm"** denince kim + saat veritabanınca yazılır ve satır **kilitlenir**: bir daha kimse değiştiremez. Yani "çözdüm" de bir imzadır.
+- "Çözdüm" imzasını **yalnızca işin atandığı kişi** atar — müdür dahil (müdür bir işi kendisi çözecekse önce kendine atar, sonra çözer). Kimse başkasının adına "çözdüm" diyemez.
 
 ### 2.6 "id=5 → id=6" denemesi neden işe yaramaz?
 Uygulama Otel B'nin bir oda kimliğini istese bile kilit önce "üye misin?" sorar. Değilse cevap **boş** döner — "yasak" bile demez. Saldırgan, o kaydın var olup olmadığını dahi öğrenemez.

@@ -91,9 +91,11 @@ Neden: Suistimal araştırmasında "kim ne zaman ne dedi?" sorusunun cevabı hi�
 
 ### A.7 Oda durumu hesaplanır
 Odanın durumunu kimse elle "Satışa Hazır" yapmaz. Veritabanı şuna bakar:
-- Son temizlik beyanı var mı? → **Temiz**, yoksa **Kirli**
+- **Bugün** (otelin saat dilimine göre) temizlik beyanı var mı? → **Temiz**, yoksa **Kirli**
 - Açık iş emri var mı? → **Arızalı**
 - Temiz **ve** açık iş emri yok → **Satışa Hazır**
+
+(Kodda: `room_status` görünümü. "Bugün" tanımı kod aşamasında netleştirildi; her sabah oda yeniden "Kirli" başlar.)
 
 Neden: İki kişi aynı odaya farklı şey yazsa bile çakışma olmaz; ikisi de beyanını yazar, durum kendiliğinden doğru çıkar.
 

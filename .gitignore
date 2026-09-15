@@ -1,0 +1,11 @@
+# Gizli bilgiler (şifre, anahtar, token) asla git'e girmez
+.env
+.env.*
+!.env.example
+
+# Supabase yerel çalışma dosyaları
+supabase/.temp/
+supabase/.branches/
+
+# Node
+node_modules/
