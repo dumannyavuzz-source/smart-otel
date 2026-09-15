@@ -1,11 +1,12 @@
 // Ana ekran: tek iş, tek buton — "QR Okut". Menü yok.
 // Otelde açık iş varsa teknisyen için ikincil bir kapı görünür: "Açık İşler (3)".
-// Altta yalnızca gerekirse tek satır durum (002 · B.9 — personel görsün).
+// Altta yalnızca gerekirse tek satır durum (002 · B.9 — personel görsün) ve küçük bir Çıkış (ux/001 · karar 4).
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { BuyukButon } from '../parcalar/BuyukButon';
 import { kutuDurumu } from '../postaci';
 import { acikIsler } from '../isEmirleri';
+import { cikisYap } from '../oturum';
 import { KUTU_DEGISTI_OLAYI, PAKET_OLAYI, YENI_MEKTUP_OLAYI } from '../olaylar';
 
 type Durum = Awaited<ReturnType<typeof kutuDurumu>>;
@@ -56,6 +57,18 @@ export function AnaEkran() {
       <p className="soluk" aria-live="polite">
         {durumMetni(durum)}
       </p>
+      <button type="button" className="buton buton--geri" onClick={() => void cikis(durum)}>
+        Çıkış
+      </button>
     </main>
   );
+}
+
+// Vardiya değişiminde ortak telefondan çıkış. Gönderilmemiş bildirim varsa önce söylenir:
+// bildirimler telefonda kalır ama ancak sahibi tekrar girince gider (postaci · kimin mektubu).
+async function cikis(durum: Durum): Promise<void> {
+  const bekleyen = durum.bekleyen + durum.gonderilemeyen;
+  const uyari = `${bekleyen} bildiriminiz henüz gönderilmedi. Çıkarsanız siz tekrar girene kadar telefonda bekler. Çıkılsın mı?`;
+  if (bekleyen > 0 && !window.confirm(uyari)) return;
+  await cikisYap();
 }

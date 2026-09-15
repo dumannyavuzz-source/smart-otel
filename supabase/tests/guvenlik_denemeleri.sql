@@ -23,7 +23,7 @@ begin
 end
 $$;
 
-select plan(99);
+select plan(106);
 
 
 -- ---------------------------------------------------------------------
@@ -81,12 +81,12 @@ insert into public.hotels (id, name) values
   ('a0000000-0000-4000-8000-000000000001', 'Deneme Otel A'),
   ('b0000000-0000-4000-8000-000000000001', 'Deneme Otel B');
 
-insert into public.memberships (hotel_id, user_id, role) values
-  ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a001', 'staff'),    -- Ayşe
-  ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a002', 'staff'),    -- Ali
-  ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a003', 'manager'),  -- Mehmet
-  ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a004', 'owner'),    -- Sahip
-  ('b0000000-0000-4000-8000-000000000001', 'b0000000-0000-4000-8000-00000000b001', 'staff');    -- Burak
+insert into public.memberships (hotel_id, user_id, role, name, job) values
+  ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a001', 'staff',   'Ayşe',   'housekeeping'),
+  ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a002', 'staff',   'Ali',    'warehouse'),
+  ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a003', 'manager', 'Mehmet', null),
+  ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a004', 'owner',   'Sahip',  null),
+  ('b0000000-0000-4000-8000-000000000001', 'b0000000-0000-4000-8000-00000000b001', 'staff',   'Burak',  'housekeeping');
 
 insert into public.rooms (id, hotel_id, number) values
   ('a0000000-0000-4000-8000-0000000a0101', 'a0000000-0000-4000-8000-000000000001', '101'),
@@ -741,8 +741,8 @@ select throws_ok(
   '2.4c. Görevli oda ekleyemez');
 
 select throws_ok(
-  $$ insert into public.memberships (hotel_id, user_id, role)
-     values ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a005', 'staff') $$,
+  $$ insert into public.memberships (hotel_id, user_id, role, name, job)
+     values ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a005', 'staff', 'Yeni', 'technician') $$,
   '42501', null,
   '2.4d. Görevli personel ekleyemez');
 
@@ -758,15 +758,24 @@ select throws_ok(
   '2.4f. Uygulamadan misafir yorumu yazılamaz (yalnızca misafir kapısı)');
 
 select throws_ok(
-  $$ insert into public.memberships (hotel_id, user_id, role)
-     values ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a005', 'manager') $$,
+  $$ insert into public.memberships (hotel_id, user_id, role, name)
+     values ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a005', 'manager', 'Yeni') $$,
   '42501', null,
   '2.4g. Müdür, müdür ekleyemez (yalnızca sahip ekler)');
 
 select lives_ok(
-  $$ insert into public.memberships (hotel_id, user_id, role)
-     values ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a005', 'staff') $$,
-  '2.4h. Müdür görevli ekler');
+  $$ insert into public.memberships (hotel_id, user_id, role, name, job)
+     values ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-00000000a005', 'staff', 'Yeni', 'technician') $$,
+  '2.4h. Müdür görevli (teknisyen) ekler');
+
+select throws_ok(
+  $$ insert into public.memberships (hotel_id, user_id, role, name)
+     values ('a0000000-0000-4000-8000-000000000001', 'b0000000-0000-4000-8000-00000000b001', 'staff', 'Burak') $$,
+  '23514', null,
+  '2.4h2. Görevsiz görevli eklenemez (kat görevlisi mi, teknisyen mi?)');
+
+select is((select count(*)::int from public.memberships where hotel_id = 'a0000000-0000-4000-8000-000000000001'), 5,
+  '2.4h3. Müdür otelin tüm personelini adlarıyla görür');
 
 delete from public.memberships where user_id = 'a0000000-0000-4000-8000-00000000a003';
 select is((select count(*)::int from public.memberships where user_id = 'a0000000-0000-4000-8000-00000000a003'), 1,
@@ -777,6 +786,30 @@ select throws_ok(
      where id = 'a0000000-0000-4000-8000-0000000a0101' $$,
   null, null,
   '2.4j. Bir odanın oteli değiştirilemez');
+
+-- Ürün sınırı: en fazla 8 açık ürün (ekran değil, veritabanı sayar)
+select lives_ok(
+  $$ insert into public.products (hotel_id, name)
+     select 'a0000000-0000-4000-8000-000000000001', 'Ürün ' || g from generate_series(2, 8) g $$,
+  '2.4k. Müdür 8. ürüne kadar ekler');
+
+select throws_ok(
+  $$ insert into public.products (hotel_id, name) values ('a0000000-0000-4000-8000-000000000001', 'Dokuzuncu') $$,
+  null, 'Listede en fazla 8 ürün olabilir. Önce birini listeden çıkarın.',
+  '2.4l. 9. ürün reddedilir');
+
+select lives_ok(
+  $$ update public.products set is_active = false where name = 'Ürün 8' $$,
+  '2.4m. Müdür bir ürünü kapatır');
+
+select lives_ok(
+  $$ insert into public.products (hotel_id, name) values ('a0000000-0000-4000-8000-000000000001', 'Dokuzuncu') $$,
+  '2.4n. Bir ürün kapanınca yeni ürün eklenebilir');
+
+select throws_ok(
+  $$ update public.products set is_active = true where name = 'Ürün 8' $$,
+  null, 'Listede en fazla 8 ürün olabilir. Önce birini listeden çıkarın.',
+  '2.4o. Kapalı ürünü açmak da sınıra takılır');
 
 
 select deneme.cikis();

@@ -14,7 +14,9 @@ Arayüz kodu burada değildir.
 | `migrations/…_misafir_kapisi.sql` | Misafir yorumunu yazan tek veritabanı fonksiyonu (yalnızca ana anahtar çağırır) |
 | `migrations/…_ariza_fotografi.sql` | Arıza fotoğrafı kuralı: yol otelin klasöründe, fotoğraf depoda olmalı |
 | `migrations/…_cozum_fotografi.sql` | Teknisyenin çözüm fotoğrafı (sütun + kural) |
+| `migrations/…_personel_ve_urun.sql` | Personelin adı ve görevi (`memberships`), en fazla 8 açık ürün kuralı |
 | `functions/guest-feedback/` | Misafir Kapısı (Edge Function): `index.ts` ince kabuk, `kapi.ts` saf mantık, `kapi_test.ts` testleri |
+| `functions/personel-ekle/` | Personel Kapısı: müdür yeni hesap açar. Ana anahtarla yapılan tek iş hesap açmaktır; üyelik müdürün kendi yetkisiyle yazılır |
 | `tests/guvenlik_denemeleri.sql` | 22 maddelik saldırı denemesi (hepsi reddedilmeli) |
 | `scripts/ana_anahtar_taramasi.sh` | 22. deneme: ana anahtar kodda/git'te var mı? |
 | `config.toml` | Yerel Supabase ayarları (şifre ≥ 8 karakter, fotoğraf ≤ 2 MB, açık kayıt kapalı, misafir kapısı anahtarsız) |
@@ -36,6 +38,22 @@ Misafir sayfası ──POST {oda_kodu, puan, yorum}──▶ guest-feedback (Edg
 - Misafir giriş yapmaz, anahtar taşımaz. Kod yanlışsa cevap hep aynıdır: **"Bu bağlantı geçersiz."**
 - Ana anahtar yalnızca sunucuda (`SUPABASE_SERVICE_ROLE_KEY`, Supabase kendisi verir). Kodda, telefonda, git'te yok.
 - Kapının testleri: `deno test supabase/functions/guest-feedback/`
+
+## Personel Kapısı nasıl çalışır?
+
+```
+Müdür paneli ──POST {otel, ad, e-posta, şifre, görev}──▶ personel-ekle (Edge Function)
+                (müdürün kendi kartıyla)                    │  1. çağıran kim, o otelde rolü ne? (kendi kartıyla)
+                                                            │     sahip → müdür + görevli · müdür → yalnızca görevli
+                                                            │  2. hesap açılır (ana anahtarla yapılan TEK iş)
+                                                            │  3. üyelik ÇAĞIRANIN kendi yetkisiyle yazılır (kilitler geçerli)
+                                                            ▼  4. üyelik yazılamazsa hesap geri silinir
+                                                      memberships
+```
+
+- Kapının testleri: `deno test supabase/functions/personel-ekle/`
+- **Canlıya çıkmadan önce `PANEL_ORIGIN` ayarlanmalı** (panelin adresi, ör. `https://panel.ornekotel.com`).
+  Boş bırakılırsa kapı her adresten gelen tarayıcı isteğine cevap verir. (Kart yine şarttır; ama "varsayılan açık" istemiyoruz.)
 
 Dayanak belgeler: `docs/decisions/002-database-architecture.md`, `docs/security/001-rls-and-maker-checker.md`.
 

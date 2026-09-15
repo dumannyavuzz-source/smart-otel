@@ -280,3 +280,66 @@ textarea.alan { min-height: 120px; resize: vertical; }
   align-items: baseline;
   gap: 12px;
 }
+
+/* ---- Müdür paneli ---- */
+.panel-baslik {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--bosluk);
+}
+
+.panel-baslik h1 { overflow-wrap: anywhere; }
+.panel-baslik .buton { flex: none; }
+
+/* Alarm kutusu: uzaktan okunur. Renk tek başına konuşmaz; yanında sayı ve cümle vardır. */
+.alarm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  padding: var(--bosluk);
+  border: 2px solid var(--cizgi);
+  border-left-width: 14px;
+  border-radius: var(--kose);
+  background: var(--kart);
+  color: var(--metin);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.alarm--kirmizi { border-left-color: #c62828; background: #fdecea; }
+.alarm--sari    { border-left-color: #f9a825; background: #fff8e1; }
+.alarm--yesil   { border-left-color: #2e7d32; background: #eef7ee; cursor: default; }
+
+.alarm-ikon  { font-size: 2.4rem; line-height: 1; }
+.alarm-metin { font-size: var(--baslik); font-weight: 700; line-height: 1.2; }
+
+/* Düz kart: talep, personel, ürün — trafik lambası şeridi yok */
+.kart {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--cizgi);
+  border-radius: var(--kose);
+  background: var(--kart);
+}
+
+.kart--soluk { opacity: 0.55; }
+
+/* Yan yana iki buton (Reddet · Onayla) */
+.ikili {
+  display: flex;
+  gap: 12px;
+}
+
+.ikili .buton { flex: 1; }
+
+/* Uzun ve boşluksuz bir ad (ürün, personel, otel) dar telefonda kartı taşırmasın */
+.kart strong,
+.is-ust strong,
+.is-ust span { overflow-wrap: anywhere; min-width: 0; }
