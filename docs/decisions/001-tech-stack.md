@@ -1,6 +1,6 @@
 # 001 — Teknoloji Yığını (Tech Stack)
 
-> **Karar veren:** Architect · **Tarih:** 2026-09-14 · **Durum:** Genel Müdür onayı bekliyor
+> **Karar veren:** Architect · **Tarih:** 2026-09-14 · **Durum:** Genel Müdür tarafından onaylandı (2026-09-15)
 > Bu belge "hangi araçlarla inşa edeceğiz?" sorusuna cevap verir. Sade dille yazılmıştır.
 
 ---

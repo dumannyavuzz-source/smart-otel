@@ -1,6 +1,6 @@
 # 002 — Veritabanı Mimarisi: Çoklu Otel (SaaS) ve Çevrimdışı Eşitleme
 
-> **Karar veren:** Architect · **Tarih:** 2026-09-14 · **Durum:** Genel Müdür onayı bekliyor
+> **Karar veren:** Architect · **Tarih:** 2026-09-14 · **Durum:** Genel Müdür tarafından onaylandı (2026-09-15)
 > Bu belge iki zor soruya sade cevap verir. Teknoloji seçimi için `001-tech-stack.md` okunmalıdır.
 
 ---
