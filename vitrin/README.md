@@ -35,7 +35,12 @@ Vercel'de **ikinci bir proje** olarak yayınlanır (Root Directory: `vitrin`, de
 | Adres | Ne çalışır |
 |---|---|
 | `oteldijital.com` | Bu vitrin sayfası |
-| `app.oteldijital.com` | Personel uygulaması (`app/`) ve misafir yorum sayfası |
+| `app.oteldijital.com` | Personel uygulaması (`app/`), kayıt sayfası (`/kayit`) ve misafir yorum sayfası |
+
+Alan adları Genel Müdür tarafından onaylandı (2026-09-16). Sayfadaki bağlantılar:
+"Ücretsiz Başlat" düğmeleri `app.oteldijital.com/kayit` adresine (beş yerde),
+Kurumsal plandaki "Görüşme ayarla" düğmesi `mailto:merhaba@oteldijital.com` adresine gider.
+Bu posta kutusu vitrindeki **tek** iletişim yoludur; canlıya çıkmadan çalıştığı doğrulanmalıdır.
 
 Adımlar `docs/deployment-checklist.md` · Bölüm 6'da.
 

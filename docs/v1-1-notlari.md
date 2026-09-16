@@ -28,9 +28,13 @@ Ayrıntı: `docs/security/004-sifre-yenileme.md`
 | # | Madde | Bugün ne oluyor? | V1.1'de ne yapılacak? |
 |---|---|---|---|
 | B1 | **E-posta doğrulanmıyor** | Sistem hiç e-posta göndermiyor; kayıt olan kişinin adresi doğrulanmadan hesap açılıyor. Biri başkasının adresiyle otel açabilir | SMTP bağlanınca doğrulama bağlantısı; ya da ilk girişte kod doğrulaması |
-| B2 | **14 günlük deneme süresi takip edilmiyor** | Vitrin "14 gün" diyor ama sistemde deneme bitiş tarihi, uyarı ya da kapanma yok | `hotels` tablosuna deneme bitiş tarihi + panelde kalan gün uyarısı |
+| B2 | **14 günlük deneme süresi takip edilmiyor** | Vitrin "14 gün" diyor; sistemde deneme bitiş tarihi, uyarı ya da kapanma yok. Açılan oteller **süresiz** | `hotels` tablosuna deneme bitiş tarihi + panelde kalan gün uyarısı |
 | B3 | **Ödeme yok** | Fiyat tablosu var, ödeme alma yolu yok | Ödeme sağlayıcısı kararı ve bağlanması |
-| B4 | **Kurumsal plandaki "Görüşme ayarla" düğmesi boş** | Vitrinde tıklanınca hiçbir yere gitmiyor | Gerçek bir iletişim adresi/formu belirlenip bağlanacak |
+| B4 | **Kurumsal plan için iletişim yalnızca e-posta** | Düğme `merhaba@oteldijital.com` adresine yazıyor (Genel Müdür kararı) | Gerçek bir iletişim formu / talep takibi |
+
+> **B2 için Genel Müdür kararı (2026-09-16):** "14 gün" vitrinde **pazarlama vaadi olarak kalacak**; ürün içinde
+> süre takibi ve kilitleme V1'de **yapılmayacaktır**. Bu bilinçli bir karardır, eksik iş değildir.
+> Açılan oteller şimdilik süresizdir; süre takibi V1.1'de eklenecektir.
 
 ## C. Daha önce kayda geçmiş, sonraya bırakılanlar
 

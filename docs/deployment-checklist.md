@@ -108,9 +108,11 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
 - [ ] **6.2** Alan adlarını ayır:
       - `oteldijital.com` → vitrin
       - `app.oteldijital.com` → personel uygulaması ve misafir yorum sayfası
-- [ ] **6.3** Vitrindeki "Ücretsiz Başlat" düğmeleri `https://app.oteldijital.com/kayit` adresine bağlandı (Aşama 20).
-      Gerçek alan adı farklıysa bu adres `vitrin/index.html` içinde **beş yerde** güncellenmelidir.
-      Kurumsal plandaki "Görüşme ayarla" düğmesi hâlâ boştur: gerçek bir iletişim adresi belirlenmeli.
+- [x] **6.3** ✅ Vitrindeki bütün düğmeler bağlandı (Aşama 20 · 20.1):
+      "Ücretsiz Başlat" → `https://app.oteldijital.com/kayit` (beş yerde) ·
+      Kurumsal "Görüşme ayarla" → `mailto:merhaba@oteldijital.com`.
+      Alan adları Genel Müdür tarafından onaylandı; ileride değişirse adres `vitrin/index.html` içinde beş yerdedir.
+- [ ] **6.6** `merhaba@oteldijital.com` posta kutusunun **gerçekten çalıştığını** doğrula (vitrindeki tek iletişim yolu).
 - [x] **6.4** ✅ **Metin–ürün doğrulaması yapıldı:** sayfa "şifreler Müdür Paneli'nden 5 saniyede güncellenir" diyor
       ve Aşama 19.1'den beri ürün bunu karşılıyor (Personel ekranı → 🔑 Şifre). Vaat ile ürün aynı.
 - [ ] **6.5** Fiyat tablosundaki plan içerikleri (hangi özellik hangi pakette) Genel Müdür onayından geçmelidir.

@@ -37,9 +37,11 @@ Sonuç: biri **başkasının e-posta adresiyle** otel açabilir. Zararı sınır
 verisine erişmez — ama o adresin gerçek sahibi ileride kaydolmak isterse "bu e-posta zaten kayıtlı" duvarına çarpar.
 `docs/v1-1-notlari.md` · B1.
 
-### 2. Deneme süresi takip edilmiyor
+### 2. Deneme süresi takip edilmiyor — bilinçli karar
 Vitrin "14 gün" diyor; sistemde deneme bitiş tarihi, uyarı veya kapanma yoktur. Açılan otel süresizdir.
-Bu bir güvenlik açığı değil, **kaynak tüketimi** ve ticari bir açıktır. `docs/v1-1-notlari.md` · B2.
+Bu bir güvenlik açığı değil, **kaynak tüketimi** ve ticari bir açıktır.
+**Genel Müdür kararı (2026-09-16):** "14 gün" vitrinde pazarlama vaadi olarak kalır; süre takibi ve kilitleme
+V1'de yapılmaz, V1.1'e bırakılır (`docs/v1-1-notlari.md` · B2). Kapının bu yüzden tek koruması saatlik sayaçtır.
 
 ### 3. Sınır IP başınadır
 Farklı adreslerden gelen toplu kayıt (bot ağı) engellenmez. Saatte 3 sınırı sıradan kötüye kullanımı keser;
