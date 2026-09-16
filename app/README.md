@@ -17,7 +17,7 @@ Giriş ──▶ Ana Ekran ──▶ QR Okut ──▶ Oda 204 ──┬─▶ E
 Giriş (müdür) ──▶ Ana Kumanda ──┬─▶ 🔴 Süresi Geçenler · 🔴 Mutsuz Misafirler · 🔴 Teslimat Uyuşmazlıkları
                                 │    (kırmızı yoksa 🟢 "Her şey yolunda")
                                 ├─▶ 🟡 Bekleyen Onaylar ──▶ ✕ Reddet / ✓ Onayla
-                                ├─▶ 👥 Personel ──▶ ➕ Personel Ekle
+                                ├─▶ 👥 Personel ──▶ ➕ Personel Ekle · 🔑 Şifre yenile
                                 ├─▶ 📦 Ürünler (listede en fazla 8) ──▶ ➕ Ürün Ekle · Listeden çıkar
                                 └─▶ Çıkış
 
@@ -46,7 +46,7 @@ Canlıya çıkış adımları: `docs/deployment-checklist.md`.
 | `src/miktar.ts` | Miktar ve birim: "7,5 Kg" yazımı, hangi birim bölünür (Kg yarımşar, adet birer birer) |
 | `src/uyusmazliklar.ts` | Müdür alarmı: teslim onaylandığı gibi mi geldi? (istenen · onaylanan · gelen + kanıt fotoğrafı) |
 | `src/misafir/yorumGonder.ts` | Misafir yorumunu kapıya (Edge Function) yollar; misafir anahtar taşımaz, giriş yapmaz |
-| `src/panel.ts` | Müdür: alarmlar (hesaplanır, saklanmaz), onaylar, personel, ürünler |
+| `src/panel.ts` | Müdür: alarmlar (hesaplanır, saklanmaz), onaylar, personel (şifre yenileme dahil), ürünler |
 | `src/panelNobeti.ts` | Panel nöbetçisi: 30 saniyede bir sorar, yeni kırmızı alarmda çanı çalar; ekranlar cevabı buradan okur |
 | `src/ses.ts` | Yeni kırmızı alarmda çalan zarif çan sesi; "bu alarmı duyurmuş muyduk?" hafızası |
 | `src/fotograf/kucult.ts` | Fotoğrafı telefonda küçültür (1280 px, JPEG) |

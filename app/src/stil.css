@@ -244,6 +244,19 @@ textarea.alan { min-height: 120px; resize: vertical; }
   font-weight: 700;
 }
 
+/* Şifre yenileme kutusu (Personel ekranı): müdür yazar, ekranda açıkça görünür,
+   çünkü müdürün bu şifreyi kişiye söylemesi gerekir. Gizlemek işe yaramaz, zorlaştırır. */
+.sifre-kutu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  border-top: 1px solid var(--cizgi);
+  padding-top: 12px;
+}
+
+.sifre-kutu .alan { min-height: 56px; }
+
 /* ---- Kamera ---- */
 .kamera-sayfa {
   position: fixed;

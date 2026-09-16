@@ -14,7 +14,7 @@
 | **Kapı anahtarı** (anon key) | Herkese açıktır, tarayıcıya konur. Tek başına hiçbir çekmeceyi açmaz; kilitler veritabanındadır. |
 | **Ana anahtar** (service role key) | Her kilidi açar. **Asla** tarayıcıya, git'e ya da `VITE_` ile başlayan bir değişkene yazılmaz. Yalnızca sunucudaki kapılarda yaşar. |
 | **Göç dosyaları** (migrations) | Veritabanının kurulum talimatı. Sırayla çalışır; elle SQL yazılmaz. |
-| **Kapılar** (Edge Functions) | Sunucuda çalışan iki küçük program: misafir yorumu ve personel ekleme. |
+| **Kapılar** (Edge Functions) | Sunucuda çalışan üç küçük program: misafir yorumu, personel ekleme ve şifre yenileme. |
 
 ---
 
@@ -24,7 +24,8 @@
 - [ ] **1.2** Projede **günlük yedeklemenin açık** olduğunu doğrula (veritabanı göçleri geri alınamaz; dönüş yolu yedektir).
 - [ ] **1.3** Bilgisayardan bağla: `supabase link --project-ref <proje-kimliği>`
 - [ ] **1.4** Veritabanını kur: `supabase db push`
-      → 11 göç dosyası sırayla çalışır: tablolar → kurallar → kilitler → fotoğraflar → misafir kapısı → arıza/çözüm fotoğrafı → personel ve ürün → teslim kanıtı → kesirli miktar → fatura gizliliği.
+      → 12 göç dosyası sırayla çalışır: tablolar → kurallar → kilitler → fotoğraflar → misafir kapısı → arıza fotoğrafı →
+      çözüm fotoğrafı → personel ve ürün → teslim kanıtı → kesirli miktar → fatura gizliliği → şifre güncelleme.
 - [ ] **1.5** Kurulumu gözle doğrula (Supabase Studio):
       - `photos` kovası **private** (public değil), dosya sınırı **2 MB**.
       - Bütün tablolarda RLS **açık**.
@@ -33,6 +34,7 @@
 - [ ] **1.7** Kapıları yayınla:
       - `supabase functions deploy guest-feedback --no-verify-jwt` ← **anahtarsız olmalı**; misafir giriş yapmaz.
       - `supabase functions deploy personel-ekle` ← anahtar ister; müdür girişliyken çağırır.
+      - `supabase functions deploy sifre-guncelle` ← anahtar ister; müdür personel şifresi yenilerken çağırır.
 - [ ] **1.8** Kapı sırlarını ayarla. **Şu an ikisi de `*`, yani CORS herkese açık:**
       - `GUEST_PAGE_ORIGIN = https://<alan-adı>`
       - `PANEL_ORIGIN = https://<alan-adı>`
@@ -56,11 +58,13 @@
 
 ## 3. Canlıdan hemen önce — doğrulamalar
 
-- [ ] **3.1** **140 güvenlik denemesini** Staging (test) projesinde koştur: `supabase test db`
+- [ ] **3.1** **145 güvenlik denemesini** Staging (test) projesinde koştur: `supabase test db`
+      ⚠️ Bu dosya 19.1 denetiminde bozuk bulundu ve onarıldı; ilk çalıştırmada "145 ok" çıktısı GÖZLE görülmelidir.
       Hepsi reddedilmeli. Bir tanesi bile geçerse canlıya çıkılmaz.
-- [ ] **3.2** Kapının kendi testleri: `deno test supabase/functions/guest-feedback/`
+- [ ] **3.2** Kapıların kendi testleri: `deno test supabase/functions/` (misafir kapısı, personel ekleme, şifre yenileme)
 - [ ] **3.3** Uygulama testleri ve derleme: `cd app && npm test && npm run build`
 - [ ] **3.4** Ana anahtar taraması: `bash supabase/scripts/ana_anahtar_taramasi.sh` — koda ya da git'e anahtar sızmış mı?
+- [ ] **3.4b** Kapılardaki `npm:@supabase/supabase-js@2` bağımlılığı tam sürüme sabitlensin (ana anahtarı tutan dosyalar).
 - [ ] **3.5** **Gerçek telefonda duman testi** (en az iki telefon: biri görevli, biri müdür):
       1. Görevli girişi → QR okut → oda açılır.
       2. "Oda Hazır" · "Eksik Var" (kesirli dene: 1,5 Kg) · "Sorun Bildir" (fotoğraflı).
@@ -69,6 +73,7 @@
       5. Müdür panelinde bekleyen onay görünmeli; onayla → depo görevlisinde "📦 Teslim Al" çıkmalı.
       6. Eksik teslim al (kanıt fotoğrafıyla) → müdür panelinde **kırmızı uyuşmazlık kutusu** ve **çan sesi**.
       7. Misafir sayfası: `/yorum/<guest_code>` → 2 yıldız ver → müdüre "mutsuz misafir" alarmı düşmeli.
+      8. Müdür panelinde bir görevlinin şifresini yenile → o telefonda yeni şifreyle giriş yapılabilmeli.
 - [ ] **3.6** Fatura gizliliğini elle dene: kat görevlisi hesabıyla bir fatura fotoğrafına ulaşmayı dene → **ulaşamamalı**.
 
 ## 4. QR kodlarını basmak
@@ -99,9 +104,8 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       - `oteldijital.com` → vitrin
       - `app.oteldijital.com` → personel uygulaması ve misafir yorum sayfası
 - [ ] **6.3** Vitrindeki "Otelimi Ücretsiz Başlat" bağlantılarını kayıt akışına bağla (şu an `#` ile duruyorlar).
-- [ ] **6.4** ⚠️ **Metin–ürün doğrulaması:** sayfa "şifreler Müdür Paneli'nden 5 saniyede güncellenir" diyor.
-      Uygulamada şifre değiştirme ekranı **henüz yok**. Ya ekran eklenir ya cümle çıkarılır — reklamı yapılan
-      her cümle üründe karşılanmalıdır.
+- [x] **6.4** ✅ **Metin–ürün doğrulaması yapıldı:** sayfa "şifreler Müdür Paneli'nden 5 saniyede güncellenir" diyor
+      ve Aşama 19.1'den beri ürün bunu karşılıyor (Personel ekranı → 🔑 Şifre). Vaat ile ürün aynı.
 - [ ] **6.5** Fiyat tablosundaki plan içerikleri (hangi özellik hangi pakette) Genel Müdür onayından geçmelidir.
 
 ---
@@ -110,7 +114,10 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
 
 | Açık | Etkisi | Kaynak |
 |---|---|---|
-| Uygulamada şifre değiştirme yolu yok | Müdür personelin şifresini bilmeye devam eder | `docs/security/002` · Açık 1 |
+| Personel kendi şifresini değiştiremiyor | Müdür şifreyi bilmeye devam eder (yenileme yolu Aşama 19.1'de eklendi) | `docs/security/002` · Açık 1 |
+| Şifre yenileme deftere yazılmıyor, hız sınırı yok | Hesaba erişim veren tek işlem kayıtsız kalıyor | `docs/security/004` · Açık 1 |
+| Şifre değişince açık oturum kapanmıyor | "Telefonu kayboldu, şifresini değiştirdim" yetmez; kişi otelden çıkarılmalı | `docs/security/004` · Açık 2 |
+| Sahip şifresini unutursa geri dönüş yolu yazılı değil | Acil günde güvensiz kestirme icat edilir | `docs/security/004` · Açık 4 |
 | Teslim düzeltme ekranı yok | Yanlış girilen miktar yalnızca veritabanından düzeltilebilir | `docs/ux/004` |
 | Uyuşmazlıkta "Gördüm" düğmesi yok | Kart 7 gün sonra kendiliğinden düşer | `docs/ux/003` |
 | Depo görevlisi kendi yüklediği faturayı sonradan da görebilir | Sızıntı değil (fotoğrafı kendisi çekti); istenirse tek satırla kapatılır | `docs/security/003` · Açık 1 |

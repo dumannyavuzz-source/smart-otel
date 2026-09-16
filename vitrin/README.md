@@ -39,15 +39,11 @@ Vercel'de **ikinci bir proje** olarak yayınlanır (Root Directory: `vitrin`, de
 
 Adımlar `docs/deployment-checklist.md` · Bölüm 6'da.
 
-## Açık madde — metin ile ürün arasındaki tek fark
+## Metin ile ürün aynı mı? Evet.
 
 Sayfada **"Personel şifreleri doğrudan Müdür Paneli üzerinden 5 saniyede güncellenir"** yazıyor.
-Bu, Genel Müdür'ün istediği metindir ve doğru hedeftir; ama **uygulamada şifre değiştirme ekranı henüz yoktur**
-(`docs/security/002-personel-kapisi-ve-panel.md` · Açık 1). Müdür bugün yalnızca yeni personel eklerken şifre belirleyebiliyor.
+Bu vaat **Aşama 19.1'de karşılandı**: Müdür Paneli → Personel → kartın üstündeki "🔑 Şifre" düğmesi.
+Kutu hazır bir öneriyle açılır, müdür kaydeder ve ekranda gördüğü şifreyi kişiye söyler. Mail gitmez.
 
-Yayına çıkmadan önce ikisinden biri yapılmalıdır:
-
-1. Müdür Paneli'ne "Şifreyi değiştir" ekranı eklenir (küçük bir iş, açık madde zaten kapatılacaktı), **ya da**
-2. Bu cümle, ürün o özelliğe kavuşana kadar sayfadan çıkarılır.
-
-Reklamı yapılan her cümlenin ürün tarafından karşılanması, projenin "sonuçlar dürüstçe bildirilir" kuralının bir parçasıdır.
+Geriye kalan açık, sayfanın vaat etmediği bir şeydir ve kayıtlıdır: personelin **kendi** şifresini değiştirme yolu
+henüz yoktur (`docs/security/002-personel-kapisi-ve-panel.md` · Açık 1). Vitrin metni bunu iddia etmiyor.

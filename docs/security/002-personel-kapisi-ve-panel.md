@@ -27,16 +27,22 @@
 
 ## Genel Müdür kararı bekleyen dört açık madde
 
-### Açık 1 · YÜKSEK — Müdür, personelin şifresini biliyor ve personel onu değiştiremiyor
-Müdür yeni personelin ilk şifresini kendisi koyuyor; uygulamada **şifre değiştirme yolu yok**. Bu, Maker-Checker'ın
-dayandığı "herkes yalnızca kendi hesabına girer" varsayımını zayıflatır: şifreleri bilen bir müdür, personelin
-hesabıyla talep açıp kendi hesabıyla onaylayabilir. Veritabanı üç farklı kişi gördüğü için itiraz etmez.
+### Açık 1 · YARISI KAPANDI — Şifre yenileme yolu var; "müdür şifreyi biliyor" sorunu duruyor
 
-Seçenekler: **(a)** "Şifremi değiştir" ekranı + ilk girişte zorunlu değiştirme · **(b)** müdür şifre koymasın,
-e-posta ile davet bağlantısı gönderilsin · **(c)** risk bilerek kabul edilsin ve buraya yazılsın.
-Aynı kararla birlikte: şifre alanı şu an **yazarken görünüyor** (omuz üstünden okunabilir). Gizlenmesi güvenlik
-için daha iyidir; ama şifre sıfırlama yolu olmadığı için yanlış yazılan bir şifre hesabı kullanılmaz hale getirir.
-İkisi tek kararda çözülmelidir.
+**Kapanan yarısı (Aşama 19.1).** Uygulamada artık şifre yenileme yolu var: müdür, Personel ekranından bir kişinin
+şifresini beş saniyede yeniler (mail linki yok, `sifre-guncelle` kapısı). Yanlış yazılan bir şifre artık hesabı
+kullanılmaz hale getirmiyor; unutulan şifre vardiya kaybettirmiyor. Kapının kendi kilitleri:
+sahip → müdür + görevli · müdür → yalnızca görevli · sahibin şifresine kimse dokunamaz · kimse kendi şifresini
+bu kapıdan değiştiremez · **iki otelde çalışan kişinin şifresine hiç dokunulmaz** (yoksa bir otelin müdürü
+diğerinin kapısını açardı).
+
+**Duran yarısı.** Şifreyi hâlâ müdür koyuyor ve biliyor; personelin kendi şifresini değiştirme yolu **yok**.
+Bu, Maker-Checker'ın dayandığı "herkes yalnızca kendi hesabına girer" varsayımını zayıflatır: şifreleri bilen bir
+müdür, personelin hesabıyla talep açıp kendi hesabıyla onaylayabilir. Veritabanı üç farklı kişi gördüğü için itiraz etmez.
+
+Geriye kalan tek çözüm: **personelin kendi şifresini değiştirebildiği bir ekran** (ve istenirse ilk girişte zorunlu
+değiştirme). Şifre alanının yazarken görünmesi artık bilinçli bir karardır: müdür yeni şifreyi kişiye **söylemek**
+zorunda olduğu için gizlemek işe yaramaz, yalnızca zorlaştırırdı.
 
 ### Açık 2 · ORTA — Personel kapısında hız sınırı yok, e-posta varlığı ele veriliyor
 Kapı sınırsız çağrılabiliyor ve "Bu e-posta zaten kayıtlı." diyerek bir adresin sistemde olup olmadığını söylüyor.
@@ -57,5 +63,5 @@ bu madde eklenmelidir ki karar bilinçli olsun, kaza olmasın.
 
 ---
 
-> **Sonraki adım:** Açık 1 karara bağlanmadan personel şifre akışı sahaya çıkmamalıdır. Açık 2 ve 3 canlıya
-> çıkmadan önce, Açık 4 yakın zamanda çözülmelidir.
+> **Sonraki adım:** Açık 1'in duran yarısı ("personel kendi şifresini değiştiremiyor") tek başına bir aşamalık iştir
+> ve Maker-Checker'ın gücünü doğrudan etkiler. Açık 2 ve 3 canlıya çıkmadan önce, Açık 4 yakın zamanda çözülmelidir.

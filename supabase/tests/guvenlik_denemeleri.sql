@@ -23,7 +23,7 @@ begin
 end
 $$;
 
-select plan(140);
+select plan(145);
 
 
 -- ---------------------------------------------------------------------
@@ -653,8 +653,8 @@ select is_empty($$ select * from storage.objects where name like 'b0000000-0000-
 
 -- Fatura gizliliği (Aşama 17.2): kat görevlisi tedarikçi fiyatını göremez.
 select is_empty(
-  1380 select * from storage.objects
-     where name like 'a0000000-0000-4000-8000-000000000001/deliveries/%' 1380,
+  $$ select * from storage.objects
+     where name like 'a0000000-0000-4000-8000-000000000001/deliveries/%' $$,
   '16b. Kat görevlisi kendi otelinin fatura/kanıt fotoğraflarını GÖREMEZ (tedarikçi fiyatı gizlidir)');
 
 select throws_ok(
@@ -1069,6 +1069,48 @@ select throws_ok(
   null, 'Listede en fazla 8 ürün olabilir. Önce birini listeden çıkarın.',
   '2.4o. Kapalı ürünü açmak da sınıra takılır');
 
+
+
+-- =====================================================================
+-- 23 · "BAŞKA OTELDE DE ÇALIŞIYOR MU?" SORUSU (Aşama 19.1)
+--
+-- Şifre yenileme kapısı bu soruyu sorar: bir kişi iki otelde çalışıyorsa, bir otelin müdürü
+-- onun şifresini yenileyerek DİĞER otelin kapısını da açmış olurdu. Soru bile yetki ister.
+-- =====================================================================
+select deneme.giris('a0000000-0000-4000-8000-00000000a001');   -- Ayşe (kat görevlisi)
+
+select throws_ok(
+  $$ select public.baska_otelde_calisiyor_mu('a0000000-0000-4000-8000-00000000a002',
+                                             'a0000000-0000-4000-8000-000000000001') $$,
+  null, 'Yetkiniz yok.',
+  '23a. Görevli bu soruyu soramaz');
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a003');   -- Mehmet (müdür)
+
+select is(
+  (select public.baska_otelde_calisiyor_mu('a0000000-0000-4000-8000-00000000a002',
+                                           'a0000000-0000-4000-8000-000000000001')),
+  false,
+  '23b. Müdür sorabilir: tek otelde çalışan için cevap "hayır"');
+
+select throws_ok(
+  $$ select public.baska_otelde_calisiyor_mu('b0000000-0000-4000-8000-00000000b001',
+                                            'a0000000-0000-4000-8000-000000000001') $$,
+  null, 'Yetkiniz yok.',
+  '23c. Otelde çalışmayan biri hakkında soru sorulamaz (müdür tanımadığı hesabı yoklayamaz)');
+
+-- Burak iki otelde birden çalışmaya başlarsa:
+select lives_ok(
+  $$ insert into public.memberships (hotel_id, user_id, role, name, job)
+     values ('a0000000-0000-4000-8000-000000000001', 'b0000000-0000-4000-8000-00000000b001',
+             'staff', 'Burak', 'housekeeping') $$,
+  '23d. Müdür, Burak''ı kendi oteline de görevli olarak ekler');
+
+select is(
+  (select public.baska_otelde_calisiyor_mu('b0000000-0000-4000-8000-00000000b001',
+                                           'a0000000-0000-4000-8000-000000000001')),
+  true,
+  '23e. İki otelde çalışan için cevap "evet" — şifresine dokunulmaz (yetki sıçraması kapalı)');
 
 select deneme.cikis();
 select * from finish();

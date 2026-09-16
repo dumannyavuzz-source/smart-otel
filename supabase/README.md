@@ -18,9 +18,11 @@ Arayüz kodu burada değildir.
 | `migrations/…_teslim_hasar.sql` | Eksik teslimde kanıt şartı: `deliveries.damage_photo_path` + teslim kuralının yeni sürümü |
 | `migrations/…_kesirli_miktar.sql` | Kesirli miktar: talep · onay · teslim · eksik beyanı `numeric(8,2)` olur ("7,5 Kg") |
 | `migrations/…_fatura_gizliligi.sql` | Fatura ve kanıt fotoğrafını yalnızca müdür, sahip ve yükleyen görür |
+| `migrations/…_sifre_guncelleme.sql` | Şifre kapısının sorduğu tek soru: "bu kişi başka otelde de çalışıyor mu?" |
 | `functions/guest-feedback/` | Misafir Kapısı (Edge Function): `index.ts` ince kabuk, `kapi.ts` saf mantık, `kapi_test.ts` testleri |
 | `functions/personel-ekle/` | Personel Kapısı: müdür yeni hesap açar. Ana anahtarla yapılan tek iş hesap açmaktır; üyelik müdürün kendi yetkisiyle yazılır |
-| `tests/guvenlik_denemeleri.sql` | 22 maddelik saldırı denemesi (hepsi reddedilmeli) · 140 deneme |
+| `functions/sifre-guncelle/` | Şifre Kapısı: müdür personelin şifresini yeniler. Ana anahtarla yapılan tek iş şifreyi yazmaktır (`docs/security/004`) |
+| `tests/guvenlik_denemeleri.sql` | 22 maddelik saldırı denemesi (hepsi reddedilmeli) · 145 deneme |
 | `scripts/ana_anahtar_taramasi.sh` | 22. deneme: ana anahtar kodda/git'te var mı? |
 | `config.toml` | Yerel Supabase ayarları (şifre ≥ 8 karakter, fotoğraf ≤ 2 MB, açık kayıt kapalı, misafir kapısı anahtarsız) |
 

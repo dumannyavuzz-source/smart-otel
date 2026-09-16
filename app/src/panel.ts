@@ -226,3 +226,57 @@ export async function urunKapatAc(id: string, acik: boolean): Promise<void> {
   const { error } = await ortakBeyin().from('products').update({ is_active: acik }).eq('id', id);
   if (error) throw new Error(hataMetni(error));
 }
+
+// ---------------------------------------------------------------------
+// Şifre yenileme (Genel Müdür talebi, Aşama 19.1)
+// Mail linki yok: müdür yeni şifreyi yazar ve kişiye kendisi söyler. Beş saniyelik iş.
+// Yetki kuralı sunucudadır (sifre-guncelle kapısı):
+//   sahip → müdür + görevli · müdür → yalnızca görevli · kimse kendi şifresini buradan değiştiremez
+//   ve iki otelde çalışan kişinin şifresine hiç dokunulmaz.
+// ---------------------------------------------------------------------
+export const EN_KISA_SIFRE = 8;
+
+export function sifreGecerliMi(sifre: string): boolean {
+  return sifre.length >= EN_KISA_SIFRE && sifre.length <= 128;
+}
+
+// Müdürün telefonda okuyabileceği kadar kolay bir öneri: "kule-zeytin-4821".
+// Türkçe harf yoktur: personel hangi klavyeyle yazarsa yazsın aynı tuşlara basar.
+//
+// Neden İKİ kelime? Bu şifre kalıcıdır (personelin kendi şifresini değiştirme yolu henüz yok),
+// üstelik kelime listesi herkesin tarayıcısında durur. Tek kelime + dört rakam yalnızca
+// 90 bin ihtimal ederdi; sabırlı biri deneye deneye bulurdu. İki ayrı kelime bunu 20 milyona çıkarır.
+const SIFRE_KELIMELERI = [
+  'kule', 'deniz', 'kaya', 'ceviz', 'fener', 'zeytin', 'bulut', 'pamuk',
+  'limon', 'kiraz', 'badem', 'marul', 'biber', 'elma', 'armut', 'kavun',
+  'karpuz', 'domates', 'salata', 'ekmek', 'peynir', 'bardak', 'tabak', 'havlu',
+  'yastik', 'perde', 'lamba', 'pencere', 'balkon', 'teras', 'bahce', 'cicek',
+  'orman', 'nehir', 'dalga', 'kumsal', 'midye', 'levrek', 'palmiye', 'portakal',
+  'mandalina', 'kestane', 'defne', 'lale', 'menekse', 'papatya', 'sardunya', 'karanfil',
+];
+
+export function sifreOner(): string {
+  const rastgele = new Uint32Array(3);
+  crypto.getRandomValues(rastgele);
+  const kac = SIFRE_KELIMELERI.length;
+  const birinci = rastgele[0]! % kac;
+  const ikinci = (birinci + 1 + (rastgele[1]! % (kac - 1))) % kac;   // iki kelime hep farklı
+  const sayi = 1000 + (rastgele[2]! % 9000);                          // dört basamak: kısa şifre çıkmaz
+  return `${SIFRE_KELIMELERI[birinci]}-${SIFRE_KELIMELERI[ikinci]}-${sayi}`;
+}
+
+export async function sifreGuncelle(
+  otelId: string,
+  userId: string,
+  yeniSifre: string,
+): Promise<{ ok: true } | { ok: false; mesaj: string }> {
+  const { data, error } = await ortakBeyin().functions.invoke<{ ok: boolean; mesaj?: string }>('sifre-guncelle', {
+    body: { hotel_id: otelId, user_id: userId, password: yeniSifre },
+  });
+  if (error) {
+    // Kapı 4xx dönünce gövdede Türkçe mesaj vardır; onu göster
+    const govde = await (error as { context?: Response }).context?.json?.().catch(() => null);
+    return { ok: false, mesaj: (govde as { mesaj?: string } | null)?.mesaj ?? 'Bu işlem yapılamadı.' };
+  }
+  return data?.ok ? { ok: true } : { ok: false, mesaj: data?.mesaj ?? 'Bu işlem yapılamadı.' };
+}

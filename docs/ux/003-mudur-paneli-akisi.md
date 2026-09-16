@@ -28,7 +28,7 @@ Giriş ──▶ Ana Kumanda ──┬─ 🔴 "3 işin süresi geçti"   ──
 | Mutsuz Misafirler | Son 24 saatin 1–3 yıldızlı yorumları: Oda no · yıldızlar · saat · yorum | bak, odaya git |
 | **Teslimat Uyuşmazlıkları** | Son 7 günde onaylandığı gibi gelmeyen teslimler: ürün · "2,5 Kg eksik geldi" · onaylanan ve gelen miktar · (farklıysa istenen de) · kim teslim aldı · saat · **eksik/hasar fotoğrafı** | bak, tedarikçiyi ara |
 | Bekleyen Onaylar | Her talep bir kart: ürün · istenen adet · talep eden · not. Adet **− +** ile değiştirilebilir | **✓ Onayla** (yanında ✕ Reddet) |
-| Personel | Ad · görev listesi. Yalnızca görevlilerde "İşten çıkar" (müdürü/sahibi veritabanı zaten çıkartmaz) | **➕ Personel Ekle** |
+| Personel | Ad · görev listesi. Her kartta "🔑 Şifre" (yetkisi varsa) ve yalnızca görevlilerde "İşten çıkar" | **➕ Personel Ekle** |
 | Ürünler | Personelin listesindeki ürünler, başlıkta "Personelin listesinde 5 ürün var (en fazla 8)" | **➕ Ürün Ekle** |
 
 ## Trafik lambası (renk tek başına konuşmaz)
@@ -77,7 +77,8 @@ Müdür panele bakmıyor olabilir; telefon masada durur. Bu yüzden sisteme **ye
 - **Uyuşmazlık kaydı düzeltilemez.** Ekran yalnızca gösterir: teslim bir imzadır. Yanlış girilmiş miktar için veritabanında düzeltme kaydı yolu vardır, ekranı henüz yoktur.
 - **Tek nöbetçi.** Panelin bütün ekranları aynı cevabı tek bir nöbetçiden okur (`app/src/panelNobeti.ts`). Böylece müdür "Onaylar" ekranındayken de alarmlar izlenir ve çan çalar; iki ekran açıkken sunucuya iki kez sorulmaz.
 - **Şifreyi müdür belirler.** Personelin ilk şifresini müdür koyar ve kendisi söyler. Hesap açmak ana anahtar ister; bu yüzden sunucudaki `personel-ekle` kapısında yapılır, müdürün yetkisi orada yeniden denetlenir.
-  ⚠️ **Açık madde:** Uygulamada henüz şifre değiştirme yolu yok; yani müdür personelin şifresini bilmeye devam ediyor. Bunun neden önemli olduğu ve seçenekler: `docs/security/002-personel-kapisi-ve-panel.md` · Açık 1. Genel Müdür kararı bekleniyor.
+- **Şifre unutulursa panelden yenilenir (Aşama 19.1).** Personel kartındaki "🔑 Şifre" düğmesi: kutu hazır bir öneriyle açılır ("kule-4821"), müdür isterse kendi şifresini yazar, kaydeder ve ekranda gördüğü şifreyi kişiye söyler. Mail gitmez, bağlantı beklenmez. Şifre ekranda **açıkça görünür** — müdürün onu söylemesi gerektiği için gizlemek işe yaramaz, yalnızca zorlaştırırdı. Yetki kuralı sunucudadır: sahip → müdür + görevli · müdür → yalnızca görevli · sahibin şifresine kimse dokunamaz · kimse kendi şifresini buradan değiştiremez.
+  ⚠️ **Açık madde:** Personelin kendi şifresini değiştirme yolu hâlâ yok; yani müdür şifreyi bilmeye devam ediyor. Bunun neden önemli olduğu: `docs/security/002-personel-kapisi-ve-panel.md` · Açık 1.
 
 ## Offline
 
