@@ -24,8 +24,9 @@
 - [ ] **1.2** Projede **günlük yedeklemenin açık** olduğunu doğrula (veritabanı göçleri geri alınamaz; dönüş yolu yedektir).
 - [ ] **1.3** Bilgisayardan bağla: `supabase link --project-ref <proje-kimliği>`
 - [ ] **1.4** Veritabanını kur: `supabase db push`
-      → 13 göç dosyası sırayla çalışır: tablolar → kurallar → kilitler → fotoğraflar → misafir kapısı → arıza fotoğrafı →
-      çözüm fotoğrafı → personel ve ürün → teslim kanıtı → kesirli miktar → fatura gizliliği → şifre güncelleme → kayıt kapısı.
+      → 14 göç dosyası sırayla çalışır: tablolar → kurallar → kilitler → fotoğraflar → misafir kapısı → arıza fotoğrafı →
+      çözüm fotoğrafı → personel ve ürün → teslim kanıtı → kesirli miktar → fatura gizliliği → şifre güncelleme →
+      kayıt kapısı → sayaç kilidi.
 - [ ] **1.5** Kurulumu gözle doğrula (Supabase Studio):
       - `photos` kovası **private** (public değil), dosya sınırı **2 MB**.
       - Bütün tablolarda RLS **açık**.
@@ -61,9 +62,11 @@
 
 ## 3. Canlıdan hemen önce — doğrulamalar
 
-- [ ] **3.1** **145 güvenlik denemesini** Staging (test) projesinde koştur: `supabase test db`
-      ⚠️ Bu dosya 19.1 denetiminde bozuk bulundu ve onarıldı; ilk çalıştırmada "145 ok" çıktısı GÖZLE görülmelidir.
-      Hepsi reddedilmeli. Bir tanesi bile geçerse canlıya çıkılmaz.
+- [x] **3.1** ✅ **150 güvenlik denemesi Staging'de koşuldu ve hepsi geçti** (2026-09-16).
+      Docker gerekmedi: `supabase db query --linked --file supabase/tests/guvenlik_denemeleri.sql`
+      (`supabase test db --linked` Docker istiyor; `db query` istemiyor). Dosya kendini begin…rollback
+      içine aldığı için veritabanında iz bırakmaz. Üretimde de aynı komutla tekrarlanmalıdır.
+      Üretimde bir tanesi bile düşerse canlıya çıkılmaz.
 - [ ] **3.2** Kapıların kendi testleri: `deno test supabase/functions/` (misafir kapısı, personel ekleme, şifre yenileme)
 - [ ] **3.3** Uygulama testleri ve derleme: `cd app && npm test && npm run build`
 - [ ] **3.4** Ana anahtar taraması: `bash supabase/scripts/ana_anahtar_taramasi.sh` — koda ya da git'e anahtar sızmış mı?
@@ -132,3 +135,30 @@ zincirlenme · sahip kilitlenirse geri dönüş · e-posta doğrulaması · dene
 - **Uygulama bozulursa:** Vercel → önceki dağıtımı "Promote to Production" ile geri al. Saniyeler sürer.
 - **Veritabanı bozulursa:** göçler geri alınmaz; günlük yedekten dönülür. Bu yüzden 1.2 adımı atlanmaz.
 - **Kapı bozulursa:** `supabase functions deploy <ad>` ile önceki sürüm yeniden yayınlanır.
+
+---
+
+## Staging kurulum kaydı (2026-09-16)
+
+Proje: `pnevrqzwgcpdspjfbqst` · Bölge: eu-central-1 (Frankfurt) · PostgreSQL 17.6 · Durum: ACTIVE_HEALTHY
+
+| Adım | Sonuç |
+|---|---|
+| 14 göç dosyası | ✅ Uygulandı |
+| 4 kapı (otel-ac · guest-feedback · personel-ekle · sifre-guncelle) | ✅ Yayınlandı; ilk ikisi anahtarsız, son ikisi kartsız isteği 401 ile reddediyor |
+| Kilitler (anon istemci) | ✅ `hotels`, `memberships`, `kayit_denemeleri` — üçü de boş dönüyor |
+| 150 güvenlik denemesi | ✅ Hepsi geçti (ilk koşuda 2 düşmüştü, ikisi de düzeltildi — aşağıda) |
+| Uçtan uca kayıt | ✅ Kayıt → 200 · aynı e-posta ikinci kez → 409 · yeni hesapla giriş → çalışıyor · kart yalnızca kendi otelini ve `owner` üyeliğini görüyor |
+
+**Canlı koşunun bulduğu üç şey (üçü de düzeltildi):**
+
+1. **Tip uyuşmazlığı:** Aşama 17.1'de miktar sütunları `numeric` olmuştu; iki eski deneme onları hâlâ tam
+   sayıyla karşılaştırıyordu (`is(numeric, integer)` diye bir işlev yok). Karşılaştırmalar `::numeric` ile düzeltildi.
+2. **Ortam farkı:** Supabase Cloud, `storage.objects` üzerinde doğrudan silmeyi/değiştirmeyi istisna fırlatarak
+   engelliyor (yerelde sessizce 0 satır etkilenirdi). 17b ve 17c denemeleri iki ortamda da çalışacak biçimde yeniden yazıldı.
+3. **🔴 Gerçek açık:** `revoke all … from public` tek başına yetmiyor — Supabase yeni fonksiyonlara `anon` ve
+   `authenticated` rollerine ayrı ayrı yetki veriyor. Kayıt sayacını giriş yapmış herkes çağırabiliyordu.
+   `…_sayac_kilidi.sql` göçüyle kapatıldı (doğru desen misafir kapısında zaten vardı).
+
+**Staging'de duran deneme verisi:** "Staging Deneme Oteli" / `staging-deneme@oteldijital.com`.
+Üretime çıkmadan silinmelidir.

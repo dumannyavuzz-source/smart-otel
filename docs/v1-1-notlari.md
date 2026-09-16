@@ -47,7 +47,8 @@ Bunlar yeni değildir; ilgili belgelerinde zaten duruyor. Tek yerden görülsün
 | C3 | Teslim düzeltme ekranı yok (veritabanı yolu hazır, ekranı yok) | `docs/ux/004` |
 | C4 | Uyuşmazlık kartında "Gördüm" düğmesi yok; kart 7 gün sonra kendiliğinden düşer | `docs/ux/003` |
 | C5 | Fatura fotoğrafını yükleyen kişi kendi yüklediğini sonradan da görebiliyor | `docs/security/003` · Açık 1 |
-| C6 | Kapılardaki `npm:@supabase/supabase-js@2` bağımlılığı tam sürüme sabitlenmeli | `docs/security/004` |
+| C6 | Kapılardaki Supabase kütüphanesi tam sürüme sabitlenmeli (ana anahtarı tutan dosyalar) | `docs/security/004` |
+| C7 | Onay kayıtları otelin BÜTÜN personeline açık (yalnızca depo görevlisine daraltılabilir) | Aşama 17 kararı · deneme 2.4b |
 
 ---
 

@@ -53,3 +53,28 @@ kararlı bir saldırganı kesmez. Gerekirse captcha (`auth.captcha`) açılabili
 - Kapı **anahtarsız** yayınlanmalı: `supabase functions deploy otel-ac --no-verify-jwt`.
 - İlk kayıt denemesi Staging'de elle yapılmalı: otel açılıyor mu, kişi sahip olarak yazılıyor mu,
   panele düşüyor mu, ikinci kez aynı e-postayla denenince ne oluyor?
+
+---
+
+## Staging koşusunda bulunup kapatılan açık (2026-09-16)
+
+### 🔴 `revoke all … from public` tek başına yetmiyordu
+
+Sayaç fonksiyonunu (`kayit_denemesi_say_ve_yaz`) **giriş yapmış herhangi bir personel doğrudan
+çağırabiliyordu.** Sebep: Supabase, `public` şemasında açılan her yeni fonksiyona `anon` ve
+`authenticated` rollerine **ayrı ayrı** çalıştırma yetkisi veriyor (varsayılan yetkiler).
+`public` rolünden yetki almak, bu iki role verilmiş açık yetkiyi geri almıyor.
+
+Etkisi: kayıt kapısının önündeki tek koruma olan sayaç, içeriden çöple doldurulabilir ya da
+yıpratılabilirdi. Doğru desen projede zaten vardı (misafir kapısı):
+
+```sql
+revoke all on function … from public, anon, authenticated;
+grant execute on function … to service_role;
+```
+
+`…_sayac_kilidi.sql` göçüyle hem sayaç hem de `baska_otelde_calisiyor_mu` bu desene çevrildi.
+Bulguyu **canlı veritabanında koşulan 24d numaralı deneme** yakaladı; yerel çalıştırmada görünmezdi.
+
+**Ders:** yeni bir SQL fonksiyonu eklenirken yetkiler `anon` ve `authenticated` için açıkça geri alınmalı,
+ve bunun bir denemesi yazılmalıdır. Bu kural `docs/security/001` kontrol listesine eklenmelidir.

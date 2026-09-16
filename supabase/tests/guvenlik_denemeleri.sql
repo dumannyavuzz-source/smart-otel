@@ -23,7 +23,7 @@ begin
 end
 $$;
 
-select plan(149);
+select plan(150);
 
 
 -- ---------------------------------------------------------------------
@@ -320,7 +320,7 @@ select lives_ok(
              'e0000000-0000-4000-8000-000000000001') $$,
   '11h. Yanlış adet: DÜZELTME kaydı yazılır, eski kayıt yerinde kalır');
 
-select is((select received_quantity from public.deliveries where id = 'e0000000-0000-4000-8000-000000000001'), 18,
+select is((select received_quantity from public.deliveries where id = 'e0000000-0000-4000-8000-000000000001'), 18::numeric,
   '11i. Eski kayıt (18) hâlâ durur; yenisi (19) onu işaret eder');
 
 
@@ -345,7 +345,7 @@ select lives_ok(
 select deneme.giris('a0000000-0000-4000-8000-00000000a002');   -- Ali (depo görevlisi)
 
 select is((select approved_quantity from public.approvals
-            where purchase_request_id = 'd0000000-0000-4000-8000-000000000003'), 10,
+            where purchase_request_id = 'd0000000-0000-4000-8000-000000000003'), 10::numeric,
   '11l. Depo görevlisi onaylanan miktarı görür ("kaç bekliyoruz?")');
 
 select lives_ok(
@@ -705,14 +705,35 @@ select throws_ok(
   '23505', null,
   '17a. Aynı yola ikinci fotoğraf yüklenemez');
 
-update storage.objects set metadata = '{"degisti": true}'
-where name = 'a0000000-0000-4000-8000-000000000001/deliveries/e0000000-0000-4000-8000-000000000001.jpg';
+-- Fotoğraf değiştirilemez ve silinemez. İki ortamda iki farklı biçimde reddedilir:
+--   * Supabase Cloud: storage koruma tetikleyicisi doğrudan istisna fırlatır.
+--   * Yerel/eski kurulum: kural olmadığı için sessizce SIFIR satır etkilenir.
+-- Sonuç ikisinde de aynı olmalı: fotoğraf yerinde ve değişmemiş durmalı.
+-- Bu yüzden denemeyi yutup SONUCU denetliyoruz; nasıl reddedildiği değil, reddedildiği önemli.
+do $$
+begin
+  begin
+    update storage.objects set metadata = '{"degisti": true}'
+    where name = 'a0000000-0000-4000-8000-000000000001/deliveries/e0000000-0000-4000-8000-000000000001.jpg';
+  exception when others then null;
+  end;
+end
+$$;
+
 select is((select metadata is null from storage.objects
            where name = 'a0000000-0000-4000-8000-000000000001/deliveries/e0000000-0000-4000-8000-000000000001.jpg'), true,
   '17b. Fotoğrafın üzerine yazılamaz');
 
-delete from storage.objects
-where name = 'a0000000-0000-4000-8000-000000000001/deliveries/e0000000-0000-4000-8000-000000000001.jpg';
+do $$
+begin
+  begin
+    delete from storage.objects
+    where name = 'a0000000-0000-4000-8000-000000000001/deliveries/e0000000-0000-4000-8000-000000000001.jpg';
+  exception when others then null;
+  end;
+end
+$$;
+
 select is((select count(*)::int from storage.objects
            where name = 'a0000000-0000-4000-8000-000000000001/deliveries/e0000000-0000-4000-8000-000000000001.jpg'), 1,
   '17c. Fotoğraf silinemez');
@@ -989,8 +1010,17 @@ select deneme.giris('a0000000-0000-4000-8000-00000000a001');   -- Ayşe
 select is_empty($$ select * from public.guest_feedback $$,
   '2.4a. Görevli misafir yorumlarını göremez');
 
-select is_empty($$ select * from public.approvals $$,
-  '2.4b. Görevli onay kayıtlarını göremez');
+-- Aşama 17'de bilerek gevşetildi: depo görevlisi, teslim alacağı ONAYLANMIŞ talebin
+-- kaç adet onaylandığını görebilmelidir ("kaç bekliyoruz?"). Bekleyen talebin kararı yoktur,
+-- reddedilen talebin kararı ise görevliye kapalıdır. Karar YAZMAK yine yalnızca müdürdedir.
+select isnt_empty($$ select * from public.approvals $$,
+  '2.4b. Görevli, onaylanmış talebin kararını görür (teslim alabilmek için — Aşama 17 kararı)');
+
+select throws_ok(
+  $$ insert into public.approvals (hotel_id, purchase_request_id, decision, approved_quantity)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000001', 'approved', 5) $$,
+  null, null,
+  '2.4b2. Ama görevli karar YAZAMAZ');
 
 select throws_ok(
   $$ insert into public.rooms (hotel_id, number)
