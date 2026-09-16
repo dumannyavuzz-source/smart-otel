@@ -23,7 +23,7 @@ begin
 end
 $$;
 
-select plan(136);
+select plan(140);
 
 
 -- ---------------------------------------------------------------------
@@ -651,8 +651,11 @@ select deneme.giris('a0000000-0000-4000-8000-00000000a001');   -- Ayşe (A)
 select is_empty($$ select * from storage.objects where name like 'b0000000-0000-4000-8000-000000000001/%' $$,
   '16. Otel A üyesi Otel B''nin fotoğraf klasörünü göremez');
 
-select is((select count(*)::int from storage.objects where name like 'a0000000-0000-4000-8000-000000000001/%'), 1,
-  '16b. Ama kendi otelinin fotoğrafını görür');
+-- Fatura gizliliği (Aşama 17.2): kat görevlisi tedarikçi fiyatını göremez.
+select is_empty(
+  1380 select * from storage.objects
+     where name like 'a0000000-0000-4000-8000-000000000001/deliveries/%' 1380,
+  '16b. Kat görevlisi kendi otelinin fatura/kanıt fotoğraflarını GÖREMEZ (tedarikçi fiyatı gizlidir)');
 
 select throws_ok(
   $$ insert into storage.objects (bucket_id, name, owner)
@@ -666,6 +669,32 @@ select throws_ok(
      values ('photos', 'bozuk-yol/sizma.jpg', 'a0000000-0000-4000-8000-00000000a001') $$,
   '42501', null,
   '16d. Otel kimliğiyle başlamayan yola yüklenemez');
+
+-- Fatura gizliliği · kimler görür? (Aşama 17.2 · Genel Müdür talimatı)
+select deneme.giris('a0000000-0000-4000-8000-00000000a003');   -- Mehmet (müdür)
+
+select lives_ok(
+  $$ insert into storage.objects (bucket_id, name, owner)
+     values ('photos', 'a0000000-0000-4000-8000-000000000001/deliveries/mudur-fatura.jpg',
+             'a0000000-0000-4000-8000-00000000a003') $$,
+  '16e. Müdür de teslim klasörüne fotoğraf yükleyebilir');
+
+select isnt_empty(
+  $$ select 1 from storage.objects
+     where name = 'a0000000-0000-4000-8000-000000000001/deliveries/e0000000-0000-4000-8000-000000000001.jpg' $$,
+  '16f. Müdür, başkasının yüklediği fatura fotoğrafını görür (panelde kanıta bakar)');
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a002');   -- Ali (depo görevlisi)
+
+select isnt_empty(
+  $$ select 1 from storage.objects
+     where name = 'a0000000-0000-4000-8000-000000000001/deliveries/e0000000-0000-4000-8000-000000000001.jpg' $$,
+  '16g. Depo görevlisi KENDİ yüklediği fotoğrafı görür');
+
+select is_empty(
+  $$ select * from storage.objects
+     where name = 'a0000000-0000-4000-8000-000000000001/deliveries/mudur-fatura.jpg' $$,
+  '16h. Ama başkasının yüklediği teslim fotoğrafını göremez');
 
 select deneme.giris('a0000000-0000-4000-8000-00000000a002');   -- Ali
 

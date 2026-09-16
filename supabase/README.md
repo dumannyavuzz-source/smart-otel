@@ -17,9 +17,10 @@ Arayüz kodu burada değildir.
 | `migrations/…_personel_ve_urun.sql` | Personelin adı ve görevi (`memberships`), en fazla 8 açık ürün kuralı |
 | `migrations/…_teslim_hasar.sql` | Eksik teslimde kanıt şartı: `deliveries.damage_photo_path` + teslim kuralının yeni sürümü |
 | `migrations/…_kesirli_miktar.sql` | Kesirli miktar: talep · onay · teslim · eksik beyanı `numeric(8,2)` olur ("7,5 Kg") |
+| `migrations/…_fatura_gizliligi.sql` | Fatura ve kanıt fotoğrafını yalnızca müdür, sahip ve yükleyen görür |
 | `functions/guest-feedback/` | Misafir Kapısı (Edge Function): `index.ts` ince kabuk, `kapi.ts` saf mantık, `kapi_test.ts` testleri |
 | `functions/personel-ekle/` | Personel Kapısı: müdür yeni hesap açar. Ana anahtarla yapılan tek iş hesap açmaktır; üyelik müdürün kendi yetkisiyle yazılır |
-| `tests/guvenlik_denemeleri.sql` | 22 maddelik saldırı denemesi (hepsi reddedilmeli) · 136 deneme |
+| `tests/guvenlik_denemeleri.sql` | 22 maddelik saldırı denemesi (hepsi reddedilmeli) · 140 deneme |
 | `scripts/ana_anahtar_taramasi.sh` | 22. deneme: ana anahtar kodda/git'te var mı? |
 | `config.toml` | Yerel Supabase ayarları (şifre ≥ 8 karakter, fotoğraf ≤ 2 MB, açık kayıt kapalı, misafir kapısı anahtarsız) |
 

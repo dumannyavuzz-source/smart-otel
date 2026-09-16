@@ -193,7 +193,9 @@ Her beyan tablosunda (🔏) iki **kural** vardır: **"değiştirmeyi reddet"** v
 Suistimal araştırmasında soru hep aynıdır: **"Kim, ne zaman, ne dedi?"** Cevap hiçbir zaman değişmez.
 
 ### 4.4 Fatura fotoğrafı da kilitli
-- Fotoğraf yolu: `hotel_id/deliveries/<teslim-kimliği>.jpg`. Yalnızca o otelin üyeleri görür.
+- Fotoğraf yolu: `hotel_id/deliveries/<teslim-kimliği>.jpg`. **Yalnızca müdür, sahip ve fotoğrafı yükleyen kişi görür**
+  (Aşama 17.2, Genel Müdür talimatı: fatura fotoğrafı tedarikçi fiyatı demektir, kat görevlisi göremez —
+  `docs/security/003-kesirli-miktar-ve-uyusmazlik.md`). Arıza fotoğraflarını otelin her üyesi görmeye devam eder.
 - **Üzerine yazma ve silme yok.** Aynı yola ikinci yükleme reddedilir.
 - Fotoğraf **önce** yüklenir, teslim kaydı **sonra** yazılır ve fotoğrafın yolunu taşır. Kayıt varsa fotoğrafı da vardır.
 - Yükleme sınırı: yalnızca resim, en fazla ~2 MB (telefonda küçültülür). Dosya adı telefonun verdiği değil, sistemin ürettiği kimliktir.

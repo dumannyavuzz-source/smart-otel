@@ -1,6 +1,6 @@
 # 003 — Güvenlik: Kesirli Miktar ve Teslimat Uyuşmazlığı (Aşama 17.1)
 
-> **Hazırlayan:** Security + Orkestratör · **Tarih:** 2026-09-16 · **Durum:** Bir açık maddede Genel Müdür kararı bekleniyor
+> **Hazırlayan:** Security + Orkestratör · **Tarih:** 2026-09-16 (Aşama 17.2 ile güncellendi) · **Durum:** Açık 1 kapatıldı
 > Bu belge, Aşama 17.1 kodlandıktan **sonra** yapılan denetimin sonucudur.
 > Dayanak: `docs/security/001-rls-and-maker-checker.md`, `docs/decisions/004-kesirli-miktar.md`.
 
@@ -53,16 +53,28 @@ Fotoğrafın adresi üretilemezse ekran sonsuza kadar "açılıyor…" diyordu. 
 | `/panel/uyusmazliklar` ekranı | Yalnızca müdür ve sahip (rota kilidi + veritabanı kilidi) |
 | Teslim kayıtları (`deliveries`) | Müdür ve sahip otelin tümünü; görevli yalnızca kendi teslim aldıklarını |
 | Onay kayıtları (`approvals`) | Müdür ve sahip tümünü; görevli yalnızca teslim alacağı, onaylanmış talebin kararını ("kaç bekliyoruz?") |
-| Kanıt/fatura fotoğrafı | Otelin **her üyesi** (aşağıda Açık 1) — imzalı adres 5 dakika geçerli |
+| Kanıt/fatura fotoğrafı | **Müdür ve sahip** (otelin tümü) · **fotoğrafı yükleyen kişi** (yalnızca kendi yüklediği) — imzalı adres 5 dakika geçerli |
+| Arıza fotoğrafı | Otelin her üyesi (teknisyenin arızayı görmesi gerekir) |
 
 ## Açık maddeler
 
-### Açık 1 — Fatura ve kanıt fotoğraflarını otelin her personeli görebiliyor
-Depo kilidi "otelin üyesi mi?" diye sorar, rol sormaz. Yani kat görevlisi de otelin fatura fotoğraflarını (tedarikçi fiyatları)
-ve hasar fotoğraflarını açabilir. Otel sınırı aşılmıyor, ama en az yetki ilkesine aykırı. Bu fotoğraflar 17.1 ile birlikte
-artık birer **denetim kanıtıdır**.
-**Öneri:** `deliveries/` klasörü yalnızca müdür+sahip ve fotoğrafı yükleyen kişi tarafından okunsun.
-**Karar Genel Müdür'ün:** bilinçli kabul mü, yoksa bir sonraki aşamada kapatılacak bir borç mu?
+### ✅ Açık 1 KAPATILDI — Fatura gizliliği (Aşama 17.2)
+Genel Müdür bunu "çok kritik" sayıp derhal kapatılmasını istedi: kat görevlisinin tedarikçi fiyatlarını görmesi bir zafiyettir.
+`supabase/migrations/…_fatura_gizliligi.sql` ile depo kilidi ikiye ayrıldı:
+
+| Klasör | Kim görür |
+|---|---|
+| `<otel>/deliveries/` (fatura · kanıt) | Müdür ve sahip otelin tümünü; **fotoğrafı yükleyen kişi yalnızca kendi yüklediğini**. Başka hiç kimse. |
+| `<otel>/issues/` (arıza) | Otelin her üyesi — teknisyenin arızayı görmesi gerekir. |
+
+Yükleme kuralı değişmedi: otelin her üyesi kendi otelinin klasörüne yükleyebilir; depo görevlisi teslim alırken
+fatura fotoğrafını yükleyebilmelidir. Eski geniş kural **kaldırıldı** — kurallar birbirine eklendiği için o kalsaydı
+yenisi hiçbir şeyi kapatmazdı.
+
+**Bilinerek bırakılan tek şey:** depo görevlisi kendi çektiği fotoğrafı sonradan da görebilir. Bu bir sızıntı değildir
+(fotoğrafı zaten kendi telefonuyla o çekti) ve teslim yüklemesinin sağlıklı çalışmasını garantiler.
+Genel Müdür bunu da kapatmak isterse kuraldan tek satır (`or owner = auth.uid()`) çıkarılır.
+Denemeler: `supabase/tests/guvenlik_denemeleri.sql` · 16b, 16e–16h.
 
 ### Açık 2 — Düzeltme kayıtları panelde ayrı alarm gibi görünür
 Bir teslim düzeltildiğinde (eski kayıt durur, yenisi onu işaret eder) panelde iki kart birden çıkabilir.

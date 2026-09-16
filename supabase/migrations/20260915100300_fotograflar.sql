@@ -5,6 +5,9 @@
 -- Her dosyanın yolu otelin kimliğiyle başlar:  <hotel_id>/deliveries/<id>.jpg
 --                                               <hotel_id>/issues/<id>.jpg
 -- Kilit aynı mantık: yalnızca o otelin üyeleri görür ve yükler.
+-- GÜNCELLENDİ (Aşama 17.2): fatura ve kanıt fotoğraflarının OKUMA kuralı daraltıldı;
+--   aşağıdaki "uye kendi otelinin fotografini gorur" kuralının yerini iki yeni kural aldı.
+--   Bkz. migrations/20260916110000_fatura_gizliligi.sql
 -- Üzerine yazma ve silme YOK — fatura fotoğrafı da bir imzadır.
 --
 -- Kaynak: docs/security/001-rls-and-maker-checker.md (2.3 son satır, 4.4)
