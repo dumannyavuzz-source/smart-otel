@@ -90,6 +90,20 @@ Her odada **iki ayrı** QR vardır. Karıştırılmamalıdır:
 - [ ] **5.2** Personele 10 dakikalık gösterim: tek buton, QR okut, üç beyan. Uygulama mağazadan indirilmez; telefona "Ana ekrana ekle" denir.
 - [ ] **5.3** İlk hafta müdür paneli günde iki kez açılsın (sabah/akşam): kırmızı kutu var mı?
 
+## 6. Vitrin (tanıtım sayfası)
+
+Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/README.md`).
+
+- [ ] **6.1** Vercel'de ikinci proje: **Root Directory: `vitrin`** · Framework: Other · Derleme komutu **yok** · Çıktı klasörü `vitrin`
+- [ ] **6.2** Alan adlarını ayır:
+      - `oteldijital.com` → vitrin
+      - `app.oteldijital.com` → personel uygulaması ve misafir yorum sayfası
+- [ ] **6.3** Vitrindeki "Otelimi Ücretsiz Başlat" bağlantılarını kayıt akışına bağla (şu an `#` ile duruyorlar).
+- [ ] **6.4** ⚠️ **Metin–ürün doğrulaması:** sayfa "şifreler Müdür Paneli'nden 5 saniyede güncellenir" diyor.
+      Uygulamada şifre değiştirme ekranı **henüz yok**. Ya ekran eklenir ya cümle çıkarılır — reklamı yapılan
+      her cümle üründe karşılanmalıdır.
+- [ ] **6.5** Fiyat tablosundaki plan içerikleri (hangi özellik hangi pakette) Genel Müdür onayından geçmelidir.
+
 ---
 
 ## Bilinen açıklar (canlıya çıkışı engellemez, takip edilir)
