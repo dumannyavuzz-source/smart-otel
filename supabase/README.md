@@ -19,6 +19,8 @@ Arayüz kodu burada değildir.
 | `migrations/…_kesirli_miktar.sql` | Kesirli miktar: talep · onay · teslim · eksik beyanı `numeric(8,2)` olur ("7,5 Kg") |
 | `migrations/…_fatura_gizliligi.sql` | Fatura ve kanıt fotoğrafını yalnızca müdür, sahip ve yükleyen görür |
 | `migrations/…_sifre_guncelleme.sql` | Şifre kapısının sorduğu tek soru: "bu kişi başka otelde de çalışıyor mu?" |
+| `migrations/…_kayit_kapisi.sql` | Kayıt sayacı: aynı adresten saatte 3 deneme (adres açık değil, özeti saklanır) |
+| `functions/otel-ac/` | Kayıt Kapısı: müşteri kendi otelini açar. Hesap + otel + ilk sahiplik birlikte yazılır, yarım iş kalmaz (`docs/security/005`) |
 | `functions/guest-feedback/` | Misafir Kapısı (Edge Function): `index.ts` ince kabuk, `kapi.ts` saf mantık, `kapi_test.ts` testleri |
 | `functions/personel-ekle/` | Personel Kapısı: müdür yeni hesap açar. Ana anahtarla yapılan tek iş hesap açmaktır; üyelik müdürün kendi yetkisiyle yazılır |
 | `functions/sifre-guncelle/` | Şifre Kapısı: müdür personelin şifresini yeniler. Ana anahtarla yapılan tek iş şifreyi yazmaktır (`docs/security/004`) |

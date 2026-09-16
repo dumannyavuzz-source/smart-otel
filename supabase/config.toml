@@ -420,3 +420,11 @@ enabled = true
 # ---------------------------------------------------------------------
 [functions.guest-feedback]
 verify_jwt = false
+
+# ---------------------------------------------------------------------
+# Kayıt Kapısı — müşteri kendi otelini açar; ortada henüz giriş yapmış kimse yoktur,
+# bu yüzden kapı anahtarsızdır. Koruma kapının içindedir: biçim denetimi + saatte 3 deneme sınırı
+# + yarım iş bırakmayan sıra (hesap → otel → ilk sahiplik).
+# ---------------------------------------------------------------------
+[functions.otel-ac]
+verify_jwt = false

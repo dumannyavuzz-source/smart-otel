@@ -14,7 +14,7 @@
 | **Kapı anahtarı** (anon key) | Herkese açıktır, tarayıcıya konur. Tek başına hiçbir çekmeceyi açmaz; kilitler veritabanındadır. |
 | **Ana anahtar** (service role key) | Her kilidi açar. **Asla** tarayıcıya, git'e ya da `VITE_` ile başlayan bir değişkene yazılmaz. Yalnızca sunucudaki kapılarda yaşar. |
 | **Göç dosyaları** (migrations) | Veritabanının kurulum talimatı. Sırayla çalışır; elle SQL yazılmaz. |
-| **Kapılar** (Edge Functions) | Sunucuda çalışan üç küçük program: misafir yorumu, personel ekleme ve şifre yenileme. |
+| **Kapılar** (Edge Functions) | Sunucuda çalışan dört küçük program: kayıt (otel açma), misafir yorumu, personel ekleme ve şifre yenileme. |
 
 ---
 
@@ -24,23 +24,26 @@
 - [ ] **1.2** Projede **günlük yedeklemenin açık** olduğunu doğrula (veritabanı göçleri geri alınamaz; dönüş yolu yedektir).
 - [ ] **1.3** Bilgisayardan bağla: `supabase link --project-ref <proje-kimliği>`
 - [ ] **1.4** Veritabanını kur: `supabase db push`
-      → 12 göç dosyası sırayla çalışır: tablolar → kurallar → kilitler → fotoğraflar → misafir kapısı → arıza fotoğrafı →
-      çözüm fotoğrafı → personel ve ürün → teslim kanıtı → kesirli miktar → fatura gizliliği → şifre güncelleme.
+      → 13 göç dosyası sırayla çalışır: tablolar → kurallar → kilitler → fotoğraflar → misafir kapısı → arıza fotoğrafı →
+      çözüm fotoğrafı → personel ve ürün → teslim kanıtı → kesirli miktar → fatura gizliliği → şifre güncelleme → kayıt kapısı.
 - [ ] **1.5** Kurulumu gözle doğrula (Supabase Studio):
       - `photos` kovası **private** (public değil), dosya sınırı **2 MB**.
       - Bütün tablolarda RLS **açık**.
       - Auth → **açık kayıt kapalı** (kimse kendi kendine hesap açamaz), şifre en az **8 karakter**.
 - [ ] **1.6** Auth → URL ayarları: Site URL ve izinli yönlendirme adresleri = `https://<alan-adı>`
 - [ ] **1.7** Kapıları yayınla:
+      - `supabase functions deploy otel-ac --no-verify-jwt` ← **anahtarsız olmalı**; kaydolan kişinin henüz kartı yoktur.
       - `supabase functions deploy guest-feedback --no-verify-jwt` ← **anahtarsız olmalı**; misafir giriş yapmaz.
       - `supabase functions deploy personel-ekle` ← anahtar ister; müdür girişliyken çağırır.
       - `supabase functions deploy sifre-guncelle` ← anahtar ister; müdür personel şifresi yenilerken çağırır.
 - [ ] **1.8** Kapı sırlarını ayarla. **Şu an ikisi de `*`, yani CORS herkese açık:**
       - `GUEST_PAGE_ORIGIN = https://<alan-adı>`
       - `PANEL_ORIGIN = https://<alan-adı>`
+      - `KAYIT_SAYFASI_ORIGIN = https://<alan-adı>` ← kayıt kapısı buna bakar
       - `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` → Supabase bunları kendisi verir, elle eklenmez.
-- [ ] **1.9** İlk oteli ve sahip hesabını aç. **Bu işlem uygulamada yoktur** (bilinçli karar: otel açmak Smartotel ekibinin işidir).
-      Studio'dan: `hotels` satırı + kullanıcı hesabı + `memberships` satırı (`role = 'owner'`).
+- [ ] **1.9** İlk oteli aç. **Aşama 20'den beri iki yol var:**
+      (a) `/kayit` sayfasından normal müşteri gibi kaydol (tercih edilen: akışın gerçekten çalıştığını da doğrular), ya da
+      (b) Studio'dan elle: `hotels` satırı + kullanıcı hesabı + `memberships` satırı (`role = 'owner'`).
 - [ ] **1.10** Odaları gir (`rooms`): numara ve kat. `staff_code` ve `guest_code` kendiliğinden üretilir.
 - [ ] **1.11** Temizlik kontrol listesini (`checklist_templates`) gir. Ürünleri müdür uygulamadan ekleyebilir (en fazla 8 açık ürün).
 
@@ -74,6 +77,8 @@
       6. Eksik teslim al (kanıt fotoğrafıyla) → müdür panelinde **kırmızı uyuşmazlık kutusu** ve **çan sesi**.
       7. Misafir sayfası: `/yorum/<guest_code>` → 2 yıldız ver → müdüre "mutsuz misafir" alarmı düşmeli.
       8. Müdür panelinde bir görevlinin şifresini yenile → o telefonda yeni şifreyle giriş yapılabilmeli.
+      9. **Kayıt akışı:** vitrindeki düğme → `/kayit` → dört alan → "Otelimi Başlat" → panele düşmeli.
+         Aynı e-postayla ikinci kez denenince "Bu e-posta zaten kayıtlı" demeli; dört kez üst üste denenince durdurmalı.
 - [ ] **3.6** Fatura gizliliğini elle dene: kat görevlisi hesabıyla bir fatura fotoğrafına ulaşmayı dene → **ulaşamamalı**.
 
 ## 4. QR kodlarını basmak
@@ -103,7 +108,9 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
 - [ ] **6.2** Alan adlarını ayır:
       - `oteldijital.com` → vitrin
       - `app.oteldijital.com` → personel uygulaması ve misafir yorum sayfası
-- [ ] **6.3** Vitrindeki "Otelimi Ücretsiz Başlat" bağlantılarını kayıt akışına bağla (şu an `#` ile duruyorlar).
+- [ ] **6.3** Vitrindeki "Ücretsiz Başlat" düğmeleri `https://app.oteldijital.com/kayit` adresine bağlandı (Aşama 20).
+      Gerçek alan adı farklıysa bu adres `vitrin/index.html` içinde **beş yerde** güncellenmelidir.
+      Kurumsal plandaki "Görüşme ayarla" düğmesi hâlâ boştur: gerçek bir iletişim adresi belirlenmeli.
 - [x] **6.4** ✅ **Metin–ürün doğrulaması yapıldı:** sayfa "şifreler Müdür Paneli'nden 5 saniyede güncellenir" diyor
       ve Aşama 19.1'den beri ürün bunu karşılıyor (Personel ekranı → 🔑 Şifre). Vaat ile ürün aynı.
 - [ ] **6.5** Fiyat tablosundaki plan içerikleri (hangi özellik hangi pakette) Genel Müdür onayından geçmelidir.
@@ -112,15 +119,11 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
 
 ## Bilinen açıklar (canlıya çıkışı engellemez, takip edilir)
 
-| Açık | Etkisi | Kaynak |
-|---|---|---|
-| Personel kendi şifresini değiştiremiyor | Müdür şifreyi bilmeye devam eder (yenileme yolu Aşama 19.1'de eklendi) | `docs/security/002` · Açık 1 |
-| Şifre yenileme deftere yazılmıyor, hız sınırı yok | Hesaba erişim veren tek işlem kayıtsız kalıyor | `docs/security/004` · Açık 1 |
-| Şifre değişince açık oturum kapanmıyor | "Telefonu kayboldu, şifresini değiştirdim" yetmez; kişi otelden çıkarılmalı | `docs/security/004` · Açık 2 |
-| Sahip şifresini unutursa geri dönüş yolu yazılı değil | Acil günde güvensiz kestirme icat edilir | `docs/security/004` · Açık 4 |
-| Teslim düzeltme ekranı yok | Yanlış girilen miktar yalnızca veritabanından düzeltilebilir | `docs/ux/004` |
-| Uyuşmazlıkta "Gördüm" düğmesi yok | Kart 7 gün sonra kendiliğinden düşer | `docs/ux/003` |
-| Depo görevlisi kendi yüklediği faturayı sonradan da görebilir | Sızıntı değil (fotoğrafı kendisi çekti); istenirse tek satırla kapatılır | `docs/security/003` · Açık 1 |
+Hepsi tek bir dosyada toplandı: **`docs/v1-1-notlari.md`** (Genel Müdür kararı, 2026-09-16).
+V1 kapsamında hiçbiri yapılmayacaktır; oradaki listeden bir maddeyi V1'e almak Genel Müdür kararıdır.
+
+Başlıklar: şifre yenileme kaydı ve hız sınırı · şifre değişince oturumun kapanmaması · üyelik kilidiyle
+zincirlenme · sahip kilitlenirse geri dönüş · e-posta doğrulaması · deneme süresi takibi · ödeme.
 
 ## Geri dönüş planı
 

@@ -23,7 +23,7 @@ begin
 end
 $$;
 
-select plan(145);
+select plan(149);
 
 
 -- ---------------------------------------------------------------------
@@ -1111,6 +1111,34 @@ select is(
                                            'a0000000-0000-4000-8000-000000000001')),
   true,
   '23e. İki otelde çalışan için cevap "evet" — şifresine dokunulmaz (yetki sıçraması kapalı)');
+
+
+-- =====================================================================
+-- 24 · KAYIT KAPISI (Aşama 20)
+--
+-- Otel açmak, sistemin tek kimlik doğrulamasız yazma yoludur ve YALNIZCA kapıdan geçer.
+-- Girişli bir kullanıcı ne yeni otel açabilir ne de kayıt sayacına dokunabilir.
+-- =====================================================================
+select deneme.giris('a0000000-0000-4000-8000-00000000a003');   -- Mehmet (müdür)
+
+select throws_ok(
+  $$ insert into public.hotels (name) values ('Korsan Otel') $$,
+  '42501', null,
+  '24a. Girişli bir müdür bile yeni otel açamaz (otel yalnızca kayıt kapısından doğar)');
+
+select is_empty(
+  $$ select * from public.kayit_denemeleri $$,
+  '24b. Kayıt sayacı kimseye görünmez');
+
+select throws_ok(
+  $$ insert into public.kayit_denemeleri (ip_ozeti) values ('aaaaaaaaaaaaaaaa') $$,
+  '42501', null,
+  '24c. Kayıt sayacına kimse satır yazamaz');
+
+select throws_ok(
+  $$ select public.kayit_denemesi_say_ve_yaz('aaaaaaaaaaaaaaaa') $$,
+  '42501', null,
+  '24d. Sayaç fonksiyonunu yalnızca kayıt kapısı çağırabilir');
 
 select deneme.cikis();
 select * from finish();

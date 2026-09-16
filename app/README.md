@@ -3,7 +3,8 @@
 Telefonda çalışır, mağaza gerekmez, internet yokken de açılır.
 Dört akış vardır: **Kat Görevlisi** (QR → oda), **Teknisyen** (açık işler → Aldım → Çözdüm),
 **Depo** (teslim al → kaç Kg geldi → fatura fotoğrafı) ve **Müdür** (kumanda → alarmlar, onaylar, personel, ürünler).
-Bir de personele ait olmayan tek sayfa vardır: odadaki QR ile açılan **Misafir Yorum Ekranı** (giriş yok, kurulum yok).
+Personele ait olmayan iki sayfa daha vardır: odadaki QR ile açılan **Misafir Yorum Ekranı** (giriş yok, kurulum yok)
+ve vitrinden gelinen **Kayıt Ekranı** (`/kayit`) — müşteri kendi otelini burada açar.
 
 ## Ekranlar
 
@@ -22,6 +23,8 @@ Giriş (müdür) ──▶ Ana Kumanda ──┬─▶ 🔴 Süresi Geçenler ·
                                 └─▶ Çıkış
 
 Odadaki misafir QR'ı ──▶ /yorum/<kod> ──▶ ★ ★ ★ ★ ★ (+ isteğe bağlı yorum) ──▶ 📨 Gönder ──▶ Teşekkür ederiz
+
+Vitrindeki düğme ──▶ /kayit ──▶ Otel adı · Ad · E-posta · Şifre ──▶ Otelimi Başlat ──▶ Ana Kumanda
 ```
 
 Her beyan **önce telefona** yazılır (giden kutusu), ekran anında "✓" der. Postacı internet gelince gönderir.
@@ -46,6 +49,7 @@ Canlıya çıkış adımları: `docs/deployment-checklist.md`.
 | `src/miktar.ts` | Miktar ve birim: "7,5 Kg" yazımı, hangi birim bölünür (Kg yarımşar, adet birer birer) |
 | `src/uyusmazliklar.ts` | Müdür alarmı: teslim onaylandığı gibi mi geldi? (istenen · onaylanan · gelen + kanıt fotoğrafı) |
 | `src/misafir/yorumGonder.ts` | Misafir yorumunu kapıya (Edge Function) yollar; misafir anahtar taşımaz, giriş yapmaz |
+| `src/kayit.ts` | Kayıt: dört alanın denetimi ve kayıt kapısına istek; sonra normal giriş yapılır |
 | `src/panel.ts` | Müdür: alarmlar (hesaplanır, saklanmaz), onaylar, personel (şifre yenileme dahil), ürünler |
 | `src/panelNobeti.ts` | Panel nöbetçisi: 30 saniyede bir sorar, yeni kırmızı alarmda çanı çalar; ekranlar cevabı buradan okur |
 | `src/ses.ts` | Yeni kırmızı alarmda çalan zarif çan sesi; "bu alarmı duyurmuş muyduk?" hafızası |
