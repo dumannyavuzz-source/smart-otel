@@ -3,15 +3,8 @@
 // ve eksi kattaki depoda yazılan teslim internet gelince fotoğraflarıyla sırayla gidiyor mu?
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { telefonDeposu, type Teslimat } from './telefonDeposu';
-import {
-  birimSorusu,
-  eksikMetni,
-  hasarFotografiGerekli,
-  miktarMetni,
-  teslimAlabilirMi,
-  teslimAldim,
-  teslimBekleyenler,
-} from './teslimler';
+import { eksikMetni, hasarFotografiGerekli, teslimAlabilirMi, teslimAldim, teslimBekleyenler } from './teslimler';
+import { birimSorusu, miktarMetni } from './miktar';
 import { mektuplariGonder, type Gonderici, type Yukleyici } from './postaci';
 import { aktifKullaniciyiAyarla } from './kullanici';
 
@@ -160,6 +153,15 @@ describe('Teslim alma (beyan)', () => {
     expect(mektup.icerik.damage_photo_path).toMatch(/^otel-1\/deliveries\/.*-hasar\.jpg$/);
     expect(mektup.fotografYollari).toHaveLength(2);
     expect(await telefonDeposu.fotograflar.count()).toBe(2);
+  });
+
+  it('kesirli teslim: "7,5 Kg onaylandı, 6,5 Kg geldi" kayda öyle geçer', async () => {
+    const kesirli = siparis({ onaylanan: 7.5 });
+    await teslimAldim(kesirli, 6.5, sahteFoto(), sahteFoto());
+
+    const mektup = (await telefonDeposu.gidenKutusu.toArray())[0]!;
+    expect(mektup.icerik.received_quantity).toBe(6.5);
+    expect(eksikMetni(6.5, kesirli)).toBe('1 Kg eksik geldi');
   });
 });
 

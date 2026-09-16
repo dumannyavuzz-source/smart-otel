@@ -1,11 +1,15 @@
 // Müdür Paneli veri katmanı — Blueprint · 3.5
-// Alarm saklanmaz, HESAPLANIR (002 · A.8): "gecikti mi?" ve "mutsuz misafir var mı?" birer sorudur.
+// Alarm saklanmaz, HESAPLANIR (002 · A.8): "gecikti mi?", "mutsuz misafir var mı?",
+// "teslim onaylandığı gibi mi geldi?" — hepsi birer sorudur.
 // Panel internet ister (002 · B.8); müdürün interneti vardır.
 import { ortakBeyin } from './ortakBeyin';
 import type { Gorev, Rol } from './kullanici';
+import { teslimleriSor, uyusmazliklariAyikla, type Uyusmazlik } from './uyusmazliklar';
 
 const MUTSUZ_PUAN = 3;                         // 1–3 → müdüre alarm (Blueprint · 3.4)
-const MUTSUZ_PENCERE_SAAT = 24;                // son 24 saatin yorumları
+const PENCERE_SAAT = 24;                       // mutsuz misafir alarmı: son 24 saatin yorumları
+const UYUSMAZLIK_GUN = 7;                      // teslimat uyuşmazlığı: para işidir, hafta sonunu atlamalı
+                                               // (Cuma akşamı yazılan eksik teslim, Pazartesi hâlâ ekranda olmalı)
 
 // Kullanıcıya gösterilebilir hata: kural mesajları (Türkçe, veritabanından) aynen; gerisi genel cümle.
 export function hataMetni(hata: { code?: string; message?: string } | null | undefined): string {
@@ -37,6 +41,7 @@ export interface MutsuzMisafir {
 export interface Alarmlar {
   gecikenler: GecikenIs[];
   mutsuzMisafirler: MutsuzMisafir[];
+  uyusmazliklar: Uyusmazlik[];        // teslim onaylandığı gibi gelmedi (eksik ya da fazla)
   bekleyenOnay: number;
   acikIs: number;
 }
@@ -53,9 +58,10 @@ interface IsSatiri {
 export async function alarmlar(otelId: string): Promise<Alarmlar> {
   const beyin = ortakBeyin();
   const simdi = new Date().toISOString();
-  const pencere = new Date(Date.now() - MUTSUZ_PENCERE_SAAT * 3600_000).toISOString();
+  const pencere = new Date(Date.now() - PENCERE_SAAT * 3600_000).toISOString();
+  const teslimPenceresi = new Date(Date.now() - UYUSMAZLIK_GUN * 24 * 3600_000).toISOString();
 
-  const [acik, yorumlar, talepler, adlar] = await Promise.all([
+  const [acik, yorumlar, talepler, teslimler, adlar] = await Promise.all([
     beyin.from('work_orders')
       .select('id, severity, due_at, assigned_to, rooms(number), issue_reports(description)')
       .eq('hotel_id', otelId).neq('status', 'resolved').order('due_at'),
@@ -63,6 +69,7 @@ export async function alarmlar(otelId: string): Promise<Alarmlar> {
       .select('id, rating, comment, created_at, rooms(number)')
       .eq('hotel_id', otelId).lte('rating', MUTSUZ_PUAN).gte('created_at', pencere).order('created_at', { ascending: false }),
     beyin.from('purchase_requests').select('id', { count: 'exact', head: true }).eq('hotel_id', otelId).eq('status', 'pending'),
+    teslimleriSor(otelId, teslimPenceresi),
     adDefteri(otelId),
   ]);
   if (acik.error) throw acik.error;
@@ -85,7 +92,10 @@ export async function alarmlar(otelId: string): Promise<Alarmlar> {
   const mutsuzMisafirler = (yorumlar.data as unknown as (MutsuzMisafir & { rooms: { number: string } | null })[])
     .map((y) => ({ id: y.id, oda_no: y.rooms?.number ?? '?', rating: y.rating, comment: y.comment, created_at: y.created_at }));
 
-  return { gecikenler, mutsuzMisafirler, bekleyenOnay: talepler.count ?? 0, acikIs: acikIsler.length };
+  // "Onaylandığı gibi geldi mi?" — cevap hesaplanır, saklanmaz.
+  const uyusmazliklar = uyusmazliklariAyikla(teslimler, adlar);
+
+  return { gecikenler, mutsuzMisafirler, uyusmazliklar, bekleyenOnay: talepler.count ?? 0, acikIs: acikIsler.length };
 }
 
 // Kullanıcı kimliği → ad (müdür otelin tüm personelini görür)

@@ -187,11 +187,29 @@ textarea.alan { min-height: 120px; resize: vertical; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 16px;                 /* dar telefonda (320 px) sayaç karta sığsın */
 }
 
-.sayac .buton { width: 88px; }
+.sayac .buton { width: 88px; flex: 0 1 88px; }   /* gerekirse büzülür, taşma olmaz */
 .sayac strong { font-size: var(--baslik); min-width: 3ch; text-align: center; }
+
+/* Sayının kendisi yazılabilir: "1,2" gibi kesirli miktar tuşlarla değil, yazarak girilir. */
+.sayac-alan {
+  flex: 1 1 3ch;
+  min-width: 0;
+  min-height: var(--buton-yukseklik);
+  padding: 4px;
+  border: 2px solid var(--cizgi);
+  border-radius: var(--kose);
+  background: var(--kart);
+  color: var(--metin);
+  font: inherit;
+  font-size: var(--baslik);
+  font-weight: 700;
+  text-align: center;
+}
+
+.sayac-alan:focus { outline: 3px solid var(--ana-acik); border-color: var(--ana); }
 
 /* ---- Kamera ---- */
 .kamera-sayfa {

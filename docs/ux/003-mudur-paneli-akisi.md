@@ -1,7 +1,7 @@
 # 003 — Müdür Paneli Akışı (Ana Kumanda, onaylar, yönetim)
 
-> **Hazırlayan:** UX + Orkestratör · **Tarih:** 2026-09-15 · **Durum:** Genel Müdür onayı bekliyor
-> Kod: `app/src/ekranlar/panel/`, `app/src/panel.ts`, `app/src/panelNobeti.ts`, `app/src/ses.ts`. Dayanak: Blueprint · 3.5.
+> **Hazırlayan:** UX + Orkestratör · **Tarih:** 2026-09-15 (Aşama 17.1 ile güncellendi: 2026-09-16) · **Durum:** Onaylandı
+> Kod: `app/src/ekranlar/panel/`, `app/src/panel.ts`, `app/src/uyusmazliklar.ts`, `app/src/panelNobeti.ts`, `app/src/ses.ts`. Dayanak: Blueprint · 3.5.
 
 ---
 
@@ -10,6 +10,7 @@
 ```
 Giriş ──▶ Ana Kumanda ──┬─ 🔴 "3 işin süresi geçti"   ──▶ Süresi Geçenler (oda · ne kadar geçti · kimde)
  (müdür)  (tek sayfa)   ├─ 🔴 "2 mutsuz misafir"      ──▶ Mutsuz Misafirler (oda · puan · yorum · saat)
+                        ├─ 🔴 "1 teslimat onaylandığı gibi gelmedi" ──▶ Teslimat Uyuşmazlıkları (istenen · onaylanan · gelen · 📷 kanıt)
                         ├─ 🟢 "Her şey yolunda"        (kırmızı yoksa; dokunulmaz, sadece haber verir)
                         ├─ 🟡 "4 onay bekliyor"        ──▶ Bekleyen Onaylar ──▶ ✕ Reddet / ✓ Onayla
                         ├─ 👥 Personel                 ──▶ Liste ──▶ ➕ Personel Ekle (ad · e-posta · şifre · görev)
@@ -25,6 +26,7 @@ Giriş ──▶ Ana Kumanda ──┬─ 🔴 "3 işin süresi geçti"   ──
 | **Ana Kumanda** | Otel adı, müdürün adı, Çıkış. Altında alarm kutuları: kırmızılar **en üstte**, kırmızı yoksa yeşil "Her şey yolunda". Sayfa dibinde Personel · Ürünler · QR Okut | kırmızı kutuya dokun |
 | Süresi Geçenler | Süresi geçmiş her iş: Oda no · "25 dk geçti" · açıklama · Acil/Normal · **kimde** (personel adı ya da "Sahipsiz") | bak, kime sesleneceğini gör |
 | Mutsuz Misafirler | Son 24 saatin 1–3 yıldızlı yorumları: Oda no · yıldızlar · saat · yorum | bak, odaya git |
+| **Teslimat Uyuşmazlıkları** | Son 7 günde onaylandığı gibi gelmeyen teslimler: ürün · "2,5 Kg eksik geldi" · onaylanan ve gelen miktar · (farklıysa istenen de) · kim teslim aldı · saat · **eksik/hasar fotoğrafı** | bak, tedarikçiyi ara |
 | Bekleyen Onaylar | Her talep bir kart: ürün · istenen adet · talep eden · not. Adet **− +** ile değiştirilebilir | **✓ Onayla** (yanında ✕ Reddet) |
 | Personel | Ad · görev listesi. Yalnızca görevlilerde "İşten çıkar" (müdürü/sahibi veritabanı zaten çıkartmaz) | **➕ Personel Ekle** |
 | Ürünler | Personelin listesindeki ürünler, başlıkta "Personelin listesinde 5 ürün var (en fazla 8)" | **➕ Ürün Ekle** |
@@ -33,7 +35,7 @@ Giriş ──▶ Ana Kumanda ──┬─ 🔴 "3 işin süresi geçti"   ──
 
 | Renk | Ne zaman | Yanındaki yazı |
 |---|---|---|
-| 🔴 Kırmızı | Süresi geçen iş **veya** mutsuz misafir var | "3 işin süresi geçti" · "2 mutsuz misafir" |
+| 🔴 Kırmızı | Süresi geçen iş, mutsuz misafir **veya** onaylandığı gibi gelmeyen teslim var | "3 işin süresi geçti" · "2 mutsuz misafir" · "1 teslimat onaylandığı gibi gelmedi" |
 | 🟡 Sarı | Onay bekleyen satın alma talebi var | "4 onay bekliyor" |
 | 🟢 Yeşil | Kırmızı hiçbir şey yok | "Her şey yolunda · 7 açık iş, hepsi süresinde" |
 
@@ -42,7 +44,7 @@ Panel 30 saniyede bir sunucuya sorar. Alarm veritabanında **saklanmaz, hesaplan
 ## Çan sesi (Genel Müdür talebi)
 
 Müdür panele bakmıyor olabilir; telefon masada durur. Bu yüzden sisteme **yeni** bir kırmızı alarm düştüğünde
-(süresi geçen iş ya da mutsuz misafir yorumu) zarif bir "ding" çalar.
+(süresi geçen iş, mutsuz misafir yorumu ya da onaylandığı gibi gelmeyen teslim) zarif bir "ding" çalar.
 
 | Karar | Neden |
 |---|---|
@@ -63,13 +65,16 @@ Müdür panele bakmıyor olabilir; telefon masada durur. Bu yüzden sisteme **ye
 - **Personelin Çıkış butonu** (`docs/ux/001` · karar 4, bu aşamaya bırakılmıştı) ana ekranın dibine küçük ve ikincil olarak kondu. Ortak telefonda vardiya değişince görevli çıkabilir. Gönderilmemiş bildirimi varsa önce uyarılır: bildirimler telefonda kalır, ancak **sahibi tekrar girince** gider.
 - **Panelde "QR Okut" da var.** Müdür de odaya girip "Oda Hazır" diyebilir, eksik bildirebilir; ayrı bir uygulama öğrenmez. Tek ek kapıdır, kumandanın sadeliğini bozmaz.
 - **Yeşil kutuya dokunulmaz.** "Her şey yolunda" bir haberdir, bir kapı değil. Dokunulacak bir şey yoksa buton da yoktur.
-- **Onayda adet değiştirilebilir.** Depocu 10 havlu ister, müdür 6 onaylar. Karar bir beyandır: kimin, ne zaman, kaç tane onayladığı veritabanınca yazılır.
+- **Onayda miktar değiştirilebilir.** Depocu 10 havlu ister, müdür 6 onaylar. Kg/Litre gibi bölünen birimlerde kesirli de onaylanabilir ("7,5 Kg"): − + yarımşar gider, sayının üstüne dokunup doğrudan yazmak da mümkündür (`docs/decisions/004-kesirli-miktar.md`). Karar bir beyandır: kimin, ne zaman, kaç tane onayladığı veritabanınca yazılır.
 - **Kendi talebini onaylayamaz.** Müdür kendi yazdığı talepte buton görmez; veritabanı da reddeder (ekran kilidi tek başına kilit sayılmaz).
 - **Personel silinmez, çıkarılır.** Geri alınamaz bir iş olduğu için önce sorulur ("Ayşe otelden çıkarılsın mı?"). Geçmiş beyanları yerinde kalır.
 - **Ürün silinmez, listeden çıkarılır.** "Kapat/Aç" değil "Listeden çıkar / Listeye koy" denir: müdürün asıl sorusu "personel bunu listesinde görsün mü?"dür. 8 ürün sınırı ekranda değil **veritabanında** sayılır; ekran dolunca ekleme formunu gizler. Aynı ad ikinci kez eklenemez (personel birbirinin aynı iki buton görmesin).
 - **Onayda iki sayı karışmaz.** Kartın üstünde "10 adet istendi", sayacın üstünde "Kaç tane onaylıyorsunuz?" yazar. Müdürün elle değiştirdiği adet, başka bir karar verilse de yerinde kalır.
 - **Reddet ince, Onayla vurgulu.** İkisi de geri alınamaz; yanlış parmakla reddedilmesin diye "Reddet" ikincil görünür. Bir karar giderken bütün butonlar kapanır: dokunuşun sessizce yutulduğu an olmaz.
 - **"Bakılıyor…" yazısı.** Cevap gelene kadar ne yeşil ne kırmızı gösterilir: "her şey yolunda" ile "henüz bilmiyorum" aynı şey değildir.
+- **Uyuşmazlık alarmı: eksik de fazla da alarmdır (Genel Müdür talebi, Aşama 17.1).** Blueprint 3.3 "istenen · onaylanan · gelen yan yana; uyuşmuyorsa müdüre uyarı düşer" der. Eksik/çürük gelmesi kadar **fazla gelmesi** de para demektir (onaylanmayan mal girmiş, fatura fazla gelecek); ikisi de kırmızı kutuya düşer. Kutu, alarmın kendisi gibi **hesaplanır, saklanmaz**: "onaylandığı gibi mi geldi?" bir sorudur.
+- **Uyuşmazlık penceresi 7 gün** (mutsuz misafirde 24 saat). Neden daha uzun: mutsuz misafir bugün oteldedir, yarın gitmiştir — o alarm bugünün işidir. Eksik teslim ise paradır ve müdür hafta sonu panele bakmayabilir; Cuma akşamı yazılan bir eksik teslim Pazartesi hâlâ ekranda durmalıdır. 24 saatlik pencerede alarm, sistemin kendi zaman aşımıyla görünmez olurdu (güvenlik denetiminin bulgusu). Genel Müdür daha uzun bir pencere ya da "Gördüm" düğmesi isterse eklenir.
+- **Uyuşmazlık kaydı düzeltilemez.** Ekran yalnızca gösterir: teslim bir imzadır. Yanlış girilmiş miktar için veritabanında düzeltme kaydı yolu vardır, ekranı henüz yoktur.
 - **Tek nöbetçi.** Panelin bütün ekranları aynı cevabı tek bir nöbetçiden okur (`app/src/panelNobeti.ts`). Böylece müdür "Onaylar" ekranındayken de alarmlar izlenir ve çan çalar; iki ekran açıkken sunucuya iki kez sorulmaz.
 - **Şifreyi müdür belirler.** Personelin ilk şifresini müdür koyar ve kendisi söyler. Hesap açmak ana anahtar ister; bu yüzden sunucudaki `personel-ekle` kapısında yapılır, müdürün yetkisi orada yeniden denetlenir.
   ⚠️ **Açık madde:** Uygulamada henüz şifre değiştirme yolu yok; yani müdür personelin şifresini bilmeye devam ediyor. Bunun neden önemli olduğu ve seçenekler: `docs/security/002-personel-kapisi-ve-panel.md` · Açık 1. Genel Müdür kararı bekleniyor.

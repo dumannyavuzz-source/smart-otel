@@ -8,18 +8,16 @@ import { useNavigate, useParams } from 'react-router';
 import { Sayfa } from '../parcalar/Sayfa';
 import { BuyukButon } from '../parcalar/BuyukButon';
 import { FotografSecici } from '../parcalar/FotografSecici';
+import { MiktarSayaci } from '../parcalar/MiktarSayaci';
+import { birimSorusu, miktarMetni } from '../miktar';
 import {
-  birimSorusu,
   eksikMetni,
   hasarFotografiGerekli,
-  miktarMetni,
   teslimAlabilirMi,
   teslimAldim,
   teslimatGetir,
 } from '../teslimler';
 import type { Teslimat } from '../telefonDeposu';
-
-const EN_FAZLA = 999;
 
 export function TeslimEkrani() {
   const { id = '' } = useParams();
@@ -97,15 +95,8 @@ export function TeslimEkrani() {
       altBaslik={`${teslimat.urun} · ${miktarMetni(teslimat.onaylanan, teslimat.birim)} onaylandı`}
       geri="/teslimler"
     >
-      <div className="sayac">
-        <button type="button" className="buton" onClick={() => setGelen((g) => Math.max(0, g - 1))} aria-label="Azalt">
-          −
-        </button>
-        <strong aria-live="polite">{gelen}</strong>
-        <button type="button" className="buton" onClick={() => setGelen((g) => Math.min(EN_FAZLA, g + 1))} aria-label="Artır">
-          +
-        </button>
-      </div>
+      {/* Sayaç onaylanan miktardan başlar; kesirli gelirse sayının üstüne dokunup yazılır ("7,5"). */}
+      <MiktarSayaci deger={gelen} onDegis={setGelen} birim={teslimat.birim} />
       <p className="soluk orta">{miktarMetni(gelen, teslimat.birim)} geldi</p>
 
       <div className="soluk">Fatura / irsaliye fotoğrafı</div>

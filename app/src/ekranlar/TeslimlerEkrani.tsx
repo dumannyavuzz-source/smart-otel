@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Sayfa } from '../parcalar/Sayfa';
-import { miktarMetni, teslimBekleyenler } from '../teslimler';
+import { teslimBekleyenler } from '../teslimler';
+import { miktarMetni } from '../miktar';
 import { KUTU_DEGISTI_OLAYI, PAKET_OLAYI } from '../olaylar';
 import type { Teslimat } from '../telefonDeposu';
 

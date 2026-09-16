@@ -1,9 +1,12 @@
 // Bekleyen onaylar (Maker-Checker · Checker adımı): her talep bir kart, iki buton: Onayla / Reddet.
-// Onaylanan adet değiştirilebilir (− +). Kendi talebi: buton yok (veritabanı da reddeder).
+// Onaylanan miktar değiştirilebilir (− + ya da sayının üstüne yazarak: "7,5 Kg").
+// Kendi talebi: buton yok (veritabanı da reddeder).
 import { useCallback, useEffect, useState } from 'react';
 import { Sayfa } from '../../parcalar/Sayfa';
 import { bekleyenTalepler, karar, type Talep } from '../../panel';
 import { aktifProfil } from '../../kullanici';
+import { MiktarSayaci } from '../../parcalar/MiktarSayaci';
+import { adim, birimAdi, miktarMetni } from '../../miktar';
 
 export function OnaylarEkrani() {
   const profil = aktifProfil();
@@ -46,8 +49,8 @@ export function OnaylarEkrani() {
     }
   }
 
-  function adetDegistir(id: string, fark: number) {
-    setAdetler((a) => ({ ...a, [id]: Math.max(1, Math.min(999, (a[id] ?? 1) + fark)) }));
+  function adetYaz(id: string, yeni: number) {
+    setAdetler((a) => ({ ...a, [id]: yeni }));
   }
 
   return (
@@ -63,9 +66,7 @@ export function OnaylarEkrani() {
             <div key={t.id} className="kart">
               <div className="is-ust">
                 <strong>{t.urun}</strong>
-                <span>
-                  {t.quantity} {t.birim} istendi
-                </span>
+                <span>{miktarMetni(t.quantity, t.birim)} istendi</span>
               </div>
               <div className="soluk">İsteyen: {t.talepEden}</div>
               {t.note && <div>{t.note}</div>}
@@ -74,12 +75,13 @@ export function OnaylarEkrani() {
                 <p className="soluk">Kendi isteğinizi onaylayamazsınız.</p>
               ) : (
                 <>
-                  <div className="soluk orta">Kaç tane onaylıyorsunuz?</div>
-                  <div className="sayac">
-                    <button type="button" className="buton" onClick={() => adetDegistir(t.id, -1)} aria-label="Azalt">−</button>
-                    <strong aria-live="polite">{adet}</strong>
-                    <button type="button" className="buton" onClick={() => adetDegistir(t.id, +1)} aria-label="Artır">+</button>
-                  </div>
+                  <div className="soluk orta">Kaç {birimAdi(t.birim)} onaylıyorsunuz?</div>
+                  <MiktarSayaci
+                    deger={adet}
+                    onDegis={(yeni) => adetYaz(t.id, yeni)}
+                    birim={t.birim}
+                    enAz={adim(t.birim)}
+                  />
                   <div className="ikili">
                     {/* Reddetmek geri alınamaz: ince buton. Onaylamak asıl iştir: vurgulu buton. */}
                     {/* Bir karar giderken bütün butonlar kapanır: dokunuşun sessizce yutulduğu an olmasın. */}

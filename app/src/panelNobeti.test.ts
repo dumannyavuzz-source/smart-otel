@@ -5,13 +5,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 interface SahteAlarm {
   gecikenler: { id: string }[];
   mutsuzMisafirler: { id: string }[];
+  uyusmazliklar: { id: string }[];
   bekleyenOnay: number;
   acikIs: number;
 }
 
 // Sunucunun vereceği cevap: testler bunu değiştirerek "yeni alarm düştü" der.
 const sunucu = vi.hoisted(() => ({
-  cevap: { gecikenler: [], mutsuzMisafirler: [], bekleyenOnay: 0, acikIs: 0 } as SahteAlarm,
+  cevap: { gecikenler: [], mutsuzMisafirler: [], uyusmazliklar: [], bekleyenOnay: 0, acikIs: 0 } as SahteAlarm,
 }));
 vi.mock('./panel', () => ({ alarmlar: async () => sunucu.cevap }));
 
@@ -55,6 +56,7 @@ async function nobetKur() {
 const gecikenler = (...idler: string[]): SahteAlarm => ({
   gecikenler: idler.map((id) => ({ id })),
   mutsuzMisafirler: [],
+  uyusmazliklar: [],
   bekleyenOnay: 0,
   acikIs: idler.length,
 });
@@ -91,13 +93,25 @@ describe('Panel nöbetçisi ve çan', () => {
     durdur();
   });
 
+  it('onaylandığı gibi gelmeyen teslim de çan çaldırır — Genel Müdür talebi', async () => {
+    sunucu.cevap = gecikenler();
+    const { ses, panelNobetiniBaslat } = await nobetKur();
+    const durdur = panelNobetiniBaslat('otel-1');
+    await vi.advanceTimersByTimeAsync(0);
+
+    sunucu.cevap = { gecikenler: [], mutsuzMisafirler: [], uyusmazliklar: [{ id: 'teslim-1' }], bekleyenOnay: 0, acikIs: 0 };
+    await vi.advanceTimersByTimeAsync(30_000);
+    expect(ses.sayac.nota).toBe(2);
+    durdur();
+  });
+
   it('mutsuz misafir yorumu da çan çaldırır', async () => {
     sunucu.cevap = gecikenler();
     const { ses, panelNobetiniBaslat } = await nobetKur();
     const durdur = panelNobetiniBaslat('otel-1');
     await vi.advanceTimersByTimeAsync(0);
 
-    sunucu.cevap = { gecikenler: [], mutsuzMisafirler: [{ id: 'yorum-1' }], bekleyenOnay: 0, acikIs: 0 };
+    sunucu.cevap = { gecikenler: [], mutsuzMisafirler: [{ id: 'yorum-1' }], uyusmazliklar: [], bekleyenOnay: 0, acikIs: 0 };
     await vi.advanceTimersByTimeAsync(30_000);
     expect(ses.sayac.nota).toBe(2);
     durdur();
@@ -109,7 +123,7 @@ describe('Panel nöbetçisi ve çan', () => {
     const durdur = panelNobetiniBaslat('otel-1');
     await vi.advanceTimersByTimeAsync(0);
 
-    sunucu.cevap = { gecikenler: [], mutsuzMisafirler: [], bekleyenOnay: 5, acikIs: 3 };
+    sunucu.cevap = { gecikenler: [], mutsuzMisafirler: [], uyusmazliklar: [], bekleyenOnay: 5, acikIs: 3 };
     await vi.advanceTimersByTimeAsync(30_000);
     expect(ses.sayac.nota).toBe(0);
     durdur();

@@ -21,6 +21,7 @@ import { TeslimEkrani } from './ekranlar/TeslimEkrani';
 import { PanelEkrani } from './ekranlar/panel/PanelEkrani';
 import { GecikenlerEkrani } from './ekranlar/panel/GecikenlerEkrani';
 import { MisafirlerEkrani } from './ekranlar/panel/MisafirlerEkrani';
+import { UyusmazliklarEkrani } from './ekranlar/panel/UyusmazliklarEkrani';
 import { OnaylarEkrani } from './ekranlar/panel/OnaylarEkrani';
 import { PersonelEkrani } from './ekranlar/panel/PersonelEkrani';
 import { UrunlerEkrani } from './ekranlar/panel/UrunlerEkrani';
@@ -96,6 +97,7 @@ export function App() {
       <Route path="/tamam" element={<TamamEkrani />} />
       <Route path="/panel/gecikenler" element={yalnizYonetici(<GecikenlerEkrani />)} />
       <Route path="/panel/misafirler" element={yalnizYonetici(<MisafirlerEkrani />)} />
+      <Route path="/panel/uyusmazliklar" element={yalnizYonetici(<UyusmazliklarEkrani />)} />
       <Route path="/panel/onaylar" element={yalnizYonetici(<OnaylarEkrani />)} />
       <Route path="/panel/personel" element={yalnizYonetici(<PersonelEkrani />)} />
       <Route path="/panel/urunler" element={yalnizYonetici(<UrunlerEkrani />)} />

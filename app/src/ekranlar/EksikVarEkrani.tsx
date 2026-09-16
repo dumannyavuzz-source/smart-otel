@@ -1,11 +1,14 @@
-// Eksik Var: "Ne eksik?" → ürün seç → "Kaç tane?" → Gönder. İki adım, tek soru.
+// Eksik Var: "Ne eksik?" → ürün seç → "Kaç Kg?" → Gönder. İki adım, tek soru.
+// Soru ürünün birimiyle sorulur; Kg/Litre gibi bölünen birimlerde kesirli yazılabilir ("1,5 Kg").
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { Sayfa } from '../parcalar/Sayfa';
 import { BuyukButon } from '../parcalar/BuyukButon';
 import { OdaBulunamadi } from '../parcalar/OdaBulunamadi';
+import { MiktarSayaci } from '../parcalar/MiktarSayaci';
 import { odayiBul, urunleriGetir } from '../odalar';
 import { eksikVarBeyani } from '../beyanlar';
+import { adim, birimAdi, miktarMetni } from '../miktar';
 import type { Oda, Urun } from '../telefonDeposu';
 
 const EN_FAZLA = 99;
@@ -42,7 +45,7 @@ export function EksikVarEkrani() {
     git('/tamam', {
       replace: true,
       state: {
-        mesaj: `Eksik bildirildi: ${adet} × ${secili.name}`,
+        mesaj: `Eksik bildirildi: ${miktarMetni(adet, secili.unit)} ${secili.name}`,
         donus: { yol: `/oda/${kod}`, yazi: `Oda ${oda.number}’e Dön` },
       },
     });
@@ -57,7 +60,13 @@ export function EksikVarEkrani() {
         {oda && urunler.length === 0 && <p className="soluk">Ürün listesi henüz yok. İnternete bağlanın.</p>}
         <div className="buton-grubu">
           {urunler.map((urun) => (
-            <BuyukButon key={urun.id} onClick={() => setSecili(urun)}>
+            <BuyukButon
+              key={urun.id}
+              onClick={() => {
+                setSecili(urun);
+                setAdet(1);                      // yeni ürün, yeni birim: sayaç baştan başlar
+              }}
+            >
               {urun.name}
             </BuyukButon>
           ))}
@@ -67,16 +76,14 @@ export function EksikVarEkrani() {
   }
 
   return (
-    <Sayfa baslik="Kaç tane?" altBaslik={`${odaAdi} · ${secili.name}`} geri={() => setSecili(null)}>
-      <div className="sayac">
-        <button type="button" className="buton" onClick={() => setAdet((a) => Math.max(1, a - 1))} aria-label="Azalt">
-          −
-        </button>
-        <strong aria-live="polite">{adet}</strong>
-        <button type="button" className="buton" onClick={() => setAdet((a) => Math.min(EN_FAZLA, a + 1))} aria-label="Artır">
-          +
-        </button>
-      </div>
+    <Sayfa baslik={`Kaç ${birimAdi(secili.unit)}?`} altBaslik={`${odaAdi} · ${secili.name}`} geri={() => setSecili(null)}>
+      <MiktarSayaci
+        deger={adet}
+        onDegis={setAdet}
+        birim={secili.unit}
+        enAz={adim(secili.unit)}
+        enFazla={EN_FAZLA}
+      />
       {hata && <p className="orta" role="alert">{hata}</p>}
       <div className="esnek" />
       <BuyukButon ikon="📨" tur="vurgu" disabled={gonderiliyor} onClick={() => void gonder()}>

@@ -7,13 +7,14 @@ Dört akış vardır: **Kat Görevlisi** (QR → oda), **Teknisyen** (açık iş
 ## Ekranlar
 
 ```
-Giriş ──▶ Ana Ekran ──▶ QR Okut ──▶ Oda 204 ──┬─▶ Eksik Var ──▶ Ne eksik? ──▶ Kaç tane? ──▶ ✓ ──▶ Oda 204'e Dön
+Giriş ──▶ Ana Ekran ──▶ QR Okut ──▶ Oda 204 ──┬─▶ Eksik Var ──▶ Ne eksik? ──▶ Kaç Kg? ──▶ ✓ ──▶ Oda 204'e Dön
         (tek buton)   (kamera)    (liste)     ├─▶ Sorun Bildir ──▶ Ne oldu? ──▶ 📷 Fotoğraf Çek (+ not) ──▶ Gönder ──▶ ✓ ──▶ Oda 204'e Dön
                                               └─▶ Oda Hazır ─────────────────────────────────────▶ ✓ ──▶ Ana Ekran
           ├─▶ 🔧 Açık İşler (3) ──▶ Liste (en acil üstte) ──▶ İş ──▶ 🙋 Aldım ──▶ ✅ Çözdüm (+ fotoğraf) ──▶ ✓ ──▶ İşlere Dön
           └─▶ 📦 Teslim Al (2) ──▶ Siparişler ──▶ "Kaç Kg geldi?" ──▶ 📷 Fatura (+ eksikse 📷 hasar) ──▶ ✓ Teslim Aldım
 
-Giriş (müdür) ──▶ Ana Kumanda ──┬─▶ 🔴 Süresi Geçenler · 🔴 Mutsuz Misafirler (kırmızı yoksa 🟢 "Her şey yolunda")
+Giriş (müdür) ──▶ Ana Kumanda ──┬─▶ 🔴 Süresi Geçenler · 🔴 Mutsuz Misafirler · 🔴 Teslimat Uyuşmazlıkları
+                                │    (kırmızı yoksa 🟢 "Her şey yolunda")
                                 ├─▶ 🟡 Bekleyen Onaylar ──▶ ✕ Reddet / ✓ Onayla
                                 ├─▶ 👥 Personel ──▶ ➕ Personel Ekle
                                 ├─▶ 📦 Ürünler (listede en fazla 8) ──▶ ➕ Ürün Ekle · Listeden çıkar
@@ -23,6 +24,7 @@ Giriş (müdür) ──▶ Ana Kumanda ──┬─▶ 🔴 Süresi Geçenler ·
 Her beyan **önce telefona** yazılır (giden kutusu), ekran anında "✓" der. Postacı internet gelince gönderir.
 Ana ekranda "3 bildirim internet gelince gönderilecek" yazısı, henüz gitmemiş beyanları gösterir.
 Müdür panelinde yeni bir kırmızı alarm düşünce zarif bir çan sesi çalar (`src/ses.ts`); panel internet ister.
+Miktarlar kesirli olabilir ("7,5 Kg", "1,2 Litre"): sayaç yarımşar gider, sayının üstüne dokunup doğrudan da yazılır.
 Ekran kararları: `docs/ux/001-kat-gorevlisi-akisi.md`, `002-teknisyen-akisi.md`, `003-mudur-paneli-akisi.md`, `004-depo-teslimat-akisi.md`.
 
 ## Dosyalar
@@ -30,13 +32,15 @@ Ekran kararları: `docs/ux/001-kat-gorevlisi-akisi.md`, `002-teknisyen-akisi.md`
 | Dosya | Ne yapar |
 |---|---|
 | `src/ekranlar/` | Personel ekranları: Giriş, Otel Seç, Ana, QR Okut, Oda, Eksik Var, Sorun Bildir, Açık İşler, İş, Teslim Al, Tamam |
-| `src/ekranlar/panel/` | Müdür ekranları: Ana Kumanda, Süresi Geçenler, Mutsuz Misafirler, Onaylar, Personel, Ürünler |
-| `src/parcalar/` | Ortak parçalar: büyük buton, sayfa iskeleti, fotoğraf çekici |
+| `src/ekranlar/panel/` | Müdür ekranları: Ana Kumanda, Süresi Geçenler, Mutsuz Misafirler, Teslimat Uyuşmazlıkları, Onaylar, Personel, Ürünler |
+| `src/parcalar/` | Ortak parçalar: büyük buton, sayfa iskeleti, fotoğraf çekici, miktar sayacı (− + ve yazarak) |
 | `src/telefonDeposu.ts` | Telefonun çekmecesi: odalar, kontrol listesi, ürünler, giden kutusu, bekleyen fotoğraflar |
 | `src/postaci.ts` | Giden kutusunu sunucuya taşır (önce fotoğraf, sonra kayıt); vardiya paketini indirir |
 | `src/beyanlar.ts` | Üç beyan: Oda Hazır · Eksik Var · Sorun Bildir (fotoğraflı); giden kutusuna yazma |
 | `src/isEmirleri.ts` | Teknisyen: trafik lambası, sıralama, Aldım/Çözdüm, listeyi indirme |
 | `src/teslimler.ts` | Depo: bekleyen siparişler, "Kaç Kg geldi?" sorusu, eksik teslimde kanıt şartı, Teslim Aldım |
+| `src/miktar.ts` | Miktar ve birim: "7,5 Kg" yazımı, hangi birim bölünür (Kg yarımşar, adet birer birer) |
+| `src/uyusmazliklar.ts` | Müdür alarmı: teslim onaylandığı gibi mi geldi? (istenen · onaylanan · gelen + kanıt fotoğrafı) |
 | `src/panel.ts` | Müdür: alarmlar (hesaplanır, saklanmaz), onaylar, personel, ürünler |
 | `src/panelNobeti.ts` | Panel nöbetçisi: 30 saniyede bir sorar, yeni kırmızı alarmda çanı çalar; ekranlar cevabı buradan okur |
 | `src/ses.ts` | Yeni kırmızı alarmda çalan zarif çan sesi; "bu alarmı duyurmuş muyduk?" hafızası |

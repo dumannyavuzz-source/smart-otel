@@ -102,7 +102,9 @@ export function UrunlerEkrani() {
       ) : (
         <form className="buton-grubu" onSubmit={ekle}>
           <input className="alan" placeholder="Ürün adı (ör. Havlu)" value={ad} onChange={(e) => setAd(e.target.value)} required maxLength={60} />
-          <input className="alan" placeholder="Birim: adet, paket, şişe…" value={birim} onChange={(e) => setBirim(e.target.value)} maxLength={10} />
+          <input className="alan" placeholder="Birim: Kg, Litre, adet, paket…" value={birim} onChange={(e) => setBirim(e.target.value)} maxLength={10} />
+          {/* Birim yalnızca bir kelime değil, bir izindir: bölünen birimde personel kesirli miktar girebilir. */}
+          <p className="soluk">Kg ya da Litre yazarsanız personel "7,5" gibi kesirli miktar girebilir. Boş bırakırsanız "adet" olur.</p>
           <button type="submit" className="buton buton--ana" disabled={bekliyor}>
             <span className="ikon" aria-hidden="true">➕</span>
             <span>Ürün Ekle</span>

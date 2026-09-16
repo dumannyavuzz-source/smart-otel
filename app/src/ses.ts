@@ -16,13 +16,16 @@ let gorulenler: Set<string> | null = null;
 interface Kirmizilar {
   gecikenler: { id: string }[];
   mutsuzMisafirler: { id: string }[];
+  uyusmazliklar: { id: string }[];
 }
 
-// İki tür kırmızı alarm vardır: süresi geçen iş ve mutsuz misafir. Kimlikleri karışmasın diye önek konur.
+// Üç tür kırmızı alarm vardır: süresi geçen iş, mutsuz misafir ve onaylandığı gibi gelmeyen teslim.
+// Kimlikleri karışmasın diye önek konur.
 export function alarmKimlikleri(veri: Kirmizilar): string[] {
   return [
     ...veri.gecikenler.map((g) => `is:${g.id}`),
     ...veri.mutsuzMisafirler.map((m) => `misafir:${m.id}`),
+    ...veri.uyusmazliklar.map((u) => `teslim:${u.id}`),
   ];
 }
 

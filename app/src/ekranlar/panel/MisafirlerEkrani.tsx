@@ -3,7 +3,8 @@ import { Sayfa } from '../../parcalar/Sayfa';
 import { usePanelVerisi } from '../../panelNobeti';
 
 // Pencere 24 saat: "03:15" bu geceye mi dün geceye mi ait, yazıdan anlaşılmalı.
-function neZaman(iso: string): string {
+// (Uyuşmazlıklar ekranı da aynı pencereye bakar, aynı cümleyi kullanır.)
+export function neZaman(iso: string): string {
   const an = new Date(iso);
   const saat = an.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
   return an.toDateString() === new Date().toDateString() ? saat : `Dün ${saat}`;

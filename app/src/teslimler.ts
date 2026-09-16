@@ -15,23 +15,10 @@ import { gidenKutusunaKoy } from './beyanlar';
 import { aktifKullanici, aktifProfil } from './kullanici';
 import { ortakBeyin } from './ortakBeyin';
 import { PAKET_OLAYI, cevrimici, haberVer } from './olaylar';
+import { birimAdi, miktarMetni, yuvarla } from './miktar';
 
 const EN_UZUN_NOT = 500;
 const EN_FAZLA_MIKTAR = 999;
-
-// Soru ürünün birimiyle sorulur: "Kaç Kg geldi?" · "Kaç Litre geldi?" · "Kaç adet geldi?"
-export function birimSorusu(birim: string): string {
-  return `Kaç ${birimAdi(birim)} geldi?`;
-}
-
-export function birimAdi(birim: string): string {
-  return birim.trim() || 'adet';
-}
-
-// "10 Kg" gibi: sayı ve birim hep yan yana yazılır, çıplak sayı bırakılmaz.
-export function miktarMetni(miktar: number, birim: string): string {
-  return `${miktar} ${birimAdi(birim)}`;
-}
 
 // Gelen, onaylanandan az mı? O zaman kanıt gerekir.
 export function hasarFotografiGerekli(gelen: number, onaylanan: number): boolean {
@@ -68,8 +55,11 @@ export async function teslimAldim(
   hasar: Blob | null,
   not = '',
 ): Promise<void> {
-  if (gelen < 0 || gelen > EN_FAZLA_MIKTAR) throw new Error('Miktar hatalı.');
-  if (hasarFotografiGerekli(gelen, teslimat.onaylanan) && !hasar) {
+  const temizGelen = yuvarla(gelen);            // "7,456 Kg" diye bir şey yok: en çok iki ondalık
+  if (!Number.isFinite(temizGelen) || temizGelen < 0 || temizGelen > EN_FAZLA_MIKTAR) {
+    throw new Error('Miktar hatalı.');
+  }
+  if (hasarFotografiGerekli(temizGelen, teslimat.onaylanan) && !hasar) {
     throw new Error('Eksik teslimde eksik/hasar fotoğrafı da gerekir.');
   }
 
@@ -83,7 +73,7 @@ export async function teslimAldim(
     {
       hotel_id: teslimat.hotel_id,
       purchase_request_id: teslimat.id,
-      received_quantity: gelen,
+      received_quantity: temizGelen,
       invoice_photo_path: faturaYolu,
       ...(hasar ? { damage_photo_path: hasarYolu } : {}),
       ...(temizNot ? { note: temizNot } : {}),

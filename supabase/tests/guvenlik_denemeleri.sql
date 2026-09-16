@@ -23,7 +23,7 @@ begin
 end
 $$;
 
-select plan(119);
+select plan(136);
 
 
 -- ---------------------------------------------------------------------
@@ -416,6 +416,142 @@ select lives_ok(
              'a0000000-0000-4000-8000-000000000001/deliveries/e4-fatura.jpg') $$,
   '11v. Tam gelen teslimde hasar fotoğrafı istenmez');
 
+
+
+-- =====================================================================
+-- 11w · KESİRLİ MİKTAR (7,5 Kg domates — Aşama 17.1)
+-- Zincirin üç halkası da ondalıklı sayıyı olduğu gibi saklamalı; yoksa
+-- "2,5 Kg onaylandı, 1,5 Kg geldi" karşılaştırması yalan söyler.
+-- =====================================================================
+select deneme.giris('a0000000-0000-4000-8000-00000000a001');   -- Ayşe (talep eden)
+
+select lives_ok(
+  $$ insert into public.purchase_requests (id, hotel_id, product_id, quantity)
+     values ('d0000000-0000-4000-8000-000000000005', 'a0000000-0000-4000-8000-000000000001',
+             'a0000000-0000-4000-8000-000000000a01', 2.5) $$,
+  '11w. Ayşe 2,5 Kg ister (kesirli talep)');
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a003');   -- Mehmet (müdür)
+
+select lives_ok(
+  $$ insert into public.approvals (hotel_id, purchase_request_id, decision, approved_quantity)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000005', 'approved', 2.5) $$,
+  '11x. Mehmet 2,5 Kg onaylar');
+
+select is((select approved_quantity from public.approvals
+            where purchase_request_id = 'd0000000-0000-4000-8000-000000000005'), 2.5::numeric,
+  '11y. Onay 2,5 olarak durur — tam sayıya yuvarlanmaz');
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a002');   -- Ali (depo görevlisi)
+
+select lives_ok(
+  $$ insert into storage.objects (bucket_id, name, owner)
+     values ('photos', 'a0000000-0000-4000-8000-000000000001/deliveries/e5-fatura.jpg',
+             'a0000000-0000-4000-8000-00000000a002') $$,
+  '11z. Ali fatura fotoğrafını yükler');
+
+select throws_ok(
+  $$ insert into public.deliveries (hotel_id, purchase_request_id, received_quantity, invoice_photo_path)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000005', 1.5,
+             'a0000000-0000-4000-8000-000000000001/deliveries/e5-fatura.jpg') $$,
+  null, 'Eksik teslimde eksik/hasar fotoğrafı da gerekir.',
+  '11aa. 2,5 onaylandı, 1,5 geldi: kesirli eksik de kanıt ister');
+
+select lives_ok(
+  $$ insert into storage.objects (bucket_id, name, owner)
+     values ('photos', 'a0000000-0000-4000-8000-000000000001/deliveries/e5-hasar.jpg',
+             'a0000000-0000-4000-8000-00000000a002') $$,
+  '11ab. Ali eksiğin fotoğrafını yükler');
+
+select lives_ok(
+  $$ insert into public.deliveries (id, hotel_id, purchase_request_id, received_quantity,
+                                    invoice_photo_path, damage_photo_path)
+     values ('e0000000-0000-4000-8000-000000000005', 'a0000000-0000-4000-8000-000000000001',
+             'd0000000-0000-4000-8000-000000000005', 1.5,
+             'a0000000-0000-4000-8000-000000000001/deliveries/e5-fatura.jpg',
+             'a0000000-0000-4000-8000-000000000001/deliveries/e5-hasar.jpg') $$,
+  '11ac. Kanıtla birlikte kesirli teslim yazılır');
+
+select is((select received_quantity from public.deliveries where id = 'e0000000-0000-4000-8000-000000000005'),
+  1.5::numeric,
+  '11ad. Teslim 1,5 olarak durur');
+
+-- Uyuşmazlık alarmının veri yolu: müdür teslimi ve kanıtını görebilmeli, yoksa panele kırmızı kutu düşmez.
+select deneme.giris('a0000000-0000-4000-8000-00000000a003');   -- Mehmet (müdür)
+
+select is((select damage_photo_path from public.deliveries where id = 'e0000000-0000-4000-8000-000000000005'),
+  'a0000000-0000-4000-8000-000000000001/deliveries/e5-hasar.jpg',
+  '11ae. Müdür eksik teslimi ve kanıt fotoğrafını görür (panelde kırmızı alarm)');
+
+
+-- =====================================================================
+-- 11af · "SAYI OLMAYAN SAYI" VE DEVASA MİKTAR (Aşama 17.1 güvenlik denetimi)
+--
+-- Ondalıklı sayıya geçince tam sayıda imkânsız olan bir şey mümkün oldu: NaN.
+-- PostgreSQL NaN'ı bütün sayılardan büyük sayar; üst sınır olmasaydı NaN yazan biri
+-- "gelen < onaylanan mı?" sorusunu atlatır ve EKSİK TESLİMDE KANIT FOTOĞRAFI İSTENMEZDİ.
+-- Aşağıdaki denemelerin hepsi reddedilmelidir.
+-- =====================================================================
+select deneme.giris('a0000000-0000-4000-8000-00000000a001');   -- Ayşe (talep eden)
+
+select lives_ok(
+  $$ insert into public.purchase_requests (id, hotel_id, product_id, quantity)
+     values ('d0000000-0000-4000-8000-000000000006', 'a0000000-0000-4000-8000-000000000001',
+             'a0000000-0000-4000-8000-000000000a01', 10) $$,
+  '11af. Ayşe 10 ister');
+
+select throws_ok(
+  $$ insert into public.purchase_requests (hotel_id, product_id, quantity)
+     values ('a0000000-0000-4000-8000-000000000001',
+             'a0000000-0000-4000-8000-000000000a01', 'NaN') $$,
+  null, null,
+  '11ag. "NaN" miktarlı talep reddedilir (satın alma defteri kirletilemez)');
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a003');   -- Mehmet (müdür)
+
+select lives_ok(
+  $$ insert into public.approvals (hotel_id, purchase_request_id, decision, approved_quantity)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000006', 'approved', 10) $$,
+  '11ah. Mehmet 10 onaylar');
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a002');   -- Ali (depo görevlisi)
+
+select lives_ok(
+  $$ insert into storage.objects (bucket_id, name, owner)
+     values ('photos', 'a0000000-0000-4000-8000-000000000001/deliveries/e6-fatura.jpg',
+             'a0000000-0000-4000-8000-00000000a002') $$,
+  '11ai. Ali fatura fotoğrafını yükler');
+
+select throws_ok(
+  $$ insert into public.deliveries (hotel_id, purchase_request_id, received_quantity, invoice_photo_path)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000006', 'NaN',
+             'a0000000-0000-4000-8000-000000000001/deliveries/e6-fatura.jpg') $$,
+  null, null,
+  '11aj. "NaN" miktarlı teslim reddedilir — kanıt şartı bu yolla atlatılamaz');
+
+select throws_ok(
+  $$ insert into public.deliveries (hotel_id, purchase_request_id, received_quantity, invoice_photo_path)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000006', 10000,
+             'a0000000-0000-4000-8000-000000000001/deliveries/e6-fatura.jpg') $$,
+  null, null,
+  '11ak. Devasa miktar (10000) reddedilir');
+
+-- Tam gelen teslimde de hasar fotoğrafının yolu gerçek olmalı:
+-- yoksa müdüre "kanıt" diye başka bir fotoğraf gösterilebilirdi.
+select throws_ok(
+  $$ insert into public.deliveries (hotel_id, purchase_request_id, received_quantity,
+                                    invoice_photo_path, damage_photo_path)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000006', 10,
+             'a0000000-0000-4000-8000-000000000001/deliveries/e6-fatura.jpg',
+             'a0000000-0000-4000-8000-000000000001/deliveries/olmayan.jpg') $$,
+  null, 'Eksik/hasar fotoğrafı yüklenmeden teslim yazılamaz.',
+  '11al. Tam gelen teslime uydurma kanıt fotoğrafı yolu yazılamaz');
+
+select lives_ok(
+  $$ insert into public.deliveries (hotel_id, purchase_request_id, received_quantity, invoice_photo_path)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000006', 10,
+             'a0000000-0000-4000-8000-000000000001/deliveries/e6-fatura.jpg') $$,
+  '11am. Kuralına uyan teslim yazılır');
 
 -- =====================================================================
 -- 12 · SAHİP BİLE TESLİMİ SİLEMEZ

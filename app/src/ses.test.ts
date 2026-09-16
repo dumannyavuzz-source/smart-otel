@@ -43,13 +43,17 @@ describe('Yeni alarm var mı?', () => {
 });
 
 describe('Alarm kimlikleri', () => {
-  it('işi ve misafiri ayırır — aynı numara iki kez sayılmaz', () => {
-    const kimlikler = alarmKimlikleri({ gecikenler: [gecikenIs('abc')], mutsuzMisafirler: [{ id: 'abc' }] });
-    expect(kimlikler).toEqual(['is:abc', 'misafir:abc']);
+  it('işi, misafiri ve teslimi ayırır — aynı numara iki kez sayılmaz', () => {
+    const kimlikler = alarmKimlikleri({
+      gecikenler: [gecikenIs('abc')],
+      mutsuzMisafirler: [{ id: 'abc' }],
+      uyusmazliklar: [{ id: 'abc' }],
+    });
+    expect(kimlikler).toEqual(['is:abc', 'misafir:abc', 'teslim:abc']);
   });
 
   it('alarm yoksa liste boştur', () => {
-    expect(alarmKimlikleri({ gecikenler: [], mutsuzMisafirler: [] })).toEqual([]);
+    expect(alarmKimlikleri({ gecikenler: [], mutsuzMisafirler: [], uyusmazliklar: [] })).toEqual([]);
   });
 });
 

@@ -1,7 +1,7 @@
 # 004 — Depo ve Teslimat Akışı (Maker-Checker'ın son halkası)
 
-> **Hazırlayan:** UX + Orkestratör · **Tarih:** 2026-09-15 · **Durum:** Genel Müdür onayı bekliyor
-> Kod: `app/src/teslimler.ts`, `app/src/ekranlar/TeslimlerEkrani.tsx`, `TeslimEkrani.tsx`,
+> **Hazırlayan:** UX + Orkestratör · **Tarih:** 2026-09-15 (Aşama 17.1 ile güncellendi: 2026-09-16) · **Durum:** Onaylandı
+> Kod: `app/src/teslimler.ts`, `app/src/miktar.ts`, `app/src/ekranlar/TeslimlerEkrani.tsx`, `TeslimEkrani.tsx`,
 > `supabase/migrations/20260915100800_teslim_hasar.sql`. Dayanak: Blueprint · 3.3.
 
 ---
@@ -25,6 +25,7 @@ Ana Ekran ──▶ 📦 Teslim Al (2) ──▶ Bekleyen siparişler ──▶ 
  (görevli)    (sipariş varsa                                      │
                görünür)                                           ▼
                                                       "Kaç Kg geldi?"  − 10 +
+                                                      (sayıya dokunup "7,5" yazılabilir)
                                                       📷 Fatura / irsaliye  (zorunlu)
                                                       ┌──────────────────────────────┐
                                         7 girilirse → │ 3 Kg eksik geldi             │
@@ -42,7 +43,7 @@ Sistem sabit "Kaç adet geldi?" demez. Ürünün birimi neyse soru odur:
 
 | Ürünün birimi | Ekrandaki soru | Ekrandaki cevap |
 |---|---|---|
-| Kg | **"Kaç Kg geldi?"** | "7 Kg geldi" |
+| Kg | **"Kaç Kg geldi?"** | "7,5 Kg geldi" |
 | Litre | **"Kaç Litre geldi?"** | "20 Litre geldi" |
 | Koli | **"Kaç Koli geldi?"** | "3 Koli geldi" |
 | (boş) | "Kaç adet geldi?" | "5 adet geldi" |
@@ -71,7 +72,7 @@ fotoğraf yüklenmeden teslim kaydı yazılamaz, yazılmaya çalışılırsa ver
 |---|---|---|
 | Ana Ekran | Sipariş varsa ikincil buton: "📦 Teslim Al (2)". Yoksa görünmez | QR Okut (dev buton olarak kalır) |
 | Bekleyen siparişler | Her sipariş bir kart: ürün · onaylanan miktar · (istenenle farklıysa ikisi birden). En eski üstte | karta dokun |
-| Teslim Al | Başlıkta soru ("Kaç Kg geldi?"), altında sayaç (onaylanan miktardan başlar), fatura fotoğrafı, gerekirse eksik/hasar fotoğrafı, isteğe bağlı not | **✓ Teslim Aldım** |
+| Teslim Al | Başlıkta soru ("Kaç Kg geldi?"), altında sayaç (onaylanan miktardan başlar; kesirli miktar sayıya dokunup yazılır), fatura fotoğrafı, gerekirse eksik/hasar fotoğrafı, isteğe bağlı not | **✓ Teslim Aldım** |
 
 ## Offline — eksi kattaki depo
 
@@ -92,6 +93,6 @@ Depo eksi ikinci kattadır, telefon çekmez. Akışın tamamı internetsiz çal�
 - **Buton, şartlar tamamlanmadan açılmaz** ve altında sebebi yazar ("Önce fatura fotoğrafını çekin").
 - **Not isteğe bağlıdır.** Asıl kanıt fotoğraftır; yazı yazmak zorunlu tutulmaz (eldiven, karanlık depo).
 - **Silme ve düzeltme yok (bu aşamada).** Teslim bir imzadır, değiştirilemez. Yanlış girilen miktar için veritabanında **düzeltme kaydı** yolu vardır (eski kayıt durur, yenisi onu işaret eder); ekranı henüz yoktur — Genel Müdür isterse eklenir.
-- **Miktarlar tam sayıdır.** "7 Kg" yazılabilir, "7,5 Kg" yazılamaz. Kesirli miktar gerekiyorsa üç tabloda (talep · onay · teslim) sayı tipi değişmelidir; Genel Müdür kararına bırakılmıştır.
-- **Müdür panelinde "uyuşmazlık uyarısı" henüz yok.** Blueprint 3.3'te "talep edilen · onaylanan · gelen yan yana; uyuşmuyorsa müdüre uyarı düşer" denir. Eksik teslim kaydı ve kanıtı veritabanında durur, ama panele kırmızı bir kutu olarak düşmez. Ayrı bir adımda eklenebilir.
-- **Küçük otel sınırı bilerek korundu.** Tek kişilik bir depoda, talebi açan kişi teslim de alamaz; o sipariş bekler. Genel Müdür "küçük otellerde esnetilsin" derse kural tek yerden (veritabanı) gevşetilir.
+- **Miktarlar kesirli olabilir (Aşama 17.1, Genel Müdür kararı).** "7,5 Kg", "1,2 Litre" yazılabilir. Kararı birim verir: Kg/Litre bölünür (− + yarımşar gider), adet/Koli bölünmez. Sayının üstüne dokunup doğrudan yazmak da mümkündür — 1,2 Litre'ye yarımşar adımlarla ulaşılamaz. Ayrıntı: `docs/decisions/004-kesirli-miktar.md`.
+- **Uyuşmazlık müdüre kırmızı alarm olarak düşer (Aşama 17.1, Genel Müdür kararı).** Teslim onaylandığı gibi gelmediyse müdürün panelinde kırmızı kutu belirir ve çan çalar: "1 teslimat onaylandığı gibi gelmedi". Kutuya dokununca üç sayı (istenen · onaylanan · gelen), teslim alan kişi, saat ve kanıt fotoğrafı yan yana görünür. Ayrıntı: `docs/ux/003-mudur-paneli-akisi.md`.
+- **Küçük otel sınırı KALICI olarak korundu (Genel Müdür kararı, 2026-09-16).** Tek kişilik bir depoda bile talebi açan kişi teslim alamaz; o sipariş bekler. Genel Müdür esnetme talebini açıkça reddetti: Maker-Checker ilk sürümde katı kalır. Bu kural gevşetilmez.

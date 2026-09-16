@@ -12,7 +12,7 @@ export function PanelEkrani() {
   const profil = aktifProfil();
   const { veri, hata } = usePanelVerisi();
 
-  const kirmizi = veri ? veri.gecikenler.length + veri.mutsuzMisafirler.length : 0;
+  const kirmizi = veri ? veri.gecikenler.length + veri.mutsuzMisafirler.length + veri.uyusmazliklar.length : 0;
 
   return (
     <main className="sayfa">
@@ -45,6 +45,15 @@ export function PanelEkrani() {
               <span className="alarm-ikon" aria-hidden="true">😟</span>
               <span className="alarm-metin">{veri.mutsuzMisafirler.length} mutsuz misafir</span>
               <span className="soluk">Odayı görün, hemen ilgilenin</span>
+            </button>
+          )}
+
+          {/* Eksik ya da fazla gelen teslim: ortada para var, müdür derhal görmeli (Blueprint · 3.3). */}
+          {veri.uyusmazliklar.length > 0 && (
+            <button type="button" className="alarm alarm--kirmizi" onClick={() => git('/panel/uyusmazliklar')}>
+              <span className="alarm-ikon" aria-hidden="true">🧾</span>
+              <span className="alarm-metin">{veri.uyusmazliklar.length} teslimat onaylandığı gibi gelmedi</span>
+              <span className="soluk">Dokunun, eksiği ve kanıt fotoğrafını görün</span>
             </button>
           )}
 
