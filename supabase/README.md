@@ -28,6 +28,7 @@ Arayüz kodu burada değildir.
 
 ```
 Misafir sayfası ──POST {oda_kodu, puan, yorum}──▶ guest-feedback (Edge Function)
+(app/.../MisafirYorumEkrani.tsx)
                                                      │  biçim/tip/uzunluk denetimi
                                                      │  ana anahtarla TEK çağrı:
                                                      ▼
@@ -40,6 +41,7 @@ Misafir sayfası ──POST {oda_kodu, puan, yorum}──▶ guest-feedback (Edg
 
 - Misafir giriş yapmaz, anahtar taşımaz. Kod yanlışsa cevap hep aynıdır: **"Bu bağlantı geçersiz."**
 - Ana anahtar yalnızca sunucuda (`SUPABASE_SERVICE_ROLE_KEY`, Supabase kendisi verir). Kodda, telefonda, git'te yok.
+- Misafirin gördüğü sayfa: `app/src/ekranlar/MisafirYorumEkrani.tsx` (odadaki QR → `/yorum/<guest_code>`).
 - Kapının testleri: `deno test supabase/functions/guest-feedback/`
 
 ## Personel Kapısı nasıl çalışır?

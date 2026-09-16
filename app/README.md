@@ -3,6 +3,7 @@
 Telefonda çalışır, mağaza gerekmez, internet yokken de açılır.
 Dört akış vardır: **Kat Görevlisi** (QR → oda), **Teknisyen** (açık işler → Aldım → Çözdüm),
 **Depo** (teslim al → kaç Kg geldi → fatura fotoğrafı) ve **Müdür** (kumanda → alarmlar, onaylar, personel, ürünler).
+Bir de personele ait olmayan tek sayfa vardır: odadaki QR ile açılan **Misafir Yorum Ekranı** (giriş yok, kurulum yok).
 
 ## Ekranlar
 
@@ -19,19 +20,22 @@ Giriş (müdür) ──▶ Ana Kumanda ──┬─▶ 🔴 Süresi Geçenler ·
                                 ├─▶ 👥 Personel ──▶ ➕ Personel Ekle
                                 ├─▶ 📦 Ürünler (listede en fazla 8) ──▶ ➕ Ürün Ekle · Listeden çıkar
                                 └─▶ Çıkış
+
+Odadaki misafir QR'ı ──▶ /yorum/<kod> ──▶ ★ ★ ★ ★ ★ (+ isteğe bağlı yorum) ──▶ 📨 Gönder ──▶ Teşekkür ederiz
 ```
 
 Her beyan **önce telefona** yazılır (giden kutusu), ekran anında "✓" der. Postacı internet gelince gönderir.
 Ana ekranda "3 bildirim internet gelince gönderilecek" yazısı, henüz gitmemiş beyanları gösterir.
 Müdür panelinde yeni bir kırmızı alarm düşünce zarif bir çan sesi çalar (`src/ses.ts`); panel internet ister.
 Miktarlar kesirli olabilir ("7,5 Kg", "1,2 Litre"): sayaç yarımşar gider, sayının üstüne dokunup doğrudan da yazılır.
-Ekran kararları: `docs/ux/001-kat-gorevlisi-akisi.md`, `002-teknisyen-akisi.md`, `003-mudur-paneli-akisi.md`, `004-depo-teslimat-akisi.md`.
+Ekran kararları: `docs/ux/001-kat-gorevlisi-akisi.md`, `002-teknisyen-akisi.md`, `003-mudur-paneli-akisi.md`, `004-depo-teslimat-akisi.md`, `005-misafir-yorum-ekrani.md`.
+Canlıya çıkış adımları: `docs/deployment-checklist.md`.
 
 ## Dosyalar
 
 | Dosya | Ne yapar |
 |---|---|
-| `src/ekranlar/` | Personel ekranları: Giriş, Otel Seç, Ana, QR Okut, Oda, Eksik Var, Sorun Bildir, Açık İşler, İş, Teslim Al, Tamam |
+| `src/ekranlar/` | Personel ekranları: Giriş, Otel Seç, Ana, QR Okut, Oda, Eksik Var, Sorun Bildir, Açık İşler, İş, Teslim Al, Tamam · ve misafirin tek sayfası: Misafir Yorum Ekranı |
 | `src/ekranlar/panel/` | Müdür ekranları: Ana Kumanda, Süresi Geçenler, Mutsuz Misafirler, Teslimat Uyuşmazlıkları, Onaylar, Personel, Ürünler |
 | `src/parcalar/` | Ortak parçalar: büyük buton, sayfa iskeleti, fotoğraf çekici, miktar sayacı (− + ve yazarak) |
 | `src/telefonDeposu.ts` | Telefonun çekmecesi: odalar, kontrol listesi, ürünler, giden kutusu, bekleyen fotoğraflar |
@@ -41,6 +45,7 @@ Ekran kararları: `docs/ux/001-kat-gorevlisi-akisi.md`, `002-teknisyen-akisi.md`
 | `src/teslimler.ts` | Depo: bekleyen siparişler, "Kaç Kg geldi?" sorusu, eksik teslimde kanıt şartı, Teslim Aldım |
 | `src/miktar.ts` | Miktar ve birim: "7,5 Kg" yazımı, hangi birim bölünür (Kg yarımşar, adet birer birer) |
 | `src/uyusmazliklar.ts` | Müdür alarmı: teslim onaylandığı gibi mi geldi? (istenen · onaylanan · gelen + kanıt fotoğrafı) |
+| `src/misafir/yorumGonder.ts` | Misafir yorumunu kapıya (Edge Function) yollar; misafir anahtar taşımaz, giriş yapmaz |
 | `src/panel.ts` | Müdür: alarmlar (hesaplanır, saklanmaz), onaylar, personel, ürünler |
 | `src/panelNobeti.ts` | Panel nöbetçisi: 30 saniyede bir sorar, yeni kırmızı alarmda çanı çalar; ekranlar cevabı buradan okur |
 | `src/ses.ts` | Yeni kırmızı alarmda çalan zarif çan sesi; "bu alarmı duyurmuş muyduk?" hafızası |
@@ -51,6 +56,7 @@ Ekran kararları: `docs/ux/001-kat-gorevlisi-akisi.md`, `002-teknisyen-akisi.md`
 | `src/kullanici.ts` | Şu an giriş yapmış kişi; beyanlar bu kimlikle etiketlenir (ortak telefon) |
 | `src/ortakBeyin.ts` | Supabase bağlantısı (kapı anahtarıyla) |
 | `src/stil.css` | Sade görünüm: 2 renk, 2 yazı boyutu, büyük butonlar |
+| `vercel.json` | Bütün adresleri `index.html`'e yönlendirir; olmazsa QR ile açılan adresler 404 verir |
 
 ## Çalıştırmak
 

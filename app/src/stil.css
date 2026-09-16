@@ -211,6 +211,39 @@ textarea.alan { min-height: 120px; resize: vertical; }
 
 .sayac-alan:focus { outline: 3px solid var(--ana-acik); border-color: var(--ana); }
 
+/* ---- Misafir yorum sayfası (odadaki QR) ---- */
+.yildizlar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.yildiz {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 76px;
+  padding: 8px 0;
+  border: 2px solid var(--cizgi);
+  border-radius: var(--kose);
+  background: var(--kart);
+  color: #c8ced4;            /* seçilmemiş yıldız soluk durur */
+  font-size: 2.4rem;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Tek renk istisnası: yıldız sarı olmazsa yıldız gibi görünmez. */
+.yildiz--dolu { color: #f2b01e; border-color: #f2b01e; }
+.yildiz:active { transform: scale(0.98); }
+
+.yildiz-yazi {
+  min-height: 1.6em;
+  text-align: center;
+  font-weight: 700;
+}
+
 /* ---- Kamera ---- */
 .kamera-sayfa {
   position: fixed;
