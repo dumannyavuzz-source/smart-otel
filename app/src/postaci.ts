@@ -13,6 +13,7 @@ import { ortakBeyin } from './ortakBeyin';
 import { KUTU_DEGISTI_OLAYI, YENI_MEKTUP_OLAYI, cevrimici, haberVer } from './olaylar';
 import { aktifKullanici } from './kullanici';
 import { isEmirleriniIndir } from './isEmirleri';
+import { teslimleriIndir } from './teslimler';
 
 export type GonderimSonucu =
   | { ok: true }
@@ -70,18 +71,13 @@ export async function mektuplariGonder(
     for (const mektup of mektuplar) {
       if (simdilikBekle(mektup)) continue;          // kesin reddedilmiş: seyrek dene, ağı yorma
 
-      // 1) Önce fotoğraf (varsa ve hâlâ telefondaysa). Yüklenince telefondan silinir.
-      if (mektup.fotografYolu) {
-        const foto = await telefonDeposu.fotograflar.get(mektup.fotografYolu);
-        if (foto) {
-          const yukleme = await guvenle(() => yukle(foto.yol, foto.veri));
-          if (!yukleme.ok) {
-            await hataIsaretle(mektup, yukleme);
-            if (!yukleme.kalici) break;
-            continue;
-          }
-          await telefonDeposu.fotograflar.delete(foto.yol);
-        }
+      // 1) Önce fotoğraflar (varsa ve hâlâ telefondaysa), sırayla. Yüklenen telefondan silinir.
+      //    Teslimde iki tane olabilir: fatura ve eksik/hasar fotoğrafı. Kayıt en sona kalır:
+      //    sunucu kuralı "fotoğraf yüklenmeden teslim yazılamaz" der.
+      const yukleneceklerBitmedi = await fotograflariYukle(mektup, yukle);
+      if (!yukleneceklerBitmedi.ok) {
+        if (!yukleneceklerBitmedi.kalici) break;
+        continue;
       }
 
       // 2) Sonra kayıt (fotoğrafın yolunu taşır)
@@ -104,6 +100,26 @@ export async function mektuplariGonder(
     gonderiyor = false;
     haberVer(KUTU_DEGISTI_OLAYI);
   }
+}
+
+// Mektubun yanındaki fotoğraflar: yenilerde liste, telefonda kalmış eskilerde tek yol.
+function fotografYollari(mektup: Mektup): string[] {
+  return mektup.fotografYollari ?? (mektup.fotografYolu ? [mektup.fotografYolu] : []);
+}
+
+// Mektubun bütün fotoğraflarını sırayla yükler. Biri yüklenemezse kayıt gönderilmez.
+async function fotograflariYukle(mektup: Mektup, yukle: Yukleyici): Promise<{ ok: boolean; kalici: boolean }> {
+  for (const yol of fotografYollari(mektup)) {
+    const foto = await telefonDeposu.fotograflar.get(yol);
+    if (!foto) continue;                          // önceki denemede yüklenmiş
+    const yukleme = await guvenle(() => yukle(foto.yol, foto.veri));
+    if (!yukleme.ok) {
+      await hataIsaretle(mektup, yukleme);
+      return { ok: false, kalici: yukleme.kalici };
+    }
+    await telefonDeposu.fotograflar.delete(foto.yol);
+  }
+  return { ok: true, kalici: false };
 }
 
 // Gönderici/yükleyici beklenmedik biçimde patlarsa postacı kilitlenmesin: geçici hata say.
@@ -160,19 +176,24 @@ export function postaciyiBaslat(): () => void {
   const yolaCik = () => void mektuplariGonder();
   const paketiAl = () => void paketiIndir().catch(() => undefined);
   const isleriAl = () => void isEmirleriniIndir().catch(() => undefined);
+  const teslimleriAl = () => void teslimleriIndir().catch(() => undefined);
+  const listeleriAl = () => {
+    isleriAl();
+    teslimleriAl();
+  };
   yolaCik();
   paketiAl();
-  isleriAl();
+  listeleriAl();
 
   const internetGeldi = () => {
     yolaCik();
     paketiAl();
-    isleriAl();
+    listeleriAl();
   };
   window.addEventListener('online', internetGeldi);
   window.addEventListener(YENI_MEKTUP_OLAYI, yolaCik);
   const sayac = window.setInterval(yolaCik, 30_000);
-  const isSayaci = window.setInterval(isleriAl, 60_000);
+  const isSayaci = window.setInterval(listeleriAl, 60_000);
 
   return () => {
     window.removeEventListener('online', internetGeldi);

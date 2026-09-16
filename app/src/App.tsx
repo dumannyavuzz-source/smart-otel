@@ -16,6 +16,8 @@ import { SorunBildirEkrani } from './ekranlar/SorunBildirEkrani';
 import { TamamEkrani } from './ekranlar/TamamEkrani';
 import { IslerEkrani } from './ekranlar/IslerEkrani';
 import { IsEkrani } from './ekranlar/IsEkrani';
+import { TeslimlerEkrani } from './ekranlar/TeslimlerEkrani';
+import { TeslimEkrani } from './ekranlar/TeslimEkrani';
 import { PanelEkrani } from './ekranlar/panel/PanelEkrani';
 import { GecikenlerEkrani } from './ekranlar/panel/GecikenlerEkrani';
 import { MisafirlerEkrani } from './ekranlar/panel/MisafirlerEkrani';
@@ -89,6 +91,8 @@ export function App() {
       <Route path="/oda/:kod/sorun" element={<SorunBildirEkrani />} />
       <Route path="/isler" element={<IslerEkrani />} />
       <Route path="/is/:id" element={<IsEkrani />} />
+      <Route path="/teslimler" element={<TeslimlerEkrani />} />
+      <Route path="/teslim/:id" element={<TeslimEkrani />} />
       <Route path="/tamam" element={<TamamEkrani />} />
       <Route path="/panel/gecikenler" element={yalnizYonetici(<GecikenlerEkrani />)} />
       <Route path="/panel/misafirler" element={yalnizYonetici(<MisafirlerEkrani />)} />

@@ -12,6 +12,7 @@ const EN_UZUN_ACIKLAMA = 500;
 export interface MektupEki {
   id?: string;                                   // beyanın kimliği (verilmezse üretilir)
   fotograf?: { veri: Blob; yol: string };        // mektubun yanında tepside bekler; postacı önce onu yükler
+  fotograflar?: { veri: Blob; yol: string }[];   // birden fazla olabilir (teslimde: fatura + hasar)
   islem?: 'guncelle';                            // var olan satırı güncelle (iş emri)
   kosul?: Record<string, unknown>;               // güncellemede hangi satır
 }
@@ -29,14 +30,17 @@ export async function gidenKutusunaKoy(
   const id = ek.id ?? crypto.randomUUID();       // offline'da bile eşsiz; sunucu tekrarı yok sayar
   const simdi = new Date().toISOString();
   const beyan = ek.islem !== 'guncelle';
+  const fotograflar = [...(ek.fotograf ? [ek.fotograf] : []), ...(ek.fotograflar ?? [])];
 
-  // Mektup ve fotoğrafı tek seferde yaz: ya ikisi de tepside, ya hiçbiri
+  // Mektup ve fotoğrafları tek seferde yaz: ya hepsi tepside, ya hiçbiri
   await telefonDeposu.transaction('rw', [telefonDeposu.gidenKutusu, telefonDeposu.fotograflar], async () => {
-    if (ek.fotograf) {
-      if ((await telefonDeposu.fotograflar.count()) >= EN_FAZLA_BEKLEYEN_FOTOGRAF) {
+    if (fotograflar.length > 0) {
+      if ((await telefonDeposu.fotograflar.count()) + fotograflar.length > EN_FAZLA_BEKLEYEN_FOTOGRAF) {
         throw new Error('Bekleyen fotoğraf çok. İnternete bağlanın.');
       }
-      await telefonDeposu.fotograflar.add({ yol: ek.fotograf.yol, veri: ek.fotograf.veri, olusturuldu: simdi });
+      for (const foto of fotograflar) {
+        await telefonDeposu.fotograflar.add({ yol: foto.yol, veri: foto.veri, olusturuldu: simdi });
+      }
     }
     // Sıra numarası: tepsideki en büyük + 1. Saate güvenilmez (aynı milisaniye, geri alınan saat).
     const sonMektup = await telefonDeposu.gidenKutusu.orderBy('sira').last();
@@ -50,7 +54,7 @@ export async function gidenKutusunaKoy(
       ...(ek.kosul ? { kosul: ek.kosul } : {}),
       olusturuldu: simdi,
       deneme: 0,
-      ...(ek.fotograf ? { fotografYolu: ek.fotograf.yol } : {}),
+      ...(fotograflar.length > 0 ? { fotografYollari: fotograflar.map((f) => f.yol) } : {}),
     });
   });
 

@@ -15,6 +15,7 @@ Arayüz kodu burada değildir.
 | `migrations/…_ariza_fotografi.sql` | Arıza fotoğrafı kuralı: yol otelin klasöründe, fotoğraf depoda olmalı |
 | `migrations/…_cozum_fotografi.sql` | Teknisyenin çözüm fotoğrafı (sütun + kural) |
 | `migrations/…_personel_ve_urun.sql` | Personelin adı ve görevi (`memberships`), en fazla 8 açık ürün kuralı |
+| `migrations/…_teslim_hasar.sql` | Eksik teslimde kanıt şartı: `deliveries.damage_photo_path` + teslim kuralının yeni sürümü |
 | `functions/guest-feedback/` | Misafir Kapısı (Edge Function): `index.ts` ince kabuk, `kapi.ts` saf mantık, `kapi_test.ts` testleri |
 | `functions/personel-ekle/` | Personel Kapısı: müdür yeni hesap açar. Ana anahtarla yapılan tek iş hesap açmaktır; üyelik müdürün kendi yetkisiyle yazılır |
 | `tests/guvenlik_denemeleri.sql` | 22 maddelik saldırı denemesi (hepsi reddedilmeli) |

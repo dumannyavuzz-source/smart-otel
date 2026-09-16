@@ -90,7 +90,7 @@ describe('Aldım / Çözdüm', () => {
 
     const [m] = await telefonDeposu.gidenKutusu.toArray();
     expect(m?.icerik).toEqual({ status: 'resolved', resolved_photo_path: 'otel-1/resolutions/w1.jpg' });
-    expect(m?.fotografYolu).toBe('otel-1/resolutions/w1.jpg');
+    expect(m?.fotografYollari).toEqual(['otel-1/resolutions/w1.jpg']);
     expect(await telefonDeposu.fotograflar.count()).toBe(1);
     expect(await acikIsler()).toEqual([]);
   });
@@ -100,7 +100,7 @@ describe('Aldım / Çözdüm', () => {
     await isiCoz((await telefonDeposu.isEmirleri.get('w1'))!, null);
     const [m] = await telefonDeposu.gidenKutusu.toArray();
     expect(m?.icerik).toEqual({ status: 'resolved' });
-    expect(m?.fotografYolu).toBeUndefined();
+    expect(m?.fotografYollari).toBeUndefined();
   });
 
   it('sunucudan eski liste inse bile bodrumda yapılan Aldım/Çözdüm ezilmez', async () => {

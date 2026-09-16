@@ -45,7 +45,7 @@ describe('Beyanlar', () => {
     expect(m?.tablo).toBe('issue_reports');
     expect(m?.icerik).toMatchObject({ severity: 'normal', description: 'Arıza: musluk damlıyor' });
     expect(m?.icerik).not.toHaveProperty('photo_path');   // fotoğrafsız gönderildi
-    expect(m?.fotografYolu).toBeUndefined();
+    expect(m?.fotografYollari).toBeUndefined();
   });
 
   it('"Sorun Bildir" fotoğrafla: fotoğraf tepside bekler, mektup yolunu taşır', async () => {
@@ -56,7 +56,7 @@ describe('Beyanlar', () => {
     const m = await telefonDeposu.gidenKutusu.get(id);
     const beklenenYol = `otel-1/issues/${id}.jpg`;
 
-    expect(m?.fotografYolu).toBe(beklenenYol);
+    expect(m?.fotografYollari).toEqual([beklenenYol]);
     expect(m?.icerik.photo_path).toBe(beklenenYol);         // veritabanı kuralı: yol otelin klasörüyle başlar
     const bekleyen = await telefonDeposu.fotograflar.get(beklenenYol);
     expect(bekleyen?.veri.size).toBe(4);

@@ -26,7 +26,21 @@ export interface Urun {
   unit: string;
 }
 
-export type BeyanTablosu = 'room_cleanings' | 'supply_reports' | 'issue_reports';
+export type BeyanTablosu = 'room_cleanings' | 'supply_reports' | 'issue_reports' | 'deliveries';
+
+// Teslim bekleyen sipariş (depo): müdürün onayladığı ama henüz gelmemiş talep.
+// Vardiya paketiyle telefona iner; eksi kattaki depoda internet olmadan da açılır.
+export interface Teslimat {
+  id: string;                  // purchase_requests.id
+  hotel_id: string;
+  urun: string;                // ürünün adı
+  birim: string;               // "adet" · "Kg" · "Litre" · "Koli" — soru bu kelimeyle sorulur
+  istenen: number;             // personelin istediği
+  onaylanan: number;           // müdürün onayladığı — gelen bununla karşılaştırılır
+  talepEdenId: string;         // talep eden (o kişi teslim alamaz)
+  onaylayanId: string;         // onaylayan (o kişi de teslim alamaz)
+  created_at: string;
+}
 
 // İş emri (teknisyen): arızadan otomatik açılır. "Değişen" tek kutu: kimde? durumu ne?
 export interface IsEmri {
@@ -58,7 +72,8 @@ export interface Mektup {
   sonHata?: string;
   kalici?: boolean;                    // sunucu kesin reddetti (kilit/kural); seyrek yeniden denenir
   sonDeneme?: string;                  // ISO saat — son deneme ne zaman yapıldı
-  fotografYolu?: string;               // mektubun yanında bekleyen fotoğraf (önce o yüklenir)
+  fotografYolu?: string;               // tek fotoğraflı eski mektuplar (telefonda kalmış olabilir)
+  fotografYollari?: string[];          // mektubun yanında bekleyen fotoğraflar (önce hepsi yüklenir)
 }
 
 // Tepside bekleyen fotoğraf: küçültülmüş, yüklenince silinir (002 · B.6)
@@ -77,6 +92,7 @@ class TelefonDeposu extends Dexie {
   gidenKutusu!: EntityTable<Mektup, 'id'>;
   fotograflar!: EntityTable<Fotograf, 'yol'>;
   isEmirleri!: EntityTable<IsEmri, 'id'>;
+  teslimler!: EntityTable<Teslimat, 'id'>;
 
   constructor() {
     super('smartotel');
@@ -94,6 +110,9 @@ class TelefonDeposu extends Dexie {
     });
     this.version(4).stores({
       isEmirleri: 'id, hotel_id, due_at',
+    });
+    this.version(5).stores({
+      teslimler: 'id, hotel_id, created_at',
     });
   }
 }

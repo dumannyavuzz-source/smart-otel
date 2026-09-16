@@ -23,7 +23,7 @@ begin
 end
 $$;
 
-select plan(106);
+select plan(119);
 
 
 -- ---------------------------------------------------------------------
@@ -322,6 +322,99 @@ select lives_ok(
 
 select is((select received_quantity from public.deliveries where id = 'e0000000-0000-4000-8000-000000000001'), 18,
   '11i. Eski kayıt (18) hâlâ durur; yenisi (19) onu işaret eder');
+
+
+-- =====================================================================
+-- 11j · EKSİK TESLİM KANIT İSTER (çürük/hasarlı ürün — Aşama 17)
+-- =====================================================================
+select deneme.giris('a0000000-0000-4000-8000-00000000a001');   -- Ayşe (talep eden)
+
+select lives_ok(
+  $$ insert into public.purchase_requests (id, hotel_id, product_id, quantity)
+     values ('d0000000-0000-4000-8000-000000000003', 'a0000000-0000-4000-8000-000000000001',
+             'a0000000-0000-4000-8000-000000000a01', 10) $$,
+  '11j. Ayşe 10 ister');
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a003');   -- Mehmet (müdür)
+
+select lives_ok(
+  $$ insert into public.approvals (hotel_id, purchase_request_id, decision, approved_quantity)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000003', 'approved', 10) $$,
+  '11k. Mehmet 10 onaylar');
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a002');   -- Ali (depo görevlisi)
+
+select is((select approved_quantity from public.approvals
+            where purchase_request_id = 'd0000000-0000-4000-8000-000000000003'), 10,
+  '11l. Depo görevlisi onaylanan miktarı görür ("kaç bekliyoruz?")');
+
+select lives_ok(
+  $$ insert into storage.objects (bucket_id, name, owner)
+     values ('photos', 'a0000000-0000-4000-8000-000000000001/deliveries/e3-fatura.jpg',
+             'a0000000-0000-4000-8000-00000000a002') $$,
+  '11m. Ali fatura fotoğrafını yükler');
+
+select throws_ok(
+  $$ insert into public.deliveries (hotel_id, purchase_request_id, received_quantity, invoice_photo_path)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000003', 7,
+             'a0000000-0000-4000-8000-000000000001/deliveries/e3-fatura.jpg') $$,
+  null, 'Eksik teslimde eksik/hasar fotoğrafı da gerekir.',
+  '11n. 10 onaylandı, 7 geldi: kanıt fotoğrafı olmadan yazılamaz');
+
+select throws_ok(
+  $$ insert into public.deliveries (hotel_id, purchase_request_id, received_quantity,
+                                    invoice_photo_path, damage_photo_path)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000003', 7,
+             'a0000000-0000-4000-8000-000000000001/deliveries/e3-fatura.jpg',
+             'a0000000-0000-4000-8000-000000000001/deliveries/e3-hasar.jpg') $$,
+  null, 'Eksik/hasar fotoğrafı yüklenmeden teslim yazılamaz.',
+  '11o. Yüklenmemiş bir hasar fotoğrafının yolunu yazmak yetmez');
+
+select lives_ok(
+  $$ insert into storage.objects (bucket_id, name, owner)
+     values ('photos', 'a0000000-0000-4000-8000-000000000001/deliveries/e3-hasar.jpg',
+             'a0000000-0000-4000-8000-00000000a002') $$,
+  '11p. Ali çürük/eksik ürünün fotoğrafını yükler');
+
+select lives_ok(
+  $$ insert into public.deliveries (id, hotel_id, purchase_request_id, received_quantity,
+                                    invoice_photo_path, damage_photo_path)
+     values ('e0000000-0000-4000-8000-000000000003', 'a0000000-0000-4000-8000-000000000001',
+             'd0000000-0000-4000-8000-000000000003', 7,
+             'a0000000-0000-4000-8000-000000000001/deliveries/e3-fatura.jpg',
+             'a0000000-0000-4000-8000-000000000001/deliveries/e3-hasar.jpg') $$,
+  '11q. Kanıtla birlikte eksik teslim yazılır');
+
+select is((select damage_photo_path from public.deliveries where id = 'e0000000-0000-4000-8000-000000000003'),
+  'a0000000-0000-4000-8000-000000000001/deliveries/e3-hasar.jpg',
+  '11r. Kanıt kayıtta durur (beyan gibi: değişmez)');
+
+-- Tam gelen teslim: kanıt istenmez
+select deneme.giris('a0000000-0000-4000-8000-00000000a001');   -- Ayşe
+select lives_ok(
+  $$ insert into public.purchase_requests (id, hotel_id, product_id, quantity)
+     values ('d0000000-0000-4000-8000-000000000004', 'a0000000-0000-4000-8000-000000000001',
+             'a0000000-0000-4000-8000-000000000a01', 4) $$,
+  '11s. Ayşe 4 ister');
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a003');   -- Mehmet
+select lives_ok(
+  $$ insert into public.approvals (hotel_id, purchase_request_id, decision, approved_quantity)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000004', 'approved', 4) $$,
+  '11t. Mehmet 4 onaylar');
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a002');   -- Ali
+select lives_ok(
+  $$ insert into storage.objects (bucket_id, name, owner)
+     values ('photos', 'a0000000-0000-4000-8000-000000000001/deliveries/e4-fatura.jpg',
+             'a0000000-0000-4000-8000-00000000a002') $$,
+  '11u. Ali fatura fotoğrafını yükler');
+
+select lives_ok(
+  $$ insert into public.deliveries (hotel_id, purchase_request_id, received_quantity, invoice_photo_path)
+     values ('a0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000004', 4,
+             'a0000000-0000-4000-8000-000000000001/deliveries/e4-fatura.jpg') $$,
+  '11v. Tam gelen teslimde hasar fotoğrafı istenmez');
 
 
 -- =====================================================================

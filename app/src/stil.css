@@ -343,3 +343,18 @@ textarea.alan { min-height: 120px; resize: vertical; }
 .kart strong,
 .is-ust strong,
 .is-ust span { overflow-wrap: anywhere; min-width: 0; }
+
+/* Eksik/hasarlı teslim uyarısı: kanıt istenen yer, sarı çerçeveyle ayrılır */
+.uyari-blok {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: var(--bosluk);
+  border: 2px solid #f9a825;
+  border-left-width: 14px;
+  border-radius: var(--kose);
+  background: #fff8e1;
+}
+
+.uyari-blok p { margin: 0; }

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router';
 import { BuyukButon } from '../parcalar/BuyukButon';
 import { kutuDurumu } from '../postaci';
 import { acikIsler } from '../isEmirleri';
+import { teslimBekleyenler } from '../teslimler';
 import { cikisYap } from '../oturum';
 import { KUTU_DEGISTI_OLAYI, PAKET_OLAYI, YENI_MEKTUP_OLAYI } from '../olaylar';
 
@@ -26,6 +27,7 @@ function useSayim<T>(say: () => Promise<T>, baslangic: T): T {
 }
 
 const acikIsSayisi = () => acikIsler().then((isler) => isler.length);
+const teslimSayisi = () => teslimBekleyenler().then((liste) => liste.length);
 
 function durumMetni({ bekleyen, gonderilemeyen, baskasinin }: Durum): string {
   if (gonderilemeyen > 0) return `${gonderilemeyen} kayıt gönderilemedi. Müdürünüze haber verin.`;
@@ -38,6 +40,7 @@ export function AnaEkran() {
   const git = useNavigate();
   const durum = useSayim(kutuDurumu, { bekleyen: 0, gonderilemeyen: 0, baskasinin: 0 });
   const acikIs = useSayim(acikIsSayisi, 0);
+  const teslim = useSayim(teslimSayisi, 0);
 
   return (
     <main className="sayfa sayfa--orta">
@@ -51,6 +54,14 @@ export function AnaEkran() {
         <div style={{ width: '100%' }}>
           <BuyukButon ikon="🔧" onClick={() => git('/isler')}>
             {`Açık İşler (${acikIs})`}
+          </BuyukButon>
+        </div>
+      )}
+      {/* Depo görevlisi için ikincil kapı: teslim alınacak sipariş varsa görünür, yoksa yok. */}
+      {teslim > 0 && (
+        <div style={{ width: '100%' }}>
+          <BuyukButon ikon="📦" onClick={() => git('/teslimler')}>
+            {`Teslim Al (${teslim})`}
           </BuyukButon>
         </div>
       )}
