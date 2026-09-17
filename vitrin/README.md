@@ -21,11 +21,11 @@ Personel uygulaması (`app/`) ile **hiçbir ortak kodu yoktur**; bilerek böyled
 | `hareket.js` | Canlı akış animasyonu. Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |
 | `etkilesim.js` | Dört etkileşim: kaydırdıkça beliren döngü hikâyesi, keşif alanındaki ekran değiştirme, görününce dolan check-up panosu ve Ortak Beyin'e yazan iletişim formu. İlk üçü betiksiz de anlamlıdır; form betik ister |
 | `ayarlar.ornek.js` | Ayar dosyasının örneği: Supabase adresi ve ziyaretçi anahtarı. Gerçeği (`ayarlar.js`) git'e girmez |
-| `ayarlar-uret.sh` | Vercel derleme komutu: ortam değişkenlerinden `ayarlar.js` üretir; değişken eksikse dağıtımı durdurur |
+| `../ayarlar-uret.sh` (depo kökünde) | Vercel derleme komutu: ortam değişkenlerinden `vitrin/ayarlar.js` üretir; değişken eksik ya da anahtar gizliyse dağıtımı durdurur |
 | `simge.svg` · `dokunma-simgesi.png` | Sekme simgesi ve telefon ana ekranı simgesi: marka işareti (turuncu yuvarlak kare) |
 | `paylasim.html` → `paylasim.png` | Bağlantı paylaşılınca görünen 1200×630 kart. HTML kaynaktır, PNG ondan üretilir (aşağıda) |
 | `robots.txt` · `sitemap.xml` | Arama motoru yönlendirmesi: tek sayfa, `paylasim.html` dışarıda |
-| `vercel.json` | Yayın başlıkları: içerik güvenlik politikası (CSP) ve diğer koruyucu başlıklar |
+| `../vercel.json` (depo kökünde) | Yayın başlıkları: içerik güvenlik politikası (CSP) ve diğer koruyucu başlıklar. Vercel bu dosyayı yalnızca Root Directory'de arar; o yüzden kökte durur |
 
 ## Bakmak için
 
@@ -60,8 +60,9 @@ Fotoğraf yok; kart da sitenin kendisi gibi kodla çizilir. `paylasim.html` kayn
 
 ## Yayınlamak
 
-Vercel'de **ikinci bir proje** olarak yayınlanır: Root Directory `vitrin` · Build Command `sh ayarlar-uret.sh` ·
-Output Directory `.` · ortam değişkenleri `SUPABASE_URL` ve `SUPABASE_ANON_KEY` (`docs/deployment-checklist.md` · 6.7).
+Vercel'de **ikinci bir proje** olarak yayınlanır. Derleme depo kökünden başlar (betik ve `vercel.json` bu yüzden köktedir):
+**Root Directory boş** (depo kökü) · Build Command `sh ayarlar-uret.sh` · **Output Directory `vitrin`** ·
+ortam değişkenleri `SUPABASE_URL` ve `SUPABASE_ANON_KEY` (`docs/deployment-checklist.md` · 6.1 ve 6.7).
 
 | Adres | Ne çalışır |
 |---|---|
@@ -76,7 +77,7 @@ Kurumsal plandaki "Görüşme ayarla" düğmesi ve iletişim bölümündeki adre
 **İletişim formu Ortak Beyin'e yazar.** "Gönder" mesajı Supabase'deki `iletisim_formu` tablosuna
 bırakır; sayfa yenilenmez, alanların yerini onay ekranı alır. Ziyaretçi anahtarı bu tabloya yalnızca
 yazabilir, okuyamaz; kimse silemez. Aynı adresten saatte 5, toplamda 300 mesajdan fazlası reddedilir.
-Mesajlar Supabase panelinden okunur. Sayfa `vercel.json` ile içerik güvenlik politikası (CSP) altında yayınlanır:
+Mesajlar Supabase panelinden okunur. Sayfa depo kökündeki `vercel.json` ile içerik güvenlik politikası (CSP) altında yayınlanır:
 betik yalnızca kendi alanından, bağlantı yalnızca `*.supabase.co`. Ayrıntı ve canlı doğrulama: `docs/security/007-iletisim-formu.md`.
 
 Alt bölümdeki yasal bağlantılar (KVKK Aydınlatma Metni, Gizlilik Politikası, Çerez Politikası,

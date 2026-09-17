@@ -75,8 +75,8 @@ Bunun fark edilmesi için henüz bir gözcü yok (aşağıda "Açık kalan").
 
 ## Ziyaretçi anahtarı nerede durur, ne yapabilir?
 
-Anahtar **git'te yoktur**. `vitrin/ayarlar.js` dosyası `.gitignore`'dadır; Vercel'de
-`ayarlar-uret.sh` her dağıtımda ortam değişkenlerinden (`SUPABASE_URL`, `SUPABASE_ANON_KEY`)
+Anahtar **git'te yoktur**. `vitrin/ayarlar.js` dosyası `.gitignore`'dadır; Vercel'de depo
+kökündeki `ayarlar-uret.sh` her dağıtımda ortam değişkenlerinden (`SUPABASE_URL`, `SUPABASE_ANON_KEY`)
 üretir. Betik şunları reddeder ve dağıtımı durdurur: değişken eksikse; anahtar gizli anahtarsa
 (`sb_secret_…` ya da rolü `service_role` olan JWT); adres `https://<proje>.supabase.co` değilse.
 Anahtar tarama betiği (`supabase/scripts/ana_anahtar_taramasi.sh`) JWT biçimindeki her anahtarı
@@ -95,7 +95,7 @@ kilidi vardır ve ayrı belgelenmiştir. **Bu tabloda** yapabildiği tek şey ya
   gönderilmez. Adı bilerek adres/web sitesi çağrıştırmaz — tarayıcı otomatik doldurması gerçek
   ziyaretçinin mesajını yutmasın. Bu yalnızca form üzerinden gelen botlara karşıdır; doğrudan
   API'ye yazan botu sel kapısı **yavaşlatır** (durdurmaz).
-- **İçerik güvenlik politikası** (`vitrin/vercel.json`): betik yalnızca kendi alanından, bağlantı
+- **İçerik güvenlik politikası** (depo kökündeki `vercel.json`): betik yalnızca kendi alanından, bağlantı
   yalnızca kendi alanı ve `*.supabase.co`; sayfa başka bir sayfaya gömülemez. Olası bir betik
   enjeksiyonunda anahtar ve form verisi başka bir yere gönderilemez. Politika yerelde `<meta>`
   ile sınandı: ihlal yok, form çalışıyor.

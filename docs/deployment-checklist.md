@@ -107,7 +107,8 @@ Her odada **iki ayrı** QR vardır. Karıştırılmamalıdır:
 
 Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/README.md`).
 
-- [ ] **6.1** Vercel'de ikinci proje: **Root Directory: `vitrin`** · Framework: Other · Build Command `sh ayarlar-uret.sh` · Output Directory `.`
+- [ ] **6.1** Vercel'de ikinci proje: **Root Directory boş (depo kökü)** · Framework: Other · Build Command `sh ayarlar-uret.sh` · **Output Directory `vitrin`**.
+      Betik ve `vercel.json` depo kökündedir; Vercel ikisini de yalnızca Root Directory'de arar (2026-09-17: "exited with 127" dersi).
 - [ ] **6.2** Alan adlarını ayır:
       - `oteldijital.com` → vitrin
       - `app.oteldijital.com` → personel uygulaması ve misafir yorum sayfası
@@ -120,8 +121,8 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       ve Aşama 19.1'den beri ürün bunu karşılıyor (Personel ekranı → 🔑 Şifre). Vaat ile ürün aynı.
 - [ ] **6.5** Fiyat tablosundaki plan içerikleri (hangi özellik hangi pakette) Genel Müdür onayından geçmelidir.
 - [ ] **6.7** Vitrin projesine iki ortam değişkeni gir: `SUPABASE_URL` ve `SUPABASE_ANON_KEY` (ziyaretçi anahtarı;
-      uygulamadaki `VITE_SUPABASE_*` ile aynı değerler). `ayarlar-uret.sh` bunlardan `ayarlar.js` üretir; biri eksikse
-      dağıtım durur. Anahtar git'e girmez (`docs/security/007-iletisim-formu.md`).
+      uygulamadaki `VITE_SUPABASE_*` ile aynı değerler). Depo kökündeki `ayarlar-uret.sh` bunlardan `vitrin/ayarlar.js` üretir;
+      biri eksikse ya da anahtar gizli anahtarsa dağıtım durur. Anahtar git'e girmez (`docs/security/007-iletisim-formu.md`).
 - [ ] **6.8** Canlıda formu bir kez gönder, Supabase panelinde `iletisim_formu` tablosuna düştüğünü gör, deneme satırını sil.
 - [ ] **6.9** Yasal metinler (KVKK Aydınlatma, Gizlilik, Çerez, Kullanım Şartları) yazılıp alt bölümdeki `#` bağlantılarına bağlanmalı;
       KVKK metninde iletişim formu verisinin saklama süresi belirtilmeli.

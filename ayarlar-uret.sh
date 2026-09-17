@@ -9,11 +9,15 @@
 #     her tarayıcıya gider; kilitleri atlar. Yalnızca ziyaretçi (anon) anahtarı yayınlanır.
 #   · adres https://<proje>.supabase.co biçiminde değilse
 #
-# Vercel ayarı: Root Directory = vitrin · Build Command = sh ayarlar-uret.sh · Output Directory = .
-# Ortam değişkenleri: SUPABASE_URL, SUPABASE_ANON_KEY (docs/deployment-checklist.md · 6.7)
+# Dosya DEPO KÖKÜNDE durur (Vercel derlemeyi kökten başlatır) ve vitrin/ayarlar.js üretir.
+# Nereden çağrılırsa çağrılsın çalışır: önce kendi bulunduğu klasöre gider.
+#
+# Vercel ayarı (vitrin projesi): Root Directory boş (depo kökü) · Build Command = sh ayarlar-uret.sh ·
+# Output Directory = vitrin · Ortam değişkenleri: SUPABASE_URL, SUPABASE_ANON_KEY
+# (docs/deployment-checklist.md · 6.1 ve 6.7)
 # =====================================================================
 set -eu
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/vitrin"
 
 : "${SUPABASE_URL:?SUPABASE_URL eksik (Vercel → Settings → Environment Variables)}"
 : "${SUPABASE_ANON_KEY:?SUPABASE_ANON_KEY eksik (Vercel → Settings → Environment Variables)}"
