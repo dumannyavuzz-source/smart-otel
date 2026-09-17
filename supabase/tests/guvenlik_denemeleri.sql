@@ -67,7 +67,7 @@ $$;
 
 
 -- ---------------------------------------------------------------------
--- Kadro ve iki otel (yönetici bağlantısıyla kurulur — Smartotel ekibi gibi)
+-- Kadro ve iki otel (yönetici bağlantısıyla kurulur — OtelDijital ekibi gibi)
 -- ---------------------------------------------------------------------
 insert into auth.users (id, email) values
   ('a0000000-0000-4000-8000-00000000a001', 'ayse@deneme.test'),

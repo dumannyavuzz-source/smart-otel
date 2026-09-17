@@ -1,6 +1,6 @@
-# PROJECT_BLUEPRINT.md — Otel Dijital Proje Planı
+# PROJECT_BLUEPRINT.md — OtelDijital Proje Planı
 
-> Bu belge, Otel Dijital'in **ne** olduğunu, **kimin için** yapıldığını ve **nasıl** inşa edileceğini anlatır.
+> Bu belge, OtelDijital'in **ne** olduğunu, **kimin için** yapıldığını ve **nasıl** inşa edileceğini anlatır.
 > Sade dille yazılmıştır; teknik olmayan biri de okuyup anlayabilmelidir.
 > "Hangi teknolojiyle?" sorusu burada cevaplanmaz. O karar Architect tarafından ayrıca verilir ve `docs/decisions/` altına yazılır.
 
@@ -8,8 +8,8 @@
 
 ## 1. Hedef
 
-### 1.1 Tek Cümleyle Otel Dijital
-Otel Dijital; otel personelinin işini telefondan, QR kodla ve birkaç dokunuşla yapmasını sağlayan,
+### 1.1 Tek Cümleyle OtelDijital
+OtelDijital; otel personelinin işini telefondan, QR kodla ve birkaç dokunuşla yapmasını sağlayan,
 kötü misafir deneyimini internete düşmeden içeride yakalayan ve depo-satın alma işlerinde
 suistimali önleyen bir **otel işletim uygulamasıdır**.
 
@@ -21,7 +21,7 @@ suistimali önleyen bir **otel işletim uygulamasıdır**.
 | **Misafir** | Odada kalan kişi | QR ile açılan tek bir yorum ekranı (kurulum yok, giriş yok) |
 | **Otel sahibi / Zincir yönetimi** | Bir veya birden fazla oteli olan işletmeci | Yönetici paneli (otel otel görür) |
 
-**Satış modeli:** SaaS. Otel Dijital tek bir sistemdir; her otel kendi hesabıyla, kendi verisiyle kullanır.
+**Satış modeli:** SaaS. OtelDijital tek bir sistemdir; her otel kendi hesabıyla, kendi verisiyle kullanır.
 **Hedef pazar:** Butik oteller, zincir oteller ve şehir otelleri.
 
 ### 1.3 Üç Söz (Temel Felsefe)
@@ -33,7 +33,7 @@ suistimali önleyen bir **otel işletim uygulamasıdır**.
 
 ### 1.4 Başarı Nasıl Ölçülür? (Öneri — Genel Müdür onayına sunulur)
 - Süresi aşılan arıza sayısı **sıfıra yaklaşsın**.
-- Misafir şikayetlerinin **büyük çoğunluğu** Google'a değil, önce Otel Dijital'e düşsün.
+- Misafir şikayetlerinin **büyük çoğunluğu** Google'a değil, önce OtelDijital'e düşsün.
 - Talep edilen adet ile teslim alınan adet arasındaki **uyumsuzluk** görünür olsun ve azalsın.
 - Yeni bir personel, eğitim almadan **5 dakikada** ilk odasını sisteme işleyebilsin.
 
@@ -42,7 +42,7 @@ suistimali önleyen bir **otel işletim uygulamasıdır**.
 ## 2. Sistem Mimarisi
 
 ### 2.1 Dört Parça
-Otel Dijital dört parçadan oluşur. Üçü insanların dokunduğu ekranlar, biri her şeyi hatırlayan ortak beyindir.
+OtelDijital dört parçadan oluşur. Üçü insanların dokunduğu ekranlar, biri her şeyi hatırlayan ortak beyindir.
 
 ```
  [Personel Telefonu] ────┐

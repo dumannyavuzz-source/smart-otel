@@ -54,7 +54,7 @@ Kural: **Varsayılan erişim yok.** Bir tabloya kilit tanımlanmadıysa kimse gi
 - Kat görevlisi: 1 otelde `staff`.
 - Otel müdürü: 1 otelde `manager`.
 - Zincir sahibi: 5 otelde `owner` → 5 satır. Panelde 5 oteli görür.
-- **Smartotel ekibi** (bizim destek): uygulamadan **asla** girmez; yalnızca yönetim anahtarıyla, kayıt altında.
+- **OtelDijital ekibi** (bizim destek): uygulamadan **asla** girmez; yalnızca yönetim anahtarıyla, kayıt altında.
 
 ### A.4 Kutular (Tablolar — sade liste)
 | Kutu | İçinde ne var |

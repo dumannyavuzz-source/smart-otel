@@ -56,14 +56,14 @@ Sonuç: Otel A'nın görevlisi Otel B'nin bir satırını sorduğunda yardımcı
 | `manager` | Kat şefi, otel müdürü, satın alma yetkilisi | Her şeyi görür, onaylar, otel ayarlarını yönetir |
 | `owner` | Otel sahibi / zincir | Müdürün yapabildiği her şey + müdür atar |
 
-Giriş yapmayan **misafir** ve bizim **Smartotel ekibimiz** rol değildir; ikisinin de tablolara doğrudan yolu yoktur (bkz. Bölüm 5).
+Giriş yapmayan **misafir** ve bizim **OtelDijital ekibimiz** rol değildir; ikisinin de tablolara doğrudan yolu yoktur (bkz. Bölüm 5).
 
 ### 2.3 Kilit Tablosu — her kutu için kim ne yapabilir?
 "Üye" = o otelde herhangi bir rolü olan kişi. "—" = **kimse**, hiçbir rol, uygulamadan asla.
 
 | Kutu | Okuma | Ekleme | Değiştirme | Silme |
 |---|---|---|---|---|
-| `hotels` | üye | — (Smartotel ekibi, kayıt altında) | owner: ad, saat dilimi | — |
+| `hotels` | üye | — (OtelDijital ekibi, kayıt altında) | owner: ad, saat dilimi | — |
 | `memberships` | staff: yalnızca kendi satırı · manager/owner: otelin tümü | owner: manager + staff ekler · manager: yalnızca staff ekler | — (rol değişikliği = çıkar + yeniden ekle; **kendi rolünü kimse değiştiremez**) | owner/manager — ama **kendini kimse silemez** |
 | `rooms` | üye | manager/owner | manager/owner (misafir kodunu yenileme dahil) | — (oda "kapalı" işaretlenir) |
 | `checklist_templates` | üye | manager/owner | manager/owner | — (pasif işaretlenir) |
@@ -181,7 +181,7 @@ Telefonun kendi saati de ayrıca saklanır (`created_at_device`) — offline gec
 ### 4.2 Kilit — Değiştirme ve silme yasağı, istisnasız
 Her beyan tablosunda (🔏) iki **kural** vardır: **"değiştirmeyi reddet"** ve **"silmeyi reddet."**
 - Görevli, müdür, sahip — **hiçbir rol** için istisna yok.
-- **Ana anahtar bile** bu kuralı geçemez: ana anahtar kilitleri (RLS) atlar ama kuralları (trigger) atlayamaz. Smartotel ekibi de bir beyanı silemez.
+- **Ana anahtar bile** bu kuralı geçemez: ana anahtar kilitleri (RLS) atlar ama kuralları (trigger) atlayamaz. OtelDijital ekibi de bir beyanı silemez.
 - Kuralı kaldırmanın tek yolu veritabanı şemasını değiştirmektir; şema **git'te** durur, her değişiklik **kim/ne zaman** ile kayıtlıdır.
 
 ### 4.3 Yanlış yazıldıysa? Yeni kayıt, eskisini işaret eder

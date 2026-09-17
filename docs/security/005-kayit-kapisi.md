@@ -1,6 +1,6 @@
 # 005 — Güvenlik: Kayıt Kapısı (Aşama 20)
 
-> **Hazırlayan:** Security + Orkestratör · **Tarih:** 2026-09-16 · **Durum:** 3 madde V1.1'e bırakıldı
+> **Hazırlayan:** Security + Orkestratör · **Tarih:** 2026-09-16 · **Durum:** 2 madde V1.1'e bırakıldı · deneme süresi takibi bir sonraki aşamaya alındı (2026-09-17)
 > Kod: `supabase/functions/otel-ac/`, `supabase/migrations/…_kayit_kapisi.sql`, `app/src/kayit.ts`.
 
 ---
@@ -8,7 +8,7 @@
 ## Neden bu belge var?
 
 Kayıt kapısı, sistemin **ilk kimlik doğrulaması olmayan yazma yoludur**. Bugüne kadar yeni otel açmak
-Smartotel ekibinin işiydi; artık vitrindeki bir düğme bunu yapıyor. Üstelik kapı üç şeyi birden ana
+OtelDijital ekibinin işiydi; artık vitrindeki bir düğme bunu yapıyor. Üstelik kapı üç şeyi birden ana
 anahtarla yazıyor — çünkü ortada henüz giriş yapmış kimse yok:
 
 1. yeni hesap, 2. yeni otel, 3. o otelin **ilk sahibi**.
@@ -37,11 +37,13 @@ Sonuç: biri **başkasının e-posta adresiyle** otel açabilir. Zararı sınır
 verisine erişmez — ama o adresin gerçek sahibi ileride kaydolmak isterse "bu e-posta zaten kayıtlı" duvarına çarpar.
 `docs/v1-1-notlari.md` · B1.
 
-### 2. Deneme süresi takip edilmiyor — bilinçli karar
-Vitrin "14 gün" diyor; sistemde deneme bitiş tarihi, uyarı veya kapanma yoktur. Açılan otel süresizdir.
+### 2. Deneme süresi takip edilmiyor — bir sonraki aşamada kapanacak
+Bugün sistemde deneme bitiş tarihi, uyarı veya kapanma yoktur: açılan otel süresizdir.
 Bu bir güvenlik açığı değil, **kaynak tüketimi** ve ticari bir açıktır.
-**Genel Müdür kararı (2026-09-16):** "14 gün" vitrinde pazarlama vaadi olarak kalır; süre takibi ve kilitleme
-V1'de yapılmaz, V1.1'e bırakılır (`docs/v1-1-notlari.md` · B2). Kapının bu yüzden tek koruması saatlik sayaçtır.
+**Genel Müdür kararı (2026-09-17):** Deneme süresi **30 gündür** ve "süre takibini V1.1'e bırakalım"
+kararı **iptal edilmiştir**. Bir sonraki aşamada `hotels` tablosuna `demo_bitis_tarihi` sütunu eklenecek,
+aktif demo takibi ve ödeme duvarı (paywall) kurulacaktır — ayrıntı: `docs/decisions/005-demo-suresi-ve-odeme-duvari.md`.
+O aşama tamamlanana kadar kapının tek koruması saatlik sayaçtır.
 
 ### 3. Sınır IP başınadır
 Farklı adreslerden gelen toplu kayıt (bot ağı) engellenmez. Saatte 3 sınırı sıradan kötüye kullanımı keser;

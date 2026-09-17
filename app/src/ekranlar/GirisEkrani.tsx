@@ -20,7 +20,7 @@ export function GirisEkrani() {
 
   return (
     <main className="sayfa sayfa--orta">
-      <h1>Otel Dijital</h1>
+      <h1>OtelDijital</h1>
       <form className="buton-grubu" style={{ width: '100%' }} onSubmit={gonder}>
         <input
           className="alan"

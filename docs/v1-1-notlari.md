@@ -16,7 +16,7 @@ dördü de "bir gün kötüye kullanılabilir" sınıfındadır, "bugün kırık
 | A1 | **Şifre yenileme deftere yazılmıyor, hız sınırı yok** | Müdür bir personelin şifresini yeniler; bu işlem hiçbir yere kaydedilmez ve kaç kez yapılabileceğinin sınırı yoktur | `sifre_yenilemeleri (hotel_id, hedef_user_id, created_by, created_at)` beyan tablosu + otel başına dakikada 3 sınırı |
 | A2 | **Şifre değişince açık oturum kapanmıyor** | "Telefonu kayboldu, şifresini değiştirdim" yetmez; telefondaki uygulama çalışmaya devam eder | Oturum zaman aşımı (`inactivity_timeout`) ya da şifre yazıldıktan sonra kişinin oturumlarının da sonlandırılması |
 | A3 | **Üyelik kilidiyle zincirlenme** | Müdür, kimliğini bildiği ve hiçbir otelde çalışmayan bir hesabı kendi oteline yazıp şifresini alabilir | Üyelik yazımı yalnızca `personel-ekle` kapısından geçsin (`docs/security/002` · Açık 4 ile birlikte) |
-| A4 | **Sahip kilitlenirse geri dönüş yolu yazılı değil** | Sahip şifresini unutursa tek çare Smartotel ekibinin ana anahtarı; bu yol yazılı değil | "Sahip kilitlendi" yordamı: kim, nasıl, hangi kayıtla açar — `docs/security/` altına yazılır |
+| A4 | **Sahip kilitlenirse geri dönüş yolu yazılı değil** | Sahip şifresini unutursa tek çare OtelDijital ekibinin ana anahtarı; bu yol yazılı değil | "Sahip kilitlendi" yordamı: kim, nasıl, hangi kayıtla açar — `docs/security/` altına yazılır |
 
 **Bugünkü doğru yol (A2 için, ekip bilmeli):** telefon kaybolduysa kişi otelden **çıkarılır**
 (üyelik silinince kilitler erişimi anında keser), sonra yeniden eklenir. Şifre yenilemek tek başına yetmez.
@@ -28,13 +28,14 @@ Ayrıntı: `docs/security/004-sifre-yenileme.md`
 | # | Madde | Bugün ne oluyor? | V1.1'de ne yapılacak? |
 |---|---|---|---|
 | B1 | **E-posta doğrulanmıyor** | Sistem hiç e-posta göndermiyor; kayıt olan kişinin adresi doğrulanmadan hesap açılıyor. Biri başkasının adresiyle otel açabilir | SMTP bağlanınca doğrulama bağlantısı; ya da ilk girişte kod doğrulaması |
-| B2 | **14 günlük deneme süresi takip edilmiyor** | Vitrin "14 gün" diyor; sistemde deneme bitiş tarihi, uyarı ya da kapanma yok. Açılan oteller **süresiz** | `hotels` tablosuna deneme bitiş tarihi + panelde kalan gün uyarısı |
+| B2 | **Deneme süresi takip edilmiyor** | Bugün deneme bitiş tarihi, uyarı ya da kapanma yok; açılan oteller **süresiz** | **V1.1'den çıkarıldı** — bir sonraki aşamada yapılacak: `hotels` tablosuna `demo_bitis_tarihi`, aktif demo takibi ve ödeme duvarı |
 | B3 | **Ödeme yok** | Fiyat tablosu var, ödeme alma yolu yok | Ödeme sağlayıcısı kararı ve bağlanması |
 | B4 | **Kurumsal plan için iletişim yalnızca e-posta** | Düğme `merhaba@oteldijital.com` adresine yazıyor (Genel Müdür kararı) | Gerçek bir iletişim formu / talep takibi |
 
-> **B2 için Genel Müdür kararı (2026-09-16):** "14 gün" vitrinde **pazarlama vaadi olarak kalacak**; ürün içinde
-> süre takibi ve kilitleme V1'de **yapılmayacaktır**. Bu bilinçli bir karardır, eksik iş değildir.
-> Açılan oteller şimdilik süresizdir; süre takibi V1.1'de eklenecektir.
+> **B2 için Genel Müdür kararı (2026-09-17 — 2026-09-16 tarihli kararın yerine geçer):** Deneme süresi
+> **30 gündür**. "Süre takibi V1.1'e bırakılsın" kararı **iptal edilmiştir**: bu iş sonraya değil,
+> **bir sonraki aşamaya** alınmıştır. `hotels` tablosuna `demo_bitis_tarihi` sütunu eklenecek, aktif demo
+> takibi ve ödeme duvarı (paywall) kurulacaktır. Ayrıntı: `docs/decisions/005-demo-suresi-ve-odeme-duvari.md`.
 
 ## C. Daha önce kayda geçmiş, sonraya bırakılanlar
 

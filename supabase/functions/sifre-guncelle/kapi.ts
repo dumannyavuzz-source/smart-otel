@@ -27,7 +27,7 @@ export const MESAJ = {
   sifre: 'Şifre en az 8 karakter olmalı.',
   kisi: 'Bu kişi otelinizde çalışmıyor.',
   kendisi: 'Kendi şifrenizi buradan değiştiremezsiniz.',
-  cokOtel: 'Bu kişi birden fazla otelde çalışıyor. Şifresini Smartotel ekibi güncelleyebilir.',
+  cokOtel: 'Bu kişi birden fazla otelde çalışıyor. Şifresini OtelDijital ekibi güncelleyebilir.',
   genel: 'Bu işlem yapılamadı.',
 } as const;
 

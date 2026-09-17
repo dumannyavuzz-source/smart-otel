@@ -47,7 +47,7 @@ zorunda olduğu için gizlemek işe yaramaz, yalnızca zorlaştırırdı.
 ### Açık 2 · ORTA — Personel kapısında hız sınırı yok, e-posta varlığı ele veriliyor
 Kapı sınırsız çağrılabiliyor ve "Bu e-posta zaten kayıtlı." diyerek bir adresin sistemde olup olmadığını söylüyor.
 Misafir kapısında dakikada 3 sınırı varken burada hiç yok. Kartı olan (ya da kartı çalınan) bir müdür, adres adres
-deneyerek "bu kişi Smartotel'de kayıtlı mı?" sorusunu yanıtlayabilir. Önerilen: otel başına sınır (ör. dakikada 3,
+deneyerek "bu kişi OtelDijital'de kayıtlı mı?" sorusunu yanıtlayabilir. Önerilen: otel başına sınır (ör. dakikada 3,
 günde 20) — misafir kapısındaki desenin aynısı.
 
 ### Açık 3 · ORTA-DÜŞÜK — Kapının varsayılanı "her adrese açık"

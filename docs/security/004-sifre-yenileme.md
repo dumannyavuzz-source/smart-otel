@@ -77,7 +77,7 @@ olmayan hesaplar (açılıp atanmamış, deneme hesapları) bu yolla ele geçiri
 
 ### Açık 4 · BİLGİ — Sahip kilitlenirse geri dönüş yolu yazılı değil
 "Sahibin şifresine kimse dokunamaz" doğru bir karardır; ama uygulamada "şifremi unuttum" akışı da yoktur.
-Sahip şifresini unutursa tek çare Smartotel ekibinin ana anahtarıdır. Bu yol **bugünden** yazılmazsa, acil bir
+Sahip şifresini unutursa tek çare OtelDijital ekibinin ana anahtarıdır. Bu yol **bugünden** yazılmazsa, acil bir
 günde güvensiz bir kestirme icat edilir. Kim, nasıl, hangi kayıtla yapar — karara bağlanmalıdır.
 
 ## Ayrıca (canlıya çıkmadan)

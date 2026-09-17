@@ -44,7 +44,7 @@ export function AnaEkran() {
 
   return (
     <main className="sayfa sayfa--orta">
-      <h1 className="soluk">Otel Dijital</h1>
+      <h1 className="soluk">OtelDijital</h1>
       <div className="esnek" style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
         <BuyukButon ikon="📷" tur="ana" dev onClick={() => git('/qr')}>
           QR Okut
