@@ -48,6 +48,12 @@ export function GirisEkrani() {
         </button>
         {hata && <p className="orta" role="alert">{hata}</p>}
       </form>
+
+      {/* Kayıt sayfası uygulamanın DIŞINDADIR (main.tsx). Bu yüzden react-router bağlantısı değil,
+          düz bağlantı kullanılır: tam sayfa yenilenir ve /kayit açılır. */}
+      <p className="giris-kayit">
+        Hesabınız yok mu? <a href="/kayit">30 Gün Ücretsiz Dene</a>
+      </p>
     </main>
   );
 }

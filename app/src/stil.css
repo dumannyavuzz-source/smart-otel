@@ -423,6 +423,20 @@ textarea.alan { min-height: 120px; resize: vertical; }
 
 .uyari-blok p { margin: 0; }
 
+/* Giriş ekranının altındaki kayıt bağlantısı — hesabı olmayan otelciyi /kayit sayfasına götürür.
+   Sade tutulur: tek satır, ana renkte bir bağlantı; butonla yarışmaz. */
+.giris-kayit {
+  margin: 20px 0 0;
+  font-size: 1rem;
+  text-align: center;
+  color: var(--metin-soluk);
+}
+.giris-kayit a {
+  color: var(--ana);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 /* ---------------------------------------------------------------------
    Kayıt sayfası (/kayit) — vitrinle aynı dil: gece yarısı zemin, elektrik turuncusu düğme.
    Uygulamanın geri kalanı aydınlıktır; burası dışarıya bakan tek ekran olduğu için

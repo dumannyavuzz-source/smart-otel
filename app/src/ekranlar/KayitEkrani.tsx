@@ -57,7 +57,7 @@ export function KayitEkrani() {
           <span>OtelDijital</span>
         </div>
 
-        <h1>Otelinizi iki dakikada kurun.</h1>
+        <h1>30 Gün Ücretsiz Dene</h1>
         <p className="kayit-giris">
           Dört soru soruyoruz, gerisini biz hallediyoruz. Kurulum bitince doğrudan müdür panelinize düşersiniz.
         </p>
@@ -125,7 +125,7 @@ export function KayitEkrani() {
         <ul className="kayit-guvence">
           <li>✓ Kredi kartı yok</li>
           <li>✓ Taahhüt yok</li>
-          <li>✓ 14 gün boyunca tüm özellikler</li>
+          <li>✓ 30 gün boyunca tüm özellikler</li>
         </ul>
 
         <p className="kayit-dip">
