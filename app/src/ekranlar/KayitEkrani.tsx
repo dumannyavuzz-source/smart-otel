@@ -1,7 +1,7 @@
 // Kayıt Ekranı — vitrindeki "Otelimi Ücretsiz Başlat" düğmesinin indiği yer (Aşama 20).
 //
 // Dört soru, tek düğme. Kurulum sihirbazı, adım adım form, oda sayısı sorusu, kart bilgisi yoktur.
-// Görünümü vitrinle aynı dildedir (gece yarısı zemin): kişi aynı ürünün içinde olduğunu hissetmeli.
+// Görünümü vitrinle aynı dildedir (açık premium dil): kişi aynı ürünün içinde olduğunu hissetmeli.
 //
 // Sayfa uygulamanın DIŞINDADIR: oturum sorulmaz, postacı çalışmaz (main.tsx).
 // Kayıt bitince kişi kendi şifresiyle normal yoldan girer ve panele düşer.
@@ -50,23 +50,23 @@ export function KayitEkrani() {
   }
 
   return (
-    <main className="kayit">
-      <div className="kayit-kutu">
-        <div className="kayit-marka">
-          <span className="kayit-isaret" aria-hidden="true"></span>
+    <main className="kapi">
+      <div className="kapi-kutu">
+        <div className="kapi-marka">
+          <span className="kapi-isaret" aria-hidden="true"></span>
           <span>OtelDijital</span>
         </div>
 
         <h1>30 Gün Ücretsiz Dene</h1>
-        <p className="kayit-giris">
+        <p className="kapi-giris">
           Dört soru soruyoruz, gerisini biz hallediyoruz. Kurulum bitince doğrudan müdür panelinize düşersiniz.
         </p>
 
-        <form className="kayit-form" onSubmit={gonder}>
+        <form className="kapi-form" onSubmit={gonder}>
           <label htmlFor="otelAdi">Otel adı</label>
           <input
             id="otelAdi"
-            className="kayit-alan"
+            className="kapi-alan"
             value={otelAdi}
             onChange={(e) => setOtelAdi(e.target.value)}
             placeholder="Deniz Otel"
@@ -78,7 +78,7 @@ export function KayitEkrani() {
           <label htmlFor="ad">Adınız soyadınız</label>
           <input
             id="ad"
-            className="kayit-alan"
+            className="kapi-alan"
             value={ad}
             onChange={(e) => setAd(e.target.value)}
             placeholder="Yavuz Duman"
@@ -90,7 +90,7 @@ export function KayitEkrani() {
           <label htmlFor="eposta">E-posta</label>
           <input
             id="eposta"
-            className="kayit-alan"
+            className="kapi-alan"
             type="email"
             inputMode="email"
             value={eposta}
@@ -104,7 +104,7 @@ export function KayitEkrani() {
           <label htmlFor="sifre">Şifre</label>
           <input
             id="sifre"
-            className="kayit-alan"
+            className="kapi-alan"
             type="password"
             value={sifre}
             onChange={(e) => setSifre(e.target.value)}
@@ -115,20 +115,20 @@ export function KayitEkrani() {
             required
           />
 
-          {hata && <p className="kayit-hata" role="alert">{hata}</p>}
+          {hata && <p className="kapi-hata" role="alert">{hata}</p>}
 
-          <button type="submit" className="kayit-dugme" disabled={durum === 'kuruluyor'}>
+          <button type="submit" className="kapi-dugme" disabled={durum === 'kuruluyor'}>
             {durum === 'kuruluyor' ? 'Oteliniz kuruluyor…' : 'Otelimi Başlat'}
           </button>
         </form>
 
-        <ul className="kayit-guvence">
+        <ul className="kapi-guvence">
           <li>✓ Kredi kartı yok</li>
           <li>✓ Taahhüt yok</li>
           <li>✓ 30 gün boyunca tüm özellikler</li>
         </ul>
 
-        <p className="kayit-dip">
+        <p className="kapi-dip">
           Zaten hesabınız var mı? <a href="/">Giriş yapın</a>
         </p>
       </div>

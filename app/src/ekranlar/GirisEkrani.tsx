@@ -1,4 +1,8 @@
 // Giriş: e-posta + şifre + tek buton. Hesap var mı yok mu söylenmez.
+//
+// Bu ekran uygulamanın DIŞ KAPISIDIR: görünümü vitrinle aynı dildedir (kırık beyaz zemin,
+// antrasit yazı, cam kart). Vitrinden gelen kişi görsel bir şok yaşamaz, aynı ürünün
+// içinde olduğunu hisseder. Uygulamanın içi ise görevli için ayrı bir dildedir.
 import { useState, type FormEvent } from 'react';
 import { girisYap } from '../oturum';
 
@@ -19,41 +23,56 @@ export function GirisEkrani() {
   }
 
   return (
-    <main className="sayfa sayfa--orta">
-      <h1>OtelDijital</h1>
-      <form className="buton-grubu" style={{ width: '100%' }} onSubmit={gonder}>
-        <input
-          className="alan"
-          type="email"
-          inputMode="email"
-          autoComplete="username"
-          placeholder="E-posta"
-          value={eposta}
-          onChange={(e) => setEposta(e.target.value)}
-          required
-        />
-        <input
-          className="alan"
-          type="password"
-          autoComplete="current-password"
-          placeholder="Şifre"
-          value={sifre}
-          onChange={(e) => setSifre(e.target.value)}
-          required
-          minLength={8}
-        />
-        <button type="submit" className="buton buton--ana" disabled={bekliyor}>
-          <span className="ikon" aria-hidden="true">🔑</span>
-          <span>{bekliyor ? 'Giriliyor…' : 'Giriş Yap'}</span>
-        </button>
-        {hata && <p className="orta" role="alert">{hata}</p>}
-      </form>
+    <main className="kapi">
+      <div className="kapi-kutu">
+        <div className="kapi-marka">
+          <span className="kapi-isaret" aria-hidden="true"></span>
+          <span>OtelDijital</span>
+        </div>
 
-      {/* Kayıt sayfası uygulamanın DIŞINDADIR (main.tsx). Bu yüzden react-router bağlantısı değil,
-          düz bağlantı kullanılır: tam sayfa yenilenir ve /kayit açılır. */}
-      <p className="giris-kayit">
-        Hesabınız yok mu? <a href="/kayit">30 Gün Ücretsiz Dene</a>
-      </p>
+        <h1>Tekrar hoş geldiniz.</h1>
+        <p className="kapi-giris">E-postanız ve şifrenizle girin; vardiyanız kaldığı yerden devam eder.</p>
+
+        <form className="kapi-form" onSubmit={gonder}>
+          <label htmlFor="eposta">E-posta</label>
+          <input
+            id="eposta"
+            className="kapi-alan"
+            type="email"
+            inputMode="email"
+            autoComplete="username"
+            placeholder="siz@oteliniz.com"
+            value={eposta}
+            onChange={(e) => setEposta(e.target.value)}
+            required
+          />
+
+          <label htmlFor="sifre">Şifre</label>
+          <input
+            id="sifre"
+            className="kapi-alan"
+            type="password"
+            autoComplete="current-password"
+            placeholder="Şifreniz"
+            value={sifre}
+            onChange={(e) => setSifre(e.target.value)}
+            required
+            minLength={8}
+          />
+
+          {hata && <p className="kapi-hata" role="alert">{hata}</p>}
+
+          <button type="submit" className="kapi-dugme" disabled={bekliyor}>
+            {bekliyor ? 'Giriliyor…' : 'Giriş Yap'}
+          </button>
+        </form>
+
+        {/* Kayıt sayfası uygulamanın DIŞINDADIR (main.tsx). Bu yüzden react-router bağlantısı değil,
+            düz bağlantı kullanılır: tam sayfa yenilenir ve /kayit açılır. */}
+        <p className="kapi-dip">
+          Hesabınız yok mu? <a href="/kayit">30 Gün Ücretsiz Dene</a>
+        </p>
+      </div>
     </main>
   );
 }
