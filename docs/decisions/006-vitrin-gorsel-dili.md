@@ -44,3 +44,19 @@ Telefon sayfanın sağ kenarından hafifçe taşar; önünde cam bir kart durur.
 Menüdeki **Çözümler**, **Dijital Check-up** ve **Hakkımızda** için sayfada tam karşılığı olan bölüm
 yoktur. Bağlantılar bugün en yakın bölüme gider (sırasıyla şifre bölümü, fiyatlar ve alt bölüm).
 Sonraki aşamalarda bu bölümler yazılınca kendi yerlerine bağlanacaklardır.
+
+## Aşama 4 — Etkileşimli tanıtım (2026-09-17)
+
+İki bölüm eklendi; ikisi de sayfanın dilini bozmaz ve **betik olmadan da anlamlıdır**:
+
+- **Döngü hikâyesi** (`#dongu`) — "Bildir → Ata → Yap → Tamamla". Kullanıcı aşağı kaydırdıkça
+  adımlar belirir; her adımın yanında uygulamadan küçük bir arayüz kesiti durur. Gizleme yalnızca
+  betik çalışıyorsa başlar, bu yüzden betiksiz ziyaretçi dört adımı da baştan görür.
+  Hareket istemeyen kullanıcıda (`prefers-reduced-motion`) hiçbir şey kıpırdamaz.
+- **Keşif alanı** (`#kesfet`) — ortada telefon, iki yanında dört başlık: Temizlik, Arıza, Görev,
+  Malzeme. Başlığa dokununca telefondaki ekran değişir. Dar ekranda düğmeler ikişerli ızgaraya,
+  telefon altına geçer. Ekranların dördü de HTML'de açıktır; betik yalnızca birini bırakır.
+
+Menüdeki **Çözümler** artık gerçek bir yere gidiyor (`#kesfet`). Hero'daki "Uygulamayı Keşfet"
+düğmesi de aynı bölüme iner. Hâlâ karşılığı olmayan tek madde **Dijital Check-up**'tır;
+bağlantısı şimdilik fiyat bölümüne gider.

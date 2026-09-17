@@ -15,9 +15,10 @@ Personel uygulaması (`app/`) ile **hiçbir ortak kodu yoktur**; bilerek böyled
 
 | Dosya | Ne yapar |
 |---|---|
-| `index.html` | Sayfanın kendisi: sade menü, hero (kodla çizilmiş telefon), değer sütunları, şifre notu, fiyatlar |
+| `index.html` | Sayfanın kendisi: sade menü, hero (kodla çizilmiş telefon), döngü hikâyesi, keşif alanı, değer sütunları, şifre notu, fiyatlar |
 | `stil.css` | Görünüm: açık (kırık beyaz) zemin, antrasit koyu bloklar, tek marka rengi. Oran %70 açık · %20 koyu · %10 marka — `docs/decisions/006-vitrin-gorsel-dili.md` |
 | `hareket.js` | Canlı akış animasyonu. Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |
+| `etkilesim.js` | İki etkileşim: kaydırdıkça beliren döngü hikâyesi ve keşif alanındaki ekran değiştirme. İkisi de betiksiz de anlamlı çalışır |
 
 ## Bakmak için
 

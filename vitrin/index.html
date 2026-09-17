@@ -26,7 +26,7 @@
     </a>
     <nav class="menu" aria-label="Sayfa menüsü">
       <a href="#urun">Ürün</a>
-      <a href="#cozumler">Çözümler</a>
+      <a href="#kesfet">Çözümler</a>
       <!-- Dijital Check-up bölümü henüz yazılmadı; bağlantı şimdilik fiyat bölümüne gider. -->
       <a href="#fiyat">Dijital Check-up</a>
       <a href="#nasil">Nasıl Çalışır?</a>
@@ -52,7 +52,7 @@
 
       <div class="cta-satir">
         <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
-        <a class="dugme dugme--sessiz" href="#urun">Uygulamayı Keşfet</a>
+        <a class="dugme dugme--sessiz" href="#kesfet">Uygulamayı Keşfet</a>
       </div>
 
       <ul class="guvence">
@@ -135,6 +135,209 @@
     </ol>
   </section>
 
+  <!-- ===================== DÖNGÜ HİKÂYESİ (scroll) =====================
+       Bir işin doğuşundan kapanışına dört adım. Kullanıcı aşağı kaydırdıkça adımlar belirir.
+       Betik yoksa ya da kişi hareket istemiyorsa dördü de baştan görünür durur (etkilesim.js). -->
+  <section class="kolon bolum" id="dongu">
+    <h2>Bir iş doğar, sahibini bulur, kapanır.</h2>
+    <p class="bolum-giris">
+      Otelde en pahalı şey, kimsenin üstlenmediği iştir. OtelDijital her işi dört adımda yürütür;
+      hiçbir adım atlanamaz, hiçbiri sessizce kaybolmaz.
+    </p>
+
+    <ol class="hikaye">
+      <li class="hikaye-adim">
+        <div class="hikaye-yazi">
+          <span class="hikaye-no">01</span>
+          <h3>Bildir</h3>
+          <p>
+            Kat görevlisi kapıdaki kareyi okutur, üç büyük butondan birine dokunur.
+            Arıza varsa fotoğrafını çeker. Yazı yazmaz, menü aramaz, kimseyi telefonla aramaz.
+          </p>
+        </div>
+        <div class="hikaye-gorsel" aria-hidden="true">
+          <div class="mini">
+            <div class="mini-ust"><b>Oda 204</b><span class="mini-etiket">Kat 2</span></div>
+            <div class="mini-govde">
+              <span class="mini-buton mini-buton--yesil">✓ Oda Hazır</span>
+              <span class="mini-buton">Eksik Var</span>
+              <span class="mini-buton mini-buton--secili">Bir Şey Bozuk</span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="hikaye-adim">
+        <div class="hikaye-yazi">
+          <span class="hikaye-no">02</span>
+          <h3>Ata</h3>
+          <p>
+            Bildirim kendiliğinden iş emrine döner ve doğru kişiye düşer. Süre o an işlemeye başlar:
+            acil işte 30 dakika, normalde 2 saat. Kimin üstünde olduğu artık tartışma konusu değildir.
+          </p>
+        </div>
+        <div class="hikaye-gorsel" aria-hidden="true">
+          <div class="mini">
+            <div class="mini-ust"><b>İş emri açıldı</b><span class="mini-etiket">#118-KLM</span></div>
+            <div class="mini-satir"><span class="mini-ikon">🔧</span><span>Klima arızası · Oda 118</span></div>
+            <div class="mini-satir"><span class="mini-ikon">👤</span><span>Mehmet · teknisyen</span><span class="mini-rozet">30 dk hedef</span></div>
+          </div>
+        </div>
+      </li>
+
+      <li class="hikaye-adim">
+        <div class="hikaye-yazi">
+          <span class="hikaye-no">03</span>
+          <h3>Yap</h3>
+          <p>
+            Teknisyen işi telefonundan görür ve ilerletir. Telefon çekmeyen bodrum katında bile çalışır;
+            kayıt telefonda bekler, internet gelince kendiliğinden gider.
+          </p>
+        </div>
+        <div class="hikaye-gorsel" aria-hidden="true">
+          <div class="mini">
+            <div class="mini-ust"><b>Açık İşler</b><span class="mini-etiket">3</span></div>
+            <div class="mini-satir mini-satir--aktif"><span class="mini-ikon">🔧</span><span>Klima · Oda 118</span><span class="mini-rozet mini-rozet--sari">sürüyor</span></div>
+            <div class="mini-satir"><span class="mini-ikon">🚿</span><span>Musluk · Oda 305</span><span class="mini-rozet">bekliyor</span></div>
+            <div class="mini-satir"><span class="mini-ikon">💡</span><span>Ampul · Koridor 2</span><span class="mini-rozet">bekliyor</span></div>
+          </div>
+        </div>
+      </li>
+
+      <li class="hikaye-adim">
+        <div class="hikaye-yazi">
+          <span class="hikaye-no">04</span>
+          <h3>Tamamla</h3>
+          <p>
+            İş kapanır ve kayda geçer: kim aldı, kim çözdü, ne kadar sürdü. Kayıt sonradan
+            değiştirilemez. Müdürün ekranında kırmızı yoksa gerçekten yolunda demektir.
+          </p>
+        </div>
+        <div class="hikaye-gorsel" aria-hidden="true">
+          <div class="mini">
+            <div class="mini-ust"><b>Kumanda</b><span class="mini-etiket">Deniz Otel</span></div>
+            <div class="mini-satir mini-satir--tamam"><span class="mini-ikon">✅</span><span>Klima arızası çözüldü</span><span class="mini-rozet mini-rozet--yesil">24 dk</span></div>
+            <div class="mini-govde mini-govde--dar">
+              <span class="mini-buton mini-buton--yesil">Her şey yolunda</span>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ===================== İNTERAKTİF KEŞİF =====================
+       Merkezde telefon, etrafında dört başlık. Başlığa dokununca ekran değişir (etkilesim.js).
+       Betik yoksa dört ekran da alt alta görünür; hiçbir bilgi kaybolmaz. -->
+  <section class="kolon bolum" id="kesfet">
+    <h2>Uygulamanın içine bakın.</h2>
+    <p class="bolum-giris">
+      Dört başlıktan birine dokunun, telefondaki ekran değişsin. Hepsi gerçek akışlardır —
+      otelinizde de tam olarak böyle görünür.
+    </p>
+
+    <div class="kesif">
+      <div class="kesif-dugmeler">
+        <button type="button" class="kesif-dugme" data-hedef="temizlik" aria-pressed="true">
+          <span class="kesif-ikon" aria-hidden="true">🧹</span>
+          <span class="kesif-yazi"><b>Temizlik</b><small>Oda hazır bildirimi</small></span>
+        </button>
+        <button type="button" class="kesif-dugme" data-hedef="ariza" aria-pressed="false">
+          <span class="kesif-ikon" aria-hidden="true">🔧</span>
+          <span class="kesif-yazi"><b>Arıza</b><small>Bildirim, iş emrine döner</small></span>
+        </button>
+        <button type="button" class="kesif-dugme" data-hedef="gorev" aria-pressed="false">
+          <span class="kesif-ikon" aria-hidden="true">🧭</span>
+          <span class="kesif-yazi"><b>Görev</b><small>Müdürün kumandası</small></span>
+        </button>
+        <button type="button" class="kesif-dugme" data-hedef="malzeme" aria-pressed="false">
+          <span class="kesif-ikon" aria-hidden="true">📦</span>
+          <span class="kesif-yazi"><b>Malzeme</b><small>Talep · onay · teslim</small></span>
+        </button>
+      </div>
+
+      <div class="kesif-telefon">
+        <div class="telefon">
+          <div class="telefon-ic">
+
+            <div class="kesif-ekran" data-ekran="temizlik" role="group" aria-label="Temizlik ekranı">
+              <div class="uyg-ust">
+                <span class="akis-baslik">Oda 204</span>
+                <span class="akis-otel">Kat 2 · 09:40</span>
+              </div>
+              <div class="ekran-govde">
+                <span class="ekran-buton ekran-buton--ana">✓ Oda Hazır</span>
+                <span class="ekran-buton">Eksik Var</span>
+                <span class="ekran-buton">Bir Şey Bozuk</span>
+              </div>
+              <p class="ekran-not">Görevli kapıdaki kareyi okuttu. Üç buton, tek dokunuş, yazı yok.</p>
+            </div>
+
+            <div class="kesif-ekran" data-ekran="ariza" role="group" aria-label="Arıza ekranı">
+              <div class="uyg-ust">
+                <span class="akis-baslik">Bir şey bozuk</span>
+                <span class="akis-otel">Oda 118</span>
+              </div>
+              <ol class="akis-liste">
+                <li class="olay">
+                  <span class="olay-ikon" aria-hidden="true">❄️</span>
+                  <span class="olay-metin"><b>Klima</b> çalışmıyor<span class="olay-kim">Fotoğraf eklendi</span></span>
+                  <span class="rozet rozet--uyari">acil</span>
+                </li>
+                <li class="olay">
+                  <span class="olay-ikon" aria-hidden="true">🔧</span>
+                  <span class="olay-metin"><b>İş emri</b> açıldı<span class="olay-kim">Mehmet · teknisyen</span></span>
+                  <span class="rozet rozet--atandi">30 dk hedef</span>
+                </li>
+              </ol>
+              <p class="ekran-not">Arıza bildirimi kendiliğinden iş emrine döner; süre o an başlar.</p>
+            </div>
+
+            <div class="kesif-ekran" data-ekran="gorev" role="group" aria-label="Görev ekranı">
+              <div class="uyg-ust">
+                <span class="nabiz" aria-hidden="true"></span>
+                <span class="akis-baslik">Kumanda</span>
+                <span class="akis-otel">Deniz Otel · 34 oda</span>
+              </div>
+              <div class="ekran-govde">
+                <span class="ekran-alarm">⏰ 2 işin süresi geçti</span>
+                <span class="ekran-alarm ekran-alarm--sakin">✓ Mutsuz misafir yok</span>
+                <span class="ekran-alarm ekran-alarm--sakin">✓ Teslimler uyuşuyor</span>
+              </div>
+              <p class="ekran-not">Kırmızı varsa en üstte, devasa. Kırmızı yoksa ekran yeşildir.</p>
+            </div>
+
+            <div class="kesif-ekran" data-ekran="malzeme" role="group" aria-label="Malzeme ekranı">
+              <div class="uyg-ust">
+                <span class="akis-baslik">Teslim alındı</span>
+                <span class="akis-otel">7,5 Kg domates</span>
+              </div>
+              <ol class="akis-liste">
+                <li class="olay">
+                  <span class="olay-ikon" aria-hidden="true">📝</span>
+                  <span class="olay-metin"><b>Talep</b><span class="olay-kim">Ali · depo görevlisi</span></span>
+                  <span class="rozet rozet--tamam">✓</span>
+                </li>
+                <li class="olay">
+                  <span class="olay-ikon" aria-hidden="true">✅</span>
+                  <span class="olay-metin"><b>Onay</b><span class="olay-kim">Mehmet · müdür</span></span>
+                  <span class="rozet rozet--tamam">✓</span>
+                </li>
+                <li class="olay">
+                  <span class="olay-ikon" aria-hidden="true">📦</span>
+                  <span class="olay-metin"><b>Teslim</b><span class="olay-kim">Zeynep · depo görevlisi</span></span>
+                  <span class="rozet rozet--uyari">2 Kg eksik</span>
+                </li>
+              </ol>
+              <p class="ekran-not">Üç imza üç ayrı kişide. Eksik geldiyse kanıt fotoğrafı ister.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== DEĞER ÖNERİLERİ ===================== -->
   <section class="kolon bolum" id="urun">
     <h2>Otelin sessiz sızıntılarını görünür yapar.</h2>
@@ -189,7 +392,7 @@
   </section>
 
   <!-- ===================== ŞİFRE YÖNETİMİ ===================== -->
-  <section class="kolon" id="cozumler">
+  <section class="kolon" id="sifre-yonetimi">
     <div class="sifre">
       <div class="sifre-sayi"><span>5</span><small>saniye</small></div>
       <div class="sifre-yazi">
@@ -291,5 +494,6 @@
 </footer>
 
 <script src="hareket.js"></script>
+<script src="etkilesim.js"></script>
 </body>
 </html>
