@@ -2,6 +2,7 @@
 -- GÜVENLİK DENEMELERİ
 -- Kaynak: docs/security/001-rls-and-maker-checker.md · Bölüm 6 (22 madde)
 --         docs/decisions/005-demo-suresi-ve-odeme-duvari.md · 25. bölüm (demo kilidi)
+--         docs/security/007-iletisim-formu.md · 26. bölüm (vitrin iletişim formu)
 --
 -- Her madde bir SALDIRI denemesidir. Hepsi başarısız olmalıdır.
 -- Biri başarılı olursa Security veto kullanır.
@@ -24,7 +25,7 @@ begin
 end
 $$;
 
-select plan(155);
+select plan(185);
 
 
 -- ---------------------------------------------------------------------
@@ -1217,6 +1218,218 @@ select lives_ok(
   $$ insert into public.room_cleanings (hotel_id, room_id)
      values ('b0000000-0000-4000-8000-000000000001', 'b0000000-0000-4000-8000-0000000b0201') $$,
   '25e. Bir otelin süresi dolunca komşu otel etkilenmez');
+
+select deneme.cikis();
+
+
+-- =====================================================================
+-- 26 · İLETİŞİM FORMU (Vitrin · Aşama 7)
+-- Vitrindeki form, kimlik doğrulamasız İKİNCİ yazma yoludur. Ziyaretçi yalnızca yazar;
+-- kimse okuyamaz, değiştiremez, silemez. Sel kapısı: aynı adresten saatte 5, toplamda 300.
+-- Otel verisine dokunmaz; 25. bölümün demo süresinden etkilenmez.
+-- Adres: önce cf-connecting-ip, yoksa x-forwarded-for'un SON parçası (ilk parça istemcinindir).
+-- =====================================================================
+select deneme.anonim();
+select set_config('request.headers', '{"x-forwarded-for":"203.0.113.5, 10.0.0.1"}', true);
+
+select lives_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, otel_adi, telefon, eposta, konu, mesaj)
+     values ('Ayşe Yılmaz', 'Deniz Otel', '+90 532 000 00 00', 'ayse@ornek.com', 'SEO', 'Merhaba') $$,
+  '26a. Ziyaretçi (anon) geçerli bir mesaj bırakabilir');
+
+select throws_ok(
+  $$ select * from public.iletisim_formu $$,
+  '42501', null,
+  '26b. Ziyaretçi mesajları okuyamaz (yetki yok)');
+
+select throws_ok(
+  $$ update public.iletisim_formu set mesaj = 'x' $$,
+  '42501', null,
+  '26c. Ziyaretçi mesaj değiştiremez');
+
+select throws_ok(
+  $$ delete from public.iletisim_formu $$,
+  '42501', null,
+  '26d. Ziyaretçi mesaj silemez');
+
+select throws_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu, olusturulma_tarihi)
+     values ('Ayşe Yılmaz', '+90 532 000 00 00', 'ayse@ornek.com', 'SEO', '2000-01-01') $$,
+  '42501', null,
+  '26e. Ziyaretçi tarihi kendisi yazamaz (sütun yetkisi yok)');
+
+select throws_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('Ayşe Yılmaz', '+90 532 000 00 00', 'ayse@ornek.com', 'Uydurma Konu') $$,
+  '23514', null,
+  '26f. Listede olmayan konu reddedilir');
+
+select throws_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('Ayşe Yılmaz', '+90 532 000 00 00', 'bu-eposta-degil', 'SEO') $$,
+  '23514', null,
+  '26g. Biçimsiz e-posta reddedilir');
+
+select throws_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu, mesaj)
+     values ('Ayşe Yılmaz', '+90 532 000 00 00', 'ayse@ornek.com', 'SEO', repeat('a', 2001)) $$,
+  '23514', null,
+  '26h. 2000 karakterden uzun mesaj reddedilir');
+
+-- Aynı adresten 4 mesaj daha (toplam 5) sorunsuz; 6.sı sel kapısına çarpar.
+select lives_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     select 'Ayşe Yılmaz', '+90 532 000 00 00', 'ayse@ornek.com', 'SEO' from generate_series(1, 4) $$,
+  '26i. Aynı adresten saatte 5 mesaja kadar izin verilir');
+
+select throws_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('Ayşe Yılmaz', '+90 532 000 00 00', 'ayse@ornek.com', 'SEO') $$,
+  'P0001', null,
+  '26j. Aynı adresten altıncı mesaj reddedilir (sel kapısı)');
+
+select set_config('request.headers', '{"x-forwarded-for":"198.51.100.7"}', true);
+
+select lives_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('Ali Kaya', '+90 533 111 11 11', 'ali@ornek.com', 'Web Sitesi') $$,
+  '26k. Başka bir adres sel kapısından etkilenmez');
+
+select set_config('request.headers', '', true);
+select deneme.cikis();
+select deneme.giris('a0000000-0000-4000-8000-00000000a001');   -- Ayşe (kat görevlisi, A)
+
+select throws_ok(
+  $$ select * from public.iletisim_formu $$,
+  '42501', null,
+  '26l. Giriş yapmış personel bile mesajları okuyamaz — otelin işi değil');
+
+select deneme.cikis();
+select deneme.ana_anahtar();
+
+select is(
+  (select ip_ozeti from public.iletisim_formu where eposta = 'ali@ornek.com'),
+  encode(extensions.digest('198.51.100.7', 'sha256'), 'hex'),
+  '26m. Adres açık yazılmaz; yalnızca özeti (SHA-256) saklanır');
+
+-- ---- Sahte başlık: istemcinin yazdığı ilk parça değil, vekilin eklediği gerçek adres sayılır ----
+select deneme.cikis();
+select deneme.anonim();
+select set_config('request.headers', '{"x-forwarded-for":"1.1.1.1, 203.0.113.9","cf-connecting-ip":"203.0.113.9"}', true);
+
+select lives_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('Sahte Deneme', '+90 534 222 22 22', 'sahte1@ornek.com', 'Diğer') $$,
+  '26n-hazırlık. cf-connecting-ip varken mesaj yazılır');
+
+select set_config('request.headers', '{"x-forwarded-for":"9.9.9.9, 203.0.113.10"}', true);
+
+select lives_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('Sahte Deneme', '+90 534 333 33 33', 'sahte2@ornek.com', 'Diğer') $$,
+  '26o-hazırlık. Yalnızca x-forwarded-for varken mesaj yazılır');
+
+select set_config('request.headers', '', true);
+select deneme.cikis();
+select deneme.ana_anahtar();
+
+select is(
+  (select ip_ozeti from public.iletisim_formu where eposta = 'sahte1@ornek.com'),
+  encode(extensions.digest('203.0.113.9', 'sha256'), 'hex'),
+  '26n. cf-connecting-ip varsa o sayılır; istemcinin yazdığı x-forwarded-for değil');
+
+select is(
+  (select ip_ozeti from public.iletisim_formu where eposta = 'sahte2@ornek.com'),
+  encode(extensions.digest('203.0.113.10', 'sha256'), 'hex'),
+  '26o. cf-connecting-ip yoksa x-forwarded-for''un SON parçası sayılır (ilk parça istemcinindir)');
+
+-- ---- Giriş yapmış personel: ne ekler, ne değiştirir, ne siler ----
+select deneme.cikis();
+select deneme.giris('a0000000-0000-4000-8000-00000000a003');   -- Mehmet (müdür, A)
+
+select throws_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('Mehmet', '+90 532 000 00 00', 'mehmet@ornek.com', 'SEO') $$,
+  '42501', null,
+  '26p. Giriş yapmış müdür bile bu tabloya mesaj yazamaz — form yalnızca vitrindeki ziyaretçi içindir');
+
+select throws_ok(
+  $$ update public.iletisim_formu set mesaj = 'x' $$,
+  '42501', null,
+  '26q. Giriş yapmış müdür mesaj değiştiremez');
+
+select throws_ok(
+  $$ delete from public.iletisim_formu $$,
+  '42501', null,
+  '26r. Giriş yapmış müdür mesaj silemez');
+
+select throws_ok(
+  $$ select public.iletisim_sel_kapisi() $$,
+  null, null,
+  '26t. Sel kapısı fonksiyonu elle çağrılamaz (giriş yapmış kullanıcı)');
+
+-- ---- Ziyaretçi: ip_ozeti sütununa yazamaz, fonksiyonu çağıramaz, boşluk ve biçim kısıtları ----
+select deneme.cikis();
+select deneme.anonim();
+
+select throws_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu, ip_ozeti)
+     values ('Ayşe Yılmaz', '+90 532 000 00 00', 'ayse2@ornek.com', 'SEO', 'sahte-ozet') $$,
+  '42501', null,
+  '26s. Ziyaretçi adres özetini kendisi yazamaz (sütun yetkisi yok)');
+
+select throws_ok(
+  $$ select public.iletisim_sel_kapisi() $$,
+  null, null,
+  '26t2. Sel kapısı fonksiyonu elle çağrılamaz (ziyaretçi)');
+
+select throws_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('        ', '+90 532 000 00 00', 'bos@ornek.com', 'SEO') $$,
+  '23514', null,
+  '26u. Yalnızca boşluktan oluşan ad reddedilir (kırpılınca boş kalır)');
+
+select throws_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('A' || repeat(' ', 200) || 'B', '+90 532 000 00 00', 'ic-bosluk@ornek.com', 'SEO') $$,
+  '23514', null,
+  '26v. İçi boşlukla şişirilmiş ad reddedilir (kısıt ham uzunluğu ölçer)');
+
+select throws_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('Ayşe Yılmaz', 'beni ara lütfen', 'tel@ornek.com', 'SEO') $$,
+  '23514', null,
+  '26w. Telefon alanına rakam dışı metin yazılamaz');
+
+select lives_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('  Ali  ' || repeat(' ', 100000), ' +90 (532) 123 45 67 ', 'KIRP@Ornek.com', 'Diğer') $$,
+  '26x-hazırlık. Baştaki/sondaki boşluklar kırpılır, kayıt geçer');
+
+select deneme.cikis();
+select deneme.ana_anahtar();
+
+select is(
+  (select ad_soyad || '|' || telefon || '|' || eposta from public.iletisim_formu where eposta = 'kirp@ornek.com'),
+  'Ali|+90 (532) 123 45 67|kirp@ornek.com',
+  '26x. Depoya kırpılmış hâli yazılır; yüz bin boşluk saklanmaz, e-posta küçük harfe iner');
+
+-- ---- Toplam sınır: saatte 300'e ulaşınca yenisi reddedilir (adres bilinmese bile) ----
+select lives_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     select 'Sel Denemesi', '+90 500 000 00 00', 'sel@ornek.com', 'Diğer'
+     from generate_series(1, 300 - (select count(*) from public.iletisim_formu
+                                     where olusturulma_tarihi > now() - interval '1 hour')) $$,
+  '26y-hazırlık. Son bir saatteki mesaj sayısı 300''e tamamlanır');
+
+select deneme.cikis();
+select deneme.anonim();
+
+select throws_ok(
+  $$ insert into public.iletisim_formu (ad_soyad, telefon, eposta, konu)
+     values ('Son Damla', '+90 532 000 00 00', 'son@ornek.com', 'SEO') $$,
+  'P0001', null,
+  '26y. 301. mesaj reddedilir — toplam sel kapısı');
 
 select deneme.cikis();
 select * from finish();

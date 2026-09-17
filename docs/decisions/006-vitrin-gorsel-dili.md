@@ -95,16 +95,15 @@ artık `.sutun-liste` adını taşıyor.
   efekti bir anlam taşır. Alanlar: Ad Soyad, Otel Adı (isteğe bağlı), Telefon, E-posta,
   İlgilendiğiniz Konu (Teknik Altyapı · OTA & Dijital Yönetim · Web Sitesi · SEO · Diğer),
   Mesaj (isteğe bağlı). Düğme marka renginde: **"Gönder"**.
-- **Form sunucuya veri yazmaz.** "Gönder" ziyaretçinin kendi posta uygulamasını, alanları düzgün
-  yazılmış bir mesajla açar (`mailto:merhaba@oteldijital.com`); betik kapalıysa formun kendi
-  `mailto` eylemi aynı işi yapar. Bu tercih bilinçlidir: vitrinde arka uç, anahtar ve kişisel veri
-  deposu yoktur, dolayısıyla korunacak bir şey de yoktur. Formun altında KVKK Aydınlatma Metni'ne
-  giden tek satırlık bir not vardır.
+- **Form Ortak Beyin'e yazar** (Aşama 7 kararı). İlk sürüm posta uygulamasını açıyordu (`mailto:`);
+  Genel Müdür bunu reddetti — posta uygulaması olmayan cihazda form tepkisiz kalır. Şimdi "Gönder"
+  mesajı Supabase'deki `iletisim_formu` tablosuna yazar; alanlar yumuşakça kaybolur, yerini onay
+  ekranı alır ("Mesajınız başarıyla alındı…"). Kilit ve canlı doğrulama: `docs/security/007`.
+  Formun altında KVKK Aydınlatma Metni'ne giden tek satırlık bir not vardır.
 - **Yasal bağlantılar** alt bölüme eklendi: KVKK Aydınlatma Metni, Gizlilik Politikası, Çerez
   Politikası, Kullanım Şartları. Metinler henüz yazılmadığı için bağlantılar şimdilik `#`
   adresine gider.
 
-**Açık karar (Genel Müdür):** Form gönderilerinin bir yerde **saklanması** istenirse (örneğin bir
-tablo ve panelde liste) bu, vitrine ilk arka uç bağlantısını ekler: anahtar yönetimi, yalnızca-yazma
-izni, istenmeyen gönderi (spam) önlemi ve KVKK gereği saklama süresi kararı gerekir. Bu iş
-güvenlik incelemesiyle ayrı bir aşamada ele alınmalıdır.
+**Karar verildi (Aşama 7):** gönderiler saklanır. Anahtar yönetimi (`ayarlar-uret.sh`), yalnızca-yazma
+izni (RLS) ve sel kapısı uygulandı; KVKK saklama süresi ise yasal metinle birlikte belirlenecek
+(`docs/security/007` · Açık kalan).

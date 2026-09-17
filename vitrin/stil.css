@@ -49,6 +49,9 @@
 
 * { box-sizing: border-box; }
 
+/* hidden özniteliği her zaman kazanır (display: grid/flex verilen kutular da gizlenebilsin) */
+[hidden] { display: none !important; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -290,7 +293,7 @@ a { color: inherit; }
 .gorsel::before {
   content: "";
   position: absolute;
-  inset: -14% -10% 2% -16%;
+  inset: -14% 0 2% -16%;             /* sağa taşmaz: dar ekranda sayfa dışına çıkmasın */
   background: radial-gradient(58% 54% at 52% 38%, rgba(255, 106, 31, 0.18), transparent 72%);
   z-index: 0;
 }
@@ -809,7 +812,7 @@ a { color: inherit; }
 }
 .halka-sayi b {
   font-size: clamp(2.6rem, 4vw, 3.2rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
 }
 .halka-sayi small {
@@ -1028,7 +1031,7 @@ a { color: inherit; }
 }
 .sifre-sayi span {
   font-size: clamp(3.4rem, 7vw, 5rem);
-  font-weight: 800;
+  font-weight: 700;
   color: var(--canli);
 }
 .sifre-sayi small {
@@ -1098,7 +1101,7 @@ a { color: inherit; }
   font-variant-numeric: tabular-nums;
 }
 .para { font-size: 1.3rem; font-weight: 700; color: var(--metin-soluk); }
-.rakam { font-size: clamp(2.6rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.03em; }
+.rakam { font-size: clamp(2.6rem, 5vw, 3.2rem); font-weight: 700; letter-spacing: -0.03em; }
 .rakam--yazi { font-size: clamp(1.7rem, 3.4vw, 2.1rem); }
 .donem { font-family: var(--veri-yazi); font-size: 0.85rem; color: var(--metin-soluk); }
 
@@ -1134,27 +1137,16 @@ a { color: inherit; }
 /* Arkada iki yumuşak ışık durur (marka ve antrasit, ikisi de çok soluk); cam kart onları
    bulanıklaştırır. Form sunucuya veri yazmaz: "Gönder" posta uygulamasını açar. */
 .iletisim-alan { position: relative; }
-.iletisim-alan::before,
-.iletisim-alan::after {
+/* Işıklar bölümün içinde kalır (inset: 0): kenardan taşan hiçbir şey yok, telefonda yana kayma olmaz. */
+.iletisim-alan::before {
   content: "";
   position: absolute;
+  inset: 0;
   z-index: 0;
-  border-radius: 50%;
   pointer-events: none;
-}
-.iletisim-alan::before {
-  width: 46%;
-  aspect-ratio: 1;
-  left: -8%;
-  top: -10%;
-  background: radial-gradient(closest-side, rgba(255, 106, 31, 0.22), transparent);
-}
-.iletisim-alan::after {
-  width: 40%;
-  aspect-ratio: 1;
-  right: -6%;
-  bottom: -12%;
-  background: radial-gradient(closest-side, rgba(20, 24, 29, 0.12), transparent);
+  background:
+    radial-gradient(42% 46% at 6% 8%, rgba(255, 106, 31, 0.22), transparent 70%),
+    radial-gradient(36% 42% at 96% 94%, rgba(20, 24, 29, 0.12), transparent 70%);
 }
 
 .iletisim {
@@ -1247,16 +1239,66 @@ button.dugme { font: inherit; border: 0; cursor: pointer; }
 .form-not { font-size: 0.8rem; color: var(--metin-cok-soluk); max-width: 36ch; }
 .form-not a { color: var(--metin-soluk); }
 
-/* Gönderince görünen not (betik açar) */
+/* Gönderilemezse görünen not (betik açar); betik yoksa noscript içindeki aynı kutu görünür */
 .form-durum {
   grid-column: 1 / -1;
   font-size: 0.88rem;
-  color: var(--canli);
+  color: var(--uyari);
   padding: 12px 16px;
-  border: 1px solid rgba(18, 161, 80, 0.3);
-  background: rgba(18, 161, 80, 0.07);
+  border: 1px solid rgba(183, 121, 31, 0.3);
+  background: rgba(183, 121, 31, 0.07);
   border-radius: 12px;
 }
+
+/* Tuzak alan: ekranın dışında, göze ve klavyeye görünmez */
+.tuzak {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.dugme:disabled { opacity: 0.7; cursor: progress; transform: none; }
+
+/* Gönderilince alanlar yumuşakça kaybolur, yerini onay ekranı alır (etkilesim.js · 4) */
+.form--gidiyor {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+
+.form-kutu { min-width: 0; }
+
+.form-basari {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  min-height: 340px;
+  padding: 32px 24px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--cizgi);
+  border-radius: var(--kose-buyuk);
+  animation: dus 0.5s ease both;
+}
+.form-basari-ikon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(18, 161, 80, 0.1);
+  color: var(--canli);
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.form-basari h3 { font-size: 1.4rem; }
+.form-basari p { color: var(--metin-soluk); max-width: 32ch; }
 
 /* ---------- Kapanış ---------- */
 .kapanis {
@@ -1303,13 +1345,22 @@ button.dugme { font: inherit; border: 0; cursor: pointer; }
 .alt-yasal a { color: rgba(238, 241, 245, 0.6); text-decoration: none; transition: color 0.2s ease; }
 .alt-yasal a:hover { color: #ffffff; }
 
+/* ---------- Orta ekran ---------- */
+/* Telefonun kenardan taşması yalnızca yanlarda boşluk varken güzel durur; daha dar ekranda
+   sayfa dışına çıkar ve dokunmatik cihazda yana kaymaya yol açar. O yüzden burada kapanır. */
+@media (max-width: 1240px) {
+  .gorsel { margin-inline-end: 0; }
+}
+
 /* ---------- Dar ekran ---------- */
 @media (max-width: 900px) {
   .kahraman { grid-template-columns: 1fr; gap: 40px; }
   .adimlar, .sutunlar, .planlar { grid-template-columns: 1fr; }
   .menu { display: none; }
-  /* Telefon tek sütunda ortalanır, taşma biter. */
+  /* Telefon tek sütunda ortalanır, taşma biter. Işık ve cam kart da sütunun içinde kalır. */
   .gorsel { justify-self: center; margin-inline-end: 0; }
+  .gorsel::before { inset: -10% 0 2% 0; }
+  .cam-kart { left: 0; }
   .telefon { margin-inline: auto; }
   .sifre { grid-template-columns: 1fr; gap: 18px; padding: 28px 22px; text-align: center; }
   .sifre-yazi p { margin-inline: auto; }
@@ -1327,6 +1378,8 @@ button.dugme { font: inherit; border: 0; cursor: pointer; }
 @media (max-width: 420px) {
   .kolon { padding-inline: 16px; }
   .dugme--dev { width: 100%; }
+  /* Üst çubuktaki düğme iki satıra kırılmasın */
+  .ust .dugme { white-space: nowrap; padding: 10px 14px; font-size: 0.86rem; }
   .rozet { font-size: 0.64rem; padding: 4px 8px; }
   /* Dar ekranda cam kart telefonun üstüne binmesin: altına, akışın devamı gibi yerleşir. */
   .cam-kart { position: static; width: 100%; margin-top: 14px; }

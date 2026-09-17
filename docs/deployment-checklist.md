@@ -107,7 +107,7 @@ Her odada **iki ayrı** QR vardır. Karıştırılmamalıdır:
 
 Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/README.md`).
 
-- [ ] **6.1** Vercel'de ikinci proje: **Root Directory: `vitrin`** · Framework: Other · Derleme komutu **yok** · Çıktı klasörü `vitrin`
+- [ ] **6.1** Vercel'de ikinci proje: **Root Directory: `vitrin`** · Framework: Other · Build Command `sh ayarlar-uret.sh` · Output Directory `.`
 - [ ] **6.2** Alan adlarını ayır:
       - `oteldijital.com` → vitrin
       - `app.oteldijital.com` → personel uygulaması ve misafir yorum sayfası
@@ -119,6 +119,12 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
 - [x] **6.4** ✅ **Metin–ürün doğrulaması yapıldı:** sayfa "şifreler Müdür Paneli'nden 5 saniyede güncellenir" diyor
       ve Aşama 19.1'den beri ürün bunu karşılıyor (Personel ekranı → 🔑 Şifre). Vaat ile ürün aynı.
 - [ ] **6.5** Fiyat tablosundaki plan içerikleri (hangi özellik hangi pakette) Genel Müdür onayından geçmelidir.
+- [ ] **6.7** Vitrin projesine iki ortam değişkeni gir: `SUPABASE_URL` ve `SUPABASE_ANON_KEY` (ziyaretçi anahtarı;
+      uygulamadaki `VITE_SUPABASE_*` ile aynı değerler). `ayarlar-uret.sh` bunlardan `ayarlar.js` üretir; biri eksikse
+      dağıtım durur. Anahtar git'e girmez (`docs/security/007-iletisim-formu.md`).
+- [ ] **6.8** Canlıda formu bir kez gönder, Supabase panelinde `iletisim_formu` tablosuna düştüğünü gör, deneme satırını sil.
+- [ ] **6.9** Yasal metinler (KVKK Aydınlatma, Gizlilik, Çerez, Kullanım Şartları) yazılıp alt bölümdeki `#` bağlantılarına bağlanmalı;
+      KVKK metninde iletişim formu verisinin saklama süresi belirtilmeli.
 
 ---
 
@@ -144,10 +150,10 @@ Proje: `pnevrqzwgcpdspjfbqst` · Bölge: eu-central-1 (Frankfurt) · PostgreSQL 
 
 | Adım | Sonuç |
 |---|---|
-| 14 göç dosyası | ✅ Uygulandı |
+| 14 göç dosyası (+ 2026-09-17: `iletisim_formu` ve `iletisim_sel_kapisi_v2`, toplam 17) | ✅ Uygulandı |
 | 4 kapı (otel-ac · guest-feedback · personel-ekle · sifre-guncelle) | ✅ Yayınlandı; ilk ikisi anahtarsız, son ikisi kartsız isteği 401 ile reddediyor |
 | Kilitler (anon istemci) | ✅ `hotels`, `memberships`, `kayit_denemeleri` — üçü de boş dönüyor |
-| 150 güvenlik denemesi | ✅ Hepsi geçti (ilk koşuda 2 düşmüştü, ikisi de düzeltildi — aşağıda) |
+| 150 güvenlik denemesi (2026-09-17 itibarıyla 185) | ✅ Hepsi geçti (ilk koşuda 2 düşmüştü, ikisi de düzeltildi — aşağıda) |
 | Uçtan uca kayıt | ✅ Kayıt → 200 · aynı e-posta ikinci kez → 409 · yeni hesapla giriş → çalışıyor · kart yalnızca kendi otelini ve `owner` üyeliğini görüyor |
 
 **Canlı koşunun bulduğu üç şey (üçü de düzeltildi):**

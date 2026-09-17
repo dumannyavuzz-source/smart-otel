@@ -20,11 +20,13 @@ Arayüz kodu burada değildir.
 | `migrations/…_fatura_gizliligi.sql` | Fatura ve kanıt fotoğrafını yalnızca müdür, sahip ve yükleyen görür |
 | `migrations/…_sifre_guncelleme.sql` | Şifre kapısının sorduğu tek soru: "bu kişi başka otelde de çalışıyor mu?" |
 | `migrations/…_kayit_kapisi.sql` | Kayıt sayacı: aynı adresten saatte 3 deneme (adres açık değil, özeti saklanır) |
+| `migrations/…_iletisim_formu.sql` | Vitrin iletişim formunun posta kutusu: ziyaretçi yalnızca yazar, kimse okuyamaz; sel kapısı (`docs/security/007`) |
+| `migrations/…_iletisim_sel_kapisi_v2.sql` | Sel kapısının ikinci sürümü: doğru adres başlığı, yarış kilidi, boşluk kırpma, SHA-256, saatte 5/300 |
 | `functions/otel-ac/` | Kayıt Kapısı: müşteri kendi otelini açar. Hesap + otel + ilk sahiplik birlikte yazılır, yarım iş kalmaz (`docs/security/005`) |
 | `functions/guest-feedback/` | Misafir Kapısı (Edge Function): `index.ts` ince kabuk, `kapi.ts` saf mantık, `kapi_test.ts` testleri |
 | `functions/personel-ekle/` | Personel Kapısı: müdür yeni hesap açar. Ana anahtarla yapılan tek iş hesap açmaktır; üyelik müdürün kendi yetkisiyle yazılır |
 | `functions/sifre-guncelle/` | Şifre Kapısı: müdür personelin şifresini yeniler. Ana anahtarla yapılan tek iş şifreyi yazmaktır (`docs/security/004`) |
-| `tests/guvenlik_denemeleri.sql` | 22 maddelik saldırı denemesi (hepsi reddedilmeli) · 145 deneme |
+| `tests/guvenlik_denemeleri.sql` | 26 bölümlük saldırı denemesi (hepsi reddedilmeli) · 185 deneme |
 | `scripts/ana_anahtar_taramasi.sh` | 22. deneme: ana anahtar kodda/git'te var mı? |
 | `config.toml` | Yerel Supabase ayarları (şifre ≥ 8 karakter, fotoğraf ≤ 2 MB, açık kayıt kapalı, misafir kapısı anahtarsız) |
 
@@ -83,3 +85,6 @@ bash supabase/scripts/ana_anahtar_taramasi.sh   # 22. deneme
 4. `tests/guvenlik_denemeleri.sql` içine en az bir saldırı denemesi
 
 Üçü olmadan tablo yoktur. Security kod incelemesinde bunu ilk sorar.
+
+Tek bilinçli istisna: `iletisim_formu` (vitrin posta kutusu). Otelin verisi olmadığı için `hotel_id`
+taşımaz; yerine tam kapalılık uygulanır — hiçbir uygulama kullanıcısı göremez (`docs/security/007`).

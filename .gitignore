@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+vitrin/ayarlar.js
 
 # Supabase yerel çalışma dosyaları
 supabase/.temp/

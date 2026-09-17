@@ -3,13 +3,13 @@
 //   1. Döngü hikâyesi: kullanıcı aşağı kaydırdıkça dört adım sırayla belirir.
 //   2. Keşif alanı: başlığa dokununca telefondaki ekran değişir.
 //   3. Check-up panosu: görüş alanına girince çubuklar ve halka dolar.
-//   4. İletişim formu: "Gönder" posta uygulamasını düzgün yazılmış bir mesajla açar.
+//   4. İletişim formu: "Gönder" mesajı Ortak Beyin'e (Supabase) yazar, sayfa yenilenmeden onay gösterir.
 //
-// Dördü de betiksiz de anlamlıdır — sayfa bu dosya hiç yüklenmese bile eksik görünmez:
+// İlk üçü betiksiz de anlamlıdır — sayfa bu dosya hiç yüklenmese bile eksik görünmez:
 //   * Hikâye adımları baştan görünür durur (gizleme sınıfını bu dosya ekler).
 //   * Keşif ekranlarının dördü de HTML'de açıktır; bu dosya yalnızca birini bırakır.
 //   * Pano baştan doludur; bu dosya yalnızca "dolma" hareketini ekler.
-//   * Formun kendi eylemi (action=mailto) zaten posta uygulamasını açar; bu dosya mesajı güzelleştirir.
+// Form ise betik ister; betik yoksa formun içindeki <noscript> notu e-posta adresini gösterir.
 
 (function () {
   'use strict';
@@ -55,35 +55,74 @@
   }
 
   // ---------------------------------------------------------------
-  // 4. İletişim formu — "Gönder" posta uygulamasını açar
+  // 4. İletişim formu — mesajı Ortak Beyin'e yazar, onay ekranını gösterir
   // ---------------------------------------------------------------
-  // Sunucu yok, veri hiçbir yere yazılmaz: mesaj ziyaretçinin kendi posta uygulamasından gider.
+  // Adres ve ziyaretçi anahtarı ayarlar.js'den gelir (git'te yoktur; dağıtımda üretilir).
+  // Ziyaretçi anahtarı tabloya yalnızca yazabilir, okuyamaz (docs/security/007-iletisim-formu.md).
   var form = document.querySelector('.form');
   if (form) {
+    var ayar = window.OTELDIJITAL_AYARLAR || {};
+    var gonderDugmesi = form.querySelector('button[type="submit"]');
+    var hataNotu = form.querySelector('.form-durum');
+    var onay = document.querySelector('.form-basari');
+
+    function al(ad) { var alan = form.elements[ad]; return alan ? alan.value.trim() : ''; }
+
+    function gonderilemedi() {
+      if (hataNotu) hataNotu.hidden = false;
+      if (gonderDugmesi) { gonderDugmesi.disabled = false; gonderDugmesi.textContent = 'Gönder'; }
+    }
+
+    // Alanlar yumuşakça kaybolur, yerini onay ekranı alır. Hareket istemeyende beklemeden.
+    function alindi() {
+      form.className += ' form--gidiyor';
+      window.setTimeout(function () {
+        form.hidden = true;
+        if (onay) onay.hidden = false;
+      }, sakin ? 0 : 350);
+    }
+
     form.addEventListener('submit', function (olay) {
       olay.preventDefault();
+      if (!form.reportValidity()) return;
+      if (hataNotu) hataNotu.hidden = true;
 
-      function al(ad) { var alan = form.elements[ad]; return alan ? alan.value.trim() : ''; }
-      var konu = al('Konu');
-      var otel = al('Otel Adı');
+      // Tuzak alan doluysa bir bot yazmıştır: "alındı" der, hiçbir şey göndermeyiz.
+      if (al('bos_birakin')) { alindi(); return; }
 
-      var baslik = 'Bilgi talebi · ' + konu + (otel ? ' · ' + otel : '');
-      var govde = [
-        'Ad Soyad: ' + al('Ad Soyad'),
-        'Otel: ' + (otel || '-'),
-        'Telefon: ' + al('Telefon'),
-        'E-posta: ' + al('E-posta'),
-        'Konu: ' + konu,
-        '',
-        al('Mesaj')
-      ].join('\n');
+      if (!ayar.url || !ayar.anahtar) { gonderilemedi(); return; }
+      if (gonderDugmesi) { gonderDugmesi.disabled = true; gonderDugmesi.textContent = 'Gönderiliyor…'; }
 
-      window.location.href = 'mailto:merhaba@oteldijital.com'
-        + '?subject=' + encodeURIComponent(baslik)
-        + '&body=' + encodeURIComponent(govde);
+      var mesaj = {
+        ad_soyad: al('ad_soyad'),
+        otel_adi: al('otel_adi') || null,
+        telefon:  al('telefon'),
+        eposta:   al('eposta'),
+        konu:     al('konu'),
+        mesaj:    al('mesaj') || null
+      };
 
-      var durum = form.querySelector('.form-durum');
-      if (durum) durum.hidden = false;
+      // 15 saniyede cevap gelmezse bekletmeyiz: "gönderilemedi" ve e-posta adresi görünür.
+      var kesici = ('AbortController' in window) ? new AbortController() : null;
+      var sayac = kesici ? window.setTimeout(function () { kesici.abort(); }, 15000) : null;
+
+      fetch(ayar.url + '/rest/v1/iletisim_formu', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': ayar.anahtar,
+          'Authorization': 'Bearer ' + ayar.anahtar,
+          'Prefer': 'return=minimal'          // cevapta satır isteme: ziyaretçinin okuma yetkisi yok
+        },
+        body: JSON.stringify(mesaj),
+        signal: kesici ? kesici.signal : undefined
+      })
+        .then(function (cevap) {
+          if (!cevap.ok) throw new Error('HTTP ' + cevap.status);
+          alindi();
+        })
+        .catch(gonderilemedi)
+        .then(function () { if (sayac) window.clearTimeout(sayac); });
     });
   }
 

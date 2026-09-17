@@ -5,17 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>OtelDijital — Otelinizi yönetmek, bir mesaj atmak kadar kolay</title>
 <meta name="description" content="Görevleri dağıtın, sorunları bildirin, depoyu takip edin ve misafir taleplerini tek yerden yönetin. Otelinizde hiçbir iş gözden kaçmasın." />
+
+<!-- Arama motorları ve paylaşım kartları (Aşama 16). Adres: docs/deployment-checklist.md · 6.2 -->
+<link rel="canonical" href="https://oteldijital.com/" />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#f6f7f9" />
+<link rel="icon" href="simge.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="dokunma-simgesi.png" />
+
+<!-- Bağlantı paylaşılınca görünen kart. Görsel kodla çizildi: paylasim.html → paylasim.png (1200×630) -->
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="tr_TR" />
+<meta property="og:site_name" content="OtelDijital" />
+<meta property="og:url" content="https://oteldijital.com/" />
+<meta property="og:title" content="OtelDijital — Otelinizi yönetmek, bir mesaj atmak kadar kolay" />
+<meta property="og:description" content="Görevleri dağıtın, sorunları bildirin, depoyu takip edin ve misafir taleplerini tek yerden yönetin. Otelinizde hiçbir iş gözden kaçmasın." />
+<meta property="og:image" content="https://oteldijital.com/paylasim.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="OtelDijital — otel operasyon asistanı: canlı akışın göründüğü telefon ekranı" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="OtelDijital — Otelinizi yönetmek, bir mesaj atmak kadar kolay" />
+<meta name="twitter:description" content="Görevleri dağıtın, sorunları bildirin, depoyu takip edin ve misafir taleplerini tek yerden yönetin. Otelinizde hiçbir iş gözden kaçmasın." />
+<meta name="twitter:image" content="https://oteldijital.com/paylasim.png" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
 <link rel="stylesheet" href="stil.css" />
+
+<!-- Arama motoruna "bu bir şirket" bilgisi (yapılandırılmış veri) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "OtelDijital",
+  "url": "https://oteldijital.com/",
+  "logo": "https://oteldijital.com/dokunma-simgesi.png",
+  "email": "merhaba@oteldijital.com",
+  "description": "Küçük ve orta ölçekli oteller için operasyon asistanı."
+}
+</script>
 </head>
 <body>
 
 <!-- KAYIT ADRESİ: "30 Gün Ücretsiz Dene" düğmelerinin hepsi app.oteldijital.com/kayit sayfasına gider.
      Alan adı onaylandı (Genel Müdür, 2026-09-16). İleride değişirse ALTI yerde birden güncellenmelidir
      (docs/deployment-checklist.md · 6.3). Kurumsal plandaki "Görüşme ayarla" düğmesi ve
-     iletişim bölümündeki form merhaba@oteldijital.com adresine yazıyor (Genel Müdür kararı).
+     iletişim bölümündeki form Ortak Beyin'e (Supabase · iletisim_formu) yazıyor (Genel Müdür kararı).
      "Bilgi Al" ve "Teknik Destek Al" düğmeleri kayıt sayfasına DEĞİL, iletişim bölümüne (#iletisim) gider. -->
 <a class="atla" href="#icerik">İçeriğe atla</a>
 
@@ -662,9 +699,10 @@
 
   <!-- ===================== İLETİŞİM =====================
        "Bilgi Al" ve "Teknik Destek Al" düğmelerinin indiği yer. Cam kartın içinde bir form.
-       Form SUNUCUYA VERİ YAZMAZ: "Gönder" ziyaretçinin posta uygulamasını hazır bir mesajla açar,
-       mesaj merhaba@oteldijital.com adresine gider (betik yoksa formun kendi mailto eylemi çalışır).
-       Kayıt tutan bir arka uç istenirse bu ayrı bir karardır (docs/decisions/006 · Aşama 6). -->
+       "Gönder" mesajı Ortak Beyin'e (Supabase · iletisim_formu tablosu) yazar; sayfa yenilenmez,
+       alanlar kaybolur ve yerini onay ekranı alır (etkilesim.js · 4). Ziyaretçi anahtarı yalnızca
+       yazabilir, okuyamaz (docs/security/007-iletisim-formu.md). Anahtar ayarlar.js'den gelir;
+       o dosya git'te yoktur, dağıtımda üretilir (ayarlar-uret.sh). -->
   <section class="kolon iletisim-alan" id="iletisim">
     <div class="iletisim">
       <div class="iletisim-yazi">
@@ -680,26 +718,27 @@
         </p>
       </div>
 
-      <form class="form" action="mailto:merhaba@oteldijital.com" method="post" enctype="text/plain">
+      <div class="form-kutu">
+      <form class="form" method="post">
         <div class="alan">
           <label for="f-ad">Ad Soyad</label>
-          <input id="f-ad" name="Ad Soyad" type="text" autocomplete="name" required maxlength="80" />
+          <input id="f-ad" name="ad_soyad" type="text" autocomplete="name" required minlength="2" maxlength="80" />
         </div>
         <div class="alan">
           <label for="f-otel">Otel Adı <small>(isteğe bağlı)</small></label>
-          <input id="f-otel" name="Otel Adı" type="text" autocomplete="organization" maxlength="80" />
+          <input id="f-otel" name="otel_adi" type="text" autocomplete="organization" maxlength="80" />
         </div>
         <div class="alan">
           <label for="f-tel">Telefon</label>
-          <input id="f-tel" name="Telefon" type="tel" autocomplete="tel" inputmode="tel" required maxlength="24" />
+          <input id="f-tel" name="telefon" type="tel" autocomplete="tel" inputmode="tel" required minlength="6" maxlength="24" />
         </div>
         <div class="alan">
           <label for="f-posta">E-posta</label>
-          <input id="f-posta" name="E-posta" type="email" autocomplete="email" required maxlength="120" />
+          <input id="f-posta" name="eposta" type="email" autocomplete="email" required maxlength="120" />
         </div>
         <div class="alan alan--tam">
           <label for="f-konu">İlgilendiğiniz Konu</label>
-          <select id="f-konu" name="Konu" required>
+          <select id="f-konu" name="konu" required>
             <option value="" disabled selected>Seçin</option>
             <option>Teknik Altyapı</option>
             <option>OTA &amp; Dijital Yönetim</option>
@@ -710,17 +749,35 @@
         </div>
         <div class="alan alan--tam">
           <label for="f-mesaj">Mesaj <small>(isteğe bağlı)</small></label>
-          <textarea id="f-mesaj" name="Mesaj" rows="4" maxlength="2000"></textarea>
+          <textarea id="f-mesaj" name="mesaj" rows="4" maxlength="2000"></textarea>
+        </div>
+        <!-- Tuzak alan: insan görmez, bot doldurur. Doluysa hiçbir şey gönderilmez.
+             Adı bilerek adres/web sitesi çağrıştırmaz: tarayıcının otomatik doldurması gerçek
+             ziyaretçinin alanını doldurup mesajını sessizce yutmasın. -->
+        <div class="tuzak" aria-hidden="true">
+          <label for="f-bos">Bu alanı boş bırakın</label>
+          <input id="f-bos" name="bos_birakin" type="text" tabindex="-1" autocomplete="off" />
         </div>
         <div class="alan alan--tam form-alt">
           <button type="submit" class="dugme dugme--dev">Gönder</button>
           <!-- Yasal metin henüz yazılmadı; bağlantı şimdilik sayfanın başına (#) gider. -->
           <p class="form-not">Formu göndererek <a href="#">KVKK Aydınlatma Metni</a>'ni okuduğunuzu kabul etmiş olursunuz.</p>
         </div>
-        <p class="form-durum" role="status" aria-live="polite" hidden>
-          Posta uygulamanız açıldı; mesajı oradan gönderin. Açılmadıysa merhaba@oteldijital.com adresine yazın.
+        <p class="form-durum" role="alert" hidden>
+          Mesaj gönderilemedi. Lütfen tekrar deneyin ya da merhaba@oteldijital.com adresine yazın.
         </p>
+        <noscript>
+          <p class="form-durum">Formu göndermek için tarayıcınızda betik açık olmalı; ya da doğrudan merhaba@oteldijital.com adresine yazın.</p>
+        </noscript>
       </form>
+
+      <!-- Onay ekranı: form gönderilince alanların yerini alır -->
+      <div class="form-basari" role="status" aria-live="polite" hidden>
+        <span class="form-basari-ikon" aria-hidden="true">✓</span>
+        <h3>Mesajınız başarıyla alındı.</h3>
+        <p>En kısa sürede sizinle iletişime geçeceğiz.</p>
+      </div>
+      </div>
     </div>
   </section>
 
@@ -756,7 +813,9 @@
   </div>
 </footer>
 
-<script src="hareket.js"></script>
-<script src="etkilesim.js"></script>
+<!-- ayarlar.js git'te yoktur: bilgisayarda ayarlar.ornek.js'den kopyalanır, Vercel'de ayarlar-uret.sh üretir -->
+<script src="ayarlar.js" defer></script>
+<script src="hareket.js" defer></script>
+<script src="etkilesim.js" defer></script>
 </body>
 </html>
