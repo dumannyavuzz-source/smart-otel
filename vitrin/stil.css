@@ -362,7 +362,7 @@ a { color: inherit; }
   padding: 0;
   margin: 44px 0 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));   /* dört paket: geniş ekranda yan yana, tablette ikişer */
   gap: 28px;
 }
 
@@ -387,7 +387,7 @@ a { color: inherit; }
 .sutunlar {
   margin-top: 44px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));   /* dört paket: geniş ekranda yan yana, tablette ikişer */
   gap: 22px;
 }
 
@@ -475,7 +475,7 @@ a { color: inherit; }
 .planlar {
   margin-top: 44px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));   /* dört paket: geniş ekranda yan yana, tablette ikişer */
   gap: 22px;
   align-items: start;
 }

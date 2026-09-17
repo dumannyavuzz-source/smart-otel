@@ -1,6 +1,6 @@
 // Fiyat paketleri: oda sayısına göre dört basamak (Genel Müdür kararı, 2026-09-17).
-// Yalnızca ödeme duvarı kullanır. Vitrindeki fiyat bölümü ayrı durur (vitrin/index.html · #fiyat):
-// vitrinin uygulamayla ortak kodu yoktur, bu yüzden rakam iki yerde yazılıdır.
+// Vitrindeki fiyat bölümüyle (vitrin/index.html · #fiyat) AYNI olmak zorundadır:
+// vitrinin uygulamayla ortak kodu yoktur, bu yüzden rakam iki yerde yazılıdır. Biri değişirse diğeri de değişir.
 export interface Paket {
   ad: string;
   odalar: string;
@@ -10,9 +10,9 @@ export interface Paket {
 }
 
 export const PAKETLER: Paket[] = [
-  { ad: 'Butik',    odalar: '1–25 oda',   fiyat: '990 TL',   donem: '/ay' },
-  { ad: 'Standart', odalar: '26–75 oda',  fiyat: '1.990 TL', donem: '/ay' },
-  { ad: 'Büyük',    odalar: '76–150 oda', fiyat: '3.490 TL', donem: '/ay' },
+  { ad: 'Butik',    odalar: '1–25 oda',   fiyat: '$29', donem: '/ay' },
+  { ad: 'Standart', odalar: '26–75 oda',  fiyat: '$59', donem: '/ay' },
+  { ad: 'Büyük',    odalar: '76–150 oda', fiyat: '$99', donem: '/ay' },
   { ad: 'Kurumsal', odalar: '150+ oda',   fiyat: 'Özel Teklif', iletisim: true },
 ];
 
