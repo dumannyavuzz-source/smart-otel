@@ -18,7 +18,7 @@ Personel uygulaması (`app/`) ile **hiçbir ortak kodu yoktur**; bilerek böyled
 | `index.html` | Sayfanın kendisi: sade menü, hero (kodla çizilmiş telefon), döngü hikâyesi, keşif alanı, dijital check-up panosu, OTA ve dijital yönetim, değer sütunları, şifre notu, fiyatlar, teknik altyapı, iletişim |
 | `stil.css` | Görünüm: açık (kırık beyaz) zemin, antrasit koyu bloklar, tek marka rengi. Oran %70 açık · %20 koyu · %10 marka — `docs/decisions/006-vitrin-gorsel-dili.md` |
 | `hareket.js` | Canlı akış animasyonu. Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |
-| `etkilesim.js` | Üç etkileşim: kaydırdıkça beliren döngü hikâyesi, keşif alanındaki ekran değiştirme ve görününce dolan check-up panosu. Üçü de betiksiz de anlamlı çalışır |
+| `etkilesim.js` | Dört etkileşim: kaydırdıkça beliren döngü hikâyesi, keşif alanındaki ekran değiştirme, görününce dolan check-up panosu ve posta uygulamasını açan iletişim formu. Dördü de betiksiz de anlamlı çalışır |
 
 ## Bakmak için
 
@@ -40,9 +40,18 @@ Vercel'de **ikinci bir proje** olarak yayınlanır (Root Directory: `vitrin`, de
 
 Alan adları Genel Müdür tarafından onaylandı (2026-09-16). Sayfadaki bağlantılar:
 "30 Gün Ücretsiz Dene" düğmeleri `app.oteldijital.com/kayit` adresine (altı yerde);
-Kurumsal plandaki "Görüşme ayarla" düğmesi ve iletişim bölümündeki (`#iletisim`) düğme
+Kurumsal plandaki "Görüşme ayarla" düğmesi ve iletişim bölümündeki (`#iletisim`) form
 `mailto:merhaba@oteldijital.com` adresine gider.
 Bu posta kutusu vitrindeki **tek** iletişim yoludur; canlıya çıkmadan çalıştığı doğrulanmalıdır.
+
+**İletişim formu sunucuya veri yazmaz.** "Gönder" ziyaretçinin kendi posta uygulamasını, alanlar
+düzgün yazılmış bir mesajla açar (betik kapalıysa formun kendi `mailto` eylemi çalışır). Böylece
+vitrinde arka uç, anahtar ve kişisel veri deposu yoktur. Kayıt tutan bir kutu istenirse bu ayrı bir
+karar ve güvenlik incelemesi gerektirir (`docs/decisions/006-vitrin-gorsel-dili.md` · Aşama 6).
+
+Alt bölümdeki yasal bağlantılar (KVKK Aydınlatma Metni, Gizlilik Politikası, Çerez Politikası,
+Kullanım Şartları) ve formun altındaki KVKK bağlantısı **şimdilik `#` adresine gider**; metinler
+yazılınca gerçek sayfalarına bağlanacaktır.
 
 Hizmet bölümlerindeki **"Bilgi Al"** (check-up ve dijital yönetim) ile **"Teknik Destek Al"** (teknik altyapı)
 düğmeleri kayıt sayfasına değil, iletişim bölümüne iner. Bu bölümler demo üyeliğine yönlendirmez;

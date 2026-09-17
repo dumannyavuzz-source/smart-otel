@@ -1,7 +1,7 @@
 # 006 — Vitrinin Görsel Dili: "Premium Teknoloji Şirketi"
 
 > **Karar veren:** Genel Müdür · **Yazan:** Orkestratör · **Tarih:** 2026-09-17
-> **Durum:** Aşama 1–5 uygulandı (görsel dil, menü, hero, etkileşim, hizmet bölümleri). Sonraki aşamalar bu kurallara uyar.
+> **Durum:** Aşama 1–6 uygulandı (görsel dil, menü, hero, etkileşim, hizmet bölümleri, iletişim formu). Sonraki aşamalar bu kurallara uyar.
 > Kod: `vitrin/stil.css`, `vitrin/index.html`
 
 ---
@@ -87,3 +87,24 @@ menü maddesi **Hakkımızda**'dır; o hâlâ alt bölüme iner.
 Bu aşamada bir de önceki aşamadan kalan hata düzeltildi: değer sütunlarındaki liste ile döngü
 kartları aynı sınıf adını (`.mini`) paylaşıyordu ve kartların yan boşluğu siliniyordu. Liste
 artık `.sutun-liste` adını taşıyor.
+
+## Aşama 6 — İletişim formu ve yasal bağlantılar (2026-09-17)
+
+- **Cam kart içinde form** (`#iletisim`) — Genel Müdür'ün "şık, cam efektli ve premium" isteğiyle.
+  Arkada iki çok soluk ışık (marka ve antrasit) durur, kart onları bulanıklaştırır; böylece cam
+  efekti bir anlam taşır. Alanlar: Ad Soyad, Otel Adı (isteğe bağlı), Telefon, E-posta,
+  İlgilendiğiniz Konu (Teknik Altyapı · OTA & Dijital Yönetim · Web Sitesi · SEO · Diğer),
+  Mesaj (isteğe bağlı). Düğme marka renginde: **"Gönder"**.
+- **Form sunucuya veri yazmaz.** "Gönder" ziyaretçinin kendi posta uygulamasını, alanları düzgün
+  yazılmış bir mesajla açar (`mailto:merhaba@oteldijital.com`); betik kapalıysa formun kendi
+  `mailto` eylemi aynı işi yapar. Bu tercih bilinçlidir: vitrinde arka uç, anahtar ve kişisel veri
+  deposu yoktur, dolayısıyla korunacak bir şey de yoktur. Formun altında KVKK Aydınlatma Metni'ne
+  giden tek satırlık bir not vardır.
+- **Yasal bağlantılar** alt bölüme eklendi: KVKK Aydınlatma Metni, Gizlilik Politikası, Çerez
+  Politikası, Kullanım Şartları. Metinler henüz yazılmadığı için bağlantılar şimdilik `#`
+  adresine gider.
+
+**Açık karar (Genel Müdür):** Form gönderilerinin bir yerde **saklanması** istenirse (örneğin bir
+tablo ve panelde liste) bu, vitrine ilk arka uç bağlantısını ekler: anahtar yönetimi, yalnızca-yazma
+izni, istenmeyen gönderi (spam) önlemi ve KVKK gereği saklama süresi kararı gerekir. Bu iş
+güvenlik incelemesiyle ayrı bir aşamada ele alınmalıdır.

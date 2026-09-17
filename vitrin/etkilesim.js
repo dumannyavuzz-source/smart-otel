@@ -1,13 +1,15 @@
-// OtelDijital vitrin — üç küçük etkileşim. Kütüphane yok, birkaç düzine satır var.
+// OtelDijital vitrin — dört küçük etkileşim. Kütüphane yok, birkaç düzine satır var.
 //
 //   1. Döngü hikâyesi: kullanıcı aşağı kaydırdıkça dört adım sırayla belirir.
 //   2. Keşif alanı: başlığa dokununca telefondaki ekran değişir.
 //   3. Check-up panosu: görüş alanına girince çubuklar ve halka dolar.
+//   4. İletişim formu: "Gönder" posta uygulamasını düzgün yazılmış bir mesajla açar.
 //
-// Üçü de betiksiz de anlamlıdır — sayfa bu dosya hiç yüklenmese bile eksik görünmez:
+// Dördü de betiksiz de anlamlıdır — sayfa bu dosya hiç yüklenmese bile eksik görünmez:
 //   * Hikâye adımları baştan görünür durur (gizleme sınıfını bu dosya ekler).
 //   * Keşif ekranlarının dördü de HTML'de açıktır; bu dosya yalnızca birini bırakır.
 //   * Pano baştan doludur; bu dosya yalnızca "dolma" hareketini ekler.
+//   * Formun kendi eylemi (action=mailto) zaten posta uygulamasını açar; bu dosya mesajı güzelleştirir.
 
 (function () {
   'use strict';
@@ -50,6 +52,39 @@
   if (pano && gozcu) {
     pano.className += ' js-pano';               // boşaltma da ancak burada başlar
     gozcu.observe(pano);
+  }
+
+  // ---------------------------------------------------------------
+  // 4. İletişim formu — "Gönder" posta uygulamasını açar
+  // ---------------------------------------------------------------
+  // Sunucu yok, veri hiçbir yere yazılmaz: mesaj ziyaretçinin kendi posta uygulamasından gider.
+  var form = document.querySelector('.form');
+  if (form) {
+    form.addEventListener('submit', function (olay) {
+      olay.preventDefault();
+
+      function al(ad) { var alan = form.elements[ad]; return alan ? alan.value.trim() : ''; }
+      var konu = al('Konu');
+      var otel = al('Otel Adı');
+
+      var baslik = 'Bilgi talebi · ' + konu + (otel ? ' · ' + otel : '');
+      var govde = [
+        'Ad Soyad: ' + al('Ad Soyad'),
+        'Otel: ' + (otel || '-'),
+        'Telefon: ' + al('Telefon'),
+        'E-posta: ' + al('E-posta'),
+        'Konu: ' + konu,
+        '',
+        al('Mesaj')
+      ].join('\n');
+
+      window.location.href = 'mailto:merhaba@oteldijital.com'
+        + '?subject=' + encodeURIComponent(baslik)
+        + '&body=' + encodeURIComponent(govde);
+
+      var durum = form.querySelector('.form-durum');
+      if (durum) durum.hidden = false;
+    });
   }
 
   // ---------------------------------------------------------------

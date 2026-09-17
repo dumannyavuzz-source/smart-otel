@@ -1130,22 +1130,133 @@ a { color: inherit; }
   font-size: 0.86rem;
 }
 
-/* ---------- İletişim ---------- */
-/* "Bilgi Al" ve "Teknik Destek Al" düğmelerinin indiği kart. Tek kanal: e-posta. */
-.iletisim {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 28px;
-  align-items: center;
-  background: var(--yuzey);
-  border: 1px solid var(--cizgi);
-  border-radius: var(--kose-buyuk);
-  padding: 34px 32px;
-  margin-block: clamp(20px, 4vw, 40px);
+/* ---------- İletişim: cam kart içinde form ---------- */
+/* Arkada iki yumuşak ışık durur (marka ve antrasit, ikisi de çok soluk); cam kart onları
+   bulanıklaştırır. Form sunucuya veri yazmaz: "Gönder" posta uygulamasını açar. */
+.iletisim-alan { position: relative; }
+.iletisim-alan::before,
+.iletisim-alan::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
 }
-.iletisim h2 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
-.iletisim p { margin-top: 10px; color: var(--metin-soluk); max-width: 56ch; }
-.iletisim .dugme { white-space: nowrap; }
+.iletisim-alan::before {
+  width: 46%;
+  aspect-ratio: 1;
+  left: -8%;
+  top: -10%;
+  background: radial-gradient(closest-side, rgba(255, 106, 31, 0.22), transparent);
+}
+.iletisim-alan::after {
+  width: 40%;
+  aspect-ratio: 1;
+  right: -6%;
+  bottom: -12%;
+  background: radial-gradient(closest-side, rgba(20, 24, 29, 0.12), transparent);
+}
+
+.iletisim {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+  padding: clamp(28px, 4vw, 48px);
+  margin-block: clamp(20px, 4vw, 40px);
+  background: var(--cam);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--kose-dev);
+  box-shadow: 0 40px 90px -60px rgba(20, 24, 29, 0.5);
+}
+.iletisim h2 { font-size: clamp(1.6rem, 2.8vw, 2.1rem); }
+.iletisim-yazi .etiket { margin-bottom: 18px; }
+.iletisim-yazi p { margin-top: 12px; color: var(--metin-soluk); max-width: 40ch; }
+.iletisim-posta { font-size: 0.92rem; }
+.iletisim-posta a {
+  color: var(--metin);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid var(--cizgi-koyu);
+}
+.iletisim-posta a:hover { border-color: var(--marka); }
+
+/* ---- Form ---- */
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.alan { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.alan--tam { grid-column: 1 / -1; }
+.alan label { font-size: 0.86rem; font-weight: 600; }
+.alan label small { font-weight: 400; font-size: 0.8rem; color: var(--metin-cok-soluk); }
+
+.alan input,
+.alan select,
+.alan textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.98rem;
+  color: var(--metin);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--cizgi-koyu);
+  border-radius: 14px;
+  padding: 13px 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.alan input:hover,
+.alan select:hover,
+.alan textarea:hover { border-color: var(--metin-cok-soluk); }
+.alan input:focus,
+.alan select:focus,
+.alan textarea:focus {
+  outline: none;
+  background: var(--yuzey);
+  border-color: var(--marka);
+  box-shadow: 0 0 0 4px var(--marka-soluk);
+}
+.alan textarea { min-height: 120px; resize: vertical; }
+
+/* Açılır liste: tarayıcının kalın oku yerine ince bir ok. "Seçin" yer tutucusu soluk kalır. */
+.alan select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 44px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' fill='none' stroke='%235b6572' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  cursor: pointer;
+}
+.alan select:invalid { color: var(--metin-cok-soluk); }
+
+/* Düğme olarak kullanılan .dugme: bağlantıyla aynı görünsün. */
+button.dugme { font: inherit; border: 0; cursor: pointer; }
+
+.form-alt {
+  margin-top: 6px;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+}
+.form-not { font-size: 0.8rem; color: var(--metin-cok-soluk); max-width: 36ch; }
+.form-not a { color: var(--metin-soluk); }
+
+/* Gönderince görünen not (betik açar) */
+.form-durum {
+  grid-column: 1 / -1;
+  font-size: 0.88rem;
+  color: var(--canli);
+  padding: 12px 16px;
+  border: 1px solid rgba(18, 161, 80, 0.3);
+  background: rgba(18, 161, 80, 0.07);
+  border-radius: 12px;
+}
 
 /* ---------- Kapanış ---------- */
 .kapanis {
@@ -1168,14 +1279,29 @@ a { color: inherit; }
 }
 .alt .marka { color: #ffffff; }
 .alt-ic {
-  padding-block: 52px;
+  padding-block: 52px 40px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 28px;
   color: rgba(238, 241, 245, 0.72);
   font-size: 0.9rem;
 }
-.alt-soluk { color: rgba(238, 241, 245, 0.45); font-size: 0.82rem; margin-top: 8px; }
+.alt-ust { display: flex; flex-direction: column; gap: 8px; }
+
+/* Alt satır: solda telif, sağda yasal bağlantılar. */
+.alt-dip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px 24px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(238, 241, 245, 0.12);
+}
+.alt-soluk { color: rgba(238, 241, 245, 0.45); font-size: 0.82rem; }
+.alt-yasal { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 0.82rem; }
+.alt-yasal a { color: rgba(238, 241, 245, 0.6); text-decoration: none; transition: color 0.2s ease; }
+.alt-yasal a:hover { color: #ffffff; }
 
 /* ---------- Dar ekran ---------- */
 @media (max-width: 900px) {
@@ -1194,9 +1320,8 @@ a { color: inherit; }
   .pano { grid-template-columns: 1fr; }
   .pano-ozet { border-right: 0; border-bottom: 1px solid var(--cizgi); }
   .olcum { grid-template-columns: minmax(120px, 0.55fr) 1fr auto; }
-  .iletisim { grid-template-columns: 1fr; text-align: center; padding: 28px 22px; }
-  .iletisim p { margin-inline: auto; }
-  .iletisim .dugme { justify-self: center; }
+  .iletisim { grid-template-columns: 1fr; padding: 26px 20px; gap: 26px; }
+  .iletisim-yazi p { max-width: none; }
 }
 
 @media (max-width: 420px) {
@@ -1209,7 +1334,10 @@ a { color: inherit; }
   .olcum { grid-template-columns: 96px 1fr auto; gap: 12px; }
   .olcum-ad small { display: none; }
   .pano-alt { flex-direction: column; align-items: stretch; text-align: center; }
-  .iletisim .dugme { width: 100%; white-space: normal; }
+  /* Telefonda alanlar alt alta, düğme tam genişlik. */
+  .form { grid-template-columns: 1fr; }
+  .form-alt { flex-direction: column; align-items: stretch; text-align: center; }
+  .form-not { max-width: none; }
 }
 
 /* ---------- Hareket istemeyenler ---------- */
