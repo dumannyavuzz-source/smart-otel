@@ -1,6 +1,7 @@
 -- =====================================================================
 -- GÜVENLİK DENEMELERİ
 -- Kaynak: docs/security/001-rls-and-maker-checker.md · Bölüm 6 (22 madde)
+--         docs/decisions/005-demo-suresi-ve-odeme-duvari.md · 25. bölüm (demo kilidi)
 --
 -- Her madde bir SALDIRI denemesidir. Hepsi başarısız olmalıdır.
 -- Biri başarılı olursa Security veto kullanır.
@@ -23,7 +24,7 @@ begin
 end
 $$;
 
-select plan(150);
+select plan(155);
 
 
 -- ---------------------------------------------------------------------
@@ -1169,6 +1170,53 @@ select throws_ok(
   $$ select public.kayit_denemesi_say_ve_yaz('aaaaaaaaaaaaaaaa') $$,
   '42501', null,
   '24d. Sayaç fonksiyonunu yalnızca kayıt kapısı çağırabilir');
+
+
+-- =====================================================================
+-- 25 · DEMO SÜRESİ ve ÖDEME DUVARI
+-- Bu bölüm bilerek EN SONDA durur: Otel A'nın demo süresini geçmişe alır.
+-- =====================================================================
+select deneme.giris('a0000000-0000-4000-8000-00000000a004');   -- Sahip (A)
+
+select throws_ok(
+  $$ update public.hotels set demo_bitis_tarihi = now() + interval '365 days'
+     where id = 'a0000000-0000-4000-8000-000000000001' $$,
+  '42501', null,
+  '25a. Otelin sahibi bile kendi demo süresini uzatamaz');
+
+select deneme.cikis();
+
+-- Süreyi geçmişe alıyoruz. Bunu yalnızca biz yapabiliriz (kartsız, ana anahtarla).
+update public.hotels set demo_bitis_tarihi = now() - interval '1 day'
+where id = 'a0000000-0000-4000-8000-000000000001';
+
+select deneme.giris('a0000000-0000-4000-8000-00000000a001');   -- Ayşe (A)
+
+select throws_ok(
+  $$ insert into public.room_cleanings (hotel_id, room_id)
+     values ('a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-0000000a0101') $$,
+  '42501', null,
+  '25b. Demo süresi dolunca görevli yeni beyan yazamaz');
+
+select isnt_empty(
+  $$ select * from public.rooms where hotel_id = 'a0000000-0000-4000-8000-000000000001' $$,
+  '25c. Demo süresi dolsa da kayıtlar okunmaya devam eder — veri silinmez, gizlenmez');
+
+select deneme.cikis();
+select deneme.giris('a0000000-0000-4000-8000-00000000a003');   -- Mehmet (müdür, A)
+
+select throws_ok(
+  $$ insert into public.rooms (hotel_id, number) values ('a0000000-0000-4000-8000-000000000001', '999') $$,
+  '42501', null,
+  '25d. Demo süresi dolunca müdür yeni oda ekleyemez');
+
+select deneme.cikis();
+select deneme.giris('b0000000-0000-4000-8000-00000000b001');   -- Burak (B)
+
+select lives_ok(
+  $$ insert into public.room_cleanings (hotel_id, room_id)
+     values ('b0000000-0000-4000-8000-000000000001', 'b0000000-0000-4000-8000-0000000b0201') $$,
+  '25e. Bir otelin süresi dolunca komşu otel etkilenmez');
 
 select deneme.cikis();
 select * from finish();

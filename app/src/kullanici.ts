@@ -11,6 +11,7 @@ export interface Profil {
   otelAdi: string;
   rol: Rol;
   gorev: Gorev | null;      // görevlide var, müdürde yok
+  demoBitis: string | null;  // demo bitiş anı — bilinmiyorsa null (kimse bilinmezlik yüzünden kilitlenmez)
 }
 
 export const GOREV_ADI: Record<Gorev, string> = {
@@ -45,5 +46,5 @@ export function aktifProfiliAyarla(profil: Profil | null): void {
 
 // Yalnızca kimlik bilinen durumlar (testler, oturum yüklenirken)
 export function aktifKullaniciyiAyarla(id: string | null): void {
-  aktif = id ? { id, ad: '', otelId: '', otelAdi: '', rol: 'staff', gorev: null } : null;
+  aktif = id ? { id, ad: '', otelId: '', otelAdi: '', rol: 'staff', gorev: null, demoBitis: null } : null;
 }

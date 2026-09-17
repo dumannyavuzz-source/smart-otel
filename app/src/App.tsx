@@ -6,6 +6,9 @@ import { cikisYap, useOturum } from './oturum';
 import { postaciyiBaslat } from './postaci';
 import { aktifProfil, yoneticiMi } from './kullanici';
 import { panelNobetiniBaslat } from './panelNobeti';
+import { demoBitti } from './demo';
+import { DemoCubugu } from './parcalar/DemoCubugu';
+import { OdemeDuvariEkrani } from './ekranlar/OdemeDuvariEkrani';
 import { GirisEkrani } from './ekranlar/GirisEkrani';
 import { OtelSecEkrani } from './ekranlar/OtelSecEkrani';
 import { AnaEkran } from './ekranlar/AnaEkran';
@@ -29,14 +32,21 @@ import { UrunlerEkrani } from './ekranlar/panel/UrunlerEkrani';
 export function App() {
   const { durum, uyelikler, otelSec } = useOturum();
 
-  // Giriş varsa postacı işe başlar; çıkışta durur.
+  // Demo süresi dolduysa uygulama kilitlidir: ne postacı çalışır, ne panel nöbetçisi, ne de ekranlar açılır.
+  // Tarih bilinmiyorsa (eski önbellek ya da sunucu sorulamadı) kilit YOKTUR:
+  // "bilmiyorum" ile "süresi doldu" karıştırılmaz, kimse bilinmezlik yüzünden kapıda kalmaz.
+  const profil = durum === 'var' ? aktifProfil() : null;
+  const kilitli = demoBitti(profil?.demoBitis);
+
+  // Giriş varsa postacı işe başlar; çıkışta durur. Kilitliyken hiç başlamaz:
+  // sunucu zaten yazdırmaz, boşuna kapı çalınmaz.
   useEffect(() => {
-    if (durum === 'var') return postaciyiBaslat();
-  }, [durum]);
+    if (durum === 'var' && !kilitli) return postaciyiBaslat();
+  }, [durum, kilitli]);
 
   // Müdür girişliyse panel nöbetçisi çalışır: hangi panel ekranında olursa olsun alarmları izler,
   // yeni bir kırmızı alarm düşerse çanı çalar.
-  const panelOteli = durum === 'var' && yoneticiMi(aktifProfil()) ? aktifProfil()?.otelId ?? '' : '';
+  const panelOteli = !kilitli && yoneticiMi(profil) ? profil?.otelId ?? '' : '';
   useEffect(() => {
     if (panelOteli) return panelNobetiniBaslat(panelOteli);
   }, [panelOteli]);
@@ -80,28 +90,35 @@ export function App() {
     );
   }
 
-  const yonetici = yoneticiMi(aktifProfil());
+  // Demo süresi doldu: operasyon durur, veri durur. Açılan tek ekran ödeme duvarıdır.
+  if (kilitli) return <OdemeDuvariEkrani />;
+
+  const yonetici = yoneticiMi(profil);
   const yalnizYonetici = (ekran: React.ReactElement) => (yonetici ? ekran : <Navigate to="/" replace />);
 
   return (
-    <Routes>
-      <Route path="/" element={yonetici ? <PanelEkrani /> : <AnaEkran />} />
-      <Route path="/qr" element={<QrOkutEkrani />} />
-      <Route path="/oda/:kod" element={<OdaEkrani />} />
-      <Route path="/oda/:kod/eksik" element={<EksikVarEkrani />} />
-      <Route path="/oda/:kod/sorun" element={<SorunBildirEkrani />} />
-      <Route path="/isler" element={<IslerEkrani />} />
-      <Route path="/is/:id" element={<IsEkrani />} />
-      <Route path="/teslimler" element={<TeslimlerEkrani />} />
-      <Route path="/teslim/:id" element={<TeslimEkrani />} />
-      <Route path="/tamam" element={<TamamEkrani />} />
-      <Route path="/panel/gecikenler" element={yalnizYonetici(<GecikenlerEkrani />)} />
-      <Route path="/panel/misafirler" element={yalnizYonetici(<MisafirlerEkrani />)} />
-      <Route path="/panel/uyusmazliklar" element={yalnizYonetici(<UyusmazliklarEkrani />)} />
-      <Route path="/panel/onaylar" element={yalnizYonetici(<OnaylarEkrani />)} />
-      <Route path="/panel/personel" element={yalnizYonetici(<PersonelEkrani />)} />
-      <Route path="/panel/urunler" element={yalnizYonetici(<UrunlerEkrani />)} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <div className="uygulama">
+      {/* Demo sayacı her ekranın üstünde durur; süre bittiyse zaten buraya hiç gelinmez. */}
+      <DemoCubugu bitis={profil?.demoBitis ?? null} />
+      <Routes>
+        <Route path="/" element={yonetici ? <PanelEkrani /> : <AnaEkran />} />
+        <Route path="/qr" element={<QrOkutEkrani />} />
+        <Route path="/oda/:kod" element={<OdaEkrani />} />
+        <Route path="/oda/:kod/eksik" element={<EksikVarEkrani />} />
+        <Route path="/oda/:kod/sorun" element={<SorunBildirEkrani />} />
+        <Route path="/isler" element={<IslerEkrani />} />
+        <Route path="/is/:id" element={<IsEkrani />} />
+        <Route path="/teslimler" element={<TeslimlerEkrani />} />
+        <Route path="/teslim/:id" element={<TeslimEkrani />} />
+        <Route path="/tamam" element={<TamamEkrani />} />
+        <Route path="/panel/gecikenler" element={yalnizYonetici(<GecikenlerEkrani />)} />
+        <Route path="/panel/misafirler" element={yalnizYonetici(<MisafirlerEkrani />)} />
+        <Route path="/panel/uyusmazliklar" element={yalnizYonetici(<UyusmazliklarEkrani />)} />
+        <Route path="/panel/onaylar" element={yalnizYonetici(<OnaylarEkrani />)} />
+        <Route path="/panel/personel" element={yalnizYonetici(<PersonelEkrani />)} />
+        <Route path="/panel/urunler" element={yalnizYonetici(<UrunlerEkrani />)} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </div>
   );
 }

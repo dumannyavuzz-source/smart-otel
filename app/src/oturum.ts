@@ -18,7 +18,7 @@ export interface Uyelik {
   role: Rol;
   name: string;
   job: Gorev | null;
-  hotels: { name: string } | null;
+  hotels: { name: string; demo_bitis_tarihi: string } | null;
 }
 
 const PROFIL_ANAHTARI = 'smartotel.uyelikler';   // { id, uyelikler } — internet yokken buradan
@@ -31,7 +31,7 @@ export function useOturum(): { durum: OturumDurumu; uyelikler: Uyelik[]; otelSec
 
   const profileGec = useCallback((id: string, liste: Uyelik[], secilenOtel: string | null) => {
     if (liste.length === 0) {
-      aktifProfiliAyarla({ id, ad: '', otelId: '', otelAdi: '', rol: 'staff', gorev: null });
+      aktifProfiliAyarla({ id, ad: '', otelId: '', otelAdi: '', rol: 'staff', gorev: null, demoBitis: null });
       setDurum('otelsiz');
       return;
     }
@@ -47,6 +47,7 @@ export function useOturum(): { durum: OturumDurumu; uyelikler: Uyelik[]; otelSec
       otelAdi: secili.hotels?.name ?? '',
       rol: secili.role,
       gorev: secili.job,
+      demoBitis: secili.hotels?.demo_bitis_tarihi ?? null,
     });
     setDurum('var');
   }, []);
@@ -108,7 +109,7 @@ async function uyelikleriYukle(id: string): Promise<Uyelik[] | null> {
   if (cevrimici()) {
     const { data, error } = await ortakBeyin()
       .from('memberships')
-      .select('hotel_id, role, name, job, hotels(name)')
+      .select('hotel_id, role, name, job, hotels(name, demo_bitis_tarihi)')
       .eq('user_id', id);
     if (!error && data) {
       const liste = data as unknown as Uyelik[];

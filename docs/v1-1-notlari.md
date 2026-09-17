@@ -28,14 +28,15 @@ Ayrıntı: `docs/security/004-sifre-yenileme.md`
 | # | Madde | Bugün ne oluyor? | V1.1'de ne yapılacak? |
 |---|---|---|---|
 | B1 | **E-posta doğrulanmıyor** | Sistem hiç e-posta göndermiyor; kayıt olan kişinin adresi doğrulanmadan hesap açılıyor. Biri başkasının adresiyle otel açabilir | SMTP bağlanınca doğrulama bağlantısı; ya da ilk girişte kod doğrulaması |
-| B2 | **Deneme süresi takip edilmiyor** | Bugün deneme bitiş tarihi, uyarı ya da kapanma yok; açılan oteller **süresiz** | **V1.1'den çıkarıldı** — bir sonraki aşamada yapılacak: `hotels` tablosuna `demo_bitis_tarihi`, aktif demo takibi ve ödeme duvarı |
+| B2 | **Deneme süresi takip edilmiyor** | ✅ **Çözüldü (Aşama 21)** — artık takip ediliyor | Bu listeden düştü: `demo_bitis_tarihi` sütunu, üst menüdeki sayaç ve ödeme duvarı yapıldı |
 | B3 | **Ödeme yok** | Fiyat tablosu var, ödeme alma yolu yok | Ödeme sağlayıcısı kararı ve bağlanması |
 | B4 | **Kurumsal plan için iletişim yalnızca e-posta** | Düğme `merhaba@oteldijital.com` adresine yazıyor (Genel Müdür kararı) | Gerçek bir iletişim formu / talep takibi |
 
-> **B2 için Genel Müdür kararı (2026-09-17 — 2026-09-16 tarihli kararın yerine geçer):** Deneme süresi
-> **30 gündür**. "Süre takibi V1.1'e bırakılsın" kararı **iptal edilmiştir**: bu iş sonraya değil,
-> **bir sonraki aşamaya** alınmıştır. `hotels` tablosuna `demo_bitis_tarihi` sütunu eklenecek, aktif demo
-> takibi ve ödeme duvarı (paywall) kurulacaktır. Ayrıntı: `docs/decisions/005-demo-suresi-ve-odeme-duvari.md`.
+> **B2 kapandı (2026-09-17).** Genel Müdür, "süre takibi V1.1'e bırakılsın" kararını **iptal etti**;
+> deneme süresi **30 gün** olarak belirlendi ve iş aynı gün yapıldı: `hotels` tablosuna `demo_bitis_tarihi`
+> sütunu eklendi, üst menüye kalan gün sayacı, süre dolunca da ödeme duvarı kondu. Süreyi yalnızca biz
+> uzatabiliriz. Ayrıntı: `docs/decisions/005-demo-suresi-ve-odeme-duvari.md` ve `docs/security/006-demo-kilidi.md`.
+> Ödeme **alma** yolu hâlâ yoktur (B3): parasını ödeyen otelin süresi şimdilik elle uzatılır.
 
 ## C. Daha önce kayda geçmiş, sonraya bırakılanlar
 

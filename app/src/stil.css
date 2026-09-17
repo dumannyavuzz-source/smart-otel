@@ -423,6 +423,46 @@ textarea.alan { min-height: 120px; resize: vertical; }
 
 .uyari-blok p { margin: 0; }
 
+/* ---------------------------------------------------------------------
+   Demo sayacı (üst çubuk) ve ödeme duvarı
+   Çubuk varken sayfa, ekranın geri kalanını kaplar; altta boş şerit kalmaz.
+   --------------------------------------------------------------------- */
+.uygulama {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+.uygulama > .sayfa {
+  min-height: 0;
+  flex: 1;
+}
+
+.demo-cubuk {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--ana-acik);
+  color: var(--metin-soluk);
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* Son 7 gün: sarı şerit. Belirgin ama bağırmayan — paneldeki kırmızı alarmlarla yarışmaz. */
+.demo-cubuk--son {
+  background: #fff8e1;
+  border-bottom: 3px solid #f9a825;
+  color: var(--metin);
+  font-weight: 600;
+}
+
+.demo-baglanti { color: var(--ana); font-weight: 600; }
+
+/* Bağlantı da buton gibi görünebilsin (ödeme duvarındaki "Paketleri Gör") */
+a.buton { text-decoration: none; }
+
 /* Giriş ekranının altındaki kayıt bağlantısı — hesabı olmayan otelciyi /kayit sayfasına götürür.
    Sade tutulur: tek satır, ana renkte bir bağlantı; butonla yarışmaz. */
 .giris-kayit {
