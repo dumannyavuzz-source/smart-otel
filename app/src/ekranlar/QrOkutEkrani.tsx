@@ -42,7 +42,7 @@ export function QrOkutEkrani() {
               git(`/oda/${kod}`, { replace: true });
               return;
             }
-            setUyari('Bu QR bir Smartotel odası değil.');
+            setUyari('Bu QR bir Otel Dijital odası değil.');
           }
           zamanlayici = window.setTimeout(bak, KARE_ARASI_MS);
         };

@@ -1,4 +1,4 @@
-# CLAUDE.md — Smartotel Proje Anayasası
+# CLAUDE.md — Otel Dijital Proje Anayasası
 
 Bu dosya, bu projede çalışan her AI ajanının (öncelikle Claude'un) uyması gereken temel kuralları tanımlar.
 Proje sahibi **Genel Müdür**'dür. Claude, Genel Müdür adına çalışan **orkestratör**dür.

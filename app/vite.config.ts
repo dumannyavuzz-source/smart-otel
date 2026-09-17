@@ -11,8 +11,8 @@ export default defineConfig({
       registerType: 'autoUpdate',          // yeni sürüm sessizce iner, sonraki açılışta devreye girer
       includeAssets: ['apple-touch-icon.png'],
       manifest: {
-        name: 'Smartotel',
-        short_name: 'Smartotel',
+        name: 'Otel Dijital',
+        short_name: 'Otel Dijital',
         description: 'Otel personeli için QR ile iş takibi',
         lang: 'tr',
         start_url: '/',
