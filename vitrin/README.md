@@ -15,10 +15,10 @@ Personel uygulaması (`app/`) ile **hiçbir ortak kodu yoktur**; bilerek böyled
 
 | Dosya | Ne yapar |
 |---|---|
-| `index.html` | Sayfanın kendisi: sade menü, hero (kodla çizilmiş telefon), döngü hikâyesi, keşif alanı, değer sütunları, şifre notu, fiyatlar |
+| `index.html` | Sayfanın kendisi: sade menü, hero (kodla çizilmiş telefon), döngü hikâyesi, keşif alanı, dijital check-up panosu, OTA ve dijital yönetim, değer sütunları, şifre notu, fiyatlar, teknik altyapı, iletişim |
 | `stil.css` | Görünüm: açık (kırık beyaz) zemin, antrasit koyu bloklar, tek marka rengi. Oran %70 açık · %20 koyu · %10 marka — `docs/decisions/006-vitrin-gorsel-dili.md` |
 | `hareket.js` | Canlı akış animasyonu. Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |
-| `etkilesim.js` | İki etkileşim: kaydırdıkça beliren döngü hikâyesi ve keşif alanındaki ekran değiştirme. İkisi de betiksiz de anlamlı çalışır |
+| `etkilesim.js` | Üç etkileşim: kaydırdıkça beliren döngü hikâyesi, keşif alanındaki ekran değiştirme ve görününce dolan check-up panosu. Üçü de betiksiz de anlamlı çalışır |
 
 ## Bakmak için
 
@@ -39,9 +39,14 @@ Vercel'de **ikinci bir proje** olarak yayınlanır (Root Directory: `vitrin`, de
 | `app.oteldijital.com` | Personel uygulaması (`app/`), kayıt sayfası (`/kayit`) ve misafir yorum sayfası |
 
 Alan adları Genel Müdür tarafından onaylandı (2026-09-16). Sayfadaki bağlantılar:
-"Ücretsiz Başlat" düğmeleri `app.oteldijital.com/kayit` adresine (beş yerde),
-Kurumsal plandaki "Görüşme ayarla" düğmesi `mailto:merhaba@oteldijital.com` adresine gider.
+"30 Gün Ücretsiz Dene" düğmeleri `app.oteldijital.com/kayit` adresine (altı yerde);
+Kurumsal plandaki "Görüşme ayarla" düğmesi ve iletişim bölümündeki (`#iletisim`) düğme
+`mailto:merhaba@oteldijital.com` adresine gider.
 Bu posta kutusu vitrindeki **tek** iletişim yoludur; canlıya çıkmadan çalıştığı doğrulanmalıdır.
+
+Hizmet bölümlerindeki **"Bilgi Al"** (check-up ve dijital yönetim) ile **"Teknik Destek Al"** (teknik altyapı)
+düğmeleri kayıt sayfasına değil, iletişim bölümüne iner. Bu bölümler demo üyeliğine yönlendirmez;
+bu, Genel Müdür'ün açık kararıdır.
 
 Adımlar `docs/deployment-checklist.md` · Bölüm 6'da.
 

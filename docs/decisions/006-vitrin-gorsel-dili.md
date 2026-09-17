@@ -1,7 +1,7 @@
 # 006 — Vitrinin Görsel Dili: "Premium Teknoloji Şirketi"
 
 > **Karar veren:** Genel Müdür · **Yazan:** Orkestratör · **Tarih:** 2026-09-17
-> **Durum:** Aşama 1–3 uygulandı (görsel dil, menü, hero). Sonraki aşamalar bu kurallara uyar.
+> **Durum:** Aşama 1–5 uygulandı (görsel dil, menü, hero, etkileşim, hizmet bölümleri). Sonraki aşamalar bu kurallara uyar.
 > Kod: `vitrin/stil.css`, `vitrin/index.html`
 
 ---
@@ -58,5 +58,32 @@ Sonraki aşamalarda bu bölümler yazılınca kendi yerlerine bağlanacaklardır
   telefon altına geçer. Ekranların dördü de HTML'de açıktır; betik yalnızca birini bırakır.
 
 Menüdeki **Çözümler** artık gerçek bir yere gidiyor (`#kesfet`). Hero'daki "Uygulamayı Keşfet"
-düğmesi de aynı bölüme iner. Hâlâ karşılığı olmayan tek madde **Dijital Check-up**'tır;
-bağlantısı şimdilik fiyat bölümüne gider.
+düğmesi de aynı bölüme iner.
+
+## Aşama 5 — Dijital check-up, hizmetler ve teknik altyapı (2026-09-17)
+
+Sayfa bu aşamada "otelin içi"nden "otelin dışı"na geçer. Dört bölüm eklendi:
+
+- **Dijital check-up** (`#checkup`) — keşif alanından sonra bilerek geniş bir boşluk ve tek bir
+  geçiş cümlesi: *"Otelin içini yönetiyoruz. Peki dışarıdan nasıl görünüyor?"* Altında örnek bir
+  **durum panosu**: 78/100 toplam skor (halka), altı başlık (Web 84 · Google 91 · Rezervasyon 76 ·
+  OTA 72 · SEO 69 · AI 63) ince çubuklarla, altta "12 geliştirme alanı bulundu" ve tek düğme.
+  Veri **tek renkle** (antrasit) çizilir; turuncu yalnızca düğmede kalır — oran bozulmaz.
+  Pano betiksiz de doludur; betik yalnızca görününce dolma hareketi ekler.
+- **OTA ve dijital yönetim** (`#dijital`) — check-up'taki altı başlığın karşılığı: OTA yönetimi,
+  Channel Manager, Google, web sitesi, online itibar, SEO. Değer sütunlarıyla aynı kart dili.
+- **Teknik altyapı** (`#teknik`) — "Otelin arkasındaki teknoloji": Wi-Fi, ağ, güvenlik kameraları,
+  sunucu, NAS, UPS. Katalog değil: fiyat yok, marka yok, parça listesi yok; her kartta tek cümle
+  fayda ve bir satır teknik not.
+- **İletişim** (`#iletisim`) — hizmet düğmelerinin indiği kart; tek kanal e-posta.
+
+**Çağrı kuralı:** hizmet bölümlerinde yalnızca **"Bilgi Al"** ve **"Teknik Destek Al"** vardır ve
+ikisi de iletişim bölümüne iner. Bu bölümler ziyaretçiyi demo üyeliğine yönlendirmez (Genel Müdür
+kararı). Ana çağrı "30 Gün Ücretsiz Dene" yalnızca uygulama bölümlerinde kalır.
+
+Menüdeki **Dijital Check-up** artık kendi bölümüne (`#checkup`) gider. Kendi bölümü olmayan tek
+menü maddesi **Hakkımızda**'dır; o hâlâ alt bölüme iner.
+
+Bu aşamada bir de önceki aşamadan kalan hata düzeltildi: değer sütunlarındaki liste ile döngü
+kartları aynı sınıf adını (`.mini`) paylaşıyordu ve kartların yan boşluğu siliniyordu. Liste
+artık `.sutun-liste` adını taşıyor.
