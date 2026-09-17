@@ -423,6 +423,42 @@ textarea.alan { min-height: 120px; resize: vertical; }
 
 .uyari-blok p { margin: 0; }
 
+/* ---- Ödeme duvarındaki fiyat kartları ---- */
+.paketler {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* .kart ile birlikte kullanılır: kartın çerçevesini alır, içini yan yana dizer. */
+.paket {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+}
+
+.paket-ad { display: flex; flex-direction: column; min-width: 0; }
+.paket-oda { font-size: 1rem; }
+
+.paket-sag {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex: none;
+}
+
+.paket-fiyat { font-weight: 700; color: var(--ana); white-space: nowrap; }
+.paket-donem { font-weight: 500; font-size: 0.9rem; color: var(--metin-soluk); }
+.paket-iletisim { font-size: 1rem; color: var(--ana); white-space: nowrap; }
+.paket-dip { font-size: 1rem; }
+
 /* ---------------------------------------------------------------------
    Demo sayacı (üst çubuk) ve ödeme duvarı
    Çubuk varken sayfa, ekranın geri kalanını kaplar; altta boş şerit kalmaz.
