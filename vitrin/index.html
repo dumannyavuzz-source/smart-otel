@@ -7,13 +7,13 @@
 <meta name="description" content="Görevleri dağıtın, sorunları bildirin, depoyu takip edin ve misafir taleplerini tek yerden yönetin. Otelinizde hiçbir iş gözden kaçmasın." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
 <link rel="stylesheet" href="stil.css" />
 </head>
 <body>
 
 <!-- KAYIT ADRESİ: "Ücretsiz Başlat" düğmeleri app.oteldijital.com/kayit sayfasına gider.
-     Alan adı onaylandı (Genel Müdür, 2026-09-16). İleride değişirse BEŞ yerde birden güncellenmelidir
+     Alan adı onaylandı (Genel Müdür, 2026-09-16). İleride değişirse ALTI yerde birden güncellenmelidir
      (docs/deployment-checklist.md · 6.3). Kurumsal plandaki "Görüşme ayarla" düğmesi
      merhaba@oteldijital.com adresine yazıyor (Genel Müdür kararı). -->
 <a class="atla" href="#icerik">İçeriğe atla</a>
@@ -25,28 +25,34 @@
       <span class="marka-ad">OtelDijital</span>
     </a>
     <nav class="menu" aria-label="Sayfa menüsü">
-      <a href="#nasil">Nasıl çalışır</a>
-      <a href="#degerler">Neler kazandırır</a>
-      <a href="#fiyat">Fiyatlar</a>
+      <a href="#urun">Ürün</a>
+      <a href="#cozumler">Çözümler</a>
+      <!-- Dijital Check-up bölümü henüz yazılmadı; bağlantı şimdilik fiyat bölümüne gider. -->
+      <a href="#fiyat">Dijital Check-up</a>
+      <a href="#nasil">Nasıl Çalışır?</a>
+      <a href="#hakkimizda">Hakkımızda</a>
     </nav>
-    <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit">Otelimi Ücretsiz Başlat</a>
+    <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
   </div>
 </header>
 
 <main id="icerik">
 
-  <!-- ===================== HERO ===================== -->
+  <!-- ===================== HERO =====================
+       Fotoğraf yok. Sağdaki telefon kodla çizilmiştir ve içindeki akış gerçekten kıpırdar:
+       ziyaretçi ürünün kendisini görür, sahnelenmiş bir otel fotoğrafını değil. -->
   <section class="kolon kahraman">
     <div class="kahraman-yazi">
       <p class="etiket">Otel operasyon asistanı</p>
-      <h1>Otelinizi Yönetmek, <span class="vurgu">Bir Mesaj Atmak</span> Kadar Kolay.</h1>
+      <h1>Otelinizde ne oluyorsa, <span class="vurgu">herkes anında bilsin.</span></h1>
       <p class="giris">
-        Görevleri dağıtın, sorunları bildirin, depoyu takip edin ve misafir taleplerini tek yerden yönetin.
-        Otelinizde hiçbir iş gözden kaçmasın.
+        Kat görevlisi kareyi okutur, müdür aynı saniyede görür. Görev, arıza, depo ve misafir talebi
+        tek akışta toplanır. Hiçbir iş kulaktan kulağa kalmaz, hiçbir kayıt sonradan değiştirilemez.
       </p>
 
       <div class="cta-satir">
-        <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">Otelimi Ücretsiz Başlat</a>
+        <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+        <a class="dugme dugme--sessiz" href="#urun">Uygulamayı Keşfet</a>
       </div>
 
       <ul class="guvence">
@@ -56,36 +62,47 @@
       </ul>
     </div>
 
-    <!-- Canlı akış: otelde o an olan biteni gösteren örnek bildirimler -->
-    <div class="akis" aria-label="Canlı operasyon akışı örneği">
-      <div class="akis-ust">
-        <span class="nabiz" aria-hidden="true"></span>
-        <span class="akis-baslik">Canlı akış</span>
-        <span class="akis-otel">Deniz Otel · 34 oda</span>
+    <!-- Kodla çizilen telefon: ekranında otelde o an olan bitenin örneği akar (hareket.js) -->
+    <div class="gorsel" aria-label="Uygulama ekranı ve canlı operasyon akışı örneği">
+      <div class="telefon">
+        <div class="telefon-ic">
+          <div class="uyg-ust">
+            <span class="nabiz" aria-hidden="true"></span>
+            <span class="akis-baslik">Canlı akış</span>
+            <span class="akis-otel">Deniz Otel · 34 oda</span>
+          </div>
+
+          <ol class="akis-liste" id="akisListesi">
+            <li class="olay">
+              <span class="olay-ikon" aria-hidden="true">🧹</span>
+              <span class="olay-metin"><b>Oda 204</b> temizlendi<span class="olay-kim">Ayşe · kat görevlisi</span></span>
+              <span class="rozet rozet--tamam">✓ Hazır</span>
+            </li>
+            <li class="olay">
+              <span class="olay-ikon" aria-hidden="true">🔧</span>
+              <span class="olay-metin"><b>Klima arızası</b> bildirildi<span class="olay-kim">Oda 118 · 30 dk hedef</span></span>
+              <span class="rozet rozet--atandi">Teknisyene atandı</span>
+            </li>
+            <li class="olay">
+              <span class="olay-ikon" aria-hidden="true">📦</span>
+              <span class="olay-metin"><b>7,5 Kg domates</b> teslim alındı<span class="olay-kim">Fatura fotoğrafı eklendi</span></span>
+              <span class="rozet rozet--tamam">✓ Kayıtta</span>
+            </li>
+            <li class="olay">
+              <span class="olay-ikon" aria-hidden="true">💬</span>
+              <span class="olay-metin"><b>Oda 309</b> misafiri 2 yıldız verdi<span class="olay-kim">"Oda soğuktu"</span></span>
+              <span class="rozet rozet--uyari">Müdüre bildirildi</span>
+            </li>
+          </ol>
+        </div>
       </div>
 
-      <ol class="akis-liste" id="akisListesi">
-        <li class="olay">
-          <span class="olay-ikon" aria-hidden="true">🧹</span>
-          <span class="olay-metin"><b>Oda 204</b> temizlendi<span class="olay-kim">Ayşe · kat görevlisi</span></span>
-          <span class="rozet rozet--tamam">✓ Hazır</span>
-        </li>
-        <li class="olay">
-          <span class="olay-ikon" aria-hidden="true">🔧</span>
-          <span class="olay-metin"><b>Klima arızası</b> bildirildi<span class="olay-kim">Oda 118 · 30 dk hedef</span></span>
-          <span class="rozet rozet--atandi">Teknisyene atandı</span>
-        </li>
-        <li class="olay">
-          <span class="olay-ikon" aria-hidden="true">📦</span>
-          <span class="olay-metin"><b>7,5 Kg domates</b> teslim alındı<span class="olay-kim">Fatura fotoğrafı eklendi</span></span>
-          <span class="rozet rozet--tamam">✓ Kayıtta</span>
-        </li>
-        <li class="olay">
-          <span class="olay-ikon" aria-hidden="true">💬</span>
-          <span class="olay-metin"><b>Oda 309</b> misafiri 2 yıldız verdi<span class="olay-kim">"Oda soğuktu"</span></span>
-          <span class="rozet rozet--uyari">Müdüre bildirildi</span>
-        </li>
-      </ol>
+      <!-- Müdürün tek bakışta gördüğü şey, telefonun önünde duran cam kartta -->
+      <div class="cam-kart">
+        <span class="cam-kart-ust"><span class="nabiz" aria-hidden="true"></span> Kumanda</span>
+        <b class="cam-kart-sayi">0 gecikme</b>
+        <p class="cam-kart-not">3 iş sürüyor · 2 talep onay bekliyor</p>
+      </div>
 
       <p class="akis-dip">Örnek akış. Gerçek otelinizde bu satırlar sizin odalarınızdan düşer.</p>
     </div>
@@ -119,7 +136,7 @@
   </section>
 
   <!-- ===================== DEĞER ÖNERİLERİ ===================== -->
-  <section class="kolon bolum" id="degerler">
+  <section class="kolon bolum" id="urun">
     <h2>Otelin sessiz sızıntılarını görünür yapar.</h2>
     <p class="bolum-giris">
       Küçük ve orta otellerde para, büyük kazalarla değil; kayıt altına alınmamış küçük işlerle erir.
@@ -172,7 +189,7 @@
   </section>
 
   <!-- ===================== ŞİFRE YÖNETİMİ ===================== -->
-  <section class="kolon">
+  <section class="kolon" id="cozumler">
     <div class="sifre">
       <div class="sifre-sayi"><span>5</span><small>saniye</small></div>
       <div class="sifre-yazi">
@@ -262,7 +279,7 @@
 
 </main>
 
-<footer class="alt">
+<footer class="alt" id="hakkimizda">
   <div class="kolon alt-ic">
     <span class="marka">
       <span class="marka-isaret" aria-hidden="true"></span>
