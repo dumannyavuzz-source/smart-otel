@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex" />
+<title>OtelDijital — paylaşım görseli (kaynak)</title>
+<!-- Bu sayfa paylasim.png'nin KAYNAĞIDIR: bağlantı paylaşılınca görünen 1200×630 görsel buradan çizilir.
+     Yeniden üretmek: README "Paylaşım görseli" bölümü. Site ziyaretçisi bu sayfayı görmez (noindex + robots.txt). -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    color: #14181d;
+    background: #f6f7f9;
+    position: relative;
+  }
+  body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(38% 52% at 84% 40%, rgba(255, 106, 31, 0.20), transparent 70%),
+      radial-gradient(30% 40% at 10% 95%, rgba(20, 24, 29, 0.08), transparent 70%);
+  }
+  .sahne { position: relative; height: 100%; padding: 64px 72px; display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: center; }
+  .marka { position: absolute; top: 56px; left: 72px; display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 26px; letter-spacing: -0.02em; }
+  .marka-isaret { width: 14px; height: 14px; border-radius: 5px; background: #ff6a1f; box-shadow: 0 0 0 5px rgba(255, 106, 31, 0.12); }
+  .etiket { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #5b6572; background: #fff; border: 1px solid #e4e8ee; padding: 8px 14px; border-radius: 999px; margin-bottom: 26px; }
+  h1 { font-size: 62px; line-height: 1.04; letter-spacing: -0.035em; font-weight: 700; max-width: 640px; }
+  .vurgu { color: #ff6a1f; }
+  .alt { margin-top: 24px; font-size: 22px; line-height: 1.5; color: #5b6572; max-width: 560px; }
+  .adres { position: absolute; bottom: 52px; left: 72px; font-family: "JetBrains Mono", monospace; font-size: 15px; color: #8a94a2; letter-spacing: 0.04em; }
+
+  /* Kodla çizilmiş telefon: sitedeki hero ile aynı dil */
+  .telefon { width: 340px; background: #14181d; border-radius: 40px; padding: 11px; box-shadow: 0 50px 90px -50px rgba(20, 24, 29, 0.6); transform: rotate(-4deg); justify-self: end; }
+  .telefon-ic { background: #fff; border-radius: 31px; overflow: hidden; }
+  .ust { display: flex; align-items: center; gap: 10px; padding: 16px 16px 13px; border-bottom: 1px solid #e4e8ee; font-size: 14px; }
+  .nabiz { width: 8px; height: 8px; border-radius: 50%; background: #12a150; }
+  .ust b { font-weight: 600; }
+  .ust span:last-child { margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: 12px; color: #8a94a2; }
+  .olay { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-bottom: 1px solid #e4e8ee; font-size: 14px; line-height: 1.35; }
+  .olay:last-child { border-bottom: 0; }
+  .ikon { width: 36px; height: 36px; border-radius: 12px; background: #eef1f5; display: grid; place-items: center; font-size: 16px; flex: none; }
+  .metin { display: flex; flex-direction: column; }
+  .metin small { color: #8a94a2; font-family: "JetBrains Mono", monospace; font-size: 11px; }
+  .rozet { margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: 10.5px; padding: 5px 9px; border-radius: 999px; border: 1px solid #e4e8ee; color: #5b6572; white-space: nowrap; }
+  .rozet--tamam { color: #12a150; border-color: rgba(18, 161, 80, 0.3); background: rgba(18, 161, 80, 0.07); }
+  .rozet--uyari { color: #b7791f; border-color: rgba(183, 121, 31, 0.3); background: rgba(183, 121, 31, 0.07); }
+</style>
+</head>
+<body>
+<div class="sahne">
+  <div class="marka"><span class="marka-isaret"></span>OtelDijital</div>
+  <div>
+    <span class="etiket">Otel operasyon asistanı</span>
+    <h1>Otelinizde ne oluyorsa, <span class="vurgu">herkes anında bilsin.</span></h1>
+    <p class="alt">Görev, arıza, depo ve misafir talebi tek akışta. Kurulum 20 dakika, 30 gün ücretsiz.</p>
+  </div>
+  <div class="telefon"><div class="telefon-ic">
+    <div class="ust"><span class="nabiz"></span><b>Canlı akış</b><span>Deniz Otel · 34 oda</span></div>
+    <div class="olay"><span class="ikon">🧹</span><span class="metin"><span><b>Oda 204</b> temizlendi</span><small>Ayşe · kat görevlisi</small></span><span class="rozet rozet--tamam">✓ Hazır</span></div>
+    <div class="olay"><span class="ikon">🔧</span><span class="metin"><span><b>Klima arızası</b> bildirildi</span><small>Oda 118 · 30 dk hedef</small></span><span class="rozet">Teknisyene atandı</span></div>
+    <div class="olay"><span class="ikon">📦</span><span class="metin"><span><b>7,5 Kg domates</b> teslim alındı</span><small>Fatura fotoğrafı eklendi</small></span><span class="rozet rozet--tamam">✓ Kayıtta</span></div>
+    <div class="olay"><span class="ikon">💬</span><span class="metin"><span><b>Oda 309</b> misafiri 2 yıldız verdi</span><small>"Oda soğuktu"</small></span><span class="rozet rozet--uyari">Müdüre bildirildi</span></div>
+  </div></div>
+  <div class="adres">oteldijital.com</div>
+</div>
+</body>
+</html>

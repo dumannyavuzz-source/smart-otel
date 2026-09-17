@@ -1,0 +1,6 @@
+# OtelDijital vitrin — arama motorlarına açık tek sayfa
+User-agent: *
+Allow: /
+# paylasim.html yalnızca paylaşım görselinin kaynağıdır; ziyaretçi sayfası değildir
+Disallow: /paylasim.html
+Sitemap: https://oteldijital.com/sitemap.xml
