@@ -81,7 +81,7 @@ export function KayitEkrani() {
             className="kapi-alan"
             value={ad}
             onChange={(e) => setAd(e.target.value)}
-            placeholder="Yavuz Duman"
+            placeholder="Ahmet Yılmaz"
             maxLength={60}
             autoComplete="name"
             required

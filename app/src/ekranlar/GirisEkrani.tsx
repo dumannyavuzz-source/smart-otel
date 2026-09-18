@@ -33,7 +33,7 @@ export function GirisEkrani() {
         </div>
 
         <h1>Tekrar hoş geldiniz.</h1>
-        <p className="kapi-giris">E-postanız ve şifrenizle girin; vardiyanız kaldığı yerden devam eder.</p>
+        <p className="kapi-giris">Otelinizi tek merkezden yönetmeye devam edin.</p>
 
         <form className="kapi-form" onSubmit={gonder}>
           <label htmlFor="eposta">E-posta</label>

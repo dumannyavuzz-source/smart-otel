@@ -88,7 +88,7 @@ body {
 }
 
 /* ---------- Yazı ---------- */
-h1, h2, h3, .kumanda-kart-sayi, .halka-sayi, .sifre-sayi, .plan-fiyat, .adim-no {
+h1, h2, h3, .kumanda-kart-sayi, .halka-sayi, .sifre-sayi, .plan-fiyat {
   font-variant-numeric: lining-nums;
 }
 
@@ -519,37 +519,6 @@ a { color: inherit; }
   max-width: 56ch;
   color: var(--tas);
 }
-
-/* ---------- Adımlar: üç satır, üç kutu değil ---------- */
-/* Solda serif numara, ortada başlık, sağda açıklama. Aralarında ince çizgi. */
-.adimlar {
-  list-style: none;
-  padding: 0;
-  margin: 56px 0 0;
-  border-top: 1px solid var(--cizgi);
-}
-
-.adimlar li {
-  display: grid;
-  grid-template-columns: 72px minmax(0, 1fr) minmax(0, 1.6fr);
-  gap: 16px 40px;
-  align-items: start;
-  padding: 32px 0;
-  border-bottom: 1px solid var(--cizgi);
-  min-width: 0;
-}
-
-/* Sıra numarası: serif, şampanya — lobideki oda numarası gibi */
-.adim-no {
-  font-family: var(--baslik-yazi);
-  font-size: 1.75rem;
-  line-height: 1;
-  color: var(--sampanya);
-  padding-top: 6px;
-}
-
-.adimlar h3 { font-size: clamp(1.5rem, 2.2vw, 1.875rem); font-weight: 400; }
-.adimlar p { color: var(--tas); font-size: 0.95rem; max-width: 56ch; }
 
 /* ---------- Döngü hikâyesi: kaydırdıkça beliren dört adım ---------- */
 .hikaye {
@@ -1420,9 +1389,7 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
 @media (max-width: 900px) {
   .kahraman { grid-template-columns: 1fr; gap: 48px; }
   .kahraman h1 { max-width: none; }
-  /* Satırlar tek sütuna iner: numara solda kalır, açıklama başlığın altına geçer */
-  .adimlar li { grid-template-columns: 56px minmax(0, 1fr); }
-  .adimlar p { grid-column: 2; }
+  /* Satırlar tek sütuna iner */
   .deger { grid-template-columns: 1fr; gap: 16px; padding: 32px 0; }
   .hizmetler { grid-template-columns: 1fr; }
   .plan { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 28px 0 28px 20px; }
