@@ -1,6 +1,6 @@
 // OtelDijital vitrin — beş küçük etkileşim. Kütüphane yok, birkaç düzine satır var.
 //
-//   1. Döngü hikâyesi: kullanıcı aşağı kaydırdıkça dört adım sırayla belirir.
+//   1. Döngü hikâyesi ve iç operasyon blokları: kullanıcı aşağı kaydırdıkça sırayla belirir.
 //   2. Keşif alanı: başlığa dokununca telefondaki ekran değişir.
 //   3. Check-up panosu: görüş alanına girince çubuklar ve halka dolar.
 //   4. İletişim formu: "Gönder" mesajı Ortak Beyin'e (Supabase) yazar, sayfa yenilenmeden onay gösterir.
@@ -59,6 +59,14 @@
 
     var adimlar = hikaye.querySelectorAll('.hikaye-adim');
     for (var a = 0; a < adimlar.length; a++) gozcu.observe(adimlar[a]);
+  }
+
+  // İç operasyon blokları (#operasyon) aynı şekilde belirir; betiksiz üçü de baştan görünür.
+  var operasyon = document.querySelector('.operasyon');
+  if (operasyon && gozcu) {
+    operasyon.className += ' js-operasyon';
+    var bloklar = operasyon.querySelectorAll('.operasyon-blok');
+    for (var b = 0; b < bloklar.length; b++) gozcu.observe(bloklar[b]);
   }
 
   // ---------------------------------------------------------------

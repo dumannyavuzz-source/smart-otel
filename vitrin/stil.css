@@ -365,7 +365,16 @@ a { color: inherit; }
 }
 
 /* Uygulama ekranındaki emoji ikonlar tek renge çekilir: renkli ikon lobiye yakışmaz */
-.olay-ikon, .mini-ikon {
+.olay-ikon, /* Satır başındaki kısa etiket: oda numarası, saat ya da adım adı */
+.mini-oda {
+  font-family: var(--veri-yazi);
+  font-size: 0.72rem;
+  color: var(--tas-soluk);
+  min-width: 5ch;
+  flex: none;
+}
+
+.mini-ikon {
   filter: grayscale(1) sepia(0.25) brightness(1.05);
 }
 
@@ -519,6 +528,44 @@ a { color: inherit; }
   max-width: 56ch;
   color: var(--tas);
 }
+
+/* ---------- İç operasyon: üç blok, zikzak ---------- */
+/* Sol görsel / sağ metin, sonra tersi. Aralarında bol boşluk; kart ızgarası yok (üçleme kuralı). */
+.operasyon-baslik {
+  text-align: center;
+  max-width: 18ch;
+  margin-inline: auto;
+}
+
+.operasyon {
+  list-style: none;
+  padding: 0;
+  margin: clamp(56px, 7vw, 96px) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(64px, 8vw, 128px);
+}
+
+.operasyon-blok {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  align-items: center;
+}
+
+/* Görsel: kodla çizilmiş arayüz kesiti; sütunu doldurmaz, ortada durur */
+.operasyon-gorsel .mini { max-width: 420px; margin-inline: auto; }
+
+.operasyon-yazi h3 { font-size: clamp(1.75rem, 2.8vw, 2.5rem); font-weight: 400; }
+.operasyon-yazi p { margin-top: 16px; color: var(--tas); max-width: 42ch; }
+
+/* Gizleme YALNIZCA betik varken (js-operasyon sınıfını betik ekler); betiksiz üç blok da baştan görünür. */
+.js-operasyon .operasyon-blok {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--sure) var(--gecis), transform var(--sure) var(--gecis);
+}
+.js-operasyon .operasyon-blok.gorundu { opacity: 1; transform: none; }
 
 /* ---------- Döngü hikâyesi: kaydırdıkça beliren dört adım ---------- */
 .hikaye {
@@ -739,6 +786,12 @@ a { color: inherit; }
   /* Hikâyede göz zikzak çizsin: çift numaralı adımlarda görsel sola geçer. */
   .hikaye-adim { grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); }
   .hikaye-adim:nth-child(even) .hikaye-gorsel { order: -1; }
+
+  /* İç operasyon: 1 ve 3 sol görsel / sağ metin; 2 sağ görsel / sol metin. */
+  .operasyon-blok { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(40px, 6vw, 96px); }
+  .operasyon-blok:nth-child(even) .operasyon-gorsel { order: 1; }
+  .operasyon-blok:nth-child(odd) .operasyon-yazi { padding-inline-start: clamp(0px, 3vw, 40px); }
+  .operasyon-blok:nth-child(even) .operasyon-yazi { padding-inline-end: clamp(0px, 3vw, 40px); }
 }
 
 /* ---------- Dijital check-up: geçiş cümlesi + durum panosu ---------- */

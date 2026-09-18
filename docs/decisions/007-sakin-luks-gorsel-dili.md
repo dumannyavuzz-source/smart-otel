@@ -89,3 +89,11 @@ olmamalı, çalışan giriş sistemi ve QR bağlantılarına dokunulmamalı. Ayr
 
 Sonraya bırakılanlar (Genel Müdür karar vermedi, mevcut hâl korunur): kayıt ekranındaki güvence satırı,
 formda telefon ve e-postanın ikisinin de zorunlu olması, 0,75 rem altındaki küçük yazı boyutları.
+
+## İç operasyon vitrini — üç zikzak blok (2026-09-18)
+
+Hero'nun hemen altına #operasyon bölümü eklendi: ortalanmış serif başlık ("Tüm operasyon tek ekranda.") ve üç
+blok — Kat Hizmetleri (sol görsel/sağ metin), Depo ve Mal Kabul (sağ görsel/sol metin), Arıza ve Tamirat (sol
+görsel/sağ metin). Görseller kodla çizilmiş arayüz kesitleridir. Genel Müdür üçleme kuralında ısrar etti: dördüncü
+blok (kayıp eşya, personel yönetimi) sayfayı uzatır; bu ayrıntılar alt sayfaya kalır. Alt sayfa henüz yazılmadı;
+bölümün altındaki "Tüm operasyon detaylarını keşfet →" düğmesi şimdilik #dongu'ya iner.

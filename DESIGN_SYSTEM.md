@@ -132,8 +132,13 @@ Yeni eklenenler: `--zeytin-800`, `--zeytin-700`, `--zeytin-500`, `--bronz`, `--d
 
 Tek vurgu kelimesi: h1 içinde **bir** kelime *italik serif* ve şampanya olabilir. İkinci vurgu yoktur.
 
-İstisnalar: **geçiş bölümü** (#checkup) kicker + tek soru cümlesiyle yetinir, paragrafı yoktur; **kapanış** yalnızca
+İstisnalar: **geçiş bölümü** (#checkup) kicker + tek soru cümlesiyle yetinir, paragrafı yoktur; **iç operasyon**
+(#operasyon) ortalanmış kicker + h2 ile başlar, paragraf yerine üç zikzak blok gelir; **kapanış** yalnızca
 h2 + bir cümle + düğmedir. Bunun dışında kalıp değişmez.
+
+**Üçleme kuralı (Genel Müdür, 2026-09-18):** hero altındaki iç operasyon vitrini **üç** bloktur — sol görsel/sağ metin,
+sonra tersi. Dördüncü blok sayfayı uzatır, ferahlığı bozar; ayrıntılar (kayıp eşya, personel yönetimi…) alt sayfaya
+kalır ve bölümün altındaki tek düğme oraya bağlanır.
 
 ---
 

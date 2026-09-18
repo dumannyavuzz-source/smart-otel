@@ -16,7 +16,7 @@ Personel uygulaması (`app/`) ile **hiçbir ortak kodu yoktur**; bilerek böyled
 
 | Dosya | Ne yapar |
 |---|---|
-| `index.html` | Sayfanın kendisi: sade menü (+ "Giriş Yap"), hero (kodla çizilmiş telefon), döngü hikâyesi ("Nasıl çalışır"), keşif alanı ("Uygulama"), dijital check-up panosu, OTA ve dijital yönetim (hizmet listesi), değerler (satırlar), şifre notu, tarife, teknik altyapı (hizmet listesi), iletişim (zeytin blok), kapanış |
+| `index.html` | Sayfanın kendisi: sade menü (+ "Giriş Yap"), hero (kodla çizilmiş telefon), iç operasyon (üç zikzak blok), döngü hikâyesi ("Nasıl çalışır"), keşif alanı ("Uygulama"), dijital check-up panosu, OTA ve dijital yönetim (hizmet listesi), değerler (satırlar), şifre notu, tarife, teknik altyapı (hizmet listesi), iletişim (zeytin blok), kapanış |
 | `stil.css` | Görünüm: "Sakin Lüks" — mat grafit zemin, zeytin iletişim bloğu, şampanya yalnızca eylemde; serif başlık (Cormorant Garamond) + Inter. Tek kaynak `DESIGN_SYSTEM.md`, karar `docs/decisions/007-sakin-luks-gorsel-dili.md` |
 | `hareket.js` | Canlı akış animasyonu. Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |
 | `etkilesim.js` | Beş etkileşim: kaydırdıkça beliren döngü hikâyesi, keşif alanındaki ekran değiştirme, görününce dolan check-up panosu, Ortak Beyin'e yazan iletişim formu ve kaydırınca üst çubuğa gelen ince çizgi. Form dışındakiler betiksiz de anlamlıdır |
