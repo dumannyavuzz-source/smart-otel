@@ -129,7 +129,7 @@ export function KayitEkrani() {
         </ul>
 
         <p className="kapi-dip">
-          Zaten hesabınız var mı? <a href="/">Giriş yapın</a>
+          Zaten hesabınız var mı? <a href="/giris">Giriş yapın</a>
         </p>
       </div>
     </main>

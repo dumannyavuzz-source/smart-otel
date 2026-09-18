@@ -9,13 +9,13 @@ ve vitrinden gelinen **Kayıt Ekranı** (`/kayit`) — müşteri kendi otelini b
 ## Ekranlar
 
 ```
-Giriş ──▶ Ana Ekran ──▶ QR Okut ──▶ Oda 204 ──┬─▶ Eksik Var ──▶ Ne eksik? ──▶ Kaç Kg? ──▶ ✓ ──▶ Oda 204'e Dön
+Giriş (/giris) ──▶ Ana Ekran ──▶ QR Okut ──▶ Oda 204 ──┬─▶ Eksik Var ──▶ Ne eksik? ──▶ Kaç Kg? ──▶ ✓ ──▶ Oda 204'e Dön
         (tek buton)   (kamera)    (liste)     ├─▶ Sorun Bildir ──▶ Ne oldu? ──▶ 📷 Fotoğraf Çek (+ not) ──▶ Gönder ──▶ ✓ ──▶ Oda 204'e Dön
                                               └─▶ Oda Hazır ─────────────────────────────────────▶ ✓ ──▶ Ana Ekran
           ├─▶ 🔧 Açık İşler (3) ──▶ Liste (en acil üstte) ──▶ İş ──▶ 🙋 Aldım ──▶ ✅ Çözdüm (+ fotoğraf) ──▶ ✓ ──▶ İşlere Dön
           └─▶ 📦 Teslim Al (2) ──▶ Siparişler ──▶ "Kaç Kg geldi?" ──▶ 📷 Fatura (+ eksikse 📷 hasar) ──▶ ✓ Teslim Aldım
 
-Giriş (müdür) ──▶ Ana Kumanda ──┬─▶ 🔴 Süresi Geçenler · 🔴 Mutsuz Misafirler · 🔴 Teslimat Uyuşmazlıkları
+Giriş (müdür, /giris) ──▶ Ana Kumanda ──┬─▶ 🔴 Süresi Geçenler · 🔴 Mutsuz Misafirler · 🔴 Teslimat Uyuşmazlıkları
                                 │    (kırmızı yoksa 🟢 "Her şey yolunda")
                                 ├─▶ 🟡 Bekleyen Onaylar ──▶ ✕ Reddet / ✓ Onayla
                                 ├─▶ 👥 Personel ──▶ ➕ Personel Ekle · 🔑 Şifre yenile
@@ -26,6 +26,10 @@ Odadaki misafir QR'ı ──▶ /yorum/<kod> ──▶ ★ ★ ★ ★ ★ (+ is
 
 Vitrindeki düğme ──▶ /kayit ──▶ Otel adı · Ad · E-posta · Şifre ──▶ Otelimi Başlat ──▶ Ana Kumanda
 ```
+
+**Kapının adresi `/giris`tir.** Giriş yapılmamışken hangi adres açılırsa açılsın (`/`, QR'dan gelen `/oda/<kod>`, `/panel/…`)
+kapıya gönderilir; gelinen adres yanında taşınır ve giriş yapınca oraya dönülür — QR okutan görevli aynı odada kalır.
+Giriş yapılmışken `/giris` açılırsa ana ekrana geçilir. `/kayit` ve `/yorum/<kod>` kapının dışındadır (`main.tsx`).
 
 Her beyan **önce telefona** yazılır (giden kutusu), ekran anında "✓" der. Postacı internet gelince gönderir.
 Ana ekranda "3 bildirim internet gelince gönderilecek" yazısı, henüz gitmemiş beyanları gösterir.
@@ -57,9 +61,10 @@ Canlıya çıkış adımları: `docs/deployment-checklist.md`.
 | `src/odalar.ts` | QR kodundan odayı bulur (önce telefon, sonra sunucu) |
 | `src/qr/qrOku.ts` | QR çözme: tarayıcının okuyucusu, yoksa jsQR |
 | `src/oturum.ts` | Giriş var mı? (internet yokken de girişli kalır) |
+| `src/kapiYolu.ts` | Giriş sonrası nereye dönülür? QR ile gelen görevli aynı odada kalır; başka siteye çıkan adres kabul edilmez |
 | `src/kullanici.ts` | Şu an giriş yapmış kişi; beyanlar bu kimlikle etiketlenir (ortak telefon) |
 | `src/ortakBeyin.ts` | Supabase bağlantısı (kapı anahtarıyla) |
-| `src/stil.css` | Sade görünüm: 2 renk, 2 yazı boyutu, büyük butonlar |
+| `src/stil.css` | Sade görünüm: 2 renk, 2 yazı boyutu, büyük butonlar. Sonundaki `.kapi…` bloğu dış kapı ekranlarına (Giriş, Kayıt) aittir ve vitrinle aynı "Sakin Lüks" dilini konuşur (`DESIGN_SYSTEM.md`) |
 | `vercel.json` | Bütün adresleri `index.html`'e yönlendirir; olmazsa QR ile açılan adresler 404 verir |
 
 ## Çalıştırmak

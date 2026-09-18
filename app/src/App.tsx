@@ -1,8 +1,9 @@
-// Yollar (rotalar). Giriş yoksa her yol Giriş ekranına çıkar.
+// Yollar (rotalar). Giriş yoksa her yol /giris'e gider; giriş yapılınca gelinen yola dönülür.
 // Müdür/sahip için ana ekran Kumanda'dır; görevli için "QR Okut".
 import { useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router';
+import { Navigate, Route, Routes, useLocation } from 'react-router';
 import { cikisYap, useOturum } from './oturum';
+import { guvenliYol } from './kapiYolu';
 import { postaciyiBaslat } from './postaci';
 import { aktifProfil, yoneticiMi } from './kullanici';
 import { panelNobetiniBaslat } from './panelNobeti';
@@ -59,7 +60,16 @@ export function App() {
     );
   }
 
-  if (durum === 'yok') return <GirisEkrani />;
+  // Giriş yok: kapının adresi /giris'tir. Başka bir yola gelen (QR'dan /oda/… gibi) önce kapıya
+  // gönderilir; geldiği yol yanında taşınır ki giriş yapınca aynı odada kalsın.
+  if (durum === 'yok') {
+    return (
+      <Routes>
+        <Route path="/giris" element={<GirisEkrani />} />
+        <Route path="*" element={<KapiyaGonder />} />
+      </Routes>
+    );
+  }
   if (durum === 'otelSec') return <OtelSecEkrani uyelikler={uyelikler} onSec={otelSec} />;
 
   // Giriş yapıldı ama üyelikler sorulamadı. "Oteliniz yok" demek yanlış olur: sebep internettir.
@@ -102,6 +112,8 @@ export function App() {
       <DemoCubugu bitis={profil?.demoBitis ?? null} />
       <Routes>
         <Route path="/" element={yonetici ? <PanelEkrani /> : <AnaEkran />} />
+        {/* Girişliyken kapıda durulmaz: gelinen yola (yoksa ana ekrana) geçilir. */}
+        <Route path="/giris" element={<KapidanIceri />} />
         <Route path="/qr" element={<QrOkutEkrani />} />
         <Route path="/oda/:kod" element={<OdaEkrani />} />
         <Route path="/oda/:kod/eksik" element={<EksikVarEkrani />} />
@@ -121,4 +133,17 @@ export function App() {
       </Routes>
     </div>
   );
+}
+
+// Girişsiz kişiyi kapıya götürür; geldiği yolu (adres + soru işareti sonrası) yanına koyar.
+function KapiyaGonder() {
+  const { pathname, search } = useLocation();
+  return <Navigate to="/giris" replace state={{ sonra: pathname + search }} />;
+}
+
+// Giriş yapılmış kişiyi kapıdan içeri alır: taşınan yol varsa oraya, yoksa ana ekrana.
+function KapidanIceri() {
+  const { state } = useLocation();
+  const sonra = (state as { sonra?: unknown } | null)?.sonra;
+  return <Navigate to={guvenliYol(sonra)} replace />;
 }
