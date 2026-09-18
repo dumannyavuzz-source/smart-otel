@@ -1,0 +1,12 @@
+<!doctype html><html><body><script>
+// Vitrini bir iframe'de açar, yedi genişlikte yatay taşma olup olmadığını ölçer, sonucu DOM'a yazar.
+var genislikler=[320,375,414,768,900,1024,1400], sonuc=[], i=0;
+var f=document.createElement('iframe'); f.style.border='0'; document.body.appendChild(f);
+function olc(){ if(i>=genislikler.length){ document.title='BITTI'; document.body.insertAdjacentHTML('beforeend','<pre id="s">'+sonuc.join('\n')+'</pre>'); return; }
+  var w=genislikler[i++]; f.style.width=w+'px'; f.style.height='900px';
+  f.onload=function(){ setTimeout(function(){ var d=f.contentDocument, sw=d.documentElement.scrollWidth, cw=d.documentElement.clientWidth;
+    var tasanlar=[]; d.querySelectorAll('body *').forEach(function(el){ var r=el.getBoundingClientRect(); if(r.right>cw+1 && r.width>0) tasanlar.push(el.tagName.toLowerCase()+'.'+(el.className&&el.className.baseVal===undefined?String(el.className).split(' ')[0]:'')+'('+Math.round(r.right-cw)+'px)'); });
+    sonuc.push(w+'px: scrollWidth='+sw+' clientWidth='+cw+(sw>cw?' TASMA':' tamam')+(tasanlar.length?' → '+tasanlar.slice(0,6).join(', '):'')); olc(); }, 400); };
+  f.src='index.html?'+w; }
+olc();
+</script></body></html>

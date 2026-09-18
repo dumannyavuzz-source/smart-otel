@@ -1,6 +1,6 @@
 # vitrin/ — OtelDijital Tanıtım Sayfası
 
-Dışarıya bakan tek sayfa: ürünü anlatır ve "Otelimi Ücretsiz Başlat" der.
+Dışarıya bakan tek sayfa: ürünü anlatır ve "30 Gün Ücretsiz Dene" der. Görsel dili "Sakin Lüks"tür (`DESIGN_SYSTEM.md`).
 Personel uygulaması (`app/`) ile **hiçbir ortak kodu yoktur**; bilerek böyledir.
 
 ## Neden ayrı duruyor?
@@ -16,24 +16,23 @@ Personel uygulaması (`app/`) ile **hiçbir ortak kodu yoktur**; bilerek böyled
 
 | Dosya | Ne yapar |
 |---|---|
-| `index.html` | Sayfanın kendisi: sade menü, hero (kodla çizilmiş telefon), döngü hikâyesi, keşif alanı, dijital check-up panosu, OTA ve dijital yönetim, değer sütunları, şifre notu, fiyatlar, teknik altyapı, iletişim |
-| `stil.css` | Görünüm: açık (kırık beyaz) zemin, antrasit koyu bloklar, tek marka rengi. Oran %70 açık · %20 koyu · %10 marka — `docs/decisions/006-vitrin-gorsel-dili.md` |
+| `index.html` | Sayfanın kendisi: sade menü (+ "Giriş Yap"), hero (kodla çizilmiş telefon), nasıl çalışır (satırlar), döngü hikâyesi, keşif alanı, dijital check-up panosu, OTA ve dijital yönetim (hizmet listesi), değerler (satırlar), şifre notu, tarife, teknik altyapı (hizmet listesi), iletişim (zeytin blok), kapanış |
+| `stil.css` | Görünüm: "Sakin Lüks" — mat grafit zemin, zeytin iletişim bloğu, şampanya yalnızca eylemde; serif başlık (Cormorant Garamond) + Inter. Tek kaynak `DESIGN_SYSTEM.md`, karar `docs/decisions/007-sakin-luks-gorsel-dili.md` |
 | `hareket.js` | Canlı akış animasyonu. Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |
-| `etkilesim.js` | Dört etkileşim: kaydırdıkça beliren döngü hikâyesi, keşif alanındaki ekran değiştirme, görününce dolan check-up panosu ve Ortak Beyin'e yazan iletişim formu. İlk üçü betiksiz de anlamlıdır; form betik ister |
+| `etkilesim.js` | Beş etkileşim: kaydırdıkça beliren döngü hikâyesi, keşif alanındaki ekran değiştirme, görününce dolan check-up panosu, Ortak Beyin'e yazan iletişim formu ve kaydırınca üst çubuğa gelen ince çizgi. Form dışındakiler betiksiz de anlamlıdır |
 | `ayarlar.ornek.js` | Ayar dosyasının örneği: Supabase adresi ve ziyaretçi anahtarı. Gerçeği (`ayarlar.js`) git'e girmez |
 | `../ayarlar-uret.sh` (depo kökünde) | Vercel derleme komutu: ortam değişkenlerinden `vitrin/ayarlar.js` üretir; değişken eksik ya da anahtar gizliyse dağıtımı durdurur |
-| `simge.svg` · `dokunma-simgesi.png` | Sekme simgesi ve telefon ana ekranı simgesi: marka işareti (turuncu yuvarlak kare) |
+| `simge.svg` · `dokunma-simgesi.png` | Sekme simgesi ve telefon ana ekranı simgesi: grafit zeminde şampanya kare. PNG, kütüphanesiz küçük bir Node betiğiyle üretildi (aşağıda) |
 | `paylasim.html` → `paylasim.png` | Bağlantı paylaşılınca görünen 1200×630 kart. HTML kaynaktır, PNG ondan üretilir (aşağıda) |
 | `robots.txt` · `sitemap.xml` | Arama motoru yönlendirmesi: tek sayfa, `paylasim.html` dışarıda |
 | `../vercel.json` (depo kökünde) | Yayın başlıkları: içerik güvenlik politikası (CSP) ve diğer koruyucu başlıklar. Vercel bu dosyayı yalnızca Root Directory'de arar; o yüzden kökte durur |
 
 ## Bakmak için
 
-Derleme gerekmez. Dosyaya çift tıklayın ya da:
+Derleme gerekmez. Dosyaya çift tıklayın ya da küçük yerel sunucuyla açın (Node yeterlidir, paket yok):
 
 ```bash
-cd vitrin
-python -m http.server 8000     # sonra tarayıcıda http://localhost:8000
+node araclar/sunucu.js "$(pwd)/vitrin"     # sonra tarayıcıda http://localhost:5180
 ```
 
 İletişim formunun bilgisayarda da çalışması için `ayarlar.ornek.js` dosyasını `ayarlar.js` adıyla
@@ -49,13 +48,23 @@ Fotoğraf yok; kart da sitenin kendisi gibi kodla çizilir. `paylasim.html` kayn
 "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" --headless=new --hide-scrollbars   --window-size=1200,630 --screenshot="$(pwd)/vitrin/paylasim.png" "file:///$(pwd)/vitrin/paylasim.html"
 ```
 
-## Mobil ve performans notları (Aşama 15–16)
+## Araçlar (depo kökündeki `araclar/`)
+
+Üçü de kütüphanesizdir ve depo kökünde durur: `vitrin/` Vercel'in yayın klasörü olduğu için içine geliştirme aracı konmaz.
+
+| Dosya | Ne yapar |
+|---|---|
+| `sunucu.js` | Verilen klasörü `http://localhost:5180` adresinde açar (taşma denetimi iframe ister; `file://` izin vermez) |
+| `tasma-denetimi.html` | Sayfayı 320–1400 px arası yedi genişlikte iframe içinde açar, sayfa dışına taşan öğeleri listeler. Geçici olarak `vitrin/` içine kopyalayıp sunucuyla açın (`http://localhost:5180/tasma-denetimi.html`); sonuç sayfanın altına yazılır. İşi bitince kopyayı silin |
+| `dokunma-simgesi-uret.js` | `dokunma-simgesi.png` üretir (180×180, grafit zeminde şampanya kare): `node araclar/dokunma-simgesi-uret.js vitrin/dokunma-simgesi.png` |
+
+## Mobil ve performans notları
 
 - Sayfada `<img>` yoktur; her görsel kodla çizilir. Bu yüzden "tembel yükleme" (lazy loading) uygulanacak bir
   şey yoktur — sayfanın tek görseli paylaşım kartıdır ve sayfada görünmez.
-- Yazı ailesi tek (Inter, 400–700) + veri için JetBrains Mono. 800 ağırlığı kullanılmıyor; tarayıcı sahte kalın üretmiyor.
+- Yazı: başlıklar Cormorant Garamond (400–500), gövde Inter (400–600), veri JetBrains Mono. Kalın (700+) başlık yoktur.
 - Betikler `defer` ile yüklenir; sayfa metni betikleri beklemez.
-- Yatay taşma denetimi 320–1400 px arası yedi genişlikte betikle yapıldı; hiçbir öğe sayfa dışına çıkmıyor.
+- Yatay taşma denetimi 320–1400 px arası yedi genişlikte `araclar/tasma-denetimi.html` ile yapılır (aşağıda, "Araçlar"); hiçbir öğe sayfa dışına çıkmıyor.
   Hero'daki telefonun kenardan taşması yalnızca yanlarda boşluk varken (≥ 1240 px) açıktır.
 
 ## Yayınlamak
@@ -67,10 +76,10 @@ ortam değişkenleri `SUPABASE_URL` ve `SUPABASE_ANON_KEY` (`docs/deployment-che
 | Adres | Ne çalışır |
 |---|---|
 | `oteldijital.com` | Bu vitrin sayfası |
-| `app.oteldijital.com` | Personel uygulaması (`app/`), kayıt sayfası (`/kayit`) ve misafir yorum sayfası |
+| `app.oteldijital.com` | Personel uygulaması (`app/`): giriş (`/giris`), kayıt (`/kayit`) ve misafir yorum sayfası |
 
 Alan adları Genel Müdür tarafından onaylandı (2026-09-16). Sayfadaki bağlantılar:
-"30 Gün Ücretsiz Dene" düğmeleri `app.oteldijital.com/kayit` adresine (altı yerde);
+"30 Gün Ücretsiz Dene" düğmeleri `app.oteldijital.com/kayit` adresine (altı yerde), menüdeki ve alt bölümdeki "Giriş Yap" `app.oteldijital.com/giris` adresine;
 Kurumsal plandaki "Görüşme ayarla" düğmesi ve iletişim bölümündeki adres
 `mailto:merhaba@oteldijital.com`'a gider. Bu posta kutusunun canlıya çıkmadan çalıştığı doğrulanmalıdır.
 
