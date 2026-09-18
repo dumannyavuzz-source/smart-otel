@@ -3,6 +3,7 @@
 > Bu belge, OtelDijital'in **ne** olduğunu, **kimin için** yapıldığını ve **nasıl** inşa edileceğini anlatır.
 > Sade dille yazılmıştır; teknik olmayan biri de okuyup anlayabilmelidir.
 > "Hangi teknolojiyle?" sorusu burada cevaplanmaz. O karar Architect tarafından ayrıca verilir ve `docs/decisions/` altına yazılır.
+> "Nasıl görünecek?" sorusunun cevabı `DESIGN_SYSTEM.md` içindedir; vitrin ve giriş kapısı kurgusu Bölüm 5'tedir.
 
 ---
 
@@ -202,6 +203,110 @@ Faz 1 sahada çalışıp oturduktan sonra eklenecekler. İkisi de Faz 1'de kurul
 ### 4.2 Cankurtaran ve SPA Kontrol Şablonları
 **Amaç:** Havuz ve SPA için günlük güvenlik ve temizlik kontrol listeleri: klor ölçümü, cankurtaran nöbeti, ekipman kontrolü.
 **Neden Faz 2:** Housekeeping'deki **tikleme listesi** mantığının aynısıdır; Faz 1'de o motor kurulunca buraya şablon eklemek küçük bir iştir.
+
+---
+
+## 5. Vitrin ve Giriş Kapısı (2026-09-18 — Genel Müdür onayladı · karar: `docs/decisions/007`)
+
+> Bu bölüm, ürünün **dışarıya bakan yüzünü** anlatır: ziyaretçinin gördüğü tanıtım sayfası ve personelin
+> uygulamaya girdiği kapı. Görünüm kuralları ayrı bir belgededir: **`DESIGN_SYSTEM.md`** ("Sakin Lüks").
+
+### 5.1 İki ayrı ev: vitrin ve uygulama
+
+Bugün de böyledir; bu kurgu korunur:
+
+| Adres | Klasör | Ne? | Kim görür |
+|---|---|---|---|
+| `oteldijital.com` | `vitrin/` | **Tanıtım sayfası** (vitrin). Çerçevesiz, paketsiz, birkaç dosya. | Otel sahibi, müdür, ziyaretçi |
+| `app.oteldijital.com` | `app/` | **Uygulama**: giriş kapısı, kayıt, personel ve müdür ekranları, misafir yorum sayfası | Personel, müdür, (QR ile) misafir |
+
+**Neden vitrin uygulamanın içine alınmaz?** (Üç sebep; ikisi güvenlik ve hız, biri sadelik.)
+1. **Ziyaretçi uygulamayı indirmez.** Vitrin uygulamanın içinde olsaydı, sayfayı merak eden herkes personel
+   uygulamasının tamamını (kamera, QR okuyucu, çevrimdışı depo) indirirdi. Vitrin birkaç dosyadır; telefonda anında açılır.
+2. **Uygulama telefona kurulur (PWA) ve internet yokken de açılır.** Kurulu uygulamanın ilk ekranı tanıtım sayfası
+   olamaz; görevli sabah telefonu açınca işini görmelidir. İki dünya aynı kapıdan girmez.
+3. **Çalışan altyapıya dokunulmaz.** Giriş sistemi (Supabase Auth), oturum mantığı, kapılar (Edge Functions), QR
+   bağlantıları (`/oda/<kod>`) ve Vercel dağıtımı olduğu gibi kalır. Vitrin yenilenirken uygulama bozulamaz, çünkü
+   ortak kodları yoktur.
+
+### 5.2 Uygulamanın kapı düzeni (yeni yönlendirme)
+
+Bugün uygulamada giriş ekranının **adresi yoktur**: giriş yapılmamışsa hangi adres açılırsa açılsın giriş ekranı
+görünür, adres çubuğu değişmez. Yeni düzende girişin kendi adresi olur: **`/giris`**.
+
+| Adres | Giriş yapılmamışken | Giriş yapılmışken |
+|---|---|---|
+| `/` | → `/giris`'e yönlendirir | Müdür: Ana Kumanda · Görevli: Ana Ekran (bugünkü gibi) |
+| `/giris` | **Giriş ekranı** | → `/`'e (ya da gelinen adrese) yönlendirir |
+| `/kayit` | Kayıt ekranı (bugünkü gibi; yönlendiricinin dışındadır) | Kayıt ekranı (değişmez) |
+| `/yorum/<kod>` | Misafir yorum sayfası (bugünkü gibi; yönlendiricinin dışındadır) | Aynı |
+| `/oda/<kod>`, `/isler`, `/panel/…` vb. | → `/giris`'e yönlendirir; **gelinen adres hatırlanır**, giriş sonrası oraya dönülür | İlgili ekran (bugünkü gibi) |
+| Bilinmeyen adres | → `/giris` | → `/` (bugünkü gibi) |
+
+**"Gelinen adres hatırlanır" neden önemli?** Bugün görevli QR'ı okutunca `/oda/ABC` açılır; giriş yoksa giriş ekranı
+görünür, giriş yapınca **aynı odada** kalır. Bu davranış korunmalıdır; `/giris` yönlendirmesi gelinen adresi yanında taşır.
+
+**Adres neden `/giris`, `/login` değil?** Uygulamadaki bütün adresler Türkçedir (`/kayit`, `/yorum`, `/oda`,
+`/isler`, `/teslimler`, `/panel`). Tek İngilizce adres göze batar ve "kendini açıklayan isim" kuralını bozar.
+Genel Müdür `/login` isterse tek kelime değişir.
+
+**Klasör taşınmaz.** Giriş ekranı zaten kendi dosyasındadır (`app/src/ekranlar/GirisEkrani.tsx`). Ayrı bir "auth"
+klasörü açmak bugün bir şey kazandırmaz; dosya taşımak ise geri alınması zor bir iştir. Gerekirse ileride
+`ekranlar/kapi/` altında toplanır — bugünkü kapsamda değildir.
+
+### 5.3 Vitrindeki bağlantılar
+
+Vitrin uygulamaya iki yerden bağlanır; ikisi de tam adrestir (ayrı alan adı):
+- **"30 Gün Ücretsiz Dene"** → `https://app.oteldijital.com/kayit` (bugünkü gibi)
+- **"Giriş Yap"** (menüde, sağdaki ana düğmenin yanında sade bir bağlantı) → `https://app.oteldijital.com/giris` (**yeni**)
+
+Kayıt ekranındaki "Zaten hesabınız var mı? Giriş yapın" bağlantısı `/` yerine `/giris`'e gider.
+
+### 5.4 Aşama 2'de değişecek ve değişmeyecek dosyalar
+
+| Değişir | Ne olur |
+|---|---|
+| `app/src/App.tsx` | `/giris` adresi eklenir; girişsizken `/giris`'e, girişliyken `/`'e yönlendirme; gelinen adres taşınır |
+| `app/src/ekranlar/GirisEkrani.tsx` | Giriş sonrası gelinen adrese dönüş; görünüm `DESIGN_SYSTEM.md` §7.3 |
+| `app/src/ekranlar/KayitEkrani.tsx` | "Giriş yapın" bağlantısı `/giris`; görünüm §7.3 |
+| `app/src/stil.css` (yalnızca `.kapi…` sınıfları) | Kapı ekranlarının renk ve yazı değerleri; uygulamanın içi (diğer sınıflar) dokunulmaz |
+| `vitrin/stil.css` | Değişken değerleri ve yüzey kuralları (§3.5 haritası) |
+| `vitrin/index.html` | Menüye "Giriş Yap"; bölümlerin "SaaS ızgarası" kalıplarından editoryal düzene geçişi |
+| `vitrin/paylasim.html` → `paylasim.png` | Paylaşım kartı yeni dile göre yeniden üretilir |
+| `app/README.md`, `vitrin/README.md`, `docs/ux/006-kayit-akisi.md` | Yeni adres ve görünüm notları |
+| `docs/decisions/007-sakin-luks-gorsel-dili.md` (yeni) | Karar kaydı; 006'yı geçersiz kılar |
+
+| **Değişmez** | Neden |
+|---|---|
+| `app/src/oturum.ts`, `kullanici.ts`, `ortakBeyin.ts` | Giriş sistemi çalışıyor; dokunulmaz |
+| `app/src/main.tsx` | `/kayit` ve `/yorum` zaten yönlendiricinin dışında; bu düzen doğru |
+| `supabase/` (göçler, kapılar) | Bu iş sunucuya dokunmaz |
+| `vercel.json` (kök) ve `app/vercel.json` | Başlıklar ve yönlendirme doğru; `/giris` de `index.html`'e düşer |
+| `ayarlar-uret.sh` | Anahtar yönetimi değişmez |
+| `app/vite.config.ts` (PWA) | `start_url: '/'` doğru kalır: girişli açılır, girişsizse `/giris`'e gider |
+| Uygulamanın iç ekranları ve `docs/ux/001–005` | Görevli ekranları bu dilin dışındadır |
+
+### 5.5 Aşamalar
+
+| Aşama | Kapsam | Onay kapısı |
+|---|---|---|
+| **1** (bu belge) | Analiz, yönlendirme planı, `DESIGN_SYSTEM.md` | ✅ Onaylandı → `docs/decisions/007` |
+| **2** | Uygulamada `/giris` adresi (yalnızca yönlendirme; görünüm değişmez) | ✅ 2026-09-18 |
+| **3** | Vitrin: değişkenler, yazı, yüzeyler (§3–§6) | ✅ 2026-09-18 |
+| **4** | Vitrin: hero ve menü editoryal düzene geçer | ✅ 2026-09-18 |
+| **5** | Vitrin: kalan bölümler (satırlar, hizmet listesi, tarife, zeytin iletişim bloğu, alt bölüm) | ✅ 2026-09-18 |
+| **6** | Kapı ekranları (Giriş, Kayıt) yeni dile geçer | ✅ 2026-09-18 |
+| **7** | Paylaşım kartı, sekme simgesi, README'ler | ✅ 2026-09-18 — canlı dağıtım ve canlıda doğrulama Genel Müdür'de |
+
+Her aşama tek başına yayınlanabilir; hiçbiri bir öncekini bozmaz.
+
+### 5.6 Değerlendirilen ve önerilmeyen seçenek
+
+**Vitrini uygulamanın içine, `/` adresine almak** (tek proje, tek alan adı) değerlendirildi. Kazancı tek Vercel
+projesi olmasıdır. Bedeli: ziyaretçiye uygulamanın tamamını indirtmek, PWA'nın açılış ekranını bozmak, girişli
+kullanıcının ana ekranını başka bir adrese taşımak (bütün "ana ekrana dön" bağlantıları değişir), servis çalışanının
+tanıtım sayfasını önbelleğe alması ve 16 aşamada yazılmış vitrinin baştan yazılması. "En basit çözüm" ve "çalışan
+altyapı bozulmaz" kurallarına aykırı bulundu. Genel Müdür yine de bunu isterse kapsam ve süre yeniden planlanır.
 
 ---
 

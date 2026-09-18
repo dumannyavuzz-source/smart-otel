@@ -1,7 +1,7 @@
 # 006 — Vitrinin Görsel Dili: "Premium Teknoloji Şirketi"
 
 > **Karar veren:** Genel Müdür · **Yazan:** Orkestratör · **Tarih:** 2026-09-17
-> **Durum:** Aşama 1–6 uygulandı (görsel dil, menü, hero, etkileşim, hizmet bölümleri, iletişim formu). Sonraki aşamalar bu kurallara uyar.
+> **Durum:** ⛔ **GEÇERSİZ** (2026-09-18) — yerini `007-sakin-luks-gorsel-dili.md` ve `DESIGN_SYSTEM.md` aldı. Bu dosya tarihçe olarak durur; kural olarak okunmaz.
 > Kod: `vitrin/stil.css`, `vitrin/index.html`
 
 ---
