@@ -1,11 +1,12 @@
-// OtelDijital vitrin — dört küçük etkileşim. Kütüphane yok, birkaç düzine satır var.
+// OtelDijital vitrin — beş küçük etkileşim. Kütüphane yok, birkaç düzine satır var.
 //
 //   1. Döngü hikâyesi: kullanıcı aşağı kaydırdıkça dört adım sırayla belirir.
 //   2. Keşif alanı: başlığa dokununca telefondaki ekran değişir.
 //   3. Check-up panosu: görüş alanına girince çubuklar ve halka dolar.
 //   4. İletişim formu: "Gönder" mesajı Ortak Beyin'e (Supabase) yazar, sayfa yenilenmeden onay gösterir.
+//   5. Üst çubuk: sayfa kaydırılınca altına ince bir çizgi gelir (hero ile aynı zeminden ayrılsın diye).
 //
-// İlk üçü betiksiz de anlamlıdır — sayfa bu dosya hiç yüklenmese bile eksik görünmez:
+// İlk üçü ve beşincisi betiksiz de anlamlıdır — sayfa bu dosya hiç yüklenmese bile eksik görünmez:
 //   * Hikâye adımları baştan görünür durur (gizleme sınıfını bu dosya ekler).
 //   * Keşif ekranlarının dördü de HTML'de açıktır; bu dosya yalnızca birini bırakır.
 //   * Pano baştan doludur; bu dosya yalnızca "dolma" hareketini ekler.
@@ -31,6 +32,21 @@
       },
       { rootMargin: '0px 0px -12% 0px', threshold: 0.2 }
     );
+  }
+
+  // ---------------------------------------------------------------
+  // 5. Üst çubuk — kaydırınca ince çizgi (sayfanın tepesinde hero ile aynı zemindedir, çizgi gerekmez)
+  // ---------------------------------------------------------------
+  var ust = document.querySelector('.ust');
+  if (ust) {
+    var cizgiyiAyarla = function () {
+      var kaydi = window.scrollY > 8;
+      var varMi = ust.className.indexOf(' ust--kaydi') !== -1;
+      if (kaydi && !varMi) ust.className += ' ust--kaydi';
+      else if (!kaydi && varMi) ust.className = ust.className.replace(' ust--kaydi', '');
+    };
+    window.addEventListener('scroll', cizgiyiAyarla, { passive: true });
+    cizgiyiAyarla();
   }
 
   // ---------------------------------------------------------------

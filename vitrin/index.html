@@ -9,7 +9,7 @@
 <!-- Arama motorları ve paylaşım kartları (Aşama 16). Adres: docs/deployment-checklist.md · 6.2 -->
 <link rel="canonical" href="https://oteldijital.com/" />
 <meta name="robots" content="index, follow" />
-<meta name="theme-color" content="#f6f7f9" />
+<meta name="theme-color" content="#121413" />
 <link rel="icon" href="simge.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="dokunma-simgesi.png" />
 
@@ -31,7 +31,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
 <link rel="stylesheet" href="stil.css" />
 
 <!-- Arama motoruna "bu bir şirket" bilgisi (yapılandırılmış veri) -->
@@ -51,8 +51,8 @@
 
 <!-- KAYIT ADRESİ: "30 Gün Ücretsiz Dene" düğmelerinin hepsi app.oteldijital.com/kayit sayfasına gider.
      Alan adı onaylandı (Genel Müdür, 2026-09-16). İleride değişirse ALTI yerde birden güncellenmelidir
-     (docs/deployment-checklist.md · 6.3). Kurumsal plandaki "Görüşme ayarla" düğmesi ve
-     iletişim bölümündeki form Ortak Beyin'e (Supabase · iletisim_formu) yazıyor (Genel Müdür kararı).
+     (docs/deployment-checklist.md · 6.3). Kurumsal plandaki "Görüşme ayarla" düğmesi e-postaya (mailto) gider;
+     iletişim bölümündeki form Ortak Beyin'e (Supabase · iletisim_formu) yazar (Genel Müdür kararı).
      "Bilgi Al" ve "Teknik Destek Al" düğmeleri kayıt sayfasına DEĞİL, iletişim bölümüne (#iletisim) gider. -->
 <a class="atla" href="#icerik">İçeriğe atla</a>
 
@@ -69,7 +69,11 @@
       <a href="#nasil">Nasıl Çalışır?</a>
       <a href="#hakkimizda">Hakkımızda</a>
     </nav>
-    <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+    <!-- Sağda iki şey: sade "Giriş Yap" bağlantısı (mevcut müşteri) ve tek eylem düğmesi (yeni müşteri). -->
+    <div class="ust-eylem">
+      <a class="ust-giris" href="https://app.oteldijital.com/giris">Giriş Yap</a>
+      <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+    </div>
   </div>
 </header>
 
@@ -77,11 +81,13 @@
 
   <!-- ===================== HERO =====================
        Fotoğraf yok. Sağdaki telefon kodla çizilmiştir ve içindeki akış gerçekten kıpırdar:
-       ziyaretçi ürünün kendisini görür, sahnelenmiş bir otel fotoğrafını değil. -->
-  <section class="kolon kahraman">
+       ziyaretçi ürünün kendisini görür, sahnelenmiş bir otel fotoğrafını değil.
+       Düzen editoryal: yazı 5 sütun, telefon 7 sütun (DESIGN_SYSTEM.md · 5). Zemin en derin grafit. -->
+  <section class="kahraman-alan">
+  <div class="kolon kahraman">
     <div class="kahraman-yazi">
       <p class="etiket">Otel operasyon asistanı</p>
-      <h1>Otelinizde ne oluyorsa, <span class="vurgu">herkes anında bilsin.</span></h1>
+      <h1>Otelinizde ne oluyorsa, <span class="vurgu">anında</span> bilin.</h1>
       <p class="giris">
         Kat görevlisi kareyi okutur, müdür aynı saniyede görür. Görev, arıza, depo ve misafir talebi
         tek akışta toplanır. Hiçbir iş kulaktan kulağa kalmaz, hiçbir kayıt sonradan değiştirilemez.
@@ -89,14 +95,10 @@
 
       <div class="cta-satir">
         <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
-        <a class="dugme dugme--sessiz" href="#kesfet">Uygulamayı Keşfet</a>
+        <a class="baglanti" href="#kesfet">Uygulamayı keşfet</a>
       </div>
 
-      <ul class="guvence">
-        <li><span class="tik" aria-hidden="true">✓</span> Kredi kartı yok</li>
-        <li><span class="tik" aria-hidden="true">✓</span> Taahhüt yok</li>
-        <li><span class="tik" aria-hidden="true">✓</span> 30 gün boyunca tüm özellikler</li>
-      </ul>
+      <p class="guvence">Kredi kartı yok <span aria-hidden="true">·</span> Taahhüt yok <span aria-hidden="true">·</span> 30 gün boyunca tüm özellikler</p>
     </div>
 
     <!-- Kodla çizilen telefon: ekranında otelde o an olan bitenin örneği akar (hareket.js) -->
@@ -134,19 +136,22 @@
         </div>
       </div>
 
-      <!-- Müdürün tek bakışta gördüğü şey, telefonun önünde duran cam kartta -->
-      <div class="cam-kart">
-        <span class="cam-kart-ust"><span class="nabiz" aria-hidden="true"></span> Kumanda</span>
-        <b class="cam-kart-sayi">0 gecikme</b>
-        <p class="cam-kart-not">3 iş sürüyor · 2 talep onay bekliyor</p>
+      <!-- Müdürün tek bakışta gördüğü şey, telefonun önünde duran mat kartta -->
+      <div class="kumanda-kart">
+        <span class="kumanda-kart-ust"><span class="nabiz" aria-hidden="true"></span> Kumanda</span>
+        <b class="kumanda-kart-sayi">0 gecikme</b>
+        <p class="kumanda-kart-not">3 iş sürüyor · 2 talep onay bekliyor</p>
       </div>
 
       <p class="akis-dip">Örnek akış. Gerçek otelinizde bu satırlar sizin odalarınızdan düşer.</p>
     </div>
+  </div>
   </section>
 
-  <!-- ===================== NASIL ÇALIŞIR (gerçek bir sıra) ===================== -->
+  <!-- ===================== NASIL ÇALIŞIR (gerçek bir sıra) =====================
+       Üç adım, üç kutu değil: satır satır, aralarında ince çizgi (DESIGN_SYSTEM.md · 5). -->
   <section class="kolon bolum" id="nasil">
+    <p class="etiket">Nasıl çalışır</p>
     <h2>Personel tek şey öğrenir: kareyi okut.</h2>
     <p class="bolum-giris">
       Uygulama mağazadan indirilmez, eğitim toplantısı gerekmez. Telefon çekmeyen bodrum katında bile çalışır;
@@ -155,17 +160,17 @@
 
     <ol class="adimlar">
       <li>
-        <span class="adim-no">1</span>
+        <span class="adim-no">01</span>
         <h3>Kareyi okut</h3>
         <p>Her odanın kapısında bir kare kod var. Görevli telefonu tutar, oda ekranı açılır. Şifre, arama, liste yok.</p>
       </li>
       <li>
-        <span class="adim-no">2</span>
+        <span class="adim-no">02</span>
         <h3>Tek dokunuşla bildir</h3>
         <p>Oda hazır · eksik var · bir şey bozuk. Üç büyük buton. Bozuksa fotoğraf çeker, iş emri kendiliğinden açılır.</p>
       </li>
       <li>
-        <span class="adim-no">3</span>
+        <span class="adim-no">03</span>
         <h3>Müdür tek ekrandan görür</h3>
         <p>Süresi geçen işler, mutsuz misafirler ve uyuşmayan teslimler kırmızı kutuda toplanır. Kırmızı yoksa ekran yeşildir.</p>
       </li>
@@ -176,6 +181,7 @@
        Bir işin doğuşundan kapanışına dört adım. Kullanıcı aşağı kaydırdıkça adımlar belirir.
        Betik yoksa ya da kişi hareket istemiyorsa dördü de baştan görünür durur (etkilesim.js). -->
   <section class="kolon bolum" id="dongu">
+    <p class="etiket">Bir işin hayatı</p>
     <h2>Bir iş doğar, sahibini bulur, kapanır.</h2>
     <p class="bolum-giris">
       Otelde en pahalı şey, kimsenin üstlenmediği iştir. OtelDijital her işi dört adımda yürütür;
@@ -267,28 +273,29 @@
        Merkezde telefon, etrafında dört başlık. Başlığa dokununca ekran değişir (etkilesim.js).
        Betik yoksa dört ekran da alt alta görünür; hiçbir bilgi kaybolmaz. -->
   <section class="kolon bolum" id="kesfet">
+    <p class="etiket">Uygulamanın içi</p>
     <h2>Uygulamanın içine bakın.</h2>
     <p class="bolum-giris">
       Dört başlıktan birine dokunun, telefondaki ekran değişsin. Hepsi gerçek akışlardır —
-      otelinizde de tam olarak böyle görünür.
+      otelinizde de tam olarak böyle çalışır.
     </p>
 
     <div class="kesif">
       <div class="kesif-dugmeler">
         <button type="button" class="kesif-dugme" data-hedef="temizlik" aria-pressed="true">
-          <span class="kesif-ikon" aria-hidden="true">🧹</span>
+          <span class="kesif-no" aria-hidden="true">01</span>
           <span class="kesif-yazi"><b>Temizlik</b><small>Oda hazır bildirimi</small></span>
         </button>
         <button type="button" class="kesif-dugme" data-hedef="ariza" aria-pressed="false">
-          <span class="kesif-ikon" aria-hidden="true">🔧</span>
+          <span class="kesif-no" aria-hidden="true">02</span>
           <span class="kesif-yazi"><b>Arıza</b><small>Bildirim, iş emrine döner</small></span>
         </button>
         <button type="button" class="kesif-dugme" data-hedef="gorev" aria-pressed="false">
-          <span class="kesif-ikon" aria-hidden="true">🧭</span>
+          <span class="kesif-no" aria-hidden="true">03</span>
           <span class="kesif-yazi"><b>Görev</b><small>Müdürün kumandası</small></span>
         </button>
         <button type="button" class="kesif-dugme" data-hedef="malzeme" aria-pressed="false">
-          <span class="kesif-ikon" aria-hidden="true">📦</span>
+          <span class="kesif-no" aria-hidden="true">04</span>
           <span class="kesif-yazi"><b>Malzeme</b><small>Talep · onay · teslim</small></span>
         </button>
       </div>
@@ -381,6 +388,7 @@
        nefes alarak geçsin. Sayılar örnektir; gerçek check-up otele özel yapılır.
        Pano betiksiz de doludur; betik yalnızca görününce "dolma" hareketi ekler (etkilesim.js). -->
   <section class="kolon bolum bolum--gecis" id="checkup">
+    <p class="etiket etiket--orta">Dijital check-up</p>
     <h2 class="gecis">
       <span class="gecis-once">Otelin içini yönetiyoruz.</span>
       Peki dışarıdan nasıl görünüyor?
@@ -435,111 +443,139 @@
 
       <div class="pano-alt">
         <p class="pano-bulgu"><span><b>12 geliştirme alanı</b> bulundu</span><small>Örnek rapor. Otelinize özel sonuç için yazın; üyelik gerekmez.</small></p>
-        <a class="dugme dugme--dev" href="#iletisim">Bilgi Al</a>
+        <a class="dugme dugme--sessiz" href="#iletisim">Bilgi Al</a>
       </div>
     </div>
   </section>
 
   <!-- ===================== OTA VE DİJİTAL YÖNETİM =====================
        Check-up'taki altı başlığın karşılığı: dışarıdaki işleri biz üstleniriz.
+       Altı kart değil, iki sütunlu bir hizmet listesi: otel menüsü gibi, satır satır.
        Burada demo daveti YOK; tek çağrı "Bilgi Al" ve iletişim bölümüne iner. -->
   <section class="kolon bolum" id="dijital">
+    <p class="etiket">OTA ve dijital yönetim</p>
     <h2>Dışarıdan da güçlü görünün.</h2>
     <p class="bolum-giris">
       Satış kanalları, Google'daki yeriniz ve web siteniz tek elden yönetilir.
       Siz misafirle ilgilenirsiniz; ekranlardaki işi biz yürütürüz.
     </p>
 
-    <div class="sutunlar sutunlar--alti">
-      <article class="sutun">
-        <span class="sutun-ikon" aria-hidden="true">🛎️</span>
-        <h3>OTA Yönetimi</h3>
-        <p>Booking, Expedia gibi satış sitelerindeki (OTA) ilanlarınızı kurar; fiyat, fotoğraf ve açıklamaları güncel tutarız.</p>
-      </article>
-      <article class="sutun">
-        <span class="sutun-ikon" aria-hidden="true">🔀</span>
-        <h3>Channel Manager</h3>
-        <p>Bir kanaldan satılan oda diğerlerinde aynı anda kapanır. Aynı odayı iki kez satma derdi biter.</p>
-      </article>
-      <article class="sutun">
-        <span class="sutun-ikon" aria-hidden="true">📍</span>
-        <h3>Google</h3>
-        <p>Haritada doğru bilgi, güncel fotoğraf, yanıtlanmış yorumlar. "Yakınımdaki otel" diyen misafir sizi bulur.</p>
-      </article>
-      <article class="sutun">
-        <span class="sutun-ikon" aria-hidden="true">🌐</span>
-        <h3>Web Sitesi</h3>
-        <p>Hızlı açılan, telefonda düzgün görünen, doğrudan rezervasyon alan bir site. Aracıya komisyon gitmez.</p>
-      </article>
-      <article class="sutun">
-        <span class="sutun-ikon" aria-hidden="true">⭐</span>
-        <h3>Online İtibar</h3>
-        <p>Bütün platformlardaki yorumlar tek yerde toplanır; olumsuz yorum aynı gün, sakin bir dille yanıtlanır.</p>
-      </article>
-      <article class="sutun">
-        <span class="sutun-ikon" aria-hidden="true">🔍</span>
-        <h3>SEO</h3>
-        <p>Arama motorunda görünürlük. "Kaş butik otel" yazan misafir sizi bulsun, aracı siteyi değil.</p>
-      </article>
-    </div>
+    <ul class="hizmetler">
+      <li class="hizmet">
+        <span class="hizmet-no">01</span>
+        <div>
+          <h3>OTA Yönetimi</h3>
+          <p>Booking, Expedia gibi satış sitelerindeki (OTA) ilanlarınızı kurar; fiyat, fotoğraf ve açıklamaları güncel tutarız.</p>
+        </div>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">02</span>
+        <div>
+          <h3>Channel Manager</h3>
+          <p>Bir kanaldan satılan oda diğerlerinde aynı anda kapanır. Aynı odayı iki kez satma derdi biter.</p>
+        </div>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">03</span>
+        <div>
+          <h3>Google</h3>
+          <p>Haritada doğru bilgi, güncel fotoğraf, yanıtlanmış yorumlar. "Yakınımdaki otel" diyen misafir sizi bulur.</p>
+        </div>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">04</span>
+        <div>
+          <h3>Web Sitesi</h3>
+          <p>Hızlı açılan, telefonda düzgün görünen, doğrudan rezervasyon alan bir site. Aracıya komisyon gitmez.</p>
+        </div>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">05</span>
+        <div>
+          <h3>Online İtibar</h3>
+          <p>Bütün platformlardaki yorumlar tek yerde toplanır; olumsuz yorum aynı gün, sakin bir dille yanıtlanır.</p>
+        </div>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">06</span>
+        <div>
+          <h3>SEO</h3>
+          <p>Arama motorunda görünürlük. "Kaş butik otel" yazan misafir sizi bulsun, aracı siteyi değil.</p>
+        </div>
+      </li>
+    </ul>
 
     <div class="bolum-cta">
-      <a class="dugme dugme--dev" href="#iletisim">Bilgi Al</a>
+      <a class="dugme dugme--sessiz" href="#iletisim">Bilgi Al</a>
       <p class="bolum-cta-not">Üyelik gerekmez. Önce otelinizi dinler, sonra ne gerektiğini açıkça söyleriz.</p>
     </div>
   </section>
 
-  <!-- ===================== DEĞER ÖNERİLERİ ===================== -->
+  <!-- ===================== DEĞER ÖNERİLERİ =====================
+       Üç eşit kart değil: her değer bir satır — solda numara ve başlık, sağda açıklama ve üç madde. -->
   <section class="kolon bolum" id="urun">
+    <p class="etiket">Ne kazandırır</p>
     <h2>Otelin sessiz sızıntılarını görünür yapar.</h2>
     <p class="bolum-giris">
       Küçük ve orta otellerde para, büyük kazalarla değil; kayıt altına alınmamış küçük işlerle erir.
       OtelDijital üç yerde durur.
     </p>
 
-    <div class="sutunlar">
-      <article class="sutun">
-        <span class="sutun-ikon" aria-hidden="true">🔐</span>
-        <h3>Kayıp Kontrolü</h3>
-        <p>
-          Depodan çıkan her ürün üç ayrı imzadan geçer: isteyen, onaylayan, teslim alan.
-          <b>Aynı kişi iki imzayı atamaz</b> — kural ekranda değil, veritabanında durur.
-        </p>
-        <ul class="sutun-liste">
-          <li>Talep · onay · teslim ayrı kişilerde</li>
-          <li>Kayıtlar silinemez, değiştirilemez</li>
-          <li>Kim, ne zaman, ne dedi — hep yanıtlanır</li>
-        </ul>
-      </article>
+    <ol class="degerler">
+      <li class="deger">
+        <div class="deger-bas">
+          <span class="deger-no">01</span>
+          <h3>Kayıp Kontrolü</h3>
+        </div>
+        <div class="deger-yazi">
+          <p>
+            Depodan çıkan her ürün üç ayrı imzadan geçer: isteyen, onaylayan, teslim alan.
+            <b>Aynı kişi iki imzayı atamaz</b> — kural ekranda değil, veritabanında durur.
+          </p>
+          <ul class="deger-liste">
+            <li>Talep · onay · teslim ayrı kişilerde</li>
+            <li>Kayıtlar silinemez, değiştirilemez</li>
+            <li>Kim, ne zaman, ne dedi — hep yanıtlanır</li>
+          </ul>
+        </div>
+      </li>
 
-      <article class="sutun">
-        <span class="sutun-ikon" aria-hidden="true">📉</span>
-        <h3>Fire Takibi</h3>
-        <p>
-          10 Kg onaylandı, 7,5 Kg geldiyse aradaki fark bir iddiadır ve <b>kanıtsız kayda geçmez</b>.
-          Eksik ya da çürük mal, fotoğrafıyla birlikte müdürün paneline düşer.
-        </p>
-        <ul class="sutun-liste">
-          <li>Kesirli miktar: 7,5 Kg · 1,2 Litre</li>
-          <li>Eksik teslimde fotoğraf zorunlu</li>
-          <li>İstenen · onaylanan · gelen yan yana</li>
-        </ul>
-      </article>
+      <li class="deger">
+        <div class="deger-bas">
+          <span class="deger-no">02</span>
+          <h3>Fire Takibi</h3>
+        </div>
+        <div class="deger-yazi">
+          <p>
+            10 Kg onaylandı, 7,5 Kg geldiyse aradaki fark bir iddiadır ve <b>kanıtsız kayda geçmez</b>.
+            Eksik ya da çürük mal, fotoğrafıyla birlikte müdürün paneline düşer.
+          </p>
+          <ul class="deger-liste">
+            <li>Kesirli miktar: 7,5 Kg · 1,2 Litre</li>
+            <li>Eksik teslimde fotoğraf zorunlu</li>
+            <li>İstenen · onaylanan · gelen yan yana</li>
+          </ul>
+        </div>
+      </li>
 
-      <article class="sutun">
-        <span class="sutun-ikon" aria-hidden="true">🧭</span>
-        <h3>Operasyon Asistanı</h3>
-        <p>
-          Arıza bildirimi kendiliğinden iş emrine döner, süre işlemeye başlar.
-          Süre aşılırsa müdürün telefonunda <b>zarif bir çan</b> çalar — siren değil.
-        </p>
-        <ul class="sutun-liste">
-          <li>Acil işte 30 dakika, normalde 2 saat</li>
-          <li>Kim aldı, kim çözdü, ne kadar sürdü</li>
-          <li>Mutsuz misafir, otelden çıkmadan yakalanır</li>
-        </ul>
-      </article>
-    </div>
+      <li class="deger">
+        <div class="deger-bas">
+          <span class="deger-no">03</span>
+          <h3>Operasyon Asistanı</h3>
+        </div>
+        <div class="deger-yazi">
+          <p>
+            Arıza bildirimi kendiliğinden iş emrine döner, süre işlemeye başlar.
+            Süre aşılırsa müdürün telefonunda <b>zarif bir çan</b> çalar — siren değil.
+          </p>
+          <ul class="deger-liste">
+            <li>Acil işte 30 dakika, normalde 2 saat</li>
+            <li>Kim aldı, kim çözdü, ne kadar sürdü</li>
+            <li>Mutsuz misafir, otelden çıkmadan yakalanır</li>
+          </ul>
+        </div>
+      </li>
+    </ol>
   </section>
 
   <!-- ===================== ŞİFRE YÖNETİMİ ===================== -->
@@ -557,75 +593,85 @@
     </div>
   </section>
 
-  <!-- ===================== FİYATLAR ===================== -->
+  <!-- ===================== FİYATLAR =====================
+       Dört kart değil, bir tarife: satır satır, aralarında ince çizgi. Kabartma tek yerde (Standart).
+       Paketler uygulamadaki ödeme duvarıyla AYNI olmalıdır (app/src/paketler.ts). -->
   <section class="kolon bolum" id="fiyat">
+    <p class="etiket">Fiyatlar</p>
     <h2>Şeffaf fiyat. Oda sayısı kadar ödersiniz.</h2>
     <p class="bolum-giris">
       Kurulum ücreti yok, donanım yok, kontrat yok. 30 gün boyunca tüm özellikler açık; beğenmezseniz tek tıkla bırakırsınız.
     </p>
 
-    <!-- Dört paket, oda sayısına göre. Uygulamadaki ödeme duvarıyla AYNI olmalıdır (app/src/paketler.ts). -->
-    <div class="planlar">
-      <article class="plan">
-        <h3>Butik</h3>
-        <p class="plan-oda">1–25 oda</p>
+    <ul class="tarife">
+      <li class="plan">
+        <div class="plan-ad">
+          <h3>Butik</h3>
+          <p class="plan-oda">1–25 oda</p>
+        </div>
         <p class="plan-fiyat"><span class="para">$</span><span class="rakam">29</span><span class="donem">/ay</span></p>
-        <a class="dugme dugme--sessiz" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
         <ul class="plan-liste">
           <li>Sınırsız personel</li>
-          <li>QR ile oda ekranları, üç dokunuşluk bildirim</li>
+          <li>QR ile oda ekranları</li>
           <li>Arıza → iş emri, süre takibi</li>
           <li>Misafir yorum kalkanı</li>
           <li>İnternetsiz çalışma</li>
         </ul>
-      </article>
+        <a class="dugme dugme--sessiz" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+      </li>
 
-      <article class="plan plan--one">
-        <p class="plan-rozet">En çok tercih edilen</p>
-        <h3>Standart</h3>
-        <p class="plan-oda">26–75 oda</p>
+      <li class="plan plan--one">
+        <div class="plan-ad">
+          <p class="plan-rozet">En çok tercih edilen</p>
+          <h3>Standart</h3>
+          <p class="plan-oda">26–75 oda</p>
+        </div>
         <p class="plan-fiyat"><span class="para">$</span><span class="rakam">59</span><span class="donem">/ay</span></p>
-        <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
         <ul class="plan-liste">
-          <li><b>Butik'teki her şey</b>, ayrıca:</li>
+          <li><b>Butik'teki her şey</b></li>
           <li>Depo ve satın alma zinciri (üç imza)</li>
           <li>Fatura ve kanıt fotoğrafı arşivi</li>
           <li>Fire ve uyuşmazlık alarmı</li>
           <li>Vardiya raporları</li>
         </ul>
-      </article>
+        <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+      </li>
 
-      <article class="plan">
-        <h3>Büyük</h3>
-        <p class="plan-oda">76–150 oda</p>
+      <li class="plan">
+        <div class="plan-ad">
+          <h3>Büyük</h3>
+          <p class="plan-oda">76–150 oda</p>
+        </div>
         <p class="plan-fiyat"><span class="para">$</span><span class="rakam">99</span><span class="donem">/ay</span></p>
-        <a class="dugme dugme--sessiz" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
         <ul class="plan-liste">
-          <li><b>Standart'taki her şey</b>, ayrıca:</li>
+          <li><b>Standart'taki her şey</b></li>
           <li>Kurulum ve personel eğitimi</li>
           <li>Öncelikli destek</li>
         </ul>
-      </article>
+        <a class="dugme dugme--sessiz" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+      </li>
 
-      <article class="plan">
-        <h3>Kurumsal</h3>
-        <p class="plan-oda">150+ oda</p>
-        <p class="plan-fiyat"><span class="rakam rakam--yazi">Özel Teklif</span></p>
-        <a class="dugme dugme--sessiz" href="mailto:merhaba@oteldijital.com">Görüşme ayarla</a>
+      <li class="plan">
+        <div class="plan-ad">
+          <h3>Kurumsal</h3>
+          <p class="plan-oda">150+ oda</p>
+        </div>
+        <p class="plan-fiyat"><span class="rakam rakam--yazi">Özel teklif</span></p>
         <ul class="plan-liste">
-          <li><b>Büyük'teki her şey</b>, ayrıca:</li>
+          <li><b>Büyük'teki her şey</b></li>
           <li>Birden çok otel, tek çatı</li>
           <li>Kurumsal fatura ve sözleşme</li>
         </ul>
-      </article>
-    </div>
+        <a class="dugme dugme--sessiz" href="mailto:merhaba@oteldijital.com">Görüşme ayarla</a>
+      </li>
+    </ul>
 
     <p class="fiyat-dip">Fiyatlara KDV dahil değildir. Yıllık ödemede iki ay hediye.</p>
   </section>
 
   <!-- ===================== TEKNİK ALTYAPI =====================
        Otelin arkasındaki donanım. Katalog değil: fiyat yok, marka yok, parça listesi yok.
-       Her kartta tek cümle fayda ve bir satır teknik not. Çağrı "Teknik Destek Al" → iletişim. -->
+       Aynı hizmet listesi; her satırda tek cümle fayda ve bir satır teknik not. Çağrı "Teknik Destek Al" → iletişim. -->
   <section class="kolon bolum" id="teknik">
     <p class="etiket">Teknik altyapı</p>
     <h2>Otelin arkasındaki teknoloji.</h2>
@@ -634,65 +680,59 @@
       Kurar, uzaktan izler ve arıza büyümeden müdahale ederiz.
     </p>
 
-    <div class="sutunlar sutunlar--alti">
-      <article class="sutun sutun--teknik">
-        <div class="sutun-bas">
-          <span class="sutun-ikon" aria-hidden="true">📶</span>
-          <span class="sutun-no">01</span>
+    <ul class="hizmetler">
+      <li class="hizmet">
+        <span class="hizmet-no">01</span>
+        <div>
+          <h3>Wi-Fi</h3>
+          <p>Lobiden en uç odaya kadar aynı hızda, kesintisiz internet. Misafir şifreyle uğraşmaz.</p>
+          <span class="hizmet-teknik">Wi-Fi 6 · her katta erişim noktası · misafir ve personel ağı ayrı</span>
         </div>
-        <h3>Wi-Fi</h3>
-        <p>Lobiden en uç odaya kadar aynı hızda, kesintisiz internet. Misafir şifreyle uğraşmaz.</p>
-        <span class="sutun-teknik">Wi-Fi 6 · her katta erişim noktası · misafir ve personel ağı ayrı</span>
-      </article>
-      <article class="sutun sutun--teknik">
-        <div class="sutun-bas">
-          <span class="sutun-ikon" aria-hidden="true">🔗</span>
-          <span class="sutun-no">02</span>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">02</span>
+        <div>
+          <h3>Ağ (Network)</h3>
+          <p>Kablolama ve ağ tasarımı. Resepsiyon, kameralar ve uygulama aynı ağı birbirini tıkamadan paylaşır.</p>
+          <span class="hizmet-teknik">Yapısal kablolama · yönetilebilir anahtar · ayrı sanal ağlar (VLAN)</span>
         </div>
-        <h3>Ağ (Network)</h3>
-        <p>Kablolama ve ağ tasarımı. Resepsiyon, kameralar ve uygulama aynı ağı birbirini tıkamadan paylaşır.</p>
-        <span class="sutun-teknik">Yapısal kablolama · yönetilebilir anahtar · ayrı sanal ağlar (VLAN)</span>
-      </article>
-      <article class="sutun sutun--teknik">
-        <div class="sutun-bas">
-          <span class="sutun-ikon" aria-hidden="true">📹</span>
-          <span class="sutun-no">03</span>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">03</span>
+        <div>
+          <h3>Güvenlik Kameraları</h3>
+          <p>Giriş, koridor ve depo görüntüde. Kayıt otelde kalır; yetkili kişi telefonundan bakar.</p>
+          <span class="hizmet-teknik">Gece görüşü · 30 gün kayıt · uzaktan izleme</span>
         </div>
-        <h3>Güvenlik Kameraları</h3>
-        <p>Giriş, koridor ve depo görüntüde. Kayıt otelde kalır; yetkili kişi telefonundan bakar.</p>
-        <span class="sutun-teknik">Gece görüşü · 30 gün kayıt · uzaktan izleme</span>
-      </article>
-      <article class="sutun sutun--teknik">
-        <div class="sutun-bas">
-          <span class="sutun-ikon" aria-hidden="true">🖥️</span>
-          <span class="sutun-no">04</span>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">04</span>
+        <div>
+          <h3>Sunucu (Server)</h3>
+          <p>Otelin programları tek bir güvenilir makinede çalışır. Bakım gece yapılır; gündüz kimse fark etmez.</p>
+          <span class="hizmet-teknik">Kurulum · bakım · uzaktan izleme</span>
         </div>
-        <h3>Sunucu (Server)</h3>
-        <p>Otelin programları tek bir güvenilir makinede çalışır. Bakım gece yapılır; gündüz kimse fark etmez.</p>
-        <span class="sutun-teknik">Kurulum · bakım · uzaktan izleme</span>
-      </article>
-      <article class="sutun sutun--teknik">
-        <div class="sutun-bas">
-          <span class="sutun-ikon" aria-hidden="true">💾</span>
-          <span class="sutun-no">05</span>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">05</span>
+        <div>
+          <h3>NAS (Depolama)</h3>
+          <p>Fatura, kamera kaydı ve dosyalar tek yerde; kopyası ayrı diskte. Bir disk bozulsa da veri kaybolmaz.</p>
+          <span class="hizmet-teknik">Ağa bağlı depolama · aynalı disk (RAID) · otomatik yedek</span>
         </div>
-        <h3>NAS (Depolama)</h3>
-        <p>Fatura, kamera kaydı ve dosyalar tek yerde; kopyası ayrı diskte. Bir disk bozulsa da veri kaybolmaz.</p>
-        <span class="sutun-teknik">Ağa bağlı depolama · aynalı disk (RAID) · otomatik yedek</span>
-      </article>
-      <article class="sutun sutun--teknik">
-        <div class="sutun-bas">
-          <span class="sutun-ikon" aria-hidden="true">🔋</span>
-          <span class="sutun-no">06</span>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">06</span>
+        <div>
+          <h3>UPS (Kesintisiz Güç)</h3>
+          <p>Elektrik gidince resepsiyon, ağ ve kameralar çalışmaya devam eder. Jeneratör gelene kadar boşluk kalmaz.</p>
+          <span class="hizmet-teknik">Kesintisiz güç kaynağı · sunucu ve ağ dolabı korumalı</span>
         </div>
-        <h3>UPS (Kesintisiz Güç)</h3>
-        <p>Elektrik gidince resepsiyon, ağ ve kameralar çalışmaya devam eder. Jeneratör gelene kadar boşluk kalmaz.</p>
-        <span class="sutun-teknik">Kesintisiz güç kaynağı · sunucu ve ağ dolabı korumalı</span>
-      </article>
-    </div>
+      </li>
+    </ul>
 
     <div class="bolum-cta">
-      <a class="dugme dugme--dev" href="#iletisim">Teknik Destek Al</a>
+      <a class="dugme dugme--sessiz" href="#iletisim">Teknik Destek Al</a>
       <p class="bolum-cta-not">Yerinde bakar, ne gerektiğini sade bir dille anlatırız.</p>
     </div>
   </section>
@@ -734,7 +774,7 @@
         </div>
         <div class="alan">
           <label for="f-posta">E-posta</label>
-          <input id="f-posta" name="eposta" type="email" autocomplete="email" required maxlength="120" />
+          <input id="f-posta" name="eposta" type="email" autocomplete="email" required maxlength="120" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" title="ad@alan.com biçiminde bir e-posta adresi" />
         </div>
         <div class="alan alan--tam">
           <label for="f-konu">İlgilendiğiniz Konu</label>
@@ -794,11 +834,18 @@
 <footer class="alt" id="hakkimizda">
   <div class="kolon alt-ic">
     <div class="alt-ust">
-      <span class="marka">
-        <span class="marka-isaret" aria-hidden="true"></span>
-        <span class="marka-ad">OtelDijital</span>
-      </span>
-      <p>Küçük ve orta ölçekli oteller için operasyon asistanı.</p>
+      <div class="alt-marka">
+        <span class="marka">
+          <span class="marka-isaret" aria-hidden="true"></span>
+          <span class="marka-ad">OtelDijital</span>
+        </span>
+        <p>Küçük ve orta ölçekli oteller için operasyon asistanı.</p>
+      </div>
+      <!-- Mevcut müşteri için giriş (uygulamanın kendi adresinde) ve iletişim; deneme düğmesi hemen üstteki kapanışta zaten var -->
+      <nav class="alt-baglantilar" aria-label="Uygulama">
+        <a href="https://app.oteldijital.com/giris">Giriş Yap</a>
+        <a href="#iletisim">İletişim</a>
+      </nav>
     </div>
     <div class="alt-dip">
       <p class="alt-soluk">© 2026 OtelDijital · Tüm hakları saklıdır.</p>
