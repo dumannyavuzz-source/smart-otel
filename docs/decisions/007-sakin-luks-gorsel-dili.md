@@ -74,3 +74,18 @@ olmamalı, çalışan giriş sistemi ve QR bağlantılarına dokunulmamalı. Ayr
 | 5 | Vitrin: kalan bölümler | ✅ 2026-09-18 — adımlar/değerler satır, hizmet listesi, tarife tablosu, zeytin iletişim bloğu, alt bölümde "Giriş Yap" |
 | 6 | Kapı ekranları (Giriş, Kayıt) | ✅ 2026-09-18 — `app/src/stil.css` yalnızca `.kapi…` bloğu, `app/index.html` serif yazı tipi; ekran mantığı değişmedi |
 | 7 | Paylaşım kartı, simge, README'ler | ✅ 2026-09-18 — `paylasim.html` → `paylasim.png`, `simge.svg`, `dokunma-simgesi.png`, README'ler, dağıtım listesi, `araclar/` |
+
+## UX denetimi sonrası Genel Müdür kararları (2026-09-18)
+
+- **Menü = bölüm başlığı.** Menüdeki her sözcük, indiği bölümün üst başlığıyla (kicker) aynıdır ve sıra sayfa
+  sırasıdır: Nasıl Çalışır · Uygulama · Dijital Check-up · Ne Kazandırır · Fiyatlar. "Hakkımızda" kalktı
+  (indiği yerde tek cümle vardı); yerine otel sahibinin en çok aradığı bilgi olan Fiyatlar geldi.
+- **#nasil kaldırıldı.** Döngü hikâyesi ve keşif alanı aynı şeyi anlatıyordu; tekrar eden bölüm silindi.
+- **İletişim formuna "Dijital Check-up / Analiz" konusu.** Bölüm metni bu konuyu vaat ediyordu ama listede
+  yoktu. Konu listesi veritabanı kuralında sabit olduğu için yeni göçle eklendi:
+  `supabase/migrations/20260918100000_iletisim_konu_checkup.sql` (eski göçe dokunulmadı).
+- **Kapı metinleri.** Kayıt örnek adı "Ahmet Yılmaz"; giriş ekranı otel sahibine hitap eder:
+  "Otelinizi tek merkezden yönetmeye devam edin."
+
+Sonraya bırakılanlar (Genel Müdür karar vermedi, mevcut hâl korunur): kayıt ekranındaki güvence satırı,
+formda telefon ve e-postanın ikisinin de zorunlu olması, 0,75 rem altındaki küçük yazı boyutları.

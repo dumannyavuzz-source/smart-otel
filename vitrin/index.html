@@ -752,6 +752,8 @@
           <label for="f-konu">İlgilendiğiniz Konu</label>
           <select id="f-konu" name="konu" required>
             <option value="" disabled selected>Seçin</option>
+            <!-- Seçenekler veritabanı kuralıyla birebir aynı olmalı: supabase/migrations/…_iletisim_konu_checkup.sql -->
+            <option>Dijital Check-up / Analiz</option>
             <option>Teknik Altyapı</option>
             <option>OTA &amp; Dijital Yönetim</option>
             <option>Web Sitesi</option>

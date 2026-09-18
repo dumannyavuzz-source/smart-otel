@@ -47,7 +47,7 @@ bağlı alan `null` olur; e-posta küçük harfe iner), kısıtlar sonra **ham u
 | `otel_adi` | isteğe bağlı · ≤ 80 |
 | `telefon` | zorunlu · 6–24 · yalnızca rakam ve `+ ( ) . -` boşluk |
 | `eposta` | zorunlu · ≤ 120 · `a@b.c` biçiminde |
-| `konu` | yalnızca beş değer: Teknik Altyapı · OTA & Dijital Yönetim · Web Sitesi · SEO · Diğer |
+| `konu` | yalnızca altı değer: Dijital Check-up / Analiz · Teknik Altyapı · OTA & Dijital Yönetim · Web Sitesi · SEO · Diğer (altıncısı 2026-09-18 göçüyle eklendi) |
 | `mesaj` | isteğe bağlı · ≤ 2000 |
 | `ip_ozeti` | veritabanı yazar; ziyaretçi dokunamaz (sınandı: 26s) |
 | `olusturulma_tarihi` | veritabanı yazar; ziyaretçi dokunamaz (sınandı: 26e) |
