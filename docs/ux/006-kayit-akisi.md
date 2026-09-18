@@ -34,7 +34,7 @@ app.oteldijital.com/kayit        ← gece yarısı zemin, vitrinle aynı dil
   sonra odalar girilirken belli olur; kayıt anında sorulan her fazladan soru bir vazgeçme sebebidir.
 - **Sayfa uygulamanın dışındadır.** `/kayit` açıldığında oturum sorulmaz, postacı çalışmaz, panel nöbetçisi
   kurulmaz (`main.tsx`). Henüz hesabı olmayan birine uygulamanın makineleri çalıştırılmaz.
-- **Vitrinle aynı görünüm.** Koyu antrasit zemin, elektrik turuncusu düğme. Kişi bir sayfadan diğerine
+- **Vitrinle aynı görünüm.** "Sakin Lüks" (`DESIGN_SYSTEM.md` · 7.3): derin grafit zemin, serif başlık, şampanya düğme. Kişi bir sayfadan diğerine
   geçerken "başka bir yere mi düştüm?" diye düşünmemeli.
 - **Kayıt kendine özel bir giriş yolu icat etmez.** Otel kurulduktan sonra kişi, az önce yazdığı şifreyle
   **normal giriş** yapar. Böylece tek bir giriş yolu vardır ve kayıt akışı güvenlik açısından ayrıcalıklı değildir.

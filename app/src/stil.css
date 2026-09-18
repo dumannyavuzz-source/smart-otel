@@ -501,8 +501,8 @@ a.buton { text-decoration: none; }
 /* ---------------------------------------------------------------------
    DIŞ KAPI — /giris ve /kayit ekranları
    Bu iki ekran uygulamanın DIŞINDADIR: onları henüz personel değil, ziyaretçi görür.
-   Bu yüzden vitrinle aynı dili konuşurlar (docs/decisions/006-vitrin-gorsel-dili.md):
-   kırık beyaz zemin, antrasit yazı, tek marka rengi, büyük yuvarlatılmış köşeler, cam kart.
+   Bu yüzden vitrinle aynı dili konuşurlar — "Sakin Lüks" (DESIGN_SYSTEM.md · 7.3,
+   docs/decisions/007): derin grafit zemin, fildişi yazı, serif başlık, şampanya yalnızca düğmede.
    Vitrinden buraya gelen kişi görsel bir şok yaşamaz.
 
    Uygulamanın İÇİ bu dile uymaz ve uymamalıdır: orada devasa butonlar ve yüksek karşıtlık,
@@ -510,126 +510,123 @@ a.buton { text-decoration: none; }
    uygulamanın değişkenlerine dokunmaz.
    --------------------------------------------------------------------- */
 .kapi {
-  position: relative;
   min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px 16px;
-  overflow: hidden;
-  background: #f6f7f9;
-  color: #14181d;
+  padding: 32px 20px;
+  background: #121413;                         /* grafit-900 */
+  color: #efeae0;                              /* fildişi */
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-}
-
-/* Arkadaki yumuşak marka ışığı — vitrindeki hero ile aynı sıcaklık */
-.kapi::before {
-  content: "";
-  position: absolute;
-  top: -22%;
-  left: 50%;
-  width: min(780px, 135%);
-  height: 62%;
-  transform: translateX(-50%);
-  background: radial-gradient(50% 50% at 50% 50%, rgba(255, 106, 31, 0.14), transparent 70%);
-  pointer-events: none;
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
 .kapi-kutu {
-  position: relative;
   width: 100%;
-  max-width: 460px;
-  padding: 34px 30px;
-  background: rgba(255, 255, 255, 0.86);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid #e4e8ee;
-  border-radius: 26px;
-  box-shadow: 0 44px 84px -58px rgba(20, 24, 29, 0.5);
+  max-width: 440px;
+  padding: 40px 32px;
+  background: #1b1e1c;                         /* grafit-800 */
+  border: 1px solid rgba(200, 180, 138, 0.14); /* şampanya tonlu ince çizgi */
+  border-radius: 4px;
 }
 
 .kapi-marka {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  font-size: 1.05rem;
-  margin-bottom: 24px;
+  gap: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  font-size: 0.9rem;
+  margin-bottom: 32px;
 }
 
 .kapi-isaret {
-  width: 11px;
-  height: 11px;
-  border-radius: 4px;
-  background: #ff6a1f;
-  box-shadow: 0 0 0 4px rgba(255, 106, 31, 0.12);
+  width: 8px;
+  height: 8px;
+  background: #c8b48a;                         /* şampanya */
   flex: none;
 }
 
 .kapi h1 {
   margin: 0;
-  font-size: 1.85rem;
-  line-height: 1.12;
-  letter-spacing: -0.035em;
+  font-family: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  font-weight: 400;
+  font-size: 2.25rem;
+  line-height: 1.08;
+  letter-spacing: -0.005em;
+  font-variant-numeric: lining-nums;
   text-wrap: balance;
+  color: #efeae0;
 }
 
 .kapi-giris {
-  margin: 12px 0 0;
-  color: #5b6572;
-  font-size: 0.98rem;
+  margin: 14px 0 0;
+  color: #b9b3a6;                              /* taş */
+  font-size: 0.95rem;
 }
 
 .kapi-form {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 26px;
+  margin-top: 28px;
 }
 
+/* Etiket alanın üstünde: küçük, büyük harf, geniş aralık */
 .kapi-form label {
-  color: #5b6572;
-  font-size: 0.86rem;
-  margin-top: 10px;
+  color: #b9b3a6;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 12px;
 }
 
 .kapi-alan {
   width: 100%;
   min-height: 56px;
   padding: 12px 16px;
-  border: 1px solid #d3d9e2;
-  border-radius: 14px;
-  background: #ffffff;
-  color: #14181d;
+  border: 1px solid rgba(200, 180, 138, 0.14);
+  border-radius: 2px;
+  background: #262a27;                         /* grafit-700 */
+  color: #efeae0;
   font: inherit;
+  transition: border-color 300ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
-.kapi-alan::placeholder { color: #8a94a2; }
-.kapi-alan:focus { outline: 3px solid rgba(255, 106, 31, 0.2); border-color: #ff6a1f; }
+.kapi-alan::placeholder { color: #8a857a; }
+.kapi-alan:hover { border-color: rgba(200, 180, 138, 0.28); }
+/* Odak: çizgi şampanya olur; renkli parlama halkası yok */
+.kapi-alan:focus { outline: none; border-color: #c8b48a; }
 
 .kapi-hata {
   margin: 14px 0 0;
-  color: #b4341a;
-  font-size: 0.94rem;
+  color: #b4655a;                              /* durum: sorun — kısık, bağırmaz */
+  font-size: 0.9rem;
 }
 
+/* Ana düğme: şampanya zemin, grafit yazı, büyük harf. Hover'da bronz. */
 .kapi-dugme {
-  margin-top: 22px;
-  min-height: 60px;
+  margin-top: 24px;
+  min-height: 56px;
   border: 0;
-  border-radius: 999px;
-  background: #ff6a1f;
-  color: #1b0a02;
+  border-radius: 2px;
+  background: #c8b48a;
+  color: #121413;
   font: inherit;
-  font-size: 1.05rem;
-  font-weight: 600;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   cursor: pointer;
   touch-action: manipulation;
-  box-shadow: 0 14px 34px -16px rgba(255, 106, 31, 0.85);
+  transition: background 300ms cubic-bezier(0.2, 0.7, 0.2, 1), color 300ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
-.kapi-dugme:hover { background: #ff7c3a; }
-.kapi-dugme:active { transform: translateY(1px); }
-.kapi-dugme:disabled { opacity: 0.6; cursor: default; box-shadow: none; }
+.kapi-dugme:hover { background: #9c7e4e; color: #efeae0; }
+.kapi-dugme:disabled { opacity: 0.6; cursor: default; }
+.kapi-dugme:focus-visible { outline: 1px solid #c8b48a; outline-offset: 4px; }
+.kapi-alan:focus-visible { outline: none; }
 
 .kapi-guvence {
   display: flex;
@@ -637,15 +634,24 @@ a.buton { text-decoration: none; }
   gap: 6px 16px;
   list-style: none;
   padding: 0;
-  margin: 18px 0 0;
-  color: #5b6572;
-  font-size: 0.86rem;
+  margin: 20px 0 0;
+  color: #8a857a;                              /* taş, soluk */
+  font-size: 0.85rem;
 }
 
 .kapi-dip {
-  margin: 22px 0 0;
-  color: #5b6572;
+  margin: 28px 0 0;
+  color: #b9b3a6;
   font-size: 0.9rem;
   text-align: center;
 }
-.kapi-dip a { color: #ff6a1f; font-weight: 600; white-space: nowrap; }
+/* Bağlantı türü: fildişi yazı, altında bronz çizgi */
+.kapi-dip a {
+  color: #efeae0;
+  text-decoration: none;
+  white-space: nowrap;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #9c7e4e;
+  transition: border-color 300ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.kapi-dip a:hover { border-color: #c8b48a; }

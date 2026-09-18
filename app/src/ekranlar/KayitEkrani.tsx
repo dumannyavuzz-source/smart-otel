@@ -1,7 +1,7 @@
-// Kayıt Ekranı — vitrindeki "Otelimi Ücretsiz Başlat" düğmesinin indiği yer (Aşama 20).
+// Kayıt Ekranı — vitrindeki "30 Gün Ücretsiz Dene" düğmesinin indiği yer (Aşama 20).
 //
 // Dört soru, tek düğme. Kurulum sihirbazı, adım adım form, oda sayısı sorusu, kart bilgisi yoktur.
-// Görünümü vitrinle aynı dildedir (açık premium dil): kişi aynı ürünün içinde olduğunu hissetmeli.
+// Görünümü vitrinle aynı dildedir ("Sakin Lüks", DESIGN_SYSTEM.md · 7.3): kişi aynı ürünün içinde olduğunu hissetmeli.
 //
 // Sayfa uygulamanın DIŞINDADIR: oturum sorulmaz, postacı çalışmaz (main.tsx).
 // Kayıt bitince kişi kendi şifresiyle normal yoldan girer ve panele düşer.

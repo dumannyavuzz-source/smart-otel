@@ -1,8 +1,8 @@
 // Giriş: e-posta + şifre + tek buton. Hesap var mı yok mu söylenmez.
 //
-// Bu ekran uygulamanın DIŞ KAPISIDIR: görünümü vitrinle aynı dildedir (kırık beyaz zemin,
-// antrasit yazı, cam kart). Vitrinden gelen kişi görsel bir şok yaşamaz, aynı ürünün
-// içinde olduğunu hisseder. Uygulamanın içi ise görevli için ayrı bir dildedir.
+// Bu ekran uygulamanın DIŞ KAPISIDIR: görünümü vitrinle aynı dildedir — "Sakin Lüks"
+// (DESIGN_SYSTEM.md · 7.3: derin grafit zemin, serif başlık, şampanya düğme). Vitrinden gelen
+// kişi görsel bir şok yaşamaz. Uygulamanın içi ise görevli için ayrı bir dildedir.
 import { useState, type FormEvent } from 'react';
 import { girisYap } from '../oturum';
 
@@ -17,7 +17,9 @@ export function GirisEkrani() {
     setHata(null);
     setBekliyor(true);
     const sonuc = await girisYap(eposta, sifre);
-    setBekliyor(false);
+    // Şifre kabul edildiyse ekran zaten kapanmak üzeredir: düğme 'Giriliyor…' kalır ki kişi
+    // yavaş bağlantıda ikinci kez basmasın, 'olmadı' sanmasın. Yalnızca hatada geri açılır.
+    if (sonuc !== 'tamam') setBekliyor(false);
     if (sonuc === 'hatali') setHata('Bilgiler hatalı. Tekrar deneyin.');
     if (sonuc === 'internetYok') setHata('İnternet yok. Bağlanıp tekrar deneyin.');
   }
