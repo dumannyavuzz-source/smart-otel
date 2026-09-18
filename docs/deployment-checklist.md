@@ -113,7 +113,7 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       - `oteldijital.com` → vitrin
       - `app.oteldijital.com` → personel uygulaması (giriş `/giris`, kayıt `/kayit`) ve misafir yorum sayfası
 - [x] **6.3** ✅ Vitrindeki bütün düğmeler bağlandı (Aşama 20 · 20.1):
-      "30 Gün Ücretsiz Dene" → `https://app.oteldijital.com/kayit` (altı yerde) · "Giriş Yap" → `https://app.oteldijital.com/giris` (menü ve alt bölüm) ·
+      Kayıt sayfası `https://app.oteldijital.com/kayit` (altı bağlantı: menüde "Demo İste", hero'da sessiz bağlantı, tarife ve kapanışta "30 Gün Ücretsiz Dene") · "Giriş Yap" → `https://app.oteldijital.com/giris` (menü ve alt bölüm) ·
       Kurumsal "Görüşme ayarla" → `mailto:merhaba@oteldijital.com`.
       Alan adları Genel Müdür tarafından onaylandı; ileride değişirse adres `vitrin/index.html` içinde altı yerdedir.
 - [ ] **6.6** `merhaba@oteldijital.com` posta kutusunun **gerçekten çalıştığını** doğrula (vitrindeki tek iletişim yolu).

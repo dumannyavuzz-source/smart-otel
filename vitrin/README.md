@@ -1,6 +1,6 @@
 # vitrin/ — OtelDijital Tanıtım Sayfası
 
-Dışarıya bakan tek sayfa: ürünü anlatır ve "30 Gün Ücretsiz Dene" der. Görsel dili "Sakin Lüks"tür (`DESIGN_SYSTEM.md`).
+Dışarıya bakan tek sayfa: ürünü anlatır, menüde "Demo İste", sayfada "30 Gün Ücretsiz Dene" der. Görsel dili "Sakin Lüks"tür (`DESIGN_SYSTEM.md`).
 Personel uygulaması (`app/`) ile **hiçbir ortak kodu yoktur**; bilerek böyledir.
 
 ## Neden ayrı duruyor?
@@ -79,7 +79,7 @@ ortam değişkenleri `SUPABASE_URL` ve `SUPABASE_ANON_KEY` (`docs/deployment-che
 | `app.oteldijital.com` | Personel uygulaması (`app/`): giriş (`/giris`), kayıt (`/kayit`) ve misafir yorum sayfası |
 
 Alan adları Genel Müdür tarafından onaylandı (2026-09-16). Sayfadaki bağlantılar:
-"30 Gün Ücretsiz Dene" düğmeleri `app.oteldijital.com/kayit` adresine (altı yerde), menüdeki ve alt bölümdeki "Giriş Yap" `app.oteldijital.com/giris` adresine;
+Kayıt sayfasına (`app.oteldijital.com/kayit`) altı bağlantı gider: menüde "Demo İste", hero'da sessiz bağlantı ve tarife/kapanışta "30 Gün Ücretsiz Dene"; menüdeki ve alt bölümdeki "Giriş Yap" `app.oteldijital.com/giris` adresine;
 Kurumsal plandaki "Görüşme ayarla" düğmesi ve iletişim bölümündeki adres
 `mailto:merhaba@oteldijital.com`'a gider. Bu posta kutusunun canlıya çıkmadan çalıştığı doğrulanmalıdır.
 

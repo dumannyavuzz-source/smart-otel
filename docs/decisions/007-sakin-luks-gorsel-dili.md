@@ -97,3 +97,12 @@ blok — Kat Hizmetleri (sol görsel/sağ metin), Depo ve Mal Kabul (sağ görse
 görsel/sağ metin). Görseller kodla çizilmiş arayüz kesitleridir. Genel Müdür üçleme kuralında ısrar etti: dördüncü
 blok (kayıp eşya, personel yönetimi) sayfayı uzatır; bu ayrıntılar alt sayfaya kalır. Alt sayfa henüz yazılmadı;
 bölümün altındaki "Tüm operasyon detaylarını keşfet →" düğmesi şimdilik #dongu'ya iner.
+
+## Konumlandırma: "Otel Operasyon Merkezi ve Teknoloji Partneri" (2026-09-18)
+
+Genel Müdür kararıyla üst çubuk ve hero yeni konumlandırmaya geçti. Menü: İç Operasyon · Dijital Vitrin ·
+Teknolojik Altyapı · Fiyatlandırma · İletişim (her biri indiği bölümün kicker'ıyla aynı; #dijital, #teknik ve
+#fiyat kicker'ları buna göre yenilendi). Menü düğmeleri: Giriş Yap · Demo İste (deneme kaydına gider). Hero: kicker
+"Otel operasyon merkezi", başlık "Otel operasyonunuzu yönetmek artık bir mesaj atmak kadar kolay." (tek italik: kolay),
+açıklama üç çözüm alanını sayar, ana düğme "Operasyon Merkezini Keşfet →" (#operasyon), deneme kaydı sessiz bağlantıda.
+Sayfa başlığı, açıklama, Open Graph ve paylaşım kartı da aynı konumlandırmada.

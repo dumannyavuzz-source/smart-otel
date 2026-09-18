@@ -182,7 +182,10 @@ kalır ve bölümün altındaki tek düğme oraya bağlanır.
 | **İkincil** | Saydam zemin, 1 px şampanya çizgi, fildişi yazı. Hover: `rgba(200,180,138,0.08)` zemin. | "Bilgi Al", "Teknik Destek Al", üst çubuktaki düğme, tarifedeki diğer üç satır |
 | **Bağlantı** | Fildişi yazı, altında 1 px bronz çizgi (4 px aşağıda). Hover: çizgi şampanya. | Metin içi, alt bölüm, "Giriş yapın", hero'daki "Uygulamayı keşfet" |
 
-Ana düğme metni **her yerde aynıdır**: "30 Gün Ücretsiz Dene" (Genel Müdür kararı). Düğmelerde ikon ve emoji yoktur.
+Deneme düğmesinin metni **her yerde aynıdır**: "30 Gün Ücretsiz Dene" (Genel Müdür kararı). Tek istisna üst çubuk:
+orada kısa "Demo İste" yazar ve aynı kayıt sayfasına gider (Genel Müdür, 2026-09-18). Hero'daki ana düğme
+"Operasyon Merkezini Keşfet →" sayfanın içine çağırır; deneme kaydı hero'da sessiz bağlantıdadır.
+Düğmelerde ikon ve emoji yoktur; "→" yalnızca "keşfet" düğmelerinde, metnin parçası olarak durur.
 
 ### 7.2 Kart
 Grafit-700 zemin, 1 px çizgi, 4 px köşe, 32 px iç boşluk (telefon 24 px). İçinde: küçük işaret (zeytin-500, 20 px)

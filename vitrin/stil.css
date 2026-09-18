@@ -292,16 +292,17 @@ a { color: inherit; }
   border-bottom: 1px solid var(--cizgi);
 }
 
-/* Editoryal düzen: yazı 5 sütun, telefon 7 sütun (DESIGN_SYSTEM.md · 5) */
+/* Editoryal düzen: yazı ve telefon eşit iki sütun — dokuz kelimelik başlık üç satırda dursun (DESIGN_SYSTEM.md · 5) */
 .kahraman {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(40px, 6vw, 96px);
   align-items: center;
   padding-block: clamp(80px, 10vw, 152px) clamp(64px, 9vw, 128px);
 }
 
-.kahraman h1 { max-width: 14ch; }
+/* Başlık dokuz kelime: bir kademe küçük ve biraz geniş ki üç satırda dursun */
+.kahraman h1 { max-width: 20ch; font-size: clamp(2.25rem, 4vw, 3.5rem); }
 
 /* Tek vurgu kelimesi: italik serif, şampanya. İkincisi yoktur. */
 .vurgu {

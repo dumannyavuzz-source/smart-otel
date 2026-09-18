@@ -64,16 +64,17 @@
     </a>
     <nav class="menu" aria-label="Sayfa menüsü">
       <!-- Her sözcük, indiği bölümün üst başlığıyla (kicker) aynıdır; sıra sayfa sırasıdır (Genel Müdür kararı) -->
-      <a href="#dongu">Nasıl Çalışır</a>
-      <a href="#kesfet">Uygulama</a>
-      <a href="#checkup">Dijital Check-up</a>
-      <a href="#urun">Ne Kazandırır</a>
-      <a href="#fiyat">Fiyatlar</a>
+      <a href="#operasyon">İç Operasyon</a>
+      <a href="#dijital">Dijital Vitrin</a>
+      <a href="#teknik">Teknolojik Altyapı</a>
+      <a href="#fiyat">Fiyatlandırma</a>
+      <a href="#iletisim">İletişim</a>
     </nav>
-    <!-- Sağda iki şey: sade "Giriş Yap" bağlantısı (mevcut müşteri) ve tek eylem düğmesi (yeni müşteri). -->
+    <!-- Sağda iki şey: sade "Giriş Yap" bağlantısı (mevcut müşteri) ve tek eylem düğmesi "Demo İste" (yeni müşteri;
+         30 günlük deneme kaydına gider). Sayfanın diğer deneme düğmeleri "30 Gün Ücretsiz Dene" der. -->
     <div class="ust-eylem">
       <a class="ust-giris" href="https://app.oteldijital.com/giris">Giriş Yap</a>
-      <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+      <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit">Demo İste</a>
     </div>
   </div>
 </header>
@@ -83,20 +84,21 @@
   <!-- ===================== HERO =====================
        Fotoğraf yok. Sağdaki telefon kodla çizilmiştir ve içindeki akış gerçekten kıpırdar:
        ziyaretçi ürünün kendisini görür, sahnelenmiş bir otel fotoğrafını değil.
-       Düzen editoryal: yazı 5 sütun, telefon 7 sütun (DESIGN_SYSTEM.md · 5). Zemin en derin grafit. -->
+       Düzen editoryal: yazı ve telefon eşit iki sütun (DESIGN_SYSTEM.md · 5). Zemin en derin grafit. -->
   <section class="kahraman-alan">
   <div class="kolon kahraman">
     <div class="kahraman-yazi">
-      <p class="etiket">Otel operasyon asistanı</p>
-      <h1>Otelinizde ne oluyorsa, <span class="vurgu">anında</span> bilin.</h1>
+      <p class="etiket">Otel operasyon merkezi</p>
+      <h1>Otel operasyonunuzu yönetmek artık bir mesaj atmak kadar <span class="vurgu">kolay.</span></h1>
       <p class="giris">
-        Kat görevlisi kareyi okutur, müdür aynı saniyede görür. Görev, arıza, depo ve misafir talebi
-        tek akışta toplanır. Hiçbir iş kulaktan kulağa kalmaz, hiçbir kayıt sonradan değiştirilemez.
+        İç Operasyon, Dijital Vitrin ve Teknolojik Altyapı çözümlerimizle otelinizin tüm çarklarını
+        tek bir merkezden, kusursuz bir uyumla yönetin.
       </p>
 
+      <!-- Ana düğme sayfanın içine çağırır (operasyon vitrini); deneme kaydı sessiz bağlantıda ve menüde ("Demo İste") -->
       <div class="cta-satir">
-        <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
-        <a class="baglanti" href="#kesfet">Uygulamayı keşfet</a>
+        <a class="dugme dugme--dev" href="#operasyon">Operasyon Merkezini Keşfet →</a>
+        <a class="baglanti" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
       </div>
 
       <p class="guvence">Kredi kartı yok <span aria-hidden="true">·</span> Taahhüt yok <span aria-hidden="true">·</span> 30 gün boyunca tüm özellikler</p>
@@ -498,7 +500,7 @@
        Altı kart değil, iki sütunlu bir hizmet listesi: otel menüsü gibi, satır satır.
        Burada demo daveti YOK; tek çağrı "Bilgi Al" ve iletişim bölümüne iner. -->
   <section class="kolon bolum" id="dijital">
-    <p class="etiket">OTA ve dijital yönetim</p>
+    <p class="etiket">Dijital vitrin</p>
     <h2>Dışarıdan da güçlü görünün.</h2>
     <p class="bolum-giris">
       Satış kanalları, Google'daki yeriniz ve web siteniz tek elden yönetilir.
@@ -642,7 +644,7 @@
        Dört kart değil, bir tarife: satır satır, aralarında ince çizgi. Kabartma tek yerde (Standart).
        Paketler uygulamadaki ödeme duvarıyla AYNI olmalıdır (app/src/paketler.ts). -->
   <section class="kolon bolum" id="fiyat">
-    <p class="etiket">Fiyatlar</p>
+    <p class="etiket">Fiyatlandırma</p>
     <h2>Şeffaf fiyat. Oda sayısı kadar ödersiniz.</h2>
     <p class="bolum-giris">
       Kurulum ücreti yok, donanım yok, kontrat yok. 30 gün boyunca tüm özellikler açık; beğenmezseniz tek tıkla bırakırsınız.
@@ -718,7 +720,7 @@
        Otelin arkasındaki donanım. Katalog değil: fiyat yok, marka yok, parça listesi yok.
        Aynı hizmet listesi; her satırda tek cümle fayda ve bir satır teknik not. Çağrı "Teknik Destek Al" → iletişim. -->
   <section class="kolon bolum" id="teknik">
-    <p class="etiket">Teknik altyapı</p>
+    <p class="etiket">Teknolojik altyapı</p>
     <h2>Otelin arkasındaki teknoloji.</h2>
     <p class="bolum-giris">
       Uygulama sağlam bir ağ ister; kamera, sunucu ve kesintisiz güç de öyle.
