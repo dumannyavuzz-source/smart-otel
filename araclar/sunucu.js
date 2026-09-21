@@ -6,9 +6,17 @@
 const http = require('http'), fs = require('fs'), path = require('path');
 const kok = process.argv[2]; const tur = {'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.xml':'application/xml','.txt':'text/plain; charset=utf-8'};
 
+// Bulunamayan adres: yayındaki gibi markalı 404 sayfası ve gerçek 404 durumu (sahte 200 değil).
+function bulunamadi(res) {
+  fs.readFile(path.join(kok, '404.html'), (hata, veri) => {
+    res.writeHead(404, {'Content-Type': 'text/html; charset=utf-8'});
+    res.end(hata ? 'Sayfa bulunamadı' : veri);
+  });
+}
+
 function gonder(res, dosya) {
   fs.readFile(dosya, (hata, veri) => {
-    if (hata) { res.writeHead(404); res.end(); return; }
+    if (hata) { bulunamadi(res); return; }
     res.writeHead(200, {'Content-Type': tur[path.extname(dosya)] || 'application/octet-stream'}); res.end(veri);
   });
 }

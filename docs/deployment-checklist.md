@@ -125,6 +125,12 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       `"cleanUrls": true` sağlar; ayar Vercel panelinden değil, bu dosyadan gelir.
       `vercel.json` yorum kabul etmez; değişiklikten sonra `node -e "require(./vercel.json)"` ile geçerliliği denetlenir.
 - [ ] **6.6** `merhaba@oteldijital.com` posta kutusunun **gerçekten çalıştığını** doğrula (vitrindeki tek iletişim yolu).
+- [ ] **6.12** **Hata sayfalarını canlıda doğrula** (denetim · Madde 3 · `docs/decisions/011-hata-sayfalari.md`):
+      Olmayan bir adres (`oteldijital.com/olmayan-sayfa-testi`) **markalı HTML** sayfa ve **HTTP 404** dönmeli.
+      Yanıtta sağlayıcının ham metni, sunucu bölgesi ya da istek kimliği görünmemeli.
+      `cleanUrls` açık olduğu için `404.html` davranışının sürdüğü özellikle bu adımda görülür;
+      sürmezse çözüm `vercel.json` ile yönlendirmedir — ama **rewrite 200 döner (soft-404)**, o yüzden
+      önce sağlayıcının kendi 404 davranışı denenir. `500.html` durağan sitede kullanılmayabilir; notu kararda.
 - [ ] **6.11** **Yasal metinler:** bugün dört sayfa da "Çok yakında." diyen bir iskelettir (`/kvkk`, `/gizlilik-politikasi`,
       `/cerez-politikasi`, `/kullanim-sartlari`) ve `noindex` etiketlidir. Metinler girilince her sayfada
       `<meta name="robots">` `index, follow` yapılır ve sayfa `vitrin/sitemap.xml` dosyasına eklenir

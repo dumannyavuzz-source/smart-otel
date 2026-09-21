@@ -1612,11 +1612,11 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
 .form-basari h3 { font-size: 1.75rem; font-weight: 400; }
 .form-basari p { color: var(--metin-soluk); max-width: 32ch; }
 
-/* ---------- Yasal sayfalar ---------- */
-/* Dört yasal sayfanın (KVKK, gizlilik, çerez, kullanım şartları) tek bölümü. İçerik hukuk
-   onayından sonra gelecek; o zamana kadar ekranın ortasında tek bir zarif satır durur.
-   Yüksekliği bilerek büyük: alt bölüm ekranın ortasına tırmanmasın, sayfa boş görünmesin. */
-.yasal {
+/* ---------- Tek satırlık sayfalar: yasal metinler ve hata sayfaları ---------- */
+/* Dört yasal sayfa (KVKK, gizlilik, çerez, kullanım şartları) ile iki hata sayfası (404, 500)
+   aynı düzeni kullanır: ekranın ortasında tek bir zarif blok. İçerik az olduğu için yükseklik
+   bilerek büyük tutulur — alt bölüm ekranın ortasına tırmanmasın, sayfa terk edilmiş görünmesin. */
+.yasal, .hata {
   min-height: 58vh;
   display: flex;
   flex-direction: column;
@@ -1626,8 +1626,12 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   gap: 18px;
   padding-block: clamp(96px, 14vw, 180px);
 }
-.yasal h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
-.yasal-not { color: var(--metin-soluk); max-width: 46ch; }
+.yasal h1, .hata h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+.yasal-not, .hata-not { color: var(--metin-soluk); max-width: 46ch; }
+
+/* Hata sayfasında iki çıkış yan yana durur; ortalanır ve dar ekranda alt alta iner. */
+.hata .cta-satir { justify-content: center; }
+.hata-yardim { margin-top: 10px; color: var(--metin-cok-soluk); font-size: 0.875rem; }
 
 /* ---------- Kapanış ---------- */
 .kapanis {

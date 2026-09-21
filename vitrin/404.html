@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Sayfa bulunamadı | OtelDijital</title>
+<meta name="description" content="Aradığınız sayfa bulunamadı. Ana sayfaya dönebilir ya da fiyatlara bakabilirsiniz." />
+
+<!-- Hata sayfası aramaya girmez. "follow": sayfadaki bağlantılar yine izlenebilir. -->
+<meta name="robots" content="noindex, follow" />
+<meta name="theme-color" content="#f9f8f6" />
+
+<!-- ⚠ VARLIK YOLLARI KÖK ADRESLİ OLMAK ZORUNDA (başında "/").
+     Bu sayfa HERHANGİ bir adreste açılabilir — örneğin /bir/iki/olmayan-sayfa. Yol göreli yazılsaydı
+     tarayıcı stil dosyasını /bir/iki/stil.css adresinde arar, bulamaz ve ziyaretçi çıplak bir HTML
+     görürdü. Diğer sayfalarda göreli yol sorun değildir; burada sorundur. -->
+<link rel="icon" href="/simge.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/dokunma-simgesi.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="/stil.css" />
+</head>
+<body>
+
+<!-- ===================================================================
+     404 — SAYFA BULUNAMADI (denetim · Madde 3)
+     Karar kaydı: docs/decisions/011-hata-sayfalari.md
+
+     Önceki durumda barındırma sağlayıcısının 79 baytlık ham düz metni çıkıyordu; içinde sunucu
+     bölgesi ve istek kimliği de vardı. Bu hem markayı düşürüyor hem de gereksiz teknik bilgi
+     sızdırıyordu. Artık bu sayfa çıkar. Eski metin buraya ÖRNEK OLARAK BİLE yazılmaz: denetimin
+     ölçütü "yanıt gövdesinde o ifadeler geçmesin" diyor ve HTML yorumu da gövdenin parçasıdır.
+
+     ÜÇ KURAL:
+       1. Yanıt gövdesi text/html, HTTP durumu 404 KALIR (sahte 200 "soft-404" üretilmez).
+       2. Sunucu kimliği, istek numarası, yığın izi gösterilmez.
+       3. En az iki gezinme çıkışı: ana sayfa ve fiyatlandırma.
+     =================================================================== -->
+<a class="atla" href="#icerik">İçeriğe atla</a>
+
+<header class="ust">
+  <div class="kolon ust-ic">
+    <a class="marka" href="/">
+      <span class="marka-isaret" aria-hidden="true"></span>
+      <span class="marka-ad">OtelDijital</span>
+    </a>
+    <nav class="menu" aria-label="Sayfa menüsü">
+      <a href="/">İç Operasyon</a>
+      <a href="/dijital-vitrin">Dijital Vitrin</a>
+      <a href="/teknolojik-altyapi">Teknolojik Altyapı</a>
+      <a href="/fiyatlandirma">Fiyatlandırma</a>
+      <a href="/iletisim">İletişim</a>
+    </nav>
+    <div class="ust-eylem">
+      <a class="ust-giris" href="https://app.oteldijital.com/giris">Giriş Yap</a>
+      <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit">Demo İste</a>
+    </div>
+  </div>
+</header>
+
+<main id="icerik">
+  <section class="kolon hata">
+    <p class="etiket etiket--orta">404</p>
+    <h1>Aradığınız sayfa bulunamadı.</h1>
+    <p class="hata-not">
+      Adres değişmiş ya da yanlış yazılmış olabilir. Aşağıdaki iki kapıdan biri sizi
+      aradığınız yere götürür.
+    </p>
+    <div class="cta-satir">
+      <a class="dugme dugme--dev" href="/">Ana Sayfaya Dön</a>
+      <a class="dugme dugme--sessiz" href="/fiyatlandirma">Fiyatları Gör</a>
+    </div>
+    <p class="hata-yardim">
+      Bir bağlantı kırıksa bize söyleyin:
+      <a href="mailto:merhaba@oteldijital.com">merhaba@oteldijital.com</a>
+    </p>
+  </section>
+</main>
+
+<footer class="alt">
+  <div class="kolon alt-ic">
+    <div class="alt-ust">
+      <div class="alt-marka">
+        <span class="marka">
+          <span class="marka-isaret" aria-hidden="true"></span>
+          <span class="marka-ad">OtelDijital</span>
+        </span>
+        <p>Küçük ve orta ölçekli oteller için operasyon asistanı.</p>
+      </div>
+
+      <div class="alt-gruplar">
+        <div class="alt-grup">
+          <span class="alt-baslik">Sayfalar</span>
+          <nav class="alt-baglantilar" aria-label="Sayfalar">
+            <a href="/">İç Operasyon</a>
+            <a href="/dijital-vitrin">Dijital Vitrin</a>
+            <a href="/teknolojik-altyapi">Teknolojik Altyapı</a>
+            <a href="/fiyatlandirma">Fiyatlandırma</a>
+            <a href="/iletisim">İletişim</a>
+          </nav>
+        </div>
+        <div class="alt-grup">
+          <span class="alt-baslik">Hızlı erişim</span>
+          <nav class="alt-baglantilar" aria-label="Hızlı erişim">
+            <a href="https://app.oteldijital.com/giris">Giriş Yap</a>
+            <a href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+            <a href="mailto:merhaba@oteldijital.com">merhaba@oteldijital.com</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Künye bloğu diğer sayfalarla aynı; değerler girilince hidden kalkar (docs/decisions/010). -->
+    <div class="kunye" hidden>
+      <p class="kunye-ad">TİCARİ ÜNVAN</p>
+      <p class="kunye-satir">
+        <a class="kunye-tel" href="tel:+90XXXXXXXXXX">+90 XXX XXX XX XX</a>
+        <span class="kunye-ayrac" aria-hidden="true">·</span>
+        <span>ŞEHİR</span>
+        <span class="kunye-ayrac" aria-hidden="true">·</span>
+        <span>Vergi dairesi ve numarası</span>
+      </p>
+    </div>
+
+    <div class="alt-dip">
+      <p class="alt-soluk">© 2026 OtelDijital · Tüm hakları saklıdır.</p>
+      <nav class="alt-yasal" aria-label="Yasal metinler">
+        <a href="/kvkk">KVKK Aydınlatma Metni</a>
+        <a href="/gizlilik-politikasi">Gizlilik Politikası</a>
+        <a href="/cerez-politikasi">Çerez Politikası</a>
+        <a href="/kullanim-sartlari">Kullanım Şartları</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<!-- Yalnızca üst çubuğun kaydırma çizgisi için; diğer betikler bu sayfada işe yaramaz.
+     Yol kök adreslidir — sayfa herhangi bir adreste açılabilir. -->
+<script src="/etkilesim.js" defer></script>
+</body>
+</html>
