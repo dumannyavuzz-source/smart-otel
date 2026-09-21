@@ -203,10 +203,18 @@ a { color: inherit; }
   flex: none;
 }
 
+/* Menü kapsülü: <details>. Geniş ekranda açılır kutu DEĞİLDİR — düğmesi gizlenir, liste
+   bugünkü gibi tek satır durur. Açılır davranışı yalnızca dar ekranda devreye girer
+   (aşağıda, @media max-width: 900px · denetim · Madde 6). */
+.menu-kapsul { justify-self: center; }
+.menu-dugme { display: none; }
+/* Tarayıcının kendi üçgen işareti kaldırılır; yerine kendi üç çizgimiz gelir. */
+.menu-kapsul > summary { list-style: none; }
+.menu-kapsul > summary::-webkit-details-marker { display: none; }
+
 .menu {
   display: flex;
   gap: 4px;
-  justify-self: center;
   font-size: 0.875rem;
   letter-spacing: 0.02em;
 }
@@ -1813,38 +1821,83 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   .plan { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 28px 0 28px 20px; }
   .plan .dugme { width: 100%; }
 
-  /* Menü telefonda GİZLENMEZ. Site tek sayfayken gizlenebiliyordu (aşağı kaydırmak yetiyordu);
-     beş sayfa olunca gizlenirse ziyaretçi diğer sayfalara geçemez. Üst çubuk iki satıra ayrılır:
-     üstte marka ve tek düğme, altta beş sayfa. Beş sözcük dar ekrana sığmazsa satır yana kayar. */
+  /* MENÜ: dar ekranda açılır kutu (denetim · Madde 6).
+     Önceki çözüm yana kayan bir şeritti; denetim iki kusur buldu: sözcükler kelime ortasından
+     kesiliyor ve Fiyatlandırma ile İletişim ilk bakışta hiç görünmüyordu. Artık üst çubuk tek
+     satır (marka · menü düğmesi · eylem) ve beş sayfa tek dokunuşla açılan bir listede.
+
+     BETİK YOKSA NE OLUR? HTML'de <details open> yazdığı için liste açık gelir; çubuğun altında
+     normal bir liste olarak durur. Uzun görünür ama hiçbir sayfa erişilmez kalmaz. Betik varsa
+     (html.js) liste kapanır ve açılır kutuya döner. */
   .ust-ic {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "marka eylem"
-      "menu  menu";
-    row-gap: 2px;
-    min-height: 0;
-    padding-block: 8px 0;
+    position: relative;                       /* açılır kutu buna göre konumlanır */
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 6px;
+    min-height: 60px;
   }
-  .marka { grid-area: marka; }
-  .ust-eylem { grid-area: eylem; }
+  .menu-kapsul { justify-self: end; }
+
+  /* Menü düğmesi: üç çizgi + "Menü". Dokunma alanı 44 px (denetim · Madde 10d). */
+  .menu-dugme {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 10px;
+    color: var(--metin-soluk);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    user-select: none;
+    border-radius: var(--kose-kucuk);
+  }
+  .menu-dugme:hover { color: var(--metin); }
+  .menu-cizgiler { position: relative; display: block; width: 18px; height: 1px; background: currentColor; }
+  .menu-cizgiler::before,
+  .menu-cizgiler::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 18px;
+    height: 1px;
+    background: currentColor;
+    transition: transform 200ms var(--gecis), top 200ms var(--gecis);
+  }
+  .menu-cizgiler::before { top: -6px; }
+  .menu-cizgiler::after { top: 6px; }
+  /* Açıkken üç çizgi çarpıya döner: "aynı düğme kapatır" demenin sessiz yolu. */
+  .menu-kapsul[open] .menu-cizgiler { background: transparent; }
+  .menu-kapsul[open] .menu-cizgiler::before { top: 0; transform: rotate(45deg); }
+  .menu-kapsul[open] .menu-cizgiler::after { top: 0; transform: rotate(-45deg); }
+
+  /* Liste: alt alta, her satır 44 px, aralarında ince çizgi. */
   .menu {
-    grid-area: menu;
-    justify-self: stretch;
-    justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
     gap: 0;
-    margin-inline: -10px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    /* Olmazsa olmaz: ızgara öğesi varsayılan olarak içeriğinden dar olamaz (min-width: auto).
-       Sıfırlanmazsa beş sözcük üst çubuğu, üst çubuk da bütün sayfayı ekrandan taşırır. */
-    min-width: 0;
-    /* Sağ kenarda yumuşak bir solma: "buradan devamı var, kaydır" demenin sessiz yolu.
-       Desteklemeyen tarayıcıda hiçbir şey olmaz, menü yine kayar. */
-    -webkit-mask-image: linear-gradient(to right, #000 86%, transparent);
-    mask-image: linear-gradient(to right, #000 86%, transparent);
+    font-size: 0.95rem;
   }
-  .menu::-webkit-scrollbar { display: none; }
-  .menu a { padding: 10px; }
+  .menu a {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--cizgi);
+  }
+  .menu a:last-child { border-bottom: 0; }
+  .menu a[aria-current="page"] { box-shadow: inset 2px 0 0 0 var(--bronz); }
+
+  /* Betik varsa: çubuğun altına inen, sayfa genişliğinde bir kart. */
+  .js .menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 8px);
+    z-index: 30;
+    background: var(--kasmir-0);
+    border: 1px solid var(--cizgi);
+    border-radius: var(--kose);
+    box-shadow: 0 16px 34px rgba(28, 28, 26, 0.14);
+  }
   /* Telefon tek sütunda ortalanır, taşma biter. Kart da sütunun içinde kalır. */
   .gorsel { justify-self: center; margin-inline-end: 0; }
   .kumanda-kart { left: 0; }

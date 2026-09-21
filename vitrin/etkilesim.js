@@ -34,6 +34,64 @@
     );
   }
 
+  // "Betik çalışıyor" işareti. Stil dosyası buna bakar: menü ancak betik varsa açılır kutuya döner.
+  // Betik yoksa menü HTML'deki <details open> sayesinde açık kalır ve hiçbir sayfa erişilmez olmaz.
+  document.documentElement.className += ' js';
+
+  // ---------------------------------------------------------------
+  // 6. Menü — dar ekranda açılır kutu (denetim · Madde 6)
+  // ---------------------------------------------------------------
+  // Açma/kapama işini <details> kendi yapar; burada yalnızca üç incelik var:
+  // dar ekranda kapalı başlatmak, Esc ve dışarı tıklamayla kapatmak, odağı kutunun içinde tutmak.
+  var menuKapsul = document.querySelector('.menu-kapsul');
+  if (menuKapsul) {
+    var darMi = window.matchMedia ? window.matchMedia('(max-width: 900px)') : null;
+
+    function menuyuAyarla() {
+      // Geniş ekranda menü her zaman açık durur (orada zaten tek satırdır).
+      menuKapsul.open = !(darMi && darMi.matches);
+    }
+    menuyuAyarla();
+    if (darMi) {
+      if (darMi.addEventListener) darMi.addEventListener('change', menuyuAyarla);
+      else if (darMi.addListener) darMi.addListener(menuyuAyarla);        // eski tarayıcı
+    }
+
+    function kapat() {
+      if (darMi && darMi.matches && menuKapsul.open) {
+        menuKapsul.open = false;
+        var dugme = menuKapsul.querySelector('summary');
+        if (dugme) dugme.focus();
+      }
+    }
+
+    // Esc kapatır.
+    document.addEventListener('keydown', function (olay) {
+      if (olay.key === 'Escape') kapat();
+    });
+
+    // Kutunun dışına dokunmak kapatır.
+    document.addEventListener('click', function (olay) {
+      if (!menuKapsul.contains(olay.target)) kapat();
+    });
+
+    // Bir sayfaya gidilince kutu arkada açık kalmasın.
+    menuKapsul.addEventListener('click', function (olay) {
+      if (olay.target && olay.target.closest && olay.target.closest('.menu a')) kapat();
+    });
+
+    // Odak tuzağı: kutu açıkken Tab, düğme ile son bağlantı arasında döner; odak arkadaki
+    // sayfaya kaçmaz. Kapalıyken hiçbir şey yapmaz.
+    menuKapsul.addEventListener('keydown', function (olay) {
+      if (olay.key !== 'Tab' || !menuKapsul.open || !(darMi && darMi.matches)) return;
+      var duraklar = menuKapsul.querySelectorAll('summary, .menu a');
+      if (!duraklar.length) return;
+      var ilk = duraklar[0], son = duraklar[duraklar.length - 1];
+      if (olay.shiftKey && document.activeElement === ilk) { olay.preventDefault(); son.focus(); }
+      else if (!olay.shiftKey && document.activeElement === son) { olay.preventDefault(); ilk.focus(); }
+    });
+  }
+
   // ---------------------------------------------------------------
   // 5. Üst çubuk — kaydırınca ince çizgi (sayfanın tepesinde hero ile aynı zemindedir, çizgi gerekmez)
   // ---------------------------------------------------------------

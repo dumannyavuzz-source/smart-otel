@@ -48,13 +48,25 @@
       <span class="marka-isaret" aria-hidden="true"></span>
       <span class="marka-ad">OtelDijital</span>
     </a>
-    <nav class="menu" aria-label="Sayfa menüsü">
-      <a href="/">İç Operasyon</a>
-      <a href="/dijital-vitrin">Dijital Vitrin</a>
-      <a href="/teknolojik-altyapi" aria-current="page">Teknolojik Altyapı</a>
-      <a href="/fiyatlandirma">Fiyatlandırma</a>
-      <a href="/iletisim">İletişim</a>
-    </nav>
+    <!-- Mobilde menü açılır kapanır (denetim · Madde 6). Üç incelik:
+         1. "open" HTML'de DURUR. Betik çalışmazsa menü açık ve eksiksiz görünür; hiçbir sayfa erişilmez kalmaz.
+            Dar ekranda betik (etkilesim.js · 6) onu kapatır ve menü düğmesi ortaya çıkar.
+         2. <details>/<summary> tarayıcının kendi açılır yapısıdır: aria-expanded ve klavye desteği hazır gelir,
+            elle yönetilen bir "hamburger" kodu yazmaya gerek kalmaz.
+         3. Geniş ekranda <summary> gizlenir; menü bugünkü gibi tek satır durur. -->
+    <details class="menu-kapsul" open>
+      <summary class="menu-dugme">
+        <span class="menu-cizgiler" aria-hidden="true"></span>
+        <span class="menu-dugme-yazi">Menü</span>
+      </summary>
+      <nav class="menu" aria-label="Sayfa menüsü">
+        <a href="/">İç Operasyon</a>
+        <a href="/dijital-vitrin">Dijital Vitrin</a>
+        <a href="/teknolojik-altyapi" aria-current="page">Teknolojik Altyapı</a>
+        <a href="/fiyatlandirma">Fiyatlandırma</a>
+        <a href="/iletisim">İletişim</a>
+      </nav>
+    </details>
     <div class="ust-eylem">
       <a class="ust-giris" href="https://app.oteldijital.com/giris">Giriş Yap</a>
       <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit">Demo İste</a>

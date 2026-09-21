@@ -142,8 +142,10 @@ eklenmedi). Boru hattı vitrin sayfasıyla denendi: 780×1688, 62 KB.
   şey yoktur — tek görsel paylaşım kartıdır ve sayfada görünmez.
 - Yazı: başlıklar Cormorant Garamond (400–500), gövde Inter (400–600), veri JetBrains Mono. Kalın (700+) başlık yoktur.
 - Betikler `defer` ile yüklenir; sayfa metni betikleri beklemez.
-- **Menü telefonda gizlenmez.** Site beş sayfa olduğu için dar ekranda üst çubuk iki satıra ayrılır:
-  üstte marka ve "Demo İste", altta beş sayfa (yana kayabilen tek satır, sağ kenarı yumuşak solar).
+- **Menü telefonda açılır kutudur** (denetim · Madde 6 · `docs/decisions/014-mobil-menu.md`).
+  Üst çubuk tek satır: marka · menü düğmesi · "Demo İste". Düğmeye dokununca beş sayfa listelenir.
+  Yapı `<details>`/`<summary>` üzerine kuruludur: klavye ve ekran okuyucu desteği tarayıcıdan gelir.
+  **Betik yüklenmezse liste açık gelir** (HTML'de `open` yazar), yani hiçbir sayfa erişilmez kalmaz.
   Bütün sayfalar alt bölümde de listelenir.
 - Yatay taşma denetimi 320–1400 px arası yedi genişlikte yapıldı; **beş sayfada da hiçbir öğe sayfa dışına çıkmıyor**.
   Hero'daki telefonun kenardan taşması yalnızca yanlarda boşluk varken (≥ 1240 px) açıktır.
