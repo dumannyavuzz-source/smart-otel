@@ -117,11 +117,15 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       Kurumsal "Görüşme ayarla" → `mailto:merhaba@oteldijital.com`.
       Alan adları Genel Müdür tarafından onaylandı; ileride değişirse adres vitrindeki **beş sayfada birden** geçer
       (`index.html`, `dijital-vitrin.html`, `teknolojik-altyapi.html`, `fiyatlandirma.html`, `iletisim.html`) — her sayfanın üst çubuğunda ve alt bölümünde.
-- [ ] **6.8** **Uzantısız adresleri canlıda doğrula** (Genel Müdür kararı, 2026-09-21 · `docs/decisions/008`):
+- [ ] **6.10** **Uzantısız adresleri canlıda doğrula** (Genel Müdür kararı, 2026-09-21 · `docs/decisions/008`):
       `oteldijital.com/dijital-vitrin`, `/teknolojik-altyapi`, `/fiyatlandirma`, `/iletisim` açılmalı;
       `/dijital-vitrin.html` kalıcı olarak uzantısız adrese yönlenmelidir. Bunu `vercel.json` içindeki
       `"cleanUrls": true` sağlar; ayar Vercel panelinden değil, bu dosyadan gelir.
 - [ ] **6.6** `merhaba@oteldijital.com` posta kutusunun **gerçekten çalıştığını** doğrula (vitrindeki tek iletişim yolu).
+- [ ] **6.11** **Yasal metinler:** bugün dört sayfa da "Çok yakında." diyen bir iskelettir (`/kvkk`, `/gizlilik-politikasi`,
+      `/cerez-politikasi`, `/kullanim-sartlari`) ve `noindex` etiketlidir. Metinler girilince her sayfada
+      `<meta name="robots">` `index, follow` yapılır ve sayfa `vitrin/sitemap.xml` dosyasına eklenir
+      (`docs/decisions/008` · Ek). KVKK metninde iletişim formu verisinin **saklama süresi** belirtilmelidir.
 - [x] **6.4** ✅ **Metin–ürün doğrulaması yapıldı:** sayfa "şifreler Müdür Paneli'nden 5 saniyede güncellenir" diyor
       ve Aşama 19.1'den beri ürün bunu karşılıyor (Personel ekranı → 🔑 Şifre). Vaat ile ürün aynı.
 - [ ] **6.5** Fiyat tablosundaki plan içerikleri (hangi özellik hangi pakette) Genel Müdür onayından geçmelidir.
@@ -129,8 +133,6 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       uygulamadaki `VITE_SUPABASE_*` ile aynı değerler). Depo kökündeki `ayarlar-uret.sh` bunlardan `vitrin/ayarlar.js` üretir;
       biri eksikse ya da anahtar gizli anahtarsa dağıtım durur. Anahtar git'e girmez (`docs/security/007-iletisim-formu.md`).
 - [ ] **6.8** Canlıda formu bir kez gönder, Supabase panelinde `iletisim_formu` tablosuna düştüğünü gör, deneme satırını sil.
-- [ ] **6.9** Yasal metinler (KVKK Aydınlatma, Gizlilik, Çerez, Kullanım Şartları) yazılıp alt bölümdeki `#` bağlantılarına bağlanmalı;
-      KVKK metninde iletişim formu verisinin saklama süresi belirtilmeli.
 
 ---
 

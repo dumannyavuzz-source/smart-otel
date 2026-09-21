@@ -101,3 +101,33 @@ OtelDijital bir uygulama satıcısı değil, otelin **operasyon merkezi ve tekno
 - Yatay taşma: beş sayfa da 320 · 375 · 414 · 768 · 900 · 1024 · 1400 px genişliklerde temiz
   (`araclar/tasma-denetimi.html` yöntemiyle, iframe içinde ölçüldü).
 - Bütün sayfa içi çapalar (`#…`) kendi sayfalarında mevcuttur; eski tek sayfa çapaları kalmamıştır.
+
+---
+
+## Ek (2026-09-21): Dört yasal sayfa iskeleti
+
+Alt bölümdeki yasal bağlantılar `#` adresine, yani boşluğa gidiyordu. Genel Müdür bunların
+"boşluğa düşmemesini" istedi ve sayfaların **iskeletlerinin** şimdi açılmasına karar verdi;
+metinler hukuk onayından sonra kendisi girecek.
+
+| Adres | Dosya |
+|---|---|
+| `/kvkk` | `vitrin/kvkk.html` |
+| `/gizlilik-politikasi` | `vitrin/gizlilik-politikasi.html` |
+| `/cerez-politikasi` | `vitrin/cerez-politikasi.html` |
+| `/kullanim-sartlari` | `vitrin/kullanim-sartlari.html` |
+
+Kurallar:
+
+- Dört sayfa **birebir aynı iskelettir**; yalnızca üst başlık (kicker) ve sayfa adı değişir.
+  İçerik, ekranın ortasında duran tek bir "Çok yakında." satırı ile bir e-posta adresidir.
+  Görünüm sitenin geri kalanıyla aynıdır (`.yasal` bölümü, `stil.css`).
+- **Menüde yer almazlar.** Yalnızca alt bölümden ve iletişim formunun altındaki KVKK
+  bağlantısından erişilir. Üst menü beş sayfalık kalır; bu, `008`in ana kuralını bozmaz.
+- İçerik olmadığı için dördü de **`noindex, follow`** etiketlidir ve `sitemap.xml` dosyasında
+  **yoktur**. Boş bir sayfanın aramaya girmesi markaya zarar verir.
+
+**Metin girildiğinde yapılacak iki şey** (unutulmasın diye buraya yazıldı):
+
+1. O sayfanın `<meta name="robots">` etiketi `index, follow` olur.
+2. Sayfa `vitrin/sitemap.xml` dosyasına eklenir.

@@ -17,6 +17,9 @@ Ana kural (Genel Müdür, 2026-09-21 · karar `docs/decisions/008-vitrin-sayfa-m
 | `fiyatlandirma.html` (adres `/fiyatlandirma`) | Dört paket (personel yazılımındaki ödeme duvarıyla aynı) ve fiyatla ilgili dört soru |
 | `iletisim.html` (adres `/iletisim`) | Sitedeki **tek** form. Bütün "Bilgi Al" / "Teknik Destek Al" düğmeleri buraya gelir |
 
+Bunların dışında dört **yasal sayfa** vardır (`/kvkk`, `/gizlilik-politikasi`, `/cerez-politikasi`,
+`/kullanim-sartlari`). Menüde görünmezler; yalnızca alt bölümden ve iletişim formundan bağlanırlar.
+
 Ana sayfadaki Dijital Vitrin ve Teknolojik Altyapı "kapıları" birer cümle ve birer düğmedir; hizmetin
 kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için de geçerlidir.
 
@@ -37,7 +40,8 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 | `dijital-vitrin.html` | Sayfa başı, dijital check-up panosu, altı hizmet, dört adım, iki kapı |
 | `teknolojik-altyapi.html` | Sayfa başı, dört belirti, altı hizmet, dört adım, iki kapı |
 | `fiyatlandirma.html` | Sayfa başı, tarife (dört plan), sık sorulanlar, kapanış |
-| `iletisim.html` | Sayfa başı, zeytin blok içinde form, "hangi konu hangi sayfada" listesi |
+| `iletisim.html` | Sayfa başı, adaçayı blok içinde form, "hangi konu hangi sayfada" listesi |
+| `kvkk.html` · `gizlilik-politikasi.html` · `cerez-politikasi.html` · `kullanim-sartlari.html` | Dört yasal sayfa. Bugün yalnızca iskelet: ekranın ortasında "Çok yakında." ve e-posta adresi. Dördü birebir aynıdır, yalnızca üst başlık ve sayfa adı değişir. `noindex` ve sitemap dışıdır |
 | `stil.css` | Beş sayfanın ortak görünümü: "Sakin Lüks — Aydınlık Premium" — uçuk krem zemin (#f9f8f6), antrasit yazı (#1c1c1a), adaçayı iletişim bloğu, şampanya yalnızca ana düğmenin zemininde, bronz yazı vurgusunda; serif başlık (Cormorant Garamond) + Inter. Tek kaynak `DESIGN_SYSTEM.md`, kararlar `docs/decisions/007`, `008` ve `009` |
 | `hareket.js` | Canlı akış animasyonu (yalnızca ana sayfada iş görür). Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |
 | `etkilesim.js` | Beş etkileşim: kaydırdıkça beliren döngü hikâyesi, keşif alanındaki ekran değiştirme, görününce dolan check-up panosu, Ortak Beyin'e yazan iletişim formu ve kaydırınca üst çubuğa gelen ince çizgi. Her biri kendi öğesini bulamazsa sessizce durur; bu yüzden aynı üç betik beş sayfada da durabilir |
@@ -45,7 +49,7 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 | `../ayarlar-uret.sh` (depo kökünde) | Vercel derleme komutu: ortam değişkenlerinden `vitrin/ayarlar.js` üretir; değişken eksik ya da anahtar gizliyse dağıtımı durdurur |
 | `simge.svg` · `dokunma-simgesi.png` | Sekme simgesi ve telefon ana ekranı simgesi: koyu plaka üstünde şampanya kare. Sayfa aydınlık ama simge koyu kalır: krem bir simge açık renkli sekme çubuğunda kaybolurdu (`docs/decisions/009`). PNG, kütüphanesiz küçük bir Node betiğiyle üretildi (aşağıda) |
 | `paylasim.html` → `paylasim.png` | Bağlantı paylaşılınca görünen 1200×630 kart. HTML kaynaktır, PNG ondan üretilir (aşağıda). Beş sayfa da aynı kartı kullanır. **Tema değişirse bu dosya da değişir ve PNG yeniden üretilir** |
-| `robots.txt` · `sitemap.xml` | Arama motoru yönlendirmesi: beş sayfa listelidir, `paylasim.html` dışarıdadır |
+| `robots.txt` · `sitemap.xml` | Arama motoru yönlendirmesi: sitemap dosyasında **beş** sayfa listelidir. `paylasim` ve dört yasal iskelet sayfa dışarıdadır; yasal metinler yazılınca sitemap dosyasına eklenir |
 | `../vercel.json` (depo kökünde) | Uzantısız adresler (`cleanUrls`) ve yayın başlıkları: içerik güvenlik politikası (CSP) ile diğer koruyucu başlıklar. Vercel bu dosyayı yalnızca Root Directory'de arar; o yüzden kökte durur |
 
 ## Bakmak için
@@ -79,8 +83,8 @@ Fotoğraf yok; kart da sitenin kendisi gibi kodla çizilir. `paylasim.html` kayn
 | Dosya | Ne yapar |
 |---|---|
 | `sunucu.js` | Verilen klasörü `http://localhost:5180` adresinde açar. Yayındaki gibi **uzantısız adresleri** de anlar: `/fiyatlandirma` bulunamazsa `fiyatlandirma.html` denenir |
-| `tasma-denetimi.html` | Sayfayı 320–1400 px arası yedi genişlikte iframe içinde açar, sayfa dışına taşan öğeleri listeler. Geçici olarak `vitrin/` içine kopyalayıp sunucuyla açın (`http://localhost:5180/tasma-denetimi.html`); sonuç sayfanın altına yazılır. İşi bitince kopyayı silin. **Not:** dosyanın içindeki `index.html` adı elle değiştirilerek diğer dört sayfa da ölçülür |
-| `dokunma-simgesi-uret.js` | `dokunma-simgesi.png` üretir (180×180, grafit zeminde şampanya kare): `node araclar/dokunma-simgesi-uret.js vitrin/dokunma-simgesi.png` |
+| `tasma-denetimi.html` | Sayfayı 320–1400 px arası yedi genişlikte iframe içinde açar, sayfa dışına taşan öğeleri listeler. Geçici olarak `vitrin/` içine kopyalayıp sunucuyla açın (`http://localhost:5180/tasma-denetimi.html`); sonuç sayfanın altına yazılır. İşi bitince kopyayı silin. **Not:** dosyanın içindeki `index.html` adı elle değiştirilerek diğer sekiz sayfa da ölçülür |
+| `dokunma-simgesi-uret.js` | `dokunma-simgesi.png` üretir (180×180, koyu plaka üstünde şampanya kare): `node araclar/dokunma-simgesi-uret.js vitrin/dokunma-simgesi.png` |
 
 > **Uyarı:** Telefon genişliğini ölçmek için tarayıcıyı `--window-size=390,844` ile açmak **yanıltır**:
 > Windows pencereyi en az ~500 px yapar, sayfa 500 px'e göre dizilir, ekran görüntüsü 390 px'e kırpılır.
@@ -127,9 +131,15 @@ Ziyaretçi anahtarı bu tabloya yalnızca yazabilir, okuyamaz; kimse silemez. Ay
 içerik güvenlik politikası (CSP) altında yayınlanır: betik yalnızca kendi alanından, bağlantı yalnızca
 `*.supabase.co`. Ayrıntı ve canlı doğrulama: `docs/security/007-iletisim-formu.md`.
 
-Alt bölümdeki yasal bağlantılar (KVKK Aydınlatma Metni, Gizlilik Politikası, Çerez Politikası,
-Kullanım Şartları) ve formun altındaki KVKK bağlantısı **şimdilik `#` adresine gider**; metinler
-yazılınca gerçek sayfalarına bağlanacaktır.
+Alt bölümdeki yasal bağlantılar ve formun altındaki KVKK bağlantısı artık boşluğa değil,
+**dört yasal sayfaya** gider: `/kvkk` · `/gizlilik-politikasi` · `/cerez-politikasi` · `/kullanim-sartlari`.
+Dördü de bugün yalnızca bir **iskelettir**: ortada "Çok yakında." yazar ve e-posta adresi verir.
+Metinler hukuk onayından sonra Genel Müdür tarafından girilecek. **Metin girilince iki şey yapılır:**
+
+1. O sayfanın `<meta name="robots">` etiketi `noindex, follow` → `index, follow` olur.
+2. Sayfa `sitemap.xml` dosyasına eklenir.
+
+Boş sayfa arama motoruna girmesin diye dördü de şimdilik `noindex`tir ve sitemap'te yoktur.
 
 Hizmet sayfalarındaki **"Bilgi Al"** ve **"Teknik Destek Al"** düğmeleri kayıt sayfasına değil,
 İletişim sayfasına (`/iletisim`) gider. Bu bölümler demo üyeliğine yönlendirmez; bu, Genel Müdür'ün açık kararıdır.
