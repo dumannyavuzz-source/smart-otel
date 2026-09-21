@@ -1,6 +1,7 @@
 # vitrin/ — OtelDijital Tanıtım Sayfaları
 
-Dışarıya bakan **beş sayfa**: ürünü ve hizmetleri anlatır, menüde "Demo İste", sayfalarda "30 Gün Ücretsiz Dene" der.
+Dışarıya bakan **beş sayfa**: ürünü ve hizmetleri anlatır. Birincil çağrı sitenin her yerinde aynı cümledir:
+**"30 Gün Ücretsiz Dene"** (denetim · Madde 7 · `docs/decisions/015-cta-birligi.md`).
 Görsel dili "Sakin Lüks — Aydınlık Premium"dur (`DESIGN_SYSTEM.md`).
 Personel yazılımı (`app/`) ile **hiçbir ortak kodu yoktur**; bilerek böyledir.
 
@@ -143,7 +144,7 @@ eklenmedi). Boru hattı vitrin sayfasıyla denendi: 780×1688, 62 KB.
 - Yazı: başlıklar Cormorant Garamond (400–500), gövde Inter (400–600), veri JetBrains Mono. Kalın (700+) başlık yoktur.
 - Betikler `defer` ile yüklenir; sayfa metni betikleri beklemez.
 - **Menü telefonda açılır kutudur** (denetim · Madde 6 · `docs/decisions/014-mobil-menu.md`).
-  Üst çubuk tek satır: marka · menü düğmesi · "Demo İste". Düğmeye dokununca beş sayfa listelenir.
+  Üst çubuk tek satır: marka · menü düğmesi · "30 Gün Ücretsiz Dene". Düğmeye dokununca beş sayfa listelenir.
   Yapı `<details>`/`<summary>` üzerine kuruludur: klavye ve ekran okuyucu desteği tarayıcıdan gelir.
   **Betik yüklenmezse liste açık gelir** (HTML'de `open` yazar), yani hiçbir sayfa erişilmez kalmaz.
   Bütün sayfalar alt bölümde de listelenir.
@@ -179,7 +180,7 @@ eğik çizgi konmaz, böylece aynı sayfanın iki adresi olmaz. Bilgisayarda
 (Genel Müdür kararı, 2026-09-21 · `docs/decisions/008`).
 
 Alan adları Genel Müdür tarafından onaylandı (2026-09-16). Sayfalardaki bağlantılar:
-Kayıt sayfasına (`app.oteldijital.com/kayit`) her sayfanın üst çubuğundaki "Demo İste" ile ana sayfa, fiyat sayfası
+Kayıt sayfasına (`app.oteldijital.com/kayit`) her sayfanın üst çubuğundaki düğme ile ana sayfa, fiyat sayfası
 ve kapanışlardaki "30 Gün Ücretsiz Dene" düğmeleri gider; "Giriş Yap" (üst çubuk ve alt bölüm)
 `app.oteldijital.com/giris` adresine; Kurumsal plandaki "Görüşme ayarla" ve iletişim sayfasındaki adres
 `mailto:merhaba@oteldijital.com`'a gider. Bu posta kutusunun canlıya çıkmadan çalıştığı doğrulanmalıdır.
@@ -202,7 +203,8 @@ Metinler hukuk onayından sonra Genel Müdür tarafından girilecek. **Metin gir
 Boş sayfa arama motoruna girmesin diye dördü de şimdilik `noindex`tir ve sitemap'te yoktur.
 
 Hizmet sayfalarındaki **"Bilgi Al"** ve **"Teknik Destek Al"** düğmeleri kayıt sayfasına değil,
-İletişim sayfasına (`/iletisim`) gider. Bu bölümler demo üyeliğine yönlendirmez; bu, Genel Müdür'ün açık kararıdır.
+İletişim sayfasına (`/iletisim`) gider. Bu sayfalar deneme kaydına yönlendirmez; bu, Genel Müdür'ün açık kararıdır
+(denetim · Madde 7 · `docs/decisions/015-cta-birligi.md`).
 
 Adımlar `docs/deployment-checklist.md` · Bölüm 6'da.
 

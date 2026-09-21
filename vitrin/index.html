@@ -60,7 +60,7 @@
      Dijital Vitrin, Teknolojik Altyapı ve Fiyatlandırma burada ANLATILMAZ; her biri kendi sayfasının
      konusudur. Ana sayfada yalnızca iki satırlık birer kapı vardır (aşağıda, "#kapilar").
 
-     KAYIT ADRESİ: "30 Gün Ücretsiz Dene" ve "Demo İste" düğmeleri app.oteldijital.com/kayit adresine gider
+     KAYIT ADRESİ: Bütün "30 Gün Ücretsiz Dene" düğmeleri app.oteldijital.com/kayit adresine gider
      (Genel Müdür, 2026-09-16). Adres değişirse beş sayfada birden güncellenir (docs/deployment-checklist.md · 6.3).
      Hizmet sayfalarındaki "Bilgi Al" düğmeleri kayıt sayfasına DEĞİL, İletişim sayfasına (/iletisim) gider.
      ADRESLER UZANTISIZDIR (/dijital-vitrin): Vercel "cleanUrls" ile yayınlar, yerel sunucu da aynısını yapar.
@@ -94,11 +94,13 @@
         <a href="/iletisim">İletişim</a>
       </nav>
     </details>
-    <!-- Sağda iki şey: sade "Giriş Yap" bağlantısı (mevcut müşteri) ve tek eylem düğmesi "Demo İste" (yeni müşteri;
-         30 günlük deneme kaydına gider). Sayfalardaki diğer deneme düğmeleri "30 Gün Ücretsiz Dene" der. -->
+    <!-- Sağda iki şey: sade "Giriş Yap" bağlantısı (mevcut müşteri) ve tek eylem düğmesi (yeni müşteri).
+         Düğmenin metni SİTENİN HER YERİNDE aynıdır: "30 Gün Ücretsiz Dene" (denetim · Madde 7).
+         Bu düğmenin eski adı değiştirildi: takvim üzerinden ilerleyen canlı bir tanıtım akışımız
+         olmadığı için o sözcük siteden tamamen kaldırıldı. Gerekçe: docs/decisions/015-cta-birligi.md -->
     <div class="ust-eylem">
       <a class="ust-giris" href="https://app.oteldijital.com/giris">Giriş Yap</a>
-      <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit">Demo İste</a>
+      <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit"><span class="dugme-yazi"><span class="dugme-onek">30 Gün</span> Ücretsiz Dene</span></a>
     </div>
   </div>
 </header>
@@ -119,10 +121,12 @@
         Personel telefonundan üç dokunuşla bildirir; müdür olan biteni tek ekrandan görür.
       </p>
 
-      <!-- Ana düğme sayfanın içine çağırır (operasyon merkezinin tanıtımı); deneme kaydı sessiz bağlantıda ve menüde ("Demo İste") -->
+      <!-- CTA hiyerarşisi (denetim · Madde 7): en güçlü teklif birincil düğmededir.
+           Önceki düzende birincil düğme yalnızca sayfayı aşağı kaydırıyordu; 30 günlük ücretsiz
+           deneme ise ikincil konumdaydı. Yerleri değişti. İkincil çağrı sessiz bağlantı biçimindedir. -->
       <div class="cta-satir">
-        <a class="dugme dugme--dev" href="#nedir">Operasyon Merkezini Tanıyın →</a>
-        <a class="baglanti" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+        <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+        <a class="baglanti" href="#dongu">Nasıl çalışır?</a>
       </div>
 
       <p class="guvence">Kredi kartı yok <span aria-hidden="true">·</span> Taahhüt yok <span aria-hidden="true">·</span> 30 gün boyunca tüm özellikler</p>
@@ -751,7 +755,7 @@
     <p>Kurulum 20 dakika. Personelin öğrenmesi bir kahve molası.</p>
     <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
     <p class="guvence-tek">✓ Kredi kartı yok &nbsp;·&nbsp; ✓ Taahhüt yok &nbsp;·&nbsp; ✓ 30 gün boyunca tüm özellikler</p>
-    <a class="baglanti" href="/fiyatlandirma">Önce fiyatlara bakayım</a>
+    <a class="baglanti" href="/fiyatlandirma">Fiyatları Gör</a>
   </section>
 
 </main>

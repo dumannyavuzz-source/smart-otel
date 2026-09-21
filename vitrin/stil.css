@@ -301,6 +301,11 @@ a { color: inherit; }
 }
 .dugme--sessiz:hover { background: rgba(138, 109, 59, 0.07); }
 
+/* Düğme metni tek parça durur: "30 Gün" öneki ile devamı AYNI esnek öğenin içindedir.
+   Ayrı öğe olsalardı aralarına düğmenin 10 px'lik boşluğu girer ve "30 GÜN  ÜCRETSİZ DENE"
+   diye çift boşluklu görünürdü. Önek gizlendiğinde baştaki boşluk kendiliğinden yutulur. */
+.dugme-yazi { display: inline; }
+
 /* Bağlantı türü: antrasit yazı, altında ince bronz çizgi; hover'da çizgi koyulaşır */
 .baglanti {
   display: inline-flex;
@@ -1802,6 +1807,13 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
    sayfa dışına çıkar ve dokunmatik cihazda yana kaymaya yol açar. O yüzden burada kapanır. */
 @media (max-width: 1240px) {
   .gorsel { margin-inline-end: 0; }
+
+  /* Üst çubuk üç sütundur: marka · menü · eylem. Denetim (Madde 7) eylem düğmesinin metnini
+     uzattı ve bu genişliğin altında beş sözcüklük menüyle birlikte sığmayıp düğme sayfayı
+     taşırıyordu (ölçüldü: 1000 px'te +13, 1150 px'te +39 piksel).
+     YALNIZCA ÜST ÇUBUKTA "30 Gün" öneki gizlenir; vaat aynı kalır ve sayfaların içindeki
+     bütün düğmelerde metin tam hâliyle yazılı durur. */
+  .ust .dugme-onek { display: none; }
 }
 
 /* ---------- Tablet: menü ile düğme yan yana sığmaz; "Giriş Yap" saklanır (alt bölümde de vardır) ---------- */
@@ -1910,6 +1922,22 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   .olcum { grid-template-columns: minmax(120px, 0.55fr) 1fr auto; }
   .iletisim { grid-template-columns: 1fr; padding: 28px 22px; gap: 28px; }
   .iletisim-yazi p { max-width: none; }
+}
+
+/* ---------- Dar üst çubuk: üç şey yan yana sığmıyor ---------- */
+/* Üst çubukta marka, menü düğmesi ve eylem düğmesi yan yana durur. Denetim (Madde 7) eylem
+   düğmesinin metnini "30 Gün Ücretsiz Dene" yaptı; bu genişliğin altında üçü birden sığmıyor ve
+   marka ile menü üst üste biniyordu. İki şey kısılır, ikisi de anlamı bozmaz.
+   Sınır ölçülerek bulundu: 620 px'in üstünde her ikisi de tam hâliyle sığıyor. */
+@media (max-width: 620px) {
+  /* 1. Menü düğmesinin yazısı ekrandan çekilir, üç çizgi kalır. Yazı SİLİNMEZ, yalnızca görünmez
+     olur: ekran okuyucu düğmeyi yine "Menü" diye okur, klavyeyle de bulunur. */
+  .menu-dugme-yazi { position: absolute; left: -9999px; }
+  .menu-dugme { padding: 0 8px; }
+
+  /* 2. Eylem düğmesinde yalnızca "30 Gün" öneki gizlenir; vaat aynı kalır: "Ücretsiz Dene".
+     Metnin tamamı bu genişliğin üstünde ve sayfanın bütün diğer düğmelerinde yazılı durur. */
+  .dugme-onek { display: none; }
 }
 
 @media (max-width: 420px) {
