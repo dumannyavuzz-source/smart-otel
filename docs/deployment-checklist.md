@@ -24,9 +24,9 @@
 - [ ] **1.2** Projede **günlük yedeklemenin açık** olduğunu doğrula (veritabanı göçleri geri alınamaz; dönüş yolu yedektir).
 - [ ] **1.3** Bilgisayardan bağla: `supabase link --project-ref <proje-kimliği>`
 - [ ] **1.4** Veritabanını kur: `supabase db push`
-      → 14 göç dosyası sırayla çalışır: tablolar → kurallar → kilitler → fotoğraflar → misafir kapısı → arıza fotoğrafı →
+      → 18 göç dosyası sırayla çalışır: tablolar → kurallar → kilitler → fotoğraflar → misafir kapısı → arıza fotoğrafı →
       çözüm fotoğrafı → personel ve ürün → teslim kanıtı → kesirli miktar → fatura gizliliği → şifre güncelleme →
-      kayıt kapısı → sayaç kilidi.
+      kayıt kapısı → sayaç kilidi → demo süresi → iletişim formu → iletişim sel kapısı → iletişim konu listesi.
 - [ ] **1.5** Kurulumu gözle doğrula (Supabase Studio):
       - `photos` kovası **private** (public değil), dosya sınırı **2 MB**.
       - Bütün tablolarda RLS **açık**.
@@ -46,6 +46,8 @@
       (a) `/kayit` sayfasından normal müşteri gibi kaydol (tercih edilen: akışın gerçekten çalıştığını da doğrular), ya da
       (b) Studio'dan elle: `hotels` satırı + kullanıcı hesabı + `memberships` satırı (`role = 'owner'`).
 - [ ] **1.10** Odaları gir (`rooms`): numara ve kat. `staff_code` ve `guest_code` kendiliğinden üretilir.
+      Uygulamada oda ekleme ekranı **yoktur**; bu adım Studio üzerinden yapılır.
+      Kopyalanmaya hazır SQL: `docs/test-listesi.md` (son bölüm).
 - [ ] **1.11** Temizlik kontrol listesini (`checklist_templates`) gir. Ürünleri müdür uygulamadan ekleyebilir (en fazla 8 açık ürün).
 
 ## 2. Vercel — Personel uygulaması ve misafir sayfası
