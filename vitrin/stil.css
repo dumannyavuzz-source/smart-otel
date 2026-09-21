@@ -1418,6 +1418,47 @@ a { color: inherit; }
 
 .plan .dugme { white-space: nowrap; }
 
+/* Şeffaflık bloğu: para birimi, KDV, faturalandırma, ödeme, iptal, büyük oteller (denetim · Madde 4).
+   Denetimin açık şartı: "küçük punto değil, okunur boyutta". O yüzden bu blok bir dipnot gibi değil,
+   tarifenin devamı gibi durur — aynı 0.95rem gövde ölçüsü, aynı çizgi düzeni. Ticari kararlar
+   docs/decisions/012-fiyat-seffafligi.md içindedir; oradaki bir cümle değişirse burası da değişir. */
+.seffaflik {
+  margin: clamp(40px, 5vw, 56px) 0 0;
+  border-top: 1px solid var(--cizgi);
+}
+.seffaflik-satir {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px 32px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--cizgi);
+}
+.seffaflik dt {
+  color: var(--metin);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+.seffaflik dd {
+  margin: 0;
+  color: var(--metin-soluk);
+  font-size: 0.95rem;
+  max-width: 68ch;
+}
+.seffaflik dd a {
+  color: var(--metin);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--cizgi-koyu);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 300ms var(--gecis);
+}
+.seffaflik dd a:hover { text-decoration-color: var(--bronz); }
+
+@media (min-width: 901px) {
+  /* Geniş ekranda başlık solda dar bir sütunda durur; göz satır başlarından aşağı kayar. */
+  .seffaflik-satir { grid-template-columns: minmax(0, 15ch) minmax(0, 1fr); align-items: baseline; }
+}
+
 .fiyat-dip {
   margin-top: 32px;
   text-align: center;

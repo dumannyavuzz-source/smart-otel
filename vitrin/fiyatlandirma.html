@@ -103,7 +103,7 @@
           <h3>Butik</h3>
           <p class="plan-oda">1–25 oda</p>
         </div>
-        <p class="plan-fiyat"><span class="para">$</span><span class="rakam">29</span><span class="donem">/ay</span></p>
+        <p class="plan-fiyat"><span class="para">$</span><span class="rakam">29</span><span class="donem">USD / ay</span></p>
         <ul class="plan-liste">
           <li>Sınırsız personel</li>
           <li>QR ile oda ekranları</li>
@@ -120,7 +120,7 @@
           <h3>Standart</h3>
           <p class="plan-oda">26–75 oda</p>
         </div>
-        <p class="plan-fiyat"><span class="para">$</span><span class="rakam">59</span><span class="donem">/ay</span></p>
+        <p class="plan-fiyat"><span class="para">$</span><span class="rakam">59</span><span class="donem">USD / ay</span></p>
         <ul class="plan-liste">
           <li><b>Butik'teki her şey</b></li>
           <li>Depo ve satın alma zinciri (üç imza)</li>
@@ -136,7 +136,7 @@
           <h3>Büyük</h3>
           <p class="plan-oda">76–150 oda</p>
         </div>
-        <p class="plan-fiyat"><span class="para">$</span><span class="rakam">99</span><span class="donem">/ay</span></p>
+        <p class="plan-fiyat"><span class="para">$</span><span class="rakam">99</span><span class="donem">USD / ay</span></p>
         <ul class="plan-liste">
           <li><b>Standart'taki her şey</b></li>
           <li>Kurulum ve personel eğitimi</li>
@@ -156,11 +156,48 @@
           <li>Birden çok otel, tek çatı</li>
           <li>Kurumsal fatura ve sözleşme</li>
         </ul>
-        <a class="dugme dugme--sessiz" href="mailto:merhaba@oteldijital.com">Görüşme ayarla</a>
+        <!-- Eskiden doğrudan mailto idi (v1-1-notlari · B4, iletişim formu yokken alınmış karar).
+             Form geldikten sonra sitedeki tek huni İletişim sayfasıdır; şeffaflık bloğundaki
+             "özel kurumsal teklif" bağlantısı da oraya gider. İki farklı hedef karışıklık yaratırdı. -->
+        <a class="dugme dugme--sessiz" href="/iletisim">Teklif Alın</a>
       </li>
     </ul>
 
-    <p class="fiyat-dip">Fiyatlara KDV dahil değildir. Yıllık ödemede iki ay hediye.</p>
+    <!-- ===================== ŞEFFAFLIK BLOĞU (denetim · Madde 4) =====================
+         Denetim: fiyat döviz cinsinden veriliyordu ama hangi para birimi olduğu, verginin dahil olup
+         olmadığı ve faturanın nasıl kesileceği hiçbir yerde yazmıyordu. Döviz fiyatlandırma bilinçli
+         bir karardır ve KORUNUR (Genel Müdür, 2026-09-21); sorun para birimi değil, açıklanmamış olmasıydı.
+
+         KÜÇÜK PUNTO DEĞİL: bu blok dipnot gibi değil, tarifenin devamı gibi okunur. Ticari kararlar
+         docs/decisions/012-fiyat-seffafligi.md içinde; oradaki bir cümle değişirse burası da değişir. -->
+    <dl class="seffaflik">
+      <div class="seffaflik-satir">
+        <dt>Para birimi</dt>
+        <dd>Fiyatlar <b>ABD doları (USD)</b> cinsindendir. Oteller döviz üzerinden satış yaptığı için fiyatlama da dövizdir.</dd>
+      </div>
+      <div class="seffaflik-satir">
+        <dt>KDV</dt>
+        <dd>Fiyatlara <b>KDV dahil değildir.</b> Yurt içi satışlarda faturaya <b>%20 KDV</b> eklenir.</dd>
+      </div>
+      <div class="seffaflik-satir">
+        <dt>Faturalandırma</dt>
+        <dd>Fatura <b>Türk lirası</b> olarak kesilir. Çevrim, <b>fatura tarihindeki TCMB döviz satış kuru</b> üzerinden yapılır.</dd>
+      </div>
+      <div class="seffaflik-satir">
+        <dt>Ödeme</dt>
+        <dd>Aylık ya da yıllık dönemlerle; <b>kredi kartı veya havale/EFT</b>. Yıllık ödemede iki ay hediyedir.</dd>
+      </div>
+      <div class="seffaflik-satir">
+        <dt>Taahhüt ve iptal</dt>
+        <dd><b>Taahhüt yoktur.</b> İstediğiniz an iptal edersiniz; hizmet, ödemesi yapılmış dönemin sonuna kadar sürer. Kalan gün için ek ücret alınmaz.</dd>
+      </div>
+      <div class="seffaflik-satir">
+        <dt>Büyük oteller</dt>
+        <dd>76 odadan sonrası <b>Büyük</b> pakettedir. 150 odanın üstünde, birden çok otelde ya da özel ihtiyaçta <a href="/iletisim">özel kurumsal teklif</a> veririz.</dd>
+      </div>
+    </dl>
+
+    <p class="fiyat-dip">Listelenen fiyatlar tek bir otel içindir ve aylık aboneliğe göre yazılmıştır.</p>
   </section>
 
   <!-- ===================== SIK SORULANLAR =====================
@@ -188,7 +225,7 @@
         <span class="hizmet-no">03</span>
         <div>
           <h3>Kontrat imzalamam gerekiyor mu?</h3>
-          <p>Hayır. Aylık ödenir, istediğiniz ay bırakılır. Yıllık ödemeyi seçerseniz iki ay hediyedir; zorunlu değildir.</p>
+          <p>Hayır, taahhüt yoktur. İstediğiniz an iptal edersiniz; hizmet ödediğiniz dönemin sonuna kadar sürer ve kalan gün için ek ücret alınmaz. Yıllık ödemeyi seçerseniz iki ay hediyedir; zorunlu değildir.</p>
         </div>
       </li>
       <li class="hizmet">

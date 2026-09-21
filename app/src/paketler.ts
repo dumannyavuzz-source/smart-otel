@@ -10,9 +10,9 @@ export interface Paket {
 }
 
 export const PAKETLER: Paket[] = [
-  { ad: 'Butik',    odalar: '1–25 oda',   fiyat: '$29', donem: '/ay' },
-  { ad: 'Standart', odalar: '26–75 oda',  fiyat: '$59', donem: '/ay' },
-  { ad: 'Büyük',    odalar: '76–150 oda', fiyat: '$99', donem: '/ay' },
+  { ad: 'Butik',    odalar: '1–25 oda',   fiyat: '$29', donem: 'USD / ay' },
+  { ad: 'Standart', odalar: '26–75 oda',  fiyat: '$59', donem: 'USD / ay' },
+  { ad: 'Büyük',    odalar: '76–150 oda', fiyat: '$99', donem: 'USD / ay' },
   { ad: 'Kurumsal', odalar: '150+ oda',   fiyat: 'Özel Teklif', iletisim: true },
 ];
 
@@ -20,4 +20,4 @@ export const PAKETLER: Paket[] = [
 export const KURUMSAL_ADRESI = 'mailto:merhaba@oteldijital.com';
 
 // Yıllık ödeme vurgusu — vitrindeki cümlenin aynısı, iki yerde farklı söz verilmesin.
-export const YILLIK_VURGU = 'Yıllık ödemede iki ay hediye. Fiyatlara KDV dahil değildir.';
+export const YILLIK_VURGU = 'Fiyatlar USD cinsindendir, KDV dahil değildir. Yıllık ödemede iki ay hediye.';
