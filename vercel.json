@@ -2,6 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/istatistik/script.js", "destination": "https://cloud.umami.is/script.js" },
+    { "source": "/istatistik/api/send", "destination": "https://cloud.umami.is/api/send" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

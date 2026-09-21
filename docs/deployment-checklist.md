@@ -125,6 +125,11 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       `"cleanUrls": true` sağlar; ayar Vercel panelinden değil, bu dosyadan gelir.
       `vercel.json` yorum kabul etmez; değişiklikten sonra `node -e "require(./vercel.json)"` ile geçerliliği denetlenir.
 - [ ] **6.6** `merhaba@oteldijital.com` posta kutusunun **gerçekten çalıştığını** doğrula (vitrindeki tek iletişim yolu).
+- [ ] **6.13** **Ölçümü aç ve doğrula** (denetim · Madde 5 · `docs/decisions/013-analitik.md`):
+      Umami Cloud hesabı açıldıktan sonra dokuz sayfaya iki satırlık sayaç etiketi eklenir.
+      Sonra canlıda: `oteldijital.com/istatistik/script.js` **200** dönmeli, panelde canlı trafik
+      görünmeli ve sekiz olay ayrı ayrı düşmeli. **CSP'ye dokunulmaz** — sayaç kendi alan adımızdan
+      sunulduğu için `script-src 'self'` olduğu gibi kalır; gevşetme gerekirse kurulum yanlıştır.
 - [ ] **6.12** **Hata sayfalarını canlıda doğrula** (denetim · Madde 3 · `docs/decisions/011-hata-sayfalari.md`):
       Olmayan bir adres (`oteldijital.com/olmayan-sayfa-testi`) **markalı HTML** sayfa ve **HTTP 404** dönmeli.
       Yanıtta sağlayıcının ham metni, sunucu bölgesi ya da istek kimliği görünmemeli.

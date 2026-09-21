@@ -106,6 +106,20 @@
       }, sakin ? 0 : 350);
     }
 
+    // Ölçüm haberleri: bu dosya yalnızca "oldu" der, sayan taraf olcum.js'dir.
+    // Ayrı tutulmasının sebebi: ölçüm kalksa bile formun işleyişi hiç değişmesin.
+    function haberVer(ad) {
+      try { document.dispatchEvent(new CustomEvent('oteldijital:' + ad)); } catch (e) { /* eski tarayıcı */ }
+    }
+
+    // Formu doldurmaya başlamak da bir olaydır: kaç kişi başlayıp yarıda bıraktığını gösterir.
+    var basladiSoylendi = false;
+    form.addEventListener('input', function () {
+      if (basladiSoylendi) return;
+      basladiSoylendi = true;
+      haberVer('form-basladi');
+    });
+
     form.addEventListener('submit', function (olay) {
       olay.preventDefault();
       if (!form.reportValidity()) return;
@@ -143,6 +157,7 @@
       })
         .then(function (cevap) {
           if (!cevap.ok) throw new Error('HTTP ' + cevap.status);
+          haberVer('form-gonderildi');   // yalnızca burada: tuzağa düşen bot gönderim sayılmaz
           alindi();
         })
         .catch(gonderilemedi)
