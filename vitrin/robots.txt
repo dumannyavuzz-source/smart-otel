@@ -5,4 +5,4 @@ Allow: /
 # paylasim yalnızca paylaşım görselinin kaynağıdır; ziyaretçi sayfası değildir
 Disallow: /paylasim
 Disallow: /paylasim.html
-Sitemap: https://oteldijital.com/sitemap.xml
+Sitemap: https://www.oteldijital.com/sitemap.xml

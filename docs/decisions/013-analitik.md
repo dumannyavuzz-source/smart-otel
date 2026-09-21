@@ -73,11 +73,11 @@ hiçbir işe yaramayan iki istek yükler ve sitenin 23 KB / 6 istek çizgisini b
    <script src="/olcum.js" defer></script>
    ```
 
-   > **Tuzak — `data-host-url` sitenin gerçekten sunulduğu host olmalı.** Bugün `oteldijital.com`
-   > adresi `www.oteldijital.com` adresine 308 ile yönleniyor. Yanlış host yazılırsa olay bildirimi
-   > bir POST isteği olduğu için yönlendirmeye takılır ve gövdesi düşebilir; olaylar sessizce
-   > kaybolur. Host birliği denetimin **Madde 8**'inde kuruluyor: etiket ya o maddeden sonra
-   > eklenmeli ya da bugünkü gerçek host (`www.oteldijital.com`) yazılmalı.
+   > **`data-host-url` sitenin sunulduğu host olmalı.** Olay bildirimi bir POST isteğidir; yanlış
+   > host yazılırsa yönlendirmeye takılır ve gövdesi düşebilir, olaylar sessizce kaybolur.
+   > **Bu tuzak Madde 8 ile kapandı:** kanonik host artık tek ve `www.oteldijital.com`
+   > (`docs/decisions/016-host-birligi-ve-yapilandirilmis-veri.md`). Etikete
+   > `https://www.oteldijital.com/istatistik` yazılacak.
 
 3. Sağlayıcı değişirse yalnızca `vercel.json` içindeki iki yönlendirmenin hedefi değişir;
    `olcum.js` aynı kalır (dosyadaki `gonder()` hem Umami hem Plausible tanır).

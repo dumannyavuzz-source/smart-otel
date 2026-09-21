@@ -6,7 +6,7 @@
 <title>İletişim | OtelDijital</title>
 <meta name="description" content="Dijital check-up, iç operasyon merkezi, satış kanalları ya da teknik altyapı — konuyu seçin, gerisini biz soralım. Üyelik gerekmez." />
 
-<link rel="canonical" href="https://oteldijital.com/iletisim" />
+<link rel="canonical" href="https://www.oteldijital.com/iletisim" />
 <meta name="robots" content="index, follow" />
 <meta name="theme-color" content="#f9f8f6" />
 <link rel="icon" href="simge.svg" type="image/svg+xml" />
@@ -15,22 +15,53 @@
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="tr_TR" />
 <meta property="og:site_name" content="OtelDijital" />
-<meta property="og:url" content="https://oteldijital.com/iletisim" />
+<meta property="og:url" content="https://www.oteldijital.com/iletisim" />
 <meta property="og:title" content="İletişim | OtelDijital" />
 <meta property="og:description" content="Konuyu seçin, gerisini biz soralım. Üyelik gerekmez." />
-<meta property="og:image" content="https://oteldijital.com/paylasim.png" />
+<meta property="og:image" content="https://www.oteldijital.com/paylasim.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="OtelDijital — otel operasyon merkezi" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="İletişim | OtelDijital" />
 <meta name="twitter:description" content="Konuyu seçin, gerisini biz soralım. Üyelik gerekmez." />
-<meta name="twitter:image" content="https://oteldijital.com/paylasim.png" />
+<meta name="twitter:image" content="https://www.oteldijital.com/paylasim.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
 <link rel="stylesheet" href="stil.css" />
+
+<!-- Yapılandırılmış veri (denetim · Madde 8b). Yalnızca sayfada görünen bilgi işaretlenir:
+     e-posta adresi ekranda yazılıdır, telefon ise HENÜZ yazılı değildir (künye bloğu "hidden",
+     docs/decisions/010-kunye-ve-telefon.md). Bu yüzden "telephone" alanı BİLEREK yok.
+     Telefon görünür olunca buraya da eklenecek — görünmeyen bilgi işaretlenmez. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://www.oteldijital.com/" },
+        { "@type": "ListItem", "position": 2, "name": "İletişim", "item": "https://www.oteldijital.com/iletisim" }
+      ]
+    },
+    {
+      "@type": "ContactPage",
+      "name": "İletişim",
+      "url": "https://www.oteldijital.com/iletisim",
+      "inLanguage": "tr-TR",
+      "about": {
+        "@type": "Organization",
+        "name": "OtelDijital",
+        "url": "https://www.oteldijital.com/",
+        "email": "merhaba@oteldijital.com"
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 

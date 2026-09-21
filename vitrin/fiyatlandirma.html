@@ -6,7 +6,7 @@
 <title>Fiyatlandırma | OtelDijital</title>
 <meta name="description" content="Oda sayısı kadar ödeyin. Kurulum ücreti yok, donanım yok, kontrat yok. 30 gün boyunca tüm özellikler açık; beğenmezseniz tek tıkla bırakırsınız." />
 
-<link rel="canonical" href="https://oteldijital.com/fiyatlandirma" />
+<link rel="canonical" href="https://www.oteldijital.com/fiyatlandirma" />
 <meta name="robots" content="index, follow" />
 <meta name="theme-color" content="#f9f8f6" />
 <link rel="icon" href="simge.svg" type="image/svg+xml" />
@@ -15,22 +15,127 @@
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="tr_TR" />
 <meta property="og:site_name" content="OtelDijital" />
-<meta property="og:url" content="https://oteldijital.com/fiyatlandirma" />
+<meta property="og:url" content="https://www.oteldijital.com/fiyatlandirma" />
 <meta property="og:title" content="Fiyatlandırma | OtelDijital" />
 <meta property="og:description" content="Oda sayısı kadar ödeyin. Kurulum ücreti yok, donanım yok, kontrat yok. 30 gün boyunca tüm özellikler açık." />
-<meta property="og:image" content="https://oteldijital.com/paylasim.png" />
+<meta property="og:image" content="https://www.oteldijital.com/paylasim.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="OtelDijital — otel operasyon merkezi" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Fiyatlandırma | OtelDijital" />
 <meta name="twitter:description" content="Oda sayısı kadar ödeyin. Kurulum ücreti yok, donanım yok, kontrat yok. 30 gün boyunca tüm özellikler açık." />
-<meta name="twitter:image" content="https://oteldijital.com/paylasim.png" />
+<meta name="twitter:image" content="https://www.oteldijital.com/paylasim.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
 <link rel="stylesheet" href="stil.css" />
+
+<!-- Yapılandırılmış veri (denetim · Madde 8b · docs/decisions/016-host-birligi-ve-yapilandirilmis-veri.md)
+     TEK KURAL: yalnızca sayfada GERÇEKTEN GÖRÜNEN bilgi işaretlenir. Burada üç şey var ve üçü de
+     ekranda yazılı: yol izi, üç ücretli paket ve dört sık sorulan soru.
+
+     Kurumsal paket bilerek dışarıda: fiyatı "Özel teklif"tir, sayısal bir bedeli yoktur.
+     Fiyatsız bir Offer yazmak arama motoruna yanlış bilgi vermek olurdu.
+
+     Fiyatlar app/src/paketler.ts ile birebir aynı olmak zorundadır; biri değişirse burası da değişir. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://www.oteldijital.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Fiyatlandırma", "item": "https://www.oteldijital.com/fiyatlandirma" }
+      ]
+    },
+    {
+      "@type": "Product",
+      "name": "OtelDijital İç Operasyon",
+      "description": "Otelin iç operasyonunu tek merkezde toplayan abonelik: kat hizmetleri, arıza iş emirleri, depo ve fire takibi, görevler ve raporlar.",
+      "brand": { "@type": "Brand", "name": "OtelDijital" },
+      "url": "https://www.oteldijital.com/fiyatlandirma",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Butik",
+          "description": "1–25 oda",
+          "price": "29",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.oteldijital.com/fiyatlandirma",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": "29",
+            "priceCurrency": "USD",
+            "valueAddedTaxIncluded": false,
+            "referenceQuantity": { "@type": "QuantitativeValue", "value": 1, "unitCode": "MON" }
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Standart",
+          "description": "26–75 oda",
+          "price": "59",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.oteldijital.com/fiyatlandirma",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": "59",
+            "priceCurrency": "USD",
+            "valueAddedTaxIncluded": false,
+            "referenceQuantity": { "@type": "QuantitativeValue", "value": 1, "unitCode": "MON" }
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Büyük",
+          "description": "76–150 oda",
+          "price": "99",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.oteldijital.com/fiyatlandirma",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": "99",
+            "priceCurrency": "USD",
+            "valueAddedTaxIncluded": false,
+            "referenceQuantity": { "@type": "QuantitativeValue", "value": 1, "unitCode": "MON" }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "30 gün bitince ne olur?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sistem yeni kayıt almayı durdurur; geçmişinizi görmeye devam edersiniz. Hiçbir veri silinmez. Paketi seçtiğiniz anda kaldığınız yerden sürer." }
+        },
+        {
+          "@type": "Question",
+          "name": "Oda sayım değişirse?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Paket oda sayısına bağlıdır. Otel büyüyünce bir üst pakete geçilir, küçülünce aşağı inilir. Geçiş için yeni bir sözleşme imzalanmaz." }
+        },
+        {
+          "@type": "Question",
+          "name": "Kontrat imzalamam gerekiyor mu?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Hayır, taahhüt yoktur. İstediğiniz an iptal edersiniz; hizmet ödediğiniz dönemin sonuna kadar sürer ve kalan gün için ek ücret alınmaz. Yıllık ödemeyi seçerseniz iki ay hediyedir; zorunlu değildir." }
+        },
+        {
+          "@type": "Question",
+          "name": "Dijital Vitrin ve Teknolojik Altyapı bu fiyata dahil mi?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Hayır. İkisi de proje işidir: otele bakılır, ne gerektiği yazılır ve ayrı teklif verilir. İç operasyon aboneliği bunlardan bağımsızdır." }
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 

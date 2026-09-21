@@ -125,6 +125,12 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       `"cleanUrls": true` sağlar; ayar Vercel panelinden değil, bu dosyadan gelir.
       `vercel.json` yorum kabul etmez; değişiklikten sonra `node -e "require(./vercel.json)"` ile geçerliliği denetlenir.
 - [ ] **6.6** `merhaba@oteldijital.com` posta kutusunun **gerçekten çalıştığını** doğrula (vitrindeki tek iletişim yolu).
+- [ ] **6.14** **Kanonik host ve yapılandırılmış veriyi canlıda doğrula**
+      (denetim · Madde 8 · `docs/decisions/016-host-birligi-ve-yapilandirilmis-veri.md`):
+      Kanonik adres **`www.oteldijital.com`**. `sitemap.xml` içindeki beş adresin hiçbiri 308 üretmemeli;
+      her sayfanın `canonical` değeri `www` ile başlamalı. Google Rich Results Test ile `/`,
+      `/dijital-vitrin`, `/teknolojik-altyapi`, `/fiyatlandirma` ve `/iletisim` hatasız geçmeli.
+      Search Console'da tercih edilen adres `www` görünmeli.
 - [ ] **6.13** **Ölçümü aç ve doğrula** (denetim · Madde 5 · `docs/decisions/013-analitik.md`):
       Umami Cloud hesabı açıldıktan sonra dokuz sayfaya iki satırlık sayaç etiketi eklenir.
       Sonra canlıda: `oteldijital.com/istatistik/script.js` **200** dönmeli, panelde canlı trafik

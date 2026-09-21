@@ -51,7 +51,7 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 | `simge.svg` · `dokunma-simgesi.png` | Sekme simgesi ve telefon ana ekranı simgesi: koyu plaka üstünde şampanya kare. Sayfa aydınlık ama simge koyu kalır: krem bir simge açık renkli sekme çubuğunda kaybolurdu (`docs/decisions/009`). PNG, kütüphanesiz küçük bir Node betiğiyle üretildi (aşağıda) |
 | `paylasim.html` → `paylasim.png` | Bağlantı paylaşılınca görünen 1200×630 kart. HTML kaynaktır, PNG ondan üretilir (aşağıda). Beş sayfa da aynı kartı kullanır. **Tema değişirse bu dosya da değişir ve PNG yeniden üretilir** |
 | `404.html` · `500.html` | Markalı hata sayfaları (denetim · Madde 3). Varlık yolları **kök adreslidir** (`/stil.css`): bu sayfalar herhangi bir adreste açılabilir, göreli yol biçimsiz sayfa üretirdi. `noindex` ve sitemap dışı |
-| `robots.txt` · `sitemap.xml` | Arama motoru yönlendirmesi: sitemap dosyasında **beş** sayfa listelidir. `paylasim` ve dört yasal iskelet sayfa dışarıdadır; yasal metinler yazılınca sitemap dosyasına eklenir |
+| `robots.txt` · `sitemap.xml` | Arama motoru yönlendirmesi. **Kanonik host `www.oteldijital.com`** (denetim · Madde 8 · `docs/decisions/016`): canonical, og:url, sitemap ve robots aynı hostu gösterir. Sitemap dosyasında **beş** sayfa listelidir. `paylasim` ve dört yasal iskelet sayfa dışarıdadır; yasal metinler yazılınca sitemap dosyasına eklenir |
 | `../vercel.json` (depo kökünde) | Uzantısız adresler (`cleanUrls`) ve yayın başlıkları: içerik güvenlik politikası (CSP) ile diğer koruyucu başlıklar. Vercel bu dosyayı yalnızca Root Directory içinde arar; o yüzden kökte durur. **Bu dosyaya yorum satırı yazılmaz** — aşağıdaki nota bakın |
 
 ## Bakmak için
