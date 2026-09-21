@@ -248,6 +248,24 @@
         </div>
       </div>
     </div>
+    <!-- ===== KURUMSAL KÜNYE — YER TUTUCU (denetim · Madde 2) =====
+         Dış denetim: sitede telefon, adres ve tüzel kişilik bilgisi yok; bu en ciddi güven açığı.
+         Blok yerine kondu ama değerler HENÜZ GERÇEK DEĞİL, o yüzden "hidden" duruyor:
+         ziyaretçiye yarım bilgi ya da çalışmayan bir telefon numarası göstermek, hiç göstermemekten kötüdür.
+
+         DOLDURMA ADIMLARI VE GEREKEN BİLGİLER: docs/decisions/010-kunye-ve-telefon.md
+         Değerler girilip "hidden" kaldırıldığında bu blok dokuz sayfada birden görünür. -->
+    <div class="kunye" hidden>
+      <p class="kunye-ad">TİCARİ ÜNVAN</p>
+      <p class="kunye-satir">
+        <a class="kunye-tel" href="tel:+90XXXXXXXXXX">+90 XXX XXX XX XX</a>
+        <span class="kunye-ayrac" aria-hidden="true">·</span>
+        <span>ŞEHİR</span>
+        <span class="kunye-ayrac" aria-hidden="true">·</span>
+        <span>Vergi dairesi ve numarası</span>
+      </p>
+    </div>
+
     <div class="alt-dip">
       <p class="alt-soluk">© 2026 OtelDijital · Tüm hakları saklıdır.</p>
       <nav class="alt-yasal" aria-label="Yasal metinler">

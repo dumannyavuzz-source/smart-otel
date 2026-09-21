@@ -1457,6 +1457,37 @@ a { color: inherit; }
 }
 .iletisim-posta a:hover { border-color: var(--bronz); }
 
+/* Ulaşım bilgileri: telefon, WhatsApp, çalışma saatleri, şehir, yanıt süresi.
+   Değerler girilene kadar HTML'de "hidden" (denetim · Madde 2 · docs/decisions/010).
+   Tanım listesi (dl) kullanılır: "Telefon" bir etiket, numara onun karşılığıdır; ekran okuyucu da böyle okur. */
+.ulasim {
+  margin: 28px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.9rem;
+}
+.ulasim-satir {
+  display: grid;
+  grid-template-columns: minmax(0, 11ch) minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
+  padding-block: 11px;                 /* dokunma alanı ≥ 44 px (denetim · Madde 10d) */
+  border-bottom: 1px solid var(--zeytin-200);
+}
+.ulasim-satir:last-child { border-bottom: 0; }
+.ulasim dt { color: var(--metin-cok-soluk); font-size: 0.78rem; letter-spacing: 0.04em; }
+.ulasim dd { margin: 0; color: var(--metin-soluk); }
+.ulasim dd a {
+  color: var(--metin);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid var(--cizgi-koyu);
+  padding-bottom: 2px;
+  transition: border-color 300ms var(--gecis);
+}
+.ulasim dd a:hover { border-color: var(--bronz); }
+
 /* ---- Form (DESIGN_SYSTEM.md · 7.3) ---- */
 .form {
   display: grid;
@@ -1662,6 +1693,36 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   transition: border-color 300ms var(--gecis);
 }
 .alt-baglantilar a:hover { border-color: var(--bronz); }
+
+/* Kurumsal künye: ticari ünvan, telefon, şehir, vergi bilgisi. Dokuz sayfanın alt bölümünde durur.
+   Değerler girilene kadar HTML'de "hidden" olduğu için ziyaretçi bunu görmez (denetim · Madde 2;
+   doldurma adımları docs/decisions/010-kunye-ve-telefon.md). Sessiz durur: alt bölümün en soluk satırı. */
+.kunye {
+  padding-top: 24px;
+  border-top: 1px solid var(--cizgi);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 18px;
+  font-size: 0.8rem;
+  color: var(--metin-cok-soluk);
+}
+.kunye-ad { color: var(--metin-soluk); font-weight: 500; }
+.kunye-satir { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+.kunye-ayrac { color: var(--cizgi-koyu); }
+/* Telefon dokunulacak bir şeydir: dokunma alanı 44 px olsun diye dikey boşluk verilir (denetim · Madde 10d) */
+.kunye-tel {
+  color: var(--metin-soluk);
+  font-weight: 500;
+  /* Çizgi yazının dibinde dursun: kenarlık kullanılsaydı dokunma boşluğunun altına düşer,
+     yazıdan kopuk ayrı bir çizgi gibi görünürdü. */
+  text-decoration: underline;
+  text-decoration-color: var(--cizgi-koyu);
+  text-underline-offset: 3px;
+  padding-block: 12px;                 /* dokunma alanı ≥ 44 px (denetim · Madde 10d) */
+  transition: color 300ms var(--gecis), text-decoration-color 300ms var(--gecis);
+}
+.kunye-tel:hover { color: var(--metin); text-decoration-color: var(--bronz); }
 
 /* Alt satır: solda telif, sağda yasal bağlantılar. */
 .alt-dip {
