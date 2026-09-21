@@ -1,53 +1,66 @@
 /* OtelDijital — vitrin sayfaları (beş sayfa, tek stil dosyası)
-   Görsel dil: "Sakin Lüks" (Quiet Luxury · Contemporary Hospitality). Tek kaynak: DESIGN_SYSTEM.md
-   Kararlar: docs/decisions/007-sakin-luks-gorsel-dili.md · docs/decisions/008-vitrin-sayfa-mimarisi.md
+   Görsel dil: "Sakin Lüks" — AYDINLIK PREMIUM TEMA. Tek kaynak: DESIGN_SYSTEM.md
+   Kararlar: docs/decisions/007-sakin-luks-gorsel-dili.md · 008-vitrin-sayfa-mimarisi.md
+             · 009-aydinlik-premium-tema.md (koyu temadan aydınlığa geçiş, 2026-09-21)
 
    Site beş sayfadır: index (iç operasyon) · dijital-vitrin · teknolojik-altyapi · fiyatlandirma · iletisim.
    Beşi de bu tek dosyayı kullanır; her sayfa yalnızca kendi bölümlerinin sınıflarını çağırır.
 
-   Sayfa bir lüks otelin lobisi gibidir: koyu, mat, sessiz, ferah.
-     ~%65  GRAFİT     — zemin ve boşluk. Sayfanın gövdesi.
-     ~%15  ZEYTİN     — bir–iki bölümde derinlik (iletişim bloğu). Her yere yayılmaz.
-     ~%15  FİLDİŞİ/TAŞ — yazı.
-      ≤%5  ŞAMPANYA   — yalnızca eylem ve vurgu: ana düğme, üst başlık (kicker), tek kelime.
-   Yüzey: 1 px şampanya tonlu çizgi, küçük köşe, gölge yok, cam/blur yok, hap düğme yok.
-   Yazı: başlık Cormorant Garamond (serif, 400), gövde Inter, veri JetBrains Mono.
+   Sayfa bir lüks otelin AYDINLIK lobisi gibidir: krem, mat, sessiz, ferah.
+     ~%70  KAŞMİR     — zemin ve boşluk. Sayfanın gövdesi (#f9f8f6).
+     ~%15  ANTRASİT   — yazı ve başlık (#1c1c1a); saf siyah yoktur.
+     ~%10  GRİ        — alt metin (#5e5e5b).
+      ≤%5  ŞAMPANYA/BRONZ — yalnızca eylem ve vurgu: ana düğme, üst başlık (kicker), tek kelime.
+   Zeytin, tek bir yerde kalır: iletişim bloğu (yumuşak adaçayı).
+   Yüzey: 1 px açık gri çizgi, küçük köşe, gölge yok (telefon hariç), cam/blur yok, hap düğme yok.
+   Yazı: başlık Cormorant Garamond (serif, 400), gövde Inter, veri JetBrains Mono. DEĞİŞMEDİ.
 
-   Değişken ADLARI eski dilden korunmuştur (--zemin, --marka, --metin…); yalnızca değerleri değişti.
+   ŞAMPANYA İLE BRONZ NEDEN İKİ AYRI RENK?
+   Aydınlık zeminde açık şampanya (#c3a77d) bir YAZI rengi olarak okunmaz (kontrast ~1,9:1).
+   Bu yüzden ikiye ayrıldı ve kural basittir:
+     · --sampanya → DOLGU: ana düğmenin zemini, odak halkası, dolu çubuk.
+     · --bronz    → YAZI ve İNCE ÇİZGİ: üst başlık (kicker), numara, vurgulu kelime, kenarlık.
+   Yeni bir vurgu eklenirken bu ayrım korunur.
+
+   Değişken ADLARI (--zemin, --yuzey, --metin, --cizgi…) korunmuştur; yalnızca değerleri değişti.
    Böylece HTML'deki sınıflar ve betikler aynen çalışır (DESIGN_SYSTEM.md · 3.5). */
 
 :root {
   /* Palet (DESIGN_SYSTEM.md · 3.2) — başka renk eklenmez */
-  --grafit-900: #121413;
-  --grafit-800: #1b1e1c;
-  --grafit-700: #262a27;
-  --grafit-600: #343936;
-  --zeytin-800: #2a3327;
-  --zeytin-700: #3a4736;
-  --zeytin-500: #5c6b55;
-  --sampanya: #c8b48a;
-  --bronz: #9c7e4e;
-  --fildisi: #efeae0;
-  --tas: #b9b3a6;
-  --tas-soluk: #8a857a;
-  --durum-iyi: #7f9b6e;
-  --durum-dikkat: #c99a5b;
-  --durum-sorun: #b4655a;
+  --kasmir-0:   #ffffff;      /* en açık yüzey: kart, telefon ekranı, form alanı */
+  --kasmir-50:  #f9f8f6;      /* ANA ZEMİN: sayfanın gövdesi, üst çubuk, hero */
+  --kasmir-100: #f2f0ec;      /* hafif gömülü yüzey: alt bölüm, pano özeti, ikon zemini */
+  --kasmir-200: #e6e4e0;      /* çizgi ve kenarlık; boş çubuk izleri */
+  --kasmir-300: #d6d3cc;      /* koyu çizgi: hover ve vurgulu kenar */
+
+  --zeytin-50:  #e9ece3;      /* iletişim bloğu — sayfanın tek renkli alanı */
+  --zeytin-200: #cfd6c6;      /* zeytin bloğun içindeki çizgi */
+
+  --antrasit:   #1c1c1a;      /* ana metin ve başlıklar; şampanya düğmenin üstündeki yazı */
+  --gri:        #5e5e5b;      /* alt metin */
+  --gri-soluk:  #757370;      /* dipnot ve mono etiket */
+
+  --sampanya:   #c3a77d;      /* DOLGU vurgusu */
+  --bronz:      #8a6d3b;      /* YAZI ve ince çizgi vurgusu */
+
+  /* Durum renkleri aydınlık zemine göre koyulaştırıldı; hepsi mat ve kısık kalır */
+  --durum-iyi:    #4f7343;
+  --durum-dikkat: #8f6415;
+  --durum-sorun:  #a03a30;
+
+  /* Cihaz: telefon maketinin çerçevesi. Sayfa yüzeyi değil, bir NESNEDİR; o yüzden koyu kalır
+     ve içindeki aydınlık ekran öne çıkar (docs/decisions/009 · "telefon neden koyu?"). */
+  --cihaz: #23231f;
 
   /* Eski adlar → yeni değerler */
-  --zemin: var(--grafit-800);
-  --yuzey: var(--grafit-700);
-  --yuzey-ust: var(--grafit-600);
-  --cizgi: rgba(200, 180, 138, 0.14);
-  --cizgi-koyu: rgba(200, 180, 138, 0.28);
-  --koyu: var(--grafit-900);
-  --metin: var(--fildisi);
-  --metin-soluk: var(--tas);
-  --metin-cok-soluk: var(--tas-soluk);
-  --marka: var(--sampanya);
-  --marka-soluk: rgba(200, 180, 138, 0.10);
-  --canli: var(--durum-iyi);
-  --uyari: var(--durum-dikkat);
+  --zemin: var(--kasmir-50);
+  --yuzey: var(--kasmir-0);
+  --yuzey-ust: var(--kasmir-100);
+  --cizgi: var(--kasmir-200);
+  --cizgi-koyu: var(--kasmir-300);
+  --metin: var(--antrasit);
+  --metin-soluk: var(--gri);
+  --metin-cok-soluk: var(--gri-soluk);
 
   /* Köşeler: sayfa parçaları küçük; telefon ve uygulama kesitleri uygulamanın kendisi gibi */
   --kose: 4px;                 /* kart */
@@ -102,7 +115,7 @@ h1, h2, h3 {
   letter-spacing: -0.005em;
   text-wrap: balance;
   margin: 0;
-  color: var(--fildisi);
+  color: var(--metin);
 }
 
 h1 { font-size: clamp(2.75rem, 6vw, 5.25rem); line-height: 1.02; letter-spacing: -0.01em; }
@@ -110,12 +123,12 @@ h2 { font-size: clamp(2rem, 4vw, 3.25rem); }
 h3 { font-size: 1.375rem; font-weight: 500; line-height: 1.25; letter-spacing: 0; }
 
 p { margin: 0; }
-b { font-weight: 500; color: var(--fildisi); }
+b { font-weight: 500; color: var(--metin); }
 
 a { color: inherit; }
 
 :focus-visible {
-  outline: 1px solid var(--sampanya);
+  outline: 1px solid var(--bronz);
   outline-offset: 4px;
   border-radius: var(--kose-kucuk);
 }
@@ -129,7 +142,7 @@ a { color: inherit; }
   top: 12px;
   z-index: 50;
   background: var(--sampanya);
-  color: var(--grafit-900);
+  color: var(--antrasit);
   padding: 10px 16px;
   border-radius: var(--kose-kucuk);
   text-decoration: none;
@@ -143,7 +156,7 @@ a { color: inherit; }
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--sampanya);
+  color: var(--bronz);
   margin-bottom: 20px;
 }
 .etiket--orta { text-align: center; }
@@ -154,7 +167,7 @@ a { color: inherit; }
   position: sticky;
   top: 0;
   z-index: 20;
-  background: var(--grafit-900);
+  background: var(--zemin);
   /* Çizgi yalnızca kaydırılınca (betik ekler): tepede hero ile aynı zemindedir, çizgi gereksizdir */
   border-bottom: 1px solid transparent;
   transition: border-color 300ms var(--gecis);
@@ -175,7 +188,7 @@ a { color: inherit; }
   gap: 12px;
   justify-self: start;
   text-decoration: none;
-  color: var(--fildisi);
+  color: var(--metin);
   font-family: var(--govde-yazi);
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -186,7 +199,7 @@ a { color: inherit; }
 .marka-isaret {
   width: 8px;
   height: 8px;
-  background: var(--sampanya);
+  background: var(--bronz);
   flex: none;
 }
 
@@ -199,19 +212,19 @@ a { color: inherit; }
 }
 
 .menu a {
-  color: var(--tas);
+  color: var(--metin-soluk);
   text-decoration: none;
   padding: 8px 14px;
   white-space: nowrap;
   transition: color 300ms var(--gecis);
 }
-.menu a:hover { color: var(--fildisi); }
+.menu a:hover { color: var(--metin); }
 
-/* Bulunulan sayfa: fildişi yazı ve altında ince şampanya çizgi. Site beş sayfa olduğundan
+/* Bulunulan sayfa: antrasit yazı ve altında ince bronz çizgi. Site beş sayfa olduğundan
    ziyaretçinin "neredeyim?" sorusu menüde cevaplanır (aria-current="page"). */
 .menu a[aria-current="page"] {
-  color: var(--fildisi);
-  box-shadow: inset 0 -1px 0 0 var(--sampanya);
+  color: var(--metin);
+  box-shadow: inset 0 -1px 0 0 var(--bronz);
 }
 
 /* Sağ taraf: "Giriş Yap" bağlantısı + tek düğme */
@@ -222,7 +235,7 @@ a { color: inherit; }
   justify-self: end;
 }
 .ust-giris {
-  color: var(--tas);
+  color: var(--metin-soluk);
   text-decoration: none;
   font-size: 0.875rem;
   letter-spacing: 0.02em;
@@ -231,7 +244,7 @@ a { color: inherit; }
   border-bottom: 1px solid transparent;
   transition: color 300ms var(--gecis), border-color 300ms var(--gecis);
 }
-.ust-giris:hover { color: var(--fildisi); border-color: var(--bronz); }
+.ust-giris:hover { color: var(--metin); border-color: var(--bronz); }
 
 /* ---------- Düğmeler (DESIGN_SYSTEM.md · 7.1) ---------- */
 /* Üç tür: ana (şampanya), ikincil (çizgi), bağlantı. Hap yok, gölge yok, büyümez. */
@@ -253,52 +266,52 @@ a { color: inherit; }
 
 .dugme--dev {
   background: var(--sampanya);
-  color: var(--grafit-900);
+  color: var(--antrasit);
   min-height: 52px;
   padding: 0 28px;
 }
-.dugme--dev:hover { background: var(--bronz); color: var(--fildisi); }
+.dugme--dev:hover { background: var(--bronz); color: var(--kasmir-0); }
 
 /* Üst çubuktaki düğme ikincil türdür: çubuk yapışkan olduğu için sayfadaki ana düğmelerle hep aynı
    görünür alanda durur; dolu olsaydı ekranda iki şampanya olurdu (§3.3). */
 .dugme--ince {
   background: transparent;
-  color: var(--fildisi);
-  border: 1px solid var(--sampanya);
+  color: var(--metin);
+  border: 1px solid var(--bronz);
   min-height: 42px;
   padding: 0 20px;
   flex: none;
 }
-.dugme--ince:hover { background: rgba(200, 180, 138, 0.08); }
+.dugme--ince:hover { background: rgba(138, 109, 59, 0.07); }
 
 .dugme--sessiz {
   background: transparent;
-  color: var(--fildisi);
-  border: 1px solid var(--sampanya);
+  color: var(--metin);
+  border: 1px solid var(--bronz);
   min-height: 52px;
   padding: 0 28px;
 }
-.dugme--sessiz:hover { background: rgba(200, 180, 138, 0.08); }
+.dugme--sessiz:hover { background: rgba(138, 109, 59, 0.07); }
 
-/* Bağlantı türü: fildişi yazı, altında bronz çizgi; hover'da çizgi şampanya olur */
+/* Bağlantı türü: antrasit yazı, altında ince bronz çizgi; hover'da çizgi koyulaşır */
 .baglanti {
   display: inline-flex;
   align-items: center;
-  color: var(--fildisi);
+  color: var(--metin);
   text-decoration: none;
   font-size: 0.9375rem;
   letter-spacing: 0.01em;
   padding-bottom: 3px;
-  border-bottom: 1px solid var(--bronz);
+  border-bottom: 1px solid var(--cizgi-koyu);
   transition: border-color 300ms var(--gecis);
 }
-.baglanti:hover { border-color: var(--sampanya); }
+.baglanti:hover { border-color: var(--bronz); }
 
 /* ---------- Hero ---------- */
-/* Üst çubukla aynı derin grafit: ziyaretçi lobiye girer, sayfa aşağıda bir ton açılır.
+/* Üst çubukla aynı krem zemin: sayfa tek bir aydınlık düzlemdir; hero'yu alttaki ince çizgi ayırır.
    Bol boşluk bilerek: sıkışık bir hero lobi hissini öldürür. */
 .kahraman-alan {
-  background: var(--grafit-900);
+  background: var(--zemin);
   border-bottom: 1px solid var(--cizgi);
 }
 
@@ -316,14 +329,14 @@ a { color: inherit; }
 
 /* Tek vurgu kelimesi: italik serif, şampanya. İkincisi yoktur. */
 .vurgu {
-  color: var(--sampanya);
+  color: var(--bronz);
   font-style: italic;
 }
 
 .giris {
   margin-top: 28px;
   max-width: 44ch;
-  color: var(--tas);
+  color: var(--metin-soluk);
   font-size: 1.0625rem;
   line-height: 1.7;
 }
@@ -339,7 +352,7 @@ a { color: inherit; }
 /* Güvence tek satır, soluk: bağırmaz, arkada durur */
 .guvence {
   margin: 28px 0 0;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   font-size: 0.875rem;
   letter-spacing: 0.01em;
 }
@@ -347,9 +360,9 @@ a { color: inherit; }
 
 /* ---------- Alt sayfaların girişi ---------- */
 /* Ana sayfanın hero'su iki sütundur (yazı + telefon). Alt sayfalarda telefon yoktur: tek sütun,
-   aynı derin grafit zemin, daha kısa boy. Ziyaretçi hangi sayfada olduğunu ilk ekranda anlar. */
+   aynı krem zemin, daha kısa boy. Ziyaretçi hangi sayfada olduğunu ilk ekranda anlar. */
 .sayfa-kahraman-alan {
-  background: var(--grafit-900);
+  background: var(--zemin);
   border-bottom: 1px solid var(--cizgi);
 }
 
@@ -377,32 +390,36 @@ a { color: inherit; }
   z-index: 1;
   width: min(400px, 100%);
   margin-inline-start: auto;
-  background: var(--grafit-700);
-  border: 1px solid var(--cizgi);
+  background: var(--cihaz);
+  border: 1px solid rgba(255, 255, 255, 0.08);   /* cihazın ince kenar ışığı; sayfa çizgisi değil */
   border-radius: var(--kose-dev);
   padding: 10px;
   /* Sayfadaki tek gölge: telefon masada durur */
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 28px 64px rgba(28, 28, 26, 0.13);
 }
 
 .telefon-ic {
-  background: var(--grafit-900);
+  background: var(--kasmir-0);
   border-radius: calc(var(--kose-dev) - 8px);
   overflow: hidden;
 }
 
-/* Uygulama ekranındaki emoji ikonlar tek renge çekilir: renkli ikon lobiye yakışmaz */
-.olay-ikon, /* Satır başındaki kısa etiket: oda numarası, saat ya da adım adı */
+/* Uygulama ekranındaki emoji ikonlar tek renge çekilir: renkli ikon lobiye yakışmaz.
+   NOT: Bu kural eskiden yanlışlıkla ikiye bölünmüştü — yorum .olay-ikon'un başına yapışmış,
+   süzgeç yalnızca .mini-ikon'a uygulanıyordu. Koyu zeminde fark edilmiyordu; aydınlık ekranda
+   renkli emoji göze battığı için ikisi yeniden birleştirildi. */
+.olay-ikon,
+.mini-ikon {
+  filter: grayscale(1) sepia(0.22) brightness(0.95);
+}
+
+/* Satır başındaki kısa etiket: oda numarası, saat ya da adım adı */
 .mini-oda {
   font-family: var(--veri-yazi);
   font-size: 0.72rem;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   min-width: 5ch;
   flex: none;
-}
-
-.mini-ikon {
-  filter: grayscale(1) sepia(0.25) brightness(1.05);
 }
 
 .uyg-ust {
@@ -414,10 +431,10 @@ a { color: inherit; }
   font-size: 0.86rem;
 }
 
-.akis-baslik { font-weight: 500; color: var(--fildisi); }
+.akis-baslik { font-weight: 500; color: var(--metin); }
 .akis-otel {
   margin-inline-start: auto;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   font-family: var(--veri-yazi);
   font-size: 0.72rem;
 }
@@ -453,7 +470,7 @@ a { color: inherit; }
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  background: var(--grafit-700);
+  background: var(--kasmir-100);
   display: grid;
   place-items: center;
   font-size: 0.95rem;
@@ -466,10 +483,10 @@ a { color: inherit; }
   min-width: 0;
   font-size: 0.88rem;
   line-height: 1.35;
-  color: var(--tas);
+  color: var(--metin-soluk);
 }
 .olay-kim {
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   font-size: 0.74rem;
   font-family: var(--veri-yazi);
   overflow-wrap: anywhere;
@@ -485,12 +502,12 @@ a { color: inherit; }
   padding: 5px 8px;
   border-radius: var(--kose-kucuk);
   border: 1px solid var(--cizgi);
-  color: var(--tas);
+  color: var(--metin-soluk);
   white-space: nowrap;
 }
-.rozet--tamam  { color: var(--durum-iyi);    border-color: rgba(127, 155, 110, 0.35); }
-.rozet--atandi { color: var(--tas);          border-color: var(--cizgi-koyu); }
-.rozet--uyari  { color: var(--durum-dikkat); border-color: rgba(201, 154, 91, 0.35); }
+.rozet--tamam  { color: var(--durum-iyi);    border-color: rgba(79, 115, 67, 0.35); }
+.rozet--atandi { color: var(--metin-soluk);          border-color: var(--cizgi-koyu); }
+.rozet--uyari  { color: var(--durum-dikkat); border-color: rgba(143, 100, 21, 0.32); }
 
 /* Yeni düşen satır: yumuşak giriş */
 .olay--yeni { animation: dus var(--sure) var(--gecis) both; }
@@ -507,8 +524,10 @@ a { color: inherit; }
   bottom: 11%;
   width: min(232px, 64%);
   padding: 16px 18px;
-  background: var(--grafit-700);
-  border: 1px solid var(--cizgi-koyu);
+  background: var(--kasmir-0);
+  border: 1px solid var(--cizgi);
+  /* Koyu telefonun üstünde duruyor: ayrılsın diye sayfanın ikinci ve son yumuşak gölgesi */
+  box-shadow: 0 14px 30px rgba(28, 28, 26, 0.14);
   border-radius: var(--kose);
 }
 
@@ -521,7 +540,7 @@ a { color: inherit; }
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
 }
 
 .kumanda-kart-sayi {
@@ -531,14 +550,14 @@ a { color: inherit; }
   font-size: 2rem;
   font-weight: 400;
   line-height: 1.05;
-  color: var(--fildisi);
+  color: var(--metin);
 }
 
-.kumanda-kart-not { margin-top: 4px; font-size: 0.8rem; color: var(--tas); }
+.kumanda-kart-not { margin-top: 4px; font-size: 0.8rem; color: var(--metin-soluk); }
 
 .akis-dip {
   margin-top: 16px;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   font-size: 0.78rem;
   text-align: center;
 }
@@ -553,11 +572,11 @@ a { color: inherit; }
 .bolum-giris {
   margin-top: 20px;
   max-width: 56ch;
-  color: var(--tas);
+  color: var(--metin-soluk);
 }
 
 /* ---------- Hangi sorunları çözer: iki sütunlu karşılaştırma ---------- */
-/* Solda otelin bugünkü hâli (soluk, arkada), sağda OtelDijital'li hâli (fildişi, önde).
+/* Solda otelin bugünkü hâli (soluk, arkada), sağda OtelDijital'li hâli (antrasit, önde).
    Kart yok, kutu yok: iki sütun ve aralarında ince bir çizgi. Dar ekranda alt alta iner. */
 .sorunlar {
   list-style: none;
@@ -575,8 +594,8 @@ a { color: inherit; }
 }
 
 .sorun-once, .sorun-sonra { margin: 0; max-width: 52ch; }
-.sorun-once { color: var(--tas-soluk); }
-.sorun-sonra { color: var(--fildisi); }
+.sorun-once { color: var(--metin-cok-soluk); }
+.sorun-sonra { color: var(--metin); }
 
 /* "Bugün" / "OtelDijital ile" — sütun başlığı her satırda tekrar eder ki dar ekranda da okunsun */
 .sorun-etiket {
@@ -586,9 +605,9 @@ a { color: inherit; }
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
 }
-.sorun-sonra .sorun-etiket { color: var(--sampanya); }
+.sorun-sonra .sorun-etiket { color: var(--bronz); }
 
 @media (min-width: 901px) {
   .sorun {
@@ -628,7 +647,7 @@ a { color: inherit; }
 .operasyon-gorsel .mini { max-width: 420px; margin-inline: auto; }
 
 .operasyon-yazi h3 { font-size: clamp(1.75rem, 2.8vw, 2.5rem); font-weight: 400; }
-.operasyon-yazi p { margin-top: 16px; color: var(--tas); max-width: 42ch; }
+.operasyon-yazi p { margin-top: 16px; color: var(--metin-soluk); max-width: 42ch; }
 
 /* Gizleme YALNIZCA betik varken (js-operasyon sınıfını betik ekler); betiksiz üç blok da baştan görünür. */
 .js-operasyon .operasyon-blok {
@@ -661,12 +680,12 @@ a { color: inherit; }
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.18em;
-  color: var(--sampanya);
+  color: var(--bronz);
   margin-bottom: 14px;
 }
 
 .hikaye-yazi h3 { font-size: clamp(1.75rem, 2.6vw, 2.25rem); font-weight: 400; }
-.hikaye-yazi p { margin-top: 14px; color: var(--tas); max-width: 46ch; }
+.hikaye-yazi p { margin-top: 14px; color: var(--metin-soluk); max-width: 46ch; }
 
 /* Gizleme YALNIZCA betik varken başlar (js-hikaye sınıfını betik ekler).
    Betik yoksa dört adım da baştan görünür; kimse boş sayfa görmez. */
@@ -679,7 +698,7 @@ a { color: inherit; }
 
 /* ---- Uygulamadan küçük bir kesit ---- */
 .mini {
-  background: var(--grafit-700);
+  background: var(--yuzey);
   border: 1px solid var(--cizgi);
   border-radius: var(--kose-uyg);
   padding: 16px;
@@ -694,7 +713,7 @@ a { color: inherit; }
   border-bottom: 1px solid var(--cizgi);
   font-size: 0.95rem;
 }
-.mini-etiket { font-family: var(--veri-yazi); font-size: 0.72rem; color: var(--tas-soluk); }
+.mini-etiket { font-family: var(--veri-yazi); font-size: 0.72rem; color: var(--metin-cok-soluk); }
 
 .mini-govde { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; }
 .mini-govde--dar { padding-top: 8px; }
@@ -708,10 +727,10 @@ a { color: inherit; }
   border-radius: 8px;
   font-size: 0.88rem;
   font-weight: 500;
-  color: var(--tas);
+  color: var(--metin-soluk);
 }
-.mini-buton--yesil { border-color: rgba(127, 155, 110, 0.4); color: var(--durum-iyi); }
-.mini-buton--secili { border-color: var(--sampanya); color: var(--fildisi); }
+.mini-buton--yesil { border-color: rgba(79, 115, 67, 0.40); color: var(--durum-iyi); }
+.mini-buton--secili { border-color: var(--bronz); color: var(--metin); }
 
 .mini-satir {
   display: flex;
@@ -720,17 +739,17 @@ a { color: inherit; }
   padding: 11px 0;
   border-bottom: 1px solid var(--cizgi);
   font-size: 0.86rem;
-  color: var(--tas);
+  color: var(--metin-soluk);
 }
 .mini-satir:last-child { border-bottom: 0; }
-.mini-satir--aktif { color: var(--fildisi); }
+.mini-satir--aktif { color: var(--metin); }
 .mini-satir--tamam { color: var(--durum-iyi); }
 
 .mini-ikon {
   width: 30px;
   height: 30px;
   border-radius: 8px;
-  background: var(--grafit-600);
+  background: var(--kasmir-100);
   display: grid;
   place-items: center;
   font-size: 0.85rem;
@@ -744,11 +763,11 @@ a { color: inherit; }
   padding: 4px 8px;
   border-radius: var(--kose-kucuk);
   border: 1px solid var(--cizgi);
-  color: var(--tas);
+  color: var(--metin-soluk);
   white-space: nowrap;
 }
-.mini-rozet--sari  { color: var(--durum-dikkat); border-color: rgba(201, 154, 91, 0.35); }
-.mini-rozet--yesil { color: var(--durum-iyi);    border-color: rgba(127, 155, 110, 0.35); }
+.mini-rozet--sari  { color: var(--durum-dikkat); border-color: rgba(143, 100, 21, 0.32); }
+.mini-rozet--yesil { color: var(--durum-iyi);    border-color: rgba(79, 115, 67, 0.35); }
 
 /* ---------- Kim ne yapar: personel ve müdür yan yana ---------- */
 /* İki sütun, iki yüz. Kart değil; her sütun kendi başına bir sayfa parçası gibi durur.
@@ -774,7 +793,7 @@ a { color: inherit; }
   display: flex;
   flex-direction: column;
   gap: 12px;
-  color: var(--tas);
+  color: var(--metin-soluk);
   font-size: 0.95rem;
 }
 /* Numara akışın dışında durur (mutlak konum): madde metni tek bir satır akışı olarak kalsın.
@@ -795,17 +814,17 @@ a { color: inherit; }
   font-size: 0.72rem;
   font-weight: 500;
   letter-spacing: 0.14em;
-  color: var(--sampanya);
+  color: var(--bronz);
 }
-.rol-liste b { color: var(--fildisi); font-weight: 500; }
+.rol-liste b { color: var(--metin); font-weight: 500; }
 
 .rol-not {
   margin-top: 20px;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   font-size: 0.9rem;
   max-width: 46ch;
 }
-.rol-not b { color: var(--tas); font-weight: 500; }
+.rol-not b { color: var(--metin-soluk); font-weight: 500; }
 
 .rol .mini { margin-top: 28px; max-width: 420px; }
 
@@ -835,7 +854,7 @@ a { color: inherit; }
   background: transparent;
   border: 1px solid var(--cizgi);
   border-radius: var(--kose);
-  color: var(--fildisi);
+  color: var(--metin);
   font: inherit;
   text-align: left;
   cursor: pointer;
@@ -843,8 +862,8 @@ a { color: inherit; }
 }
 .kesif-dugme:hover { border-color: var(--cizgi-koyu); }
 .kesif-dugme[aria-pressed="true"] {
-  border-color: var(--sampanya);
-  background: rgba(200, 180, 138, 0.06);
+  border-color: var(--bronz);
+  background: rgba(195, 167, 125, 0.16);
 }
 
 /* Düğmede ikon yoktur (§7.1); sayfanın geri kalanı gibi numara */
@@ -853,14 +872,14 @@ a { color: inherit; }
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.18em;
-  color: var(--sampanya);
+  color: var(--bronz);
   flex: none;
   min-width: 28px;
 }
 
 .kesif-yazi { display: flex; flex-direction: column; min-width: 0; }
 .kesif-yazi b { font-weight: 500; }
-.kesif-yazi small { color: var(--tas); font-size: 0.82rem; }
+.kesif-yazi small { color: var(--metin-soluk); font-size: 0.82rem; }
 
 .kesif-telefon .telefon { margin-inline: auto; width: min(330px, 100%); }
 
@@ -877,9 +896,9 @@ a { color: inherit; }
   border: 1px solid var(--cizgi-koyu);
   border-radius: 8px;
   font-weight: 500;
-  color: var(--tas);
+  color: var(--metin-soluk);
 }
-.ekran-buton--ana { border-color: rgba(127, 155, 110, 0.45); color: var(--durum-iyi); }
+.ekran-buton--ana { border-color: rgba(79, 115, 67, 0.45); color: var(--durum-iyi); }
 
 .ekran-alarm {
   display: flex;
@@ -887,16 +906,16 @@ a { color: inherit; }
   gap: 10px;
   padding: 14px 16px;
   border-radius: 8px;
-  border: 1px solid rgba(180, 101, 90, 0.4);
+  border: 1px solid rgba(160, 58, 48, 0.32);
   color: var(--durum-sorun);
   font-weight: 500;
   font-size: 0.9rem;
 }
-.ekran-alarm--sakin { border-color: rgba(127, 155, 110, 0.35); color: var(--durum-iyi); }
+.ekran-alarm--sakin { border-color: rgba(79, 115, 67, 0.35); color: var(--durum-iyi); }
 
 .ekran-not {
   padding: 0 16px 16px;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   font-size: 0.78rem;
   text-align: center;
 }
@@ -945,18 +964,18 @@ a { color: inherit; }
 /* İlk cümle geri çekilir, soru öne çıkar. */
 .gecis-once {
   display: block;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   font-style: italic;
   margin-bottom: 8px;
 }
 
 /* Pano: solda tek büyük sayı, sağda altı çubuk, altta bulgu ve tek düğme.
-   Veri fildişiyle çizilir; şampanya yalnızca toplam skorda ve düğmede. */
+   Veri antrasitle çizilir; bronz yalnızca toplam skorda ve düğmede. */
 .pano {
   margin-top: clamp(48px, 6vw, 72px);
   display: grid;
   grid-template-columns: minmax(230px, 0.72fr) 1.28fr;
-  background: var(--grafit-700);
+  background: var(--yuzey);
   border: 1px solid var(--cizgi);
   border-radius: var(--kose);
   overflow: hidden;
@@ -970,7 +989,7 @@ a { color: inherit; }
   gap: 18px;
   padding: clamp(28px, 4vw, 48px) clamp(20px, 3vw, 32px);
   border-right: 1px solid var(--cizgi);
-  background: var(--grafit-800);
+  background: var(--kasmir-100);
   text-align: center;
 }
 
@@ -980,7 +999,7 @@ a { color: inherit; }
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
 }
 
 /* Halka: 100 birimlik yol (pathLength), dolu kısım --deger kadar. */
@@ -996,9 +1015,9 @@ a { color: inherit; }
   transform: rotate(-90deg);          /* dolma tepeden başlar */
 }
 .halka-iz, .halka-dolgu { fill: none; stroke-width: 3; }
-.halka-iz { stroke: var(--grafit-600); }
+.halka-iz { stroke: var(--kasmir-200); }
 .halka-dolgu {
-  stroke: var(--sampanya);
+  stroke: var(--bronz);
   stroke-linecap: butt;
   stroke-dasharray: var(--deger) 100;
 }
@@ -1015,19 +1034,19 @@ a { color: inherit; }
 .halka-sayi b {
   font-size: clamp(2.8rem, 4.4vw, 3.6rem);
   font-weight: 400;
-  color: var(--fildisi);
+  color: var(--metin);
 }
 .halka-sayi small {
   font-family: var(--veri-yazi);
   font-size: 0.78rem;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   margin-inline-start: 3px;
 }
 
 .pano-otel {
   font-family: var(--veri-yazi);
   font-size: 0.74rem;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
 }
 
 .olcumler {
@@ -1054,26 +1073,26 @@ a { color: inherit; }
   font-size: 0.95rem;
   line-height: 1.25;
   min-width: 0;
-  color: var(--fildisi);
+  color: var(--metin);
 }
 .olcum-ad small {
   font-weight: 400;
   font-size: 0.76rem;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
 }
 
-/* İnce çubuk: fildişi dolgu, koyu iz */
+/* İnce çubuk: antrasit dolgu, açık gri iz */
 .olcum-cubuk {
   display: block;
   height: 2px;
-  background: var(--grafit-600);
+  background: var(--kasmir-200);
   overflow: hidden;
 }
 .olcum-dolgu {
   display: block;
   height: 100%;
   width: calc(var(--deger) * 1%);
-  background: var(--fildisi);
+  background: var(--metin);
 }
 
 /* Sayılar alt alta hizalansın diye burada tablo rakamı kullanılır. */
@@ -1083,7 +1102,7 @@ a { color: inherit; }
   font-size: 0.9rem;
   min-width: 2.2ch;
   text-align: right;
-  color: var(--tas);
+  color: var(--metin-soluk);
 }
 
 .pano-alt {
@@ -1096,9 +1115,9 @@ a { color: inherit; }
   padding: 22px clamp(22px, 4vw, 48px);
   border-top: 1px solid var(--cizgi);
 }
-.pano-bulgu { display: flex; flex-direction: column; color: var(--tas); }
+.pano-bulgu { display: flex; flex-direction: column; color: var(--metin-soluk); }
 .pano-bulgu span { font-size: 1.05rem; }
-.pano-bulgu small { font-size: 0.82rem; color: var(--tas-soluk); }
+.pano-bulgu small { font-size: 0.82rem; color: var(--metin-cok-soluk); }
 
 /* Dolma hareketi YALNIZCA betik varken (js-pano sınıfını betik ekler).
    Betiksiz pano baştan doludur; hareket istemeyende hiçbir şey kıpırdamaz. */
@@ -1143,12 +1162,12 @@ a { color: inherit; }
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.18em;
-  color: var(--sampanya);
+  color: var(--bronz);
   margin-bottom: 12px;
 }
 
 .deger h3 { font-size: clamp(1.75rem, 2.6vw, 2.25rem); font-weight: 400; }
-.deger-yazi p { color: var(--tas); max-width: 56ch; }
+.deger-yazi p { color: var(--metin-soluk); max-width: 56ch; }
 
 .deger-liste {
   list-style: none;
@@ -1158,7 +1177,7 @@ a { color: inherit; }
   flex-direction: column;
   gap: 8px;
   font-size: 0.9rem;
-  color: var(--tas);
+  color: var(--metin-soluk);
 }
 .deger-liste li { display: flex; gap: 12px; }
 .deger-liste li::before { content: "—"; color: var(--bronz); flex: none; }
@@ -1172,7 +1191,7 @@ a { color: inherit; }
   align-items: center;
 }
 
-.rapor-yazi p { color: var(--tas); max-width: 52ch; }
+.rapor-yazi p { color: var(--metin-soluk); max-width: 52ch; }
 
 .rapor-liste {
   list-style: none;
@@ -1186,12 +1205,12 @@ a { color: inherit; }
 .rapor-liste li {
   padding-inline-start: 18px;
   border-inline-start: 1px solid var(--cizgi-koyu);
-  color: var(--tas);
+  color: var(--metin-soluk);
   font-size: 0.95rem;
 }
-.rapor-liste b { color: var(--fildisi); font-weight: 500; }
+.rapor-liste b { color: var(--metin); font-weight: 500; }
 
-.rapor-not { margin-top: 28px; color: var(--tas-soluk); font-size: 0.9rem; }
+.rapor-not { margin-top: 28px; color: var(--metin-cok-soluk); font-size: 0.9rem; }
 
 .rapor-gorsel .mini { max-width: 420px; margin-inline: auto; }
 
@@ -1226,12 +1245,12 @@ a { color: inherit; }
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.18em;
-  color: var(--sampanya);
+  color: var(--bronz);
   padding-top: 8px;
 }
 
 .hizmet h3 { font-size: 1.375rem; }
-.hizmet p { margin-top: 8px; color: var(--tas); font-size: 0.95rem; }
+.hizmet p { margin-top: 8px; color: var(--metin-soluk); font-size: 0.95rem; }
 
 /* Teknik not: mono, soluk, tek satır — katalog değil */
 .hizmet-teknik {
@@ -1240,7 +1259,7 @@ a { color: inherit; }
   font-family: var(--veri-yazi);
   font-size: 0.72rem;
   line-height: 1.6;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
 }
 
 /* Bölüm sonundaki tek çağrı: ortada düğme, altında kısa bir not. */
@@ -1252,7 +1271,7 @@ a { color: inherit; }
   gap: 14px;
   text-align: center;
 }
-.bolum-cta-not { color: var(--tas-soluk); font-size: 0.875rem; }
+.bolum-cta-not { color: var(--metin-cok-soluk); font-size: 0.875rem; }
 
 /* ---------- Şifre yönetimi ---------- */
 .sifre {
@@ -1260,7 +1279,7 @@ a { color: inherit; }
   grid-template-columns: auto 1fr;
   gap: 40px;
   align-items: center;
-  background: var(--grafit-700);
+  background: var(--yuzey);
   border: 1px solid var(--cizgi);
   border-radius: var(--kose);
   padding: 40px 40px;
@@ -1277,20 +1296,20 @@ a { color: inherit; }
 .sifre-sayi span {
   font-size: clamp(3.6rem, 7vw, 5.5rem);
   font-weight: 400;
-  color: var(--sampanya);
+  color: var(--bronz);
 }
 .sifre-sayi small {
   font-family: var(--govde-yazi);
   font-size: 0.72rem;
   font-weight: 500;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   margin-top: 8px;
 }
 
 .sifre-yazi h2 { font-size: clamp(1.6rem, 2.8vw, 2.25rem); }
-.sifre-yazi p { margin-top: 14px; color: var(--tas); max-width: 56ch; }
+.sifre-yazi p { margin-top: 14px; color: var(--metin-soluk); max-width: 56ch; }
 
 /* ---------- Diğer kapılar: başka sayfaya giden iki blok ---------- */
 /* Her sayfanın sonunda duran iki kapı. Burada hizmet ANLATILMAZ: tek cümle ve bir düğme.
@@ -1308,7 +1327,7 @@ a { color: inherit; }
   align-items: flex-start;
   gap: 16px;
   padding: clamp(28px, 4vw, 40px);
-  background: var(--grafit-700);
+  background: var(--yuzey);
   border: 1px solid var(--cizgi);
   border-radius: var(--kose);
   transition: border-color 300ms var(--gecis);
@@ -1318,7 +1337,7 @@ a { color: inherit; }
   margin: 0;
   font-size: clamp(1.25rem, 1.8vw, 1.55rem);
   font-weight: 400;
-  color: var(--fildisi);
+  color: var(--metin);
   max-width: 30ch;
 }
 .kapi .dugme { margin-top: auto; }
@@ -1347,7 +1366,7 @@ a { color: inherit; }
   min-width: 0;
 }
 
-.plan--one { border-left-color: var(--sampanya); }
+.plan--one { border-left-color: var(--bronz); }
 
 .plan-rozet {
   font-family: var(--govde-yazi);
@@ -1355,7 +1374,7 @@ a { color: inherit; }
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--sampanya);
+  color: var(--bronz);
   margin-bottom: 8px;
 }
 
@@ -1364,7 +1383,7 @@ a { color: inherit; }
 .plan-oda {
   font-family: var(--veri-yazi);
   font-size: 0.76rem;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   margin-top: 4px;
 }
 
@@ -1374,13 +1393,13 @@ a { color: inherit; }
   gap: 4px;
   font-family: var(--baslik-yazi);
   font-variant-numeric: tabular-nums;
-  color: var(--fildisi);
+  color: var(--metin);
   white-space: nowrap;
 }
-.para { font-size: 1.375rem; font-weight: 400; color: var(--tas); }
+.para { font-size: 1.375rem; font-weight: 400; color: var(--metin-soluk); }
 .rakam { font-size: clamp(2.4rem, 3.6vw, 3rem); font-weight: 400; line-height: 1; }
 .rakam--yazi { font-size: clamp(1.6rem, 2.4vw, 2rem); font-style: italic; }
-.donem { font-family: var(--veri-yazi); font-size: 0.78rem; color: var(--tas-soluk); }
+.donem { font-family: var(--veri-yazi); font-size: 0.78rem; color: var(--metin-cok-soluk); }
 
 /* Neler var: yan yana, aralarında bronz nokta */
 .plan-liste {
@@ -1392,7 +1411,7 @@ a { color: inherit; }
   gap: 6px 0;
   font-size: 0.875rem;
   line-height: 1.5;
-  color: var(--tas);
+  color: var(--metin-soluk);
 }
 .plan-liste li { display: inline-flex; align-items: baseline; }
 .plan-liste li:not(:last-child)::after { content: "·"; color: var(--bronz); margin-inline: 10px; }
@@ -1402,12 +1421,13 @@ a { color: inherit; }
 .fiyat-dip {
   margin-top: 32px;
   text-align: center;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
   font-size: 0.875rem;
 }
 
-/* ---------- İletişim: zeytin blok içinde form ---------- */
-/* Sayfanın zeytin bölümü burasıdır: ziyaretçi son adımda derinliğe iner. Cam yok, ışık yok. */
+/* ---------- İletişim: yumuşak adaçayı blok içinde form ---------- */
+/* Sayfanın tek renkli alanı burasıdır: yumuşak adaçayı. Ziyaretçi son adımda krem düzlemden çıkar.
+   Cam yok, gölge yok; içindeki form alanları beyazdır ki yazı yazılan yer belli olsun. */
 .iletisim-alan { position: relative; }
 
 .iletisim {
@@ -1419,23 +1439,23 @@ a { color: inherit; }
   align-items: start;
   padding: clamp(32px, 5vw, 64px);
   margin-block: clamp(24px, 4vw, 48px);
-  background: var(--zeytin-800);
-  border: 1px solid var(--cizgi);
+  background: var(--zeytin-50);
+  border: 1px solid var(--zeytin-200);
   border-radius: var(--kose);
 }
 .iletisim h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); }
 .iletisim-yazi .etiket { margin-bottom: 18px; }
-.iletisim-yazi p { margin-top: 14px; color: var(--tas); max-width: 40ch; }
+.iletisim-yazi p { margin-top: 14px; color: var(--metin-soluk); max-width: 40ch; }
 .iletisim-posta { font-size: 0.9rem; }
 .iletisim-posta a {
-  color: var(--fildisi);
+  color: var(--metin);
   font-weight: 500;
   text-decoration: none;
-  border-bottom: 1px solid var(--bronz);
+  border-bottom: 1px solid var(--cizgi-koyu);
   padding-bottom: 2px;
   transition: border-color 300ms var(--gecis);
 }
-.iletisim-posta a:hover { border-color: var(--sampanya); }
+.iletisim-posta a:hover { border-color: var(--bronz); }
 
 /* ---- Form (DESIGN_SYSTEM.md · 7.3) ---- */
 .form {
@@ -1450,9 +1470,9 @@ a { color: inherit; }
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--tas);
+  color: var(--metin-soluk);
 }
-.alan label small { font-weight: 400; letter-spacing: 0.04em; text-transform: none; font-size: 0.72rem; color: var(--tas-soluk); }
+.alan label small { font-weight: 400; letter-spacing: 0.04em; text-transform: none; font-size: 0.72rem; color: var(--metin-cok-soluk); }
 
 .alan input,
 .alan select,
@@ -1460,8 +1480,8 @@ a { color: inherit; }
   width: 100%;
   font: inherit;
   font-size: 0.95rem;
-  color: var(--fildisi);
-  background: var(--grafit-800);
+  color: var(--metin);
+  background: var(--kasmir-0);
   border: 1px solid var(--cizgi);
   border-radius: var(--kose-kucuk);
   min-height: 56px;
@@ -1469,7 +1489,7 @@ a { color: inherit; }
   transition: border-color 300ms var(--gecis);
 }
 .alan input::placeholder,
-.alan textarea::placeholder { color: var(--tas-soluk); }
+.alan textarea::placeholder { color: var(--metin-cok-soluk); }
 .alan input:hover,
 .alan select:hover,
 .alan textarea:hover { border-color: var(--cizgi-koyu); }
@@ -1477,7 +1497,7 @@ a { color: inherit; }
 .alan select:focus,
 .alan textarea:focus {
   outline: none;
-  border-color: var(--sampanya);
+  border-color: var(--bronz);
 }
 .alan textarea { min-height: 128px; resize: vertical; }
 
@@ -1491,8 +1511,8 @@ a { color: inherit; }
   background-position: right 18px center;
   cursor: pointer;
 }
-.alan select:invalid { color: var(--tas-soluk); }
-.alan select option { background: var(--grafit-800); color: var(--fildisi); }
+.alan select:invalid { color: var(--metin-cok-soluk); }
+.alan select option { background: var(--kasmir-0); color: var(--metin); }
 
 /* Düğme olarak kullanılan .dugme: bağlantıyla aynı görünsün. */
 button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text-transform: uppercase; border: 0; cursor: pointer; }
@@ -1504,8 +1524,8 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   flex-wrap: wrap;
   gap: 14px 24px;
 }
-.form-not { font-size: 0.78rem; color: var(--tas-soluk); max-width: 36ch; }
-.form-not a { color: var(--tas); }
+.form-not { font-size: 0.78rem; color: var(--metin-cok-soluk); max-width: 36ch; }
+.form-not a { color: var(--metin-soluk); }
 
 /* Gönderilemezse görünen not (betik açar); betik yoksa noscript içindeki aynı kutu görünür */
 .form-durum {
@@ -1513,7 +1533,7 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   font-size: 0.875rem;
   color: var(--durum-sorun);
   padding: 12px 16px;
-  border: 1px solid rgba(180, 101, 90, 0.4);
+  border: 1px solid rgba(160, 58, 48, 0.32);
   border-radius: var(--kose-kucuk);
 }
 
@@ -1547,19 +1567,19 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   gap: 10px;
   min-height: 340px;
   padding: 32px 24px;
-  background: var(--grafit-800);
+  background: var(--kasmir-0);
   border: 1px solid var(--cizgi);
   border-radius: var(--kose);
   animation: dus var(--sure) var(--gecis) both;
 }
 .form-basari-ikon {
-  color: var(--sampanya);
+  color: var(--bronz);
   font-size: 1.6rem;
   line-height: 1;
   margin-bottom: 8px;
 }
 .form-basari h3 { font-size: 1.75rem; font-weight: 400; }
-.form-basari p { color: var(--tas); max-width: 32ch; }
+.form-basari p { color: var(--metin-soluk); max-width: 32ch; }
 
 /* ---------- Kapanış ---------- */
 .kapanis {
@@ -1572,17 +1592,17 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   gap: 20px;
 }
 .kapanis h2 { max-width: 18ch; }
-.kapanis p { color: var(--tas); }
+.kapanis p { color: var(--metin-soluk); }
 .kapanis .dugme { margin-top: 8px; }
-.guvence-tek { color: var(--tas-soluk); font-size: 0.875rem; }
+.guvence-tek { color: var(--metin-cok-soluk); font-size: 0.875rem; }
 
 /* ---------- Alt ---------- */
 .alt {
-  background: var(--grafit-900);
-  color: var(--tas);
+  background: var(--kasmir-100);
+  color: var(--metin-soluk);
   border-top: 1px solid var(--cizgi);
 }
-.alt .marka { color: var(--fildisi); }
+.alt .marka { color: var(--metin); }
 .alt-ic {
   padding-block: 56px 40px;
   display: flex;
@@ -1609,22 +1629,22 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--tas-soluk);
+  color: var(--metin-cok-soluk);
 }
 /* Gruplu listede alt çizgi yoktur: yan yana yedi bağlantı çizgiliyse sayfa gürültülü görünür. */
 .alt-grup .alt-baglantilar { flex-direction: column; gap: 8px; }
-.alt-grup .alt-baglantilar a { border-bottom-color: transparent; color: var(--tas); }
-.alt-grup .alt-baglantilar a:hover { color: var(--fildisi); border-bottom-color: var(--bronz); }
+.alt-grup .alt-baglantilar a { border-bottom-color: transparent; color: var(--metin-soluk); }
+.alt-grup .alt-baglantilar a:hover { color: var(--metin); border-bottom-color: var(--bronz); }
 
 .alt-baglantilar { display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 0.875rem; }
 .alt-baglantilar a {
-  color: var(--fildisi);
+  color: var(--metin);
   text-decoration: none;
   padding-bottom: 2px;
-  border-bottom: 1px solid var(--bronz);
+  border-bottom: 1px solid var(--cizgi-koyu);
   transition: border-color 300ms var(--gecis);
 }
-.alt-baglantilar a:hover { border-color: var(--sampanya); }
+.alt-baglantilar a:hover { border-color: var(--bronz); }
 
 /* Alt satır: solda telif, sağda yasal bağlantılar. */
 .alt-dip {
@@ -1636,15 +1656,15 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   padding-top: 24px;
   border-top: 1px solid var(--cizgi);
 }
-.alt-soluk { color: var(--tas-soluk); font-size: 0.8rem; }
+.alt-soluk { color: var(--metin-cok-soluk); font-size: 0.8rem; }
 .alt-yasal { display: flex; flex-wrap: wrap; gap: 6px 24px; font-size: 0.8rem; }
 .alt-yasal a {
-  color: var(--tas);
+  color: var(--metin-soluk);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: color 300ms var(--gecis), border-color 300ms var(--gecis);
 }
-.alt-yasal a:hover { color: var(--fildisi); border-color: var(--bronz); }
+.alt-yasal a:hover { color: var(--metin); border-color: var(--bronz); }
 
 /* ---------- Orta ekran ---------- */
 /* Telefonun kenardan taşması yalnızca yanlarda boşluk varken güzel durur; daha dar ekranda

@@ -1,7 +1,7 @@
 // dokunma-simgesi.png: 180×180, grafit zemin üstünde şampanya kare (simge.svg ile aynı oran: 24/64).
 // Kütüphane yok; PNG elle yazılır (zlib Node'un içinde).
 const zlib = require('zlib'), fs = require('fs');
-const N = 180, zemin = [0x12, 0x14, 0x13], kare = [0xc8, 0xb4, 0x8a];
+const N = 180, zemin = [0x23, 0x23, 0x1f], kare = [0xc3, 0xa7, 0x7d];
 const bas = Math.round(N * 20 / 64), son = Math.round(N * 44 / 64);
 const ham = Buffer.alloc((N * 3 + 1) * N);
 for (let y = 0; y < N; y++) {
