@@ -85,10 +85,55 @@ Fotoğraf yok; kart da sitenin kendisi gibi kodla çizilir. `paylasim.html` kayn
 | `sunucu.js` | Verilen klasörü `http://localhost:5180` adresinde açar. Yayındaki gibi **uzantısız adresleri** de anlar: `/fiyatlandirma` bulunamazsa `fiyatlandirma.html` denenir |
 | `tasma-denetimi.html` | Sayfayı 320–1400 px arası yedi genişlikte iframe içinde açar, sayfa dışına taşan öğeleri listeler. Geçici olarak `vitrin/` içine kopyalayıp sunucuyla açın (`http://localhost:5180/tasma-denetimi.html`); sonuç sayfanın altına yazılır. İşi bitince kopyayı silin. **Not:** dosyanın içindeki `index.html` adı elle değiştirilerek diğer sekiz sayfa da ölçülür |
 | `dokunma-simgesi-uret.js` | `dokunma-simgesi.png` üretir (180×180, koyu plaka üstünde şampanya kare): `node araclar/dokunma-simgesi-uret.js vitrin/dokunma-simgesi.png` |
+| `ekran-goruntusu-al.js` | **Gerçek uygulamadan** telefon ölçüsünde (390×844, 2x) ekran görüntüsü alır ve WebP'ye çevirir. Aşağıdaki "Ürün ekran görüntüleri" bölümüne bakın |
 
 > **Uyarı:** Telefon genişliğini ölçmek için tarayıcıyı `--window-size=390,844` ile açmak **yanıltır**:
 > Windows pencereyi en az ~500 px yapar, sayfa 500 px'e göre dizilir, ekran görüntüsü 390 px'e kırpılır.
 > Doğru ölçüm iframe içinde yapılır — `tasma-denetimi.html` bu yüzden iframe kullanır.
+
+## Ürün ekran görüntüleri (denetim · Madde 1)
+
+Sitedeki bütün "ekranlar" bugün CSS ile çizilmiş **temsillerdir**; tek bir `<img>` yoktur. Dış denetim
+bunu yayın engeli saydı: ziyaretçi ürünün gerçekten var olduğunu göremiyor. Karar, temsilleri
+kaldırmak değil, **yanlarına gerçeğini koymaktır.**
+
+Görseller `vitrin/gorseller/` klasöründe durur ve şu kurallara uyar:
+
+| Kural | Değer |
+|---|---|
+| Biçim | WebP, 2x (780×1688 piksel = 390×844 telefon ölçüsü) |
+| Ağırlık | Her biri **≤ 250 KB**; toplam sayfa ağırlığı ≤ 1,5 MB |
+| Sunum | Kendi alan adımızdan. CSP `img-src 'self' data:` — üçüncü parti barındırma çalışmaz |
+| İlk görsel | `fetchpriority="high"`, `loading` **yok** (LCP görseli) |
+| Diğerleri | `loading="lazy"` + `decoding="async"` |
+| Boyut | `width`/`height` her zaman yazılır (CLS olmasın) |
+| `alt` | Bilgi taşır: "Kat görevlisinin telefonu: Oda 204, üç büyük buton" — "ekran görüntüsü" demez |
+| Veri | Gerçek otel/kişi bilgisi görünmemeli. Örnek veriyle çekilir; görselin altında "örnek veri" yazar |
+
+### Nasıl alınır?
+
+Ekranlar giriş ister; başsız tarayıcı kendi başına giriş yapamaz. Araç bu yüzden **sizin bir kez giriş
+yaptığınız tarayıcı profilini** ödünç alır. Şifre hiçbir yere yazılmaz, hiçbir yere gönderilmez.
+
+```bash
+# 1) Uygulamayı çalıştırın
+cd app && npm run dev
+
+# 2) Yalnızca bu iş için ayrı bir profille tarayıcı açıp GİRİŞ YAPIN
+"C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" --user-data-dir=C:/tmp/od-profil http://localhost:5173
+
+# 3) Aynı profili vererek aracı çalıştırın
+node araclar/ekran-goruntusu-al.js C:/tmp/od-profil
+```
+
+Araç dört ekranı çeker: kat görevlisi üç buton · müdür kumandası · iş emri · teslimat uyuşmazlığı.
+Oda ve iş kodlarını `araclar/ekran-goruntusu-al.js` içindeki `EKRANLAR` listesine yazmanız gerekir;
+kodları `docs/test-listesi.md` sonundaki SQL sorgusu döker.
+
+Aracın iki küçük numarası var, ikisi de bir sebebe dayanıyor: uygulama 390 px'lik bir **iframe** içinde
+açılır (Windows pencereyi en az ~500 px yaptığı için doğrudan ölçmek yanıltır) ve WebP çevirisi
+**tarayıcının kendi kodlayıcısıyla** yapılır (bilgisayarda cwebp/ImageMagick yok, yeni bağımlılık da
+eklenmedi). Boru hattı vitrin sayfasıyla denendi: 780×1688, 62 KB.
 
 ## Mobil ve performans notları
 
