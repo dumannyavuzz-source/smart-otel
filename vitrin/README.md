@@ -50,7 +50,7 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 | `simge.svg` · `dokunma-simgesi.png` | Sekme simgesi ve telefon ana ekranı simgesi: koyu plaka üstünde şampanya kare. Sayfa aydınlık ama simge koyu kalır: krem bir simge açık renkli sekme çubuğunda kaybolurdu (`docs/decisions/009`). PNG, kütüphanesiz küçük bir Node betiğiyle üretildi (aşağıda) |
 | `paylasim.html` → `paylasim.png` | Bağlantı paylaşılınca görünen 1200×630 kart. HTML kaynaktır, PNG ondan üretilir (aşağıda). Beş sayfa da aynı kartı kullanır. **Tema değişirse bu dosya da değişir ve PNG yeniden üretilir** |
 | `robots.txt` · `sitemap.xml` | Arama motoru yönlendirmesi: sitemap dosyasında **beş** sayfa listelidir. `paylasim` ve dört yasal iskelet sayfa dışarıdadır; yasal metinler yazılınca sitemap dosyasına eklenir |
-| `../vercel.json` (depo kökünde) | Uzantısız adresler (`cleanUrls`) ve yayın başlıkları: içerik güvenlik politikası (CSP) ile diğer koruyucu başlıklar. Vercel bu dosyayı yalnızca Root Directory'de arar; o yüzden kökte durur |
+| `../vercel.json` (depo kökünde) | Uzantısız adresler (`cleanUrls`) ve yayın başlıkları: içerik güvenlik politikası (CSP) ile diğer koruyucu başlıklar. Vercel bu dosyayı yalnızca Root Directory içinde arar; o yüzden kökte durur. **Bu dosyaya yorum satırı yazılmaz** — aşağıdaki nota bakın |
 
 ## Bakmak için
 
@@ -114,7 +114,19 @@ ortam değişkenleri `SUPABASE_URL` ve `SUPABASE_ANON_KEY` (`docs/deployment-che
 | `oteldijital.com/dijital-vitrin` · `/teknolojik-altyapi` · `/fiyatlandirma` · `/iletisim` | Diğer dört sayfa |
 | `app.oteldijital.com` | Personel yazılımı (`app/`): giriş (`/giris`), kayıt (`/kayit`) ve misafir yorum sayfası |
 
-**Adresler uzantısızdır.** Yayında bunu depo kökündeki `vercel.json` içindeki `"cleanUrls": true` sağlar; bilgisayarda
+> **`vercel.json` dosyasına ASLA yorum yazılmaz.** JSON'da yorum yoktur; yaygın `"//": "..."` hilesi de burada
+> çalışmaz. Vercel dosyayı katı bir şemaya göre doğrular ve tanımadığı her anahtarda dağıtımı durdurur:
+> *"Invalid request: should NOT have additional property '//'."* Bu, 2026-09-21'de bir kez yaşandı.
+> Ayarların gerekçesi bu dosyaya (README) ya da `docs/decisions/` altına yazılır, `vercel.json` içine değil.
+>
+> Değişiklikten sonra dosyanın hâlâ geçerli olduğu tek satırla denetlenir:
+> ```bash
+> node -e "require('./vercel.json'); console.log('geçerli')"
+> ```
+
+**Adresler uzantısızdır.** Yayında bunu depo kökündeki `vercel.json` içindeki `"cleanUrls": true` sağlar;
+`.html` ile gelen istek kalıcı olarak uzantısız adrese yönlenir. `"trailingSlash": false` ile adres sonuna
+eğik çizgi konmaz, böylece aynı sayfanın iki adresi olmaz. Bilgisayarda
 `araclar/sunucu.js` aynı davranışı taklit eder. Dosya adları diskte `.html` kalır, sayfalardaki bağlantılar uzantısız yazılır
 (Genel Müdür kararı, 2026-09-21 · `docs/decisions/008`).
 

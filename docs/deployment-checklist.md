@@ -121,6 +121,7 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       `oteldijital.com/dijital-vitrin`, `/teknolojik-altyapi`, `/fiyatlandirma`, `/iletisim` açılmalı;
       `/dijital-vitrin.html` kalıcı olarak uzantısız adrese yönlenmelidir. Bunu `vercel.json` içindeki
       `"cleanUrls": true` sağlar; ayar Vercel panelinden değil, bu dosyadan gelir.
+      `vercel.json` yorum kabul etmez; değişiklikten sonra `node -e "require(./vercel.json)"` ile geçerliliği denetlenir.
 - [ ] **6.6** `merhaba@oteldijital.com` posta kutusunun **gerçekten çalıştığını** doğrula (vitrindeki tek iletişim yolu).
 - [ ] **6.11** **Yasal metinler:** bugün dört sayfa da "Çok yakında." diyen bir iskelettir (`/kvkk`, `/gizlilik-politikasi`,
       `/cerez-politikasi`, `/kullanim-sartlari`) ve `noindex` etiketlidir. Metinler girilince her sayfada

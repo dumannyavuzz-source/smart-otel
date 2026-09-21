@@ -95,6 +95,9 @@ OtelDijital bir uygulama satıcısı değil, otelin **operasyon merkezi ve tekno
   ".html uzantısı markanın premium yapısına uygun değil." Yayında `vercel.json` içindeki `cleanUrls` bunu sağlar;
   bilgisayarda `araclar/sunucu.js` aynı davranışı taklit eder (uzantısız adres bulunamazsa sonuna `.html` ekleyip bakar).
   Sayfalardaki bağlantılar da uzantısız yazılır; dosya adları diskte `.html` olarak kalır.
+  **Uyarı:** `vercel.json` bir JSON dosyasıdır ve yorum kabul etmez. Ayarın gerekçesini dosyanın içine
+  `"//": "..."` anahtarıyla yazmak dağıtımı durdurur (*"should NOT have additional property"*); gerekçe
+  `vitrin/README.md` ya da bu klasördeki karar kayıtlarına yazılır.
 
 ## Denendi ve doğrulandı
 
