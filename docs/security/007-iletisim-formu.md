@@ -52,7 +52,7 @@ bağlı alan `null` olur; e-posta küçük harfe iner), kısıtlar sonra **ham u
 | `ip_ozeti` | veritabanı yazar; ziyaretçi dokunamaz (sınandı: 26s) |
 | `olusturulma_tarihi` | veritabanı yazar; ziyaretçi dokunamaz (sınandı: 26e) |
 
-Ekrandaki (`vitrin/index.html`) `required`, `maxlength`, `type="email"` yalnızca nezakettir;
+Ekrandaki (`vitrin/iletisim.html`) `required`, `maxlength`, `type="email"` yalnızca nezakettir;
 uygulamayı atlayıp doğrudan sunucuya yazan da aynı kurallara çarpar.
 
 ## Adres nasıl belirlenir, özet ne kadar korur?

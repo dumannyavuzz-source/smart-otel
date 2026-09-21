@@ -115,7 +115,12 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
 - [x] **6.3** ✅ Vitrindeki bütün düğmeler bağlandı (Aşama 20 · 20.1):
       Kayıt sayfası `https://app.oteldijital.com/kayit` (altı bağlantı: menüde "Demo İste", hero'da sessiz bağlantı, tarife ve kapanışta "30 Gün Ücretsiz Dene") · "Giriş Yap" → `https://app.oteldijital.com/giris` (menü ve alt bölüm) ·
       Kurumsal "Görüşme ayarla" → `mailto:merhaba@oteldijital.com`.
-      Alan adları Genel Müdür tarafından onaylandı; ileride değişirse adres `vitrin/index.html` içinde altı yerdedir.
+      Alan adları Genel Müdür tarafından onaylandı; ileride değişirse adres vitrindeki **beş sayfada birden** geçer
+      (`index.html`, `dijital-vitrin.html`, `teknolojik-altyapi.html`, `fiyatlandirma.html`, `iletisim.html`) — her sayfanın üst çubuğunda ve alt bölümünde.
+- [ ] **6.8** **Uzantısız adresleri canlıda doğrula** (Genel Müdür kararı, 2026-09-21 · `docs/decisions/008`):
+      `oteldijital.com/dijital-vitrin`, `/teknolojik-altyapi`, `/fiyatlandirma`, `/iletisim` açılmalı;
+      `/dijital-vitrin.html` kalıcı olarak uzantısız adrese yönlenmelidir. Bunu `vercel.json` içindeki
+      `"cleanUrls": true` sağlar; ayar Vercel panelinden değil, bu dosyadan gelir.
 - [ ] **6.6** `merhaba@oteldijital.com` posta kutusunun **gerçekten çalıştığını** doğrula (vitrindeki tek iletişim yolu).
 - [x] **6.4** ✅ **Metin–ürün doğrulaması yapıldı:** sayfa "şifreler Müdür Paneli'nden 5 saniyede güncellenir" diyor
       ve Aşama 19.1'den beri ürün bunu karşılıyor (Personel ekranı → 🔑 Şifre). Vaat ile ürün aynı.

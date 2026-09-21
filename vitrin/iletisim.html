@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>İletişim | OtelDijital</title>
+<meta name="description" content="Dijital check-up, iç operasyon merkezi, satış kanalları ya da teknik altyapı — konuyu seçin, gerisini biz soralım. Üyelik gerekmez." />
+
+<link rel="canonical" href="https://oteldijital.com/iletisim" />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#121413" />
+<link rel="icon" href="simge.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="dokunma-simgesi.png" />
+
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="tr_TR" />
+<meta property="og:site_name" content="OtelDijital" />
+<meta property="og:url" content="https://oteldijital.com/iletisim" />
+<meta property="og:title" content="İletişim | OtelDijital" />
+<meta property="og:description" content="Konuyu seçin, gerisini biz soralım. Üyelik gerekmez." />
+<meta property="og:image" content="https://oteldijital.com/paylasim.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="OtelDijital — otel operasyon merkezi" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="İletişim | OtelDijital" />
+<meta name="twitter:description" content="Konuyu seçin, gerisini biz soralım. Üyelik gerekmez." />
+<meta name="twitter:image" content="https://oteldijital.com/paylasim.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="stil.css" />
+</head>
+<body>
+
+<!-- ===================================================================
+     İLETİŞİM SAYFASI (Genel Müdür kararı, 2026-09-21 · docs/decisions/008-vitrin-sayfa-mimarisi.md)
+     Sitedeki TEK form buradadır: diğer sayfalardaki "Bilgi Al" ve "Teknik Destek Al" düğmeleri
+     bu sayfaya gelir. Form ikinci bir yere kopyalanmaz; kopyalanırsa iki yerde bakım gerekir.
+
+     "Gönder" mesajı Ortak Beyin'e (Supabase · iletisim_formu tablosu) yazar; sayfa yenilenmez,
+     alanlar kaybolur ve yerini onay ekranı alır (etkilesim.js · 4). Ziyaretçi anahtarı yalnızca
+     yazabilir, okuyamaz (docs/security/007-iletisim-formu.md). Anahtar ayarlar.js'den gelir;
+     o dosya git'te yoktur, dağıtımda üretilir (ayarlar-uret.sh).
+     =================================================================== -->
+<a class="atla" href="#icerik">İçeriğe atla</a>
+
+<header class="ust">
+  <div class="kolon ust-ic">
+    <a class="marka" href="/">
+      <span class="marka-isaret" aria-hidden="true"></span>
+      <span class="marka-ad">OtelDijital</span>
+    </a>
+    <nav class="menu" aria-label="Sayfa menüsü">
+      <a href="/">İç Operasyon</a>
+      <a href="/dijital-vitrin">Dijital Vitrin</a>
+      <a href="/teknolojik-altyapi">Teknolojik Altyapı</a>
+      <a href="/fiyatlandirma">Fiyatlandırma</a>
+      <a href="/iletisim" aria-current="page">İletişim</a>
+    </nav>
+    <div class="ust-eylem">
+      <a class="ust-giris" href="https://app.oteldijital.com/giris">Giriş Yap</a>
+      <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit">Demo İste</a>
+    </div>
+  </div>
+</header>
+
+<main id="icerik">
+
+  <!-- ===================== SAYFA BAŞI ===================== -->
+  <section class="sayfa-kahraman-alan">
+    <div class="kolon sayfa-kahraman">
+      <p class="etiket">İletişim</p>
+      <h1>Bilgi almak için <span class="vurgu">yazın.</span></h1>
+      <p class="giris">
+        Dijital check-up, iç operasyon merkezi, satış kanalları ya da teknik altyapı —
+        konuyu seçin, gerisini biz sorarız. Üyelik gerekmez, kimse sizi aramak için sözleşme istemez.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== FORM (zeytin blok) ===================== -->
+  <section class="kolon iletisim-alan" id="form">
+    <div class="iletisim">
+      <div class="iletisim-yazi">
+        <p class="etiket">Mesaj bırakın</p>
+        <h2>Ne olacağını baştan söyleyelim.</h2>
+        <p>
+          Mesajınız bize ulaşır, aynı gün içinde okunur. Önce otelinizi dinleriz;
+          sonra ne gerektiğini — ve neyin gerekmediğini — açıkça söyleriz.
+        </p>
+        <p class="iletisim-posta">
+          Doğrudan yazmak isterseniz:<br />
+          <a href="mailto:merhaba@oteldijital.com">merhaba@oteldijital.com</a>
+        </p>
+      </div>
+
+      <div class="form-kutu">
+      <form class="form" method="post">
+        <div class="alan">
+          <label for="f-ad">Ad Soyad</label>
+          <input id="f-ad" name="ad_soyad" type="text" autocomplete="name" required minlength="2" maxlength="80" />
+        </div>
+        <div class="alan">
+          <label for="f-otel">Otel Adı <small>(isteğe bağlı)</small></label>
+          <input id="f-otel" name="otel_adi" type="text" autocomplete="organization" maxlength="80" />
+        </div>
+        <div class="alan">
+          <label for="f-tel">Telefon</label>
+          <input id="f-tel" name="telefon" type="tel" autocomplete="tel" inputmode="tel" required minlength="6" maxlength="24" />
+        </div>
+        <div class="alan">
+          <label for="f-posta">E-posta</label>
+          <input id="f-posta" name="eposta" type="email" autocomplete="email" required maxlength="120" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" title="ad@alan.com biçiminde bir e-posta adresi" />
+        </div>
+        <div class="alan alan--tam">
+          <label for="f-konu">İlgilendiğiniz Konu</label>
+          <select id="f-konu" name="konu" required>
+            <option value="" disabled selected>Seçin</option>
+            <!-- Seçenekler veritabanı kuralıyla birebir aynı olmalı: supabase/migrations/…_iletisim_konu_checkup.sql -->
+            <option>Dijital Check-up / Analiz</option>
+            <option>Teknik Altyapı</option>
+            <option>OTA &amp; Dijital Yönetim</option>
+            <option>Web Sitesi</option>
+            <option>SEO</option>
+            <option>Diğer</option>
+          </select>
+        </div>
+        <div class="alan alan--tam">
+          <label for="f-mesaj">Mesaj <small>(isteğe bağlı)</small></label>
+          <textarea id="f-mesaj" name="mesaj" rows="4" maxlength="2000"></textarea>
+        </div>
+        <!-- Tuzak alan: insan görmez, bot doldurur. Doluysa hiçbir şey gönderilmez.
+             Adı bilerek adres/web sitesi çağrıştırmaz: tarayıcının otomatik doldurması gerçek
+             ziyaretçinin alanını doldurup mesajını sessizce yutmasın. -->
+        <div class="tuzak" aria-hidden="true">
+          <label for="f-bos">Bu alanı boş bırakın</label>
+          <input id="f-bos" name="bos_birakin" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+        <div class="alan alan--tam form-alt">
+          <button type="submit" class="dugme dugme--dev">Gönder</button>
+          <!-- Yasal metin henüz yazılmadı; bağlantı şimdilik sayfanın başına (#) gider. -->
+          <p class="form-not">Formu göndererek <a href="#">KVKK Aydınlatma Metni</a>'ni okuduğunuzu kabul etmiş olursunuz.</p>
+        </div>
+        <p class="form-durum" role="alert" hidden>
+          Mesaj gönderilemedi. Lütfen tekrar deneyin ya da merhaba@oteldijital.com adresine yazın.
+        </p>
+        <noscript>
+          <p class="form-durum">Formu göndermek için tarayıcınızda betik açık olmalı; ya da doğrudan merhaba@oteldijital.com adresine yazın.</p>
+        </noscript>
+      </form>
+
+      <!-- Onay ekranı: form gönderilince alanların yerini alır -->
+      <div class="form-basari" role="status" aria-live="polite" hidden>
+        <span class="form-basari-ikon" aria-hidden="true">✓</span>
+        <h3>Mesajınız başarıyla alındı.</h3>
+        <p>En kısa sürede sizinle iletişime geçeceğiz.</p>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HANGİ KONU HANGİ SAYFADA? =====================
+       Ziyaretçi yanlış kapıdan geldiyse doğru sayfaya gidebilsin diye. -->
+  <section class="kolon bolum" id="kapilar">
+    <p class="etiket etiket--orta">Önce okumak isterseniz</p>
+    <h2 class="operasyon-baslik">Hangi konu hangi sayfada?</h2>
+
+    <ul class="hizmetler">
+      <li class="hizmet">
+        <span class="hizmet-no">01</span>
+        <div>
+          <h3><a class="baglanti" href="/">İç Operasyon</a></h3>
+          <p>Kat hizmetleri, arıza iş emirleri, depo, fire, görev ve raporlama — operasyon merkezinin kendisi.</p>
+        </div>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">02</span>
+        <div>
+          <h3><a class="baglanti" href="/dijital-vitrin">Dijital Vitrin</a></h3>
+          <p>OTA ilanları, channel manager, Google kaydı, web sitesi, online itibar ve SEO.</p>
+        </div>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">03</span>
+        <div>
+          <h3><a class="baglanti" href="/teknolojik-altyapi">Teknolojik Altyapı</a></h3>
+          <p>Wi-Fi, ağ, güvenlik kameraları, sunucu, NAS ve kesintisiz güç.</p>
+        </div>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">04</span>
+        <div>
+          <h3><a class="baglanti" href="/fiyatlandirma">Fiyatlandırma</a></h3>
+          <p>İç operasyonun dört paketi, oda sayısına göre. Diğer hizmetler için ayrı teklif verilir.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="alt">
+  <div class="kolon alt-ic">
+    <div class="alt-ust">
+      <div class="alt-marka">
+        <span class="marka">
+          <span class="marka-isaret" aria-hidden="true"></span>
+          <span class="marka-ad">OtelDijital</span>
+        </span>
+        <p>Küçük ve orta ölçekli oteller için operasyon asistanı.</p>
+      </div>
+
+      <div class="alt-gruplar">
+        <div class="alt-grup">
+          <span class="alt-baslik">Sayfalar</span>
+          <nav class="alt-baglantilar" aria-label="Sayfalar">
+            <a href="/">İç Operasyon</a>
+            <a href="/dijital-vitrin">Dijital Vitrin</a>
+            <a href="/teknolojik-altyapi">Teknolojik Altyapı</a>
+            <a href="/fiyatlandirma">Fiyatlandırma</a>
+            <a href="/iletisim">İletişim</a>
+          </nav>
+        </div>
+        <div class="alt-grup">
+          <span class="alt-baslik">Hızlı erişim</span>
+          <nav class="alt-baglantilar" aria-label="Hızlı erişim">
+            <a href="https://app.oteldijital.com/giris">Giriş Yap</a>
+            <a href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+            <a href="mailto:merhaba@oteldijital.com">merhaba@oteldijital.com</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="alt-dip">
+      <p class="alt-soluk">© 2026 OtelDijital · Tüm hakları saklıdır.</p>
+      <nav class="alt-yasal" aria-label="Yasal metinler">
+        <a href="#">KVKK Aydınlatma Metni</a>
+        <a href="#">Gizlilik Politikası</a>
+        <a href="#">Çerez Politikası</a>
+        <a href="#">Kullanım Şartları</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="ayarlar.js" defer></script>
+<script src="hareket.js" defer></script>
+<script src="etkilesim.js" defer></script>
+</body>
+</html>

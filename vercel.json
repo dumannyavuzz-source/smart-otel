@@ -1,5 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "//": "cleanUrls: adresler uzantısız yayınlanır (oteldijital.com/dijital-vitrin). Vercel, /dijital-vitrin.html isteğini kalıcı olarak uzantısız adrese yönlendirir; sayfalardaki bağlantılar bu yüzden zaten uzantısızdır (Genel Müdür kararı, 2026-09-21 · docs/decisions/008-vitrin-sayfa-mimarisi.md). trailingSlash: adres sonuna eğik çizgi konmaz; aynı sayfanın iki adresi olmasın.",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "headers": [
     {
       "source": "/(.*)",

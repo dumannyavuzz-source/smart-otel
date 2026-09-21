@@ -6,9 +6,9 @@
 export const DEMO_GUN = 30;
 export const UYARI_GUNU = 7;               // 7 gün ve altında sayaç renk değiştirir
 
-// Paketlerin durduğu yer: vitrinin fiyat bölümü. Ödeme sağlayıcısı henüz yoktur (v1-1-notlari · B3),
+// Paketlerin durduğu yer: vitrindeki Fiyatlandırma sayfası. Ödeme sağlayıcısı henüz yoktur (v1-1-notlari · B3),
 // bu yüzden "paketinizi seçin" bugün fiyat sayfasına götürür.
-export const PAKETLER_ADRESI = 'https://oteldijital.com/#fiyat';
+export const PAKETLER_ADRESI = 'https://oteldijital.com/fiyatlandirma';
 
 const GUN_MS = 24 * 60 * 60 * 1000;
 

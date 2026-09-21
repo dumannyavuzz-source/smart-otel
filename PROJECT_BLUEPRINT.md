@@ -256,6 +256,12 @@ klasörü açmak bugün bir şey kazandırmaz; dosya taşımak ise geri alınmas
 
 ### 5.3 Vitrindeki bağlantılar
 
+> **Güncelleme (2026-09-21 · karar `docs/decisions/008-vitrin-sayfa-mimarisi.md`):** Vitrin artık tek sayfa
+> değil, **beş sayfadır**: `index.html` (iç operasyon — ana ürün), `dijital-vitrin.html`,
+> `teknolojik-altyapi.html`, `fiyatlandirma.html`, `iletisim.html`. Her sayfa yalnızca kendi konusunu
+> anlatır; ana sayfada diğer hizmetler için yalnızca birer cümle ve bir düğme vardır.
+> Aşağıdaki iki bağlantı kuralı **beş sayfada da** aynen geçerlidir (üst çubuk ve alt bölüm).
+
 Vitrin uygulamaya iki yerden bağlanır; ikisi de tam adrestir (ayrı alan adı):
 - **"30 Gün Ücretsiz Dene"** → `https://app.oteldijital.com/kayit` (bugünkü gibi)
 - **"Giriş Yap"** (menüde, sağdaki ana düğmenin yanında sade bir bağlantı) → `https://app.oteldijital.com/giris` (**yeni**)

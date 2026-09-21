@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Fiyatlandırma | OtelDijital</title>
+<meta name="description" content="Oda sayısı kadar ödeyin. Kurulum ücreti yok, donanım yok, kontrat yok. 30 gün boyunca tüm özellikler açık; beğenmezseniz tek tıkla bırakırsınız." />
+
+<link rel="canonical" href="https://oteldijital.com/fiyatlandirma" />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#121413" />
+<link rel="icon" href="simge.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="dokunma-simgesi.png" />
+
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="tr_TR" />
+<meta property="og:site_name" content="OtelDijital" />
+<meta property="og:url" content="https://oteldijital.com/fiyatlandirma" />
+<meta property="og:title" content="Fiyatlandırma | OtelDijital" />
+<meta property="og:description" content="Oda sayısı kadar ödeyin. Kurulum ücreti yok, donanım yok, kontrat yok. 30 gün boyunca tüm özellikler açık." />
+<meta property="og:image" content="https://oteldijital.com/paylasim.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="OtelDijital — otel operasyon merkezi" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Fiyatlandırma | OtelDijital" />
+<meta name="twitter:description" content="Oda sayısı kadar ödeyin. Kurulum ücreti yok, donanım yok, kontrat yok. 30 gün boyunca tüm özellikler açık." />
+<meta name="twitter:image" content="https://oteldijital.com/paylasim.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="stil.css" />
+</head>
+<body>
+
+<!-- ===================================================================
+     FİYATLANDIRMA SAYFASI — yalnızca bu konuyu anlatır (Genel Müdür kararı, 2026-09-21).
+     Karar kaydı: docs/decisions/008-vitrin-sayfa-mimarisi.md
+
+     DİKKAT: Buradaki dört paket, personel yazılımındaki ödeme duvarıyla (app/src/paketler.ts) BİREBİR AYNI
+     olmak zorundadır. Vitrinin app/ ile ortak kodu yoktur; rakam iki yerde yazılıdır. Biri
+     değişirse diğeri de değişir.
+
+     Fiyatlar yalnızca İÇ OPERASYON merkezi içindir. Dijital Vitrin ve Teknolojik Altyapı proje
+     işidir; otele bakıldıktan sonra ayrı teklif verilir (aşağıda "Sık sorulanlar" · 04).
+     =================================================================== -->
+<a class="atla" href="#icerik">İçeriğe atla</a>
+
+<header class="ust">
+  <div class="kolon ust-ic">
+    <a class="marka" href="/">
+      <span class="marka-isaret" aria-hidden="true"></span>
+      <span class="marka-ad">OtelDijital</span>
+    </a>
+    <nav class="menu" aria-label="Sayfa menüsü">
+      <a href="/">İç Operasyon</a>
+      <a href="/dijital-vitrin">Dijital Vitrin</a>
+      <a href="/teknolojik-altyapi">Teknolojik Altyapı</a>
+      <a href="/fiyatlandirma" aria-current="page">Fiyatlandırma</a>
+      <a href="/iletisim">İletişim</a>
+    </nav>
+    <div class="ust-eylem">
+      <a class="ust-giris" href="https://app.oteldijital.com/giris">Giriş Yap</a>
+      <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit">Demo İste</a>
+    </div>
+  </div>
+</header>
+
+<main id="icerik">
+
+  <!-- ===================== SAYFA BAŞI ===================== -->
+  <section class="sayfa-kahraman-alan">
+    <div class="kolon sayfa-kahraman">
+      <p class="etiket">Fiyatlandırma</p>
+      <h1>Şeffaf fiyat. Oda sayısı kadar <span class="vurgu">ödersiniz.</span></h1>
+      <p class="giris">
+        Kurulum ücreti yok, donanım yok, kontrat yok. 30 gün boyunca tüm özellikler açık;
+        beğenmezseniz tek tıkla bırakırsınız. Aşağıdaki fiyatlar iç operasyon merkezi içindir.
+      </p>
+      <div class="cta-satir">
+        <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+        <a class="baglanti" href="#tarife">Paketlere bak</a>
+      </div>
+      <p class="guvence">Kredi kartı yok <span aria-hidden="true">·</span> Taahhüt yok <span aria-hidden="true">·</span> 30 gün boyunca tüm özellikler</p>
+    </div>
+  </section>
+
+  <!-- ===================== TARİFE =====================
+       Dört kart değil, bir tarife: satır satır, aralarında ince çizgi. Kabartma tek yerde (Standart).
+       Paketler personel yazılımındaki ödeme duvarıyla AYNI olmalıdır (app/src/paketler.ts). -->
+  <section class="kolon bolum" id="tarife">
+    <p class="etiket">Paketler</p>
+    <h2>Otelinizin büyüklüğü kadar ödeyin.</h2>
+    <p class="bolum-giris">
+      Paket oda sayısına göre kendiliğinden belirlenir. Otel büyürse paket de büyür; ara katman,
+      kullanıcı başı ücret ya da gizli kalem yoktur.
+    </p>
+
+    <ul class="tarife">
+      <li class="plan">
+        <div class="plan-ad">
+          <h3>Butik</h3>
+          <p class="plan-oda">1–25 oda</p>
+        </div>
+        <p class="plan-fiyat"><span class="para">$</span><span class="rakam">29</span><span class="donem">/ay</span></p>
+        <ul class="plan-liste">
+          <li>Sınırsız personel</li>
+          <li>QR ile oda ekranları</li>
+          <li>Arıza → iş emri, süre takibi</li>
+          <li>Misafir yorum kalkanı</li>
+          <li>İnternetsiz çalışma</li>
+        </ul>
+        <a class="dugme dugme--sessiz" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+      </li>
+
+      <li class="plan plan--one">
+        <div class="plan-ad">
+          <p class="plan-rozet">En çok tercih edilen</p>
+          <h3>Standart</h3>
+          <p class="plan-oda">26–75 oda</p>
+        </div>
+        <p class="plan-fiyat"><span class="para">$</span><span class="rakam">59</span><span class="donem">/ay</span></p>
+        <ul class="plan-liste">
+          <li><b>Butik'teki her şey</b></li>
+          <li>Depo ve satın alma zinciri (üç imza)</li>
+          <li>Fatura ve kanıt fotoğrafı arşivi</li>
+          <li>Fire ve uyuşmazlık alarmı</li>
+          <li>Vardiya raporları</li>
+        </ul>
+        <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+      </li>
+
+      <li class="plan">
+        <div class="plan-ad">
+          <h3>Büyük</h3>
+          <p class="plan-oda">76–150 oda</p>
+        </div>
+        <p class="plan-fiyat"><span class="para">$</span><span class="rakam">99</span><span class="donem">/ay</span></p>
+        <ul class="plan-liste">
+          <li><b>Standart'taki her şey</b></li>
+          <li>Kurulum ve personel eğitimi</li>
+          <li>Öncelikli destek</li>
+        </ul>
+        <a class="dugme dugme--sessiz" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+      </li>
+
+      <li class="plan">
+        <div class="plan-ad">
+          <h3>Kurumsal</h3>
+          <p class="plan-oda">150+ oda</p>
+        </div>
+        <p class="plan-fiyat"><span class="rakam rakam--yazi">Özel teklif</span></p>
+        <ul class="plan-liste">
+          <li><b>Büyük'teki her şey</b></li>
+          <li>Birden çok otel, tek çatı</li>
+          <li>Kurumsal fatura ve sözleşme</li>
+        </ul>
+        <a class="dugme dugme--sessiz" href="mailto:merhaba@oteldijital.com">Görüşme ayarla</a>
+      </li>
+    </ul>
+
+    <p class="fiyat-dip">Fiyatlara KDV dahil değildir. Yıllık ödemede iki ay hediye.</p>
+  </section>
+
+  <!-- ===================== SIK SORULANLAR =====================
+       Dört soru, dört kısa cevap. Aynı hizmet listesi düzeni kullanılır; yeni bir kalıp icat edilmez. -->
+  <section class="kolon bolum" id="sorular">
+    <p class="etiket">Sık sorulanlar</p>
+    <h2>Fiyatla ilgili dört soru.</h2>
+
+    <ul class="hizmetler">
+      <li class="hizmet">
+        <span class="hizmet-no">01</span>
+        <div>
+          <h3>30 gün bitince ne olur?</h3>
+          <p>Sistem yeni kayıt almayı durdurur; geçmişinizi görmeye devam edersiniz. <b>Hiçbir veri silinmez.</b> Paketi seçtiğiniz anda kaldığınız yerden sürer.</p>
+        </div>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">02</span>
+        <div>
+          <h3>Oda sayım değişirse?</h3>
+          <p>Paket oda sayısına bağlıdır. Otel büyüyünce bir üst pakete geçilir, küçülünce aşağı inilir. Geçiş için yeni bir sözleşme imzalanmaz.</p>
+        </div>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">03</span>
+        <div>
+          <h3>Kontrat imzalamam gerekiyor mu?</h3>
+          <p>Hayır. Aylık ödenir, istediğiniz ay bırakılır. Yıllık ödemeyi seçerseniz iki ay hediyedir; zorunlu değildir.</p>
+        </div>
+      </li>
+      <li class="hizmet">
+        <span class="hizmet-no">04</span>
+        <div>
+          <h3>Dijital Vitrin ve Teknolojik Altyapı bu fiyata dahil mi?</h3>
+          <p>Hayır. İkisi de proje işidir: otele bakılır, ne gerektiği yazılır ve ayrı teklif verilir. İç operasyon aboneliği bunlardan bağımsızdır.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="bolum-cta">
+      <a class="dugme dugme--sessiz" href="/iletisim">Başka bir sorum var</a>
+      <p class="bolum-cta-not">Yazın, aynı gün sade bir cevap alın. Üyelik gerekmez.</p>
+    </div>
+  </section>
+
+  <!-- ===================== KAPANIŞ ===================== -->
+  <section class="kolon kapanis">
+    <h2>Bu akşamki vardiyada kullanmaya başlayın.</h2>
+    <p>Kurulum 20 dakika. Personelin öğrenmesi bir kahve molası.</p>
+    <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+    <p class="guvence-tek">✓ Kredi kartı yok &nbsp;·&nbsp; ✓ Taahhüt yok &nbsp;·&nbsp; ✓ 30 gün boyunca tüm özellikler</p>
+  </section>
+
+</main>
+
+<footer class="alt">
+  <div class="kolon alt-ic">
+    <div class="alt-ust">
+      <div class="alt-marka">
+        <span class="marka">
+          <span class="marka-isaret" aria-hidden="true"></span>
+          <span class="marka-ad">OtelDijital</span>
+        </span>
+        <p>Küçük ve orta ölçekli oteller için operasyon asistanı.</p>
+      </div>
+
+      <div class="alt-gruplar">
+        <div class="alt-grup">
+          <span class="alt-baslik">Sayfalar</span>
+          <nav class="alt-baglantilar" aria-label="Sayfalar">
+            <a href="/">İç Operasyon</a>
+            <a href="/dijital-vitrin">Dijital Vitrin</a>
+            <a href="/teknolojik-altyapi">Teknolojik Altyapı</a>
+            <a href="/fiyatlandirma">Fiyatlandırma</a>
+            <a href="/iletisim">İletişim</a>
+          </nav>
+        </div>
+        <div class="alt-grup">
+          <span class="alt-baslik">Hızlı erişim</span>
+          <nav class="alt-baglantilar" aria-label="Hızlı erişim">
+            <a href="https://app.oteldijital.com/giris">Giriş Yap</a>
+            <a href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+            <a href="mailto:merhaba@oteldijital.com">merhaba@oteldijital.com</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="alt-dip">
+      <p class="alt-soluk">© 2026 OtelDijital · Tüm hakları saklıdır.</p>
+      <nav class="alt-yasal" aria-label="Yasal metinler">
+        <a href="#">KVKK Aydınlatma Metni</a>
+        <a href="#">Gizlilik Politikası</a>
+        <a href="#">Çerez Politikası</a>
+        <a href="#">Kullanım Şartları</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="ayarlar.js" defer></script>
+<script src="hareket.js" defer></script>
+<script src="etkilesim.js" defer></script>
+</body>
+</html>

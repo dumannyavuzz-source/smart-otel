@@ -1,5 +1,5 @@
 // Fiyat paketleri: oda sayısına göre dört basamak (Genel Müdür kararı, 2026-09-17).
-// Vitrindeki fiyat bölümüyle (vitrin/index.html · #fiyat) AYNI olmak zorundadır:
+// Vitrindeki fiyat sayfasıyla (vitrin/fiyatlandirma.html) AYNI olmak zorundadır:
 // vitrinin uygulamayla ortak kodu yoktur, bu yüzden rakam iki yerde yazılıdır. Biri değişirse diğeri de değişir.
 export interface Paket {
   ad: string;

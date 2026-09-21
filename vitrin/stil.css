@@ -1,6 +1,9 @@
-/* OtelDijital — vitrin sayfası
+/* OtelDijital — vitrin sayfaları (beş sayfa, tek stil dosyası)
    Görsel dil: "Sakin Lüks" (Quiet Luxury · Contemporary Hospitality). Tek kaynak: DESIGN_SYSTEM.md
-   Karar: docs/decisions/007-sakin-luks-gorsel-dili.md
+   Kararlar: docs/decisions/007-sakin-luks-gorsel-dili.md · docs/decisions/008-vitrin-sayfa-mimarisi.md
+
+   Site beş sayfadır: index (iç operasyon) · dijital-vitrin · teknolojik-altyapi · fiyatlandirma · iletisim.
+   Beşi de bu tek dosyayı kullanır; her sayfa yalnızca kendi bölümlerinin sınıflarını çağırır.
 
    Sayfa bir lüks otelin lobisi gibidir: koyu, mat, sessiz, ferah.
      ~%65  GRAFİT     — zemin ve boşluk. Sayfanın gövdesi.
@@ -204,6 +207,13 @@ a { color: inherit; }
 }
 .menu a:hover { color: var(--fildisi); }
 
+/* Bulunulan sayfa: fildişi yazı ve altında ince şampanya çizgi. Site beş sayfa olduğundan
+   ziyaretçinin "neredeyim?" sorusu menüde cevaplanır (aria-current="page"). */
+.menu a[aria-current="page"] {
+  color: var(--fildisi);
+  box-shadow: inset 0 -1px 0 0 var(--sampanya);
+}
+
 /* Sağ taraf: "Giriş Yap" bağlantısı + tek düğme */
 .ust-eylem {
   display: flex;
@@ -334,6 +344,22 @@ a { color: inherit; }
   letter-spacing: 0.01em;
 }
 .guvence span { margin-inline: 6px; color: var(--bronz); }
+
+/* ---------- Alt sayfaların girişi ---------- */
+/* Ana sayfanın hero'su iki sütundur (yazı + telefon). Alt sayfalarda telefon yoktur: tek sütun,
+   aynı derin grafit zemin, daha kısa boy. Ziyaretçi hangi sayfada olduğunu ilk ekranda anlar. */
+.sayfa-kahraman-alan {
+  background: var(--grafit-900);
+  border-bottom: 1px solid var(--cizgi);
+}
+
+.sayfa-kahraman {
+  padding-block: clamp(64px, 8vw, 112px) clamp(56px, 7vw, 96px);
+  max-width: 900px;
+  margin-inline: auto;
+}
+.sayfa-kahraman h1 { max-width: 20ch; font-size: clamp(2.1rem, 3.6vw, 3.1rem); }
+.sayfa-kahraman .giris { max-width: 58ch; }
 
 /* ---------- Uygulama görseli: kodla çizilmiş telefon ---------- */
 /* Fotoğraf yok. Ekranda görünen şey ürünün kendisidir; içindeki akış gerçekten kıpırdar. */
@@ -530,6 +556,50 @@ a { color: inherit; }
   color: var(--tas);
 }
 
+/* ---------- Hangi sorunları çözer: iki sütunlu karşılaştırma ---------- */
+/* Solda otelin bugünkü hâli (soluk, arkada), sağda OtelDijital'li hâli (fildişi, önde).
+   Kart yok, kutu yok: iki sütun ve aralarında ince bir çizgi. Dar ekranda alt alta iner. */
+.sorunlar {
+  list-style: none;
+  padding: 0;
+  margin: 56px 0 0;
+  border-top: 1px solid var(--cizgi);
+}
+
+.sorun {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--cizgi);
+}
+
+.sorun-once, .sorun-sonra { margin: 0; max-width: 52ch; }
+.sorun-once { color: var(--tas-soluk); }
+.sorun-sonra { color: var(--fildisi); }
+
+/* "Bugün" / "OtelDijital ile" — sütun başlığı her satırda tekrar eder ki dar ekranda da okunsun */
+.sorun-etiket {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tas-soluk);
+}
+.sorun-sonra .sorun-etiket { color: var(--sampanya); }
+
+@media (min-width: 901px) {
+  .sorun {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  /* Sağ sütun soldan ince bir çizgiyle ayrılır: "önce / sonra" sınırı görünür olsun */
+  .sorun-sonra { padding-inline-start: clamp(24px, 3vw, 40px); border-left: 1px solid var(--cizgi); }
+}
+
 /* ---------- İç operasyon: üç blok, zikzak ---------- */
 /* Sol görsel / sağ metin, sonra tersi. Aralarında bol boşluk; kart ızgarası yok (üçleme kuralı). */
 .operasyon-baslik {
@@ -680,6 +750,69 @@ a { color: inherit; }
 .mini-rozet--sari  { color: var(--durum-dikkat); border-color: rgba(201, 154, 91, 0.35); }
 .mini-rozet--yesil { color: var(--durum-iyi);    border-color: rgba(127, 155, 110, 0.35); }
 
+/* ---------- Kim ne yapar: personel ve müdür yan yana ---------- */
+/* İki sütun, iki yüz. Kart değil; her sütun kendi başına bir sayfa parçası gibi durur.
+   Altındaki uygulama kesiti (.mini) anlatılanın gerçekten ekranda böyle göründüğünü gösterir. */
+.roller {
+  margin-top: clamp(48px, 6vw, 72px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(40px, 6vw, 72px);
+}
+
+.rol h3 {
+  margin-top: 10px;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 400;
+}
+
+.rol-liste {
+  list-style: none;
+  counter-reset: rol;
+  padding: 0;
+  margin: 24px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--tas);
+  font-size: 0.95rem;
+}
+/* Numara akışın dışında durur (mutlak konum): madde metni tek bir satır akışı olarak kalsın.
+   Burada ızgara KULLANILMAZ — ızgara olsaydı <b> gibi her iç parça ayrı bir hücreye düşer,
+   cümle kelime kelime alt alta inerdi. */
+.rol-liste li {
+  counter-increment: rol;
+  position: relative;
+  padding-inline-start: 40px;
+}
+/* Numara şampanyadır ve sayfanın geri kalanıyla aynı dildedir (01, 02…) */
+.rol-liste li::before {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 4px;                          /* iki farklı punto: sayı ile cümlenin ilk satırı aynı hizaya gelsin */
+  content: "0" counter(rol);
+  font-family: var(--govde-yazi);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--sampanya);
+}
+.rol-liste b { color: var(--fildisi); font-weight: 500; }
+
+.rol-not {
+  margin-top: 20px;
+  color: var(--tas-soluk);
+  font-size: 0.9rem;
+  max-width: 46ch;
+}
+.rol-not b { color: var(--tas); font-weight: 500; }
+
+.rol .mini { margin-top: 28px; max-width: 420px; }
+
+@media (min-width: 901px) {
+  .roller { grid-template-columns: 1fr 1fr; }
+}
+
 /* ---------- İnteraktif keşif: ortada telefon, etrafında dört başlık ---------- */
 .kesif {
   margin-top: 56px;
@@ -796,8 +929,8 @@ a { color: inherit; }
 }
 
 /* ---------- Dijital check-up: geçiş cümlesi + durum panosu ---------- */
-/* Buraya kadar otelin içi anlatıldı; bu bölüm dışarıya bakar. Üstte çizgi yok, yalnızca geniş
-   boşluk var: ziyaretçi bir konudan ötekine nefes alarak geçsin. */
+/* Yalnızca dijital-vitrin.html sayfasında kullanılır: otelin dışarıdan nasıl göründüğünü ölçen pano.
+   .bolum--gecis üstteki çizgiyi kaldırır, yerine geniş boşluk bırakır. */
 .bolum--gecis {
   border-top: 0;
   padding-top: clamp(96px, 12vw, 176px);
@@ -1030,6 +1163,42 @@ a { color: inherit; }
 .deger-liste li { display: flex; gap: 12px; }
 .deger-liste li::before { content: "—"; color: var(--bronz); flex: none; }
 
+/* ---------- Raporlama: solda metin, sağda vardiya özeti ---------- */
+.rapor {
+  margin-top: clamp(48px, 6vw, 72px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.rapor-yazi p { color: var(--tas); max-width: 52ch; }
+
+.rapor-liste {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 52ch;
+}
+.rapor-liste li {
+  padding-inline-start: 18px;
+  border-inline-start: 1px solid var(--cizgi-koyu);
+  color: var(--tas);
+  font-size: 0.95rem;
+}
+.rapor-liste b { color: var(--fildisi); font-weight: 500; }
+
+.rapor-not { margin-top: 28px; color: var(--tas-soluk); font-size: 0.9rem; }
+
+.rapor-gorsel .mini { max-width: 420px; margin-inline: auto; }
+
+@media (min-width: 901px) {
+  .rapor { grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr); gap: clamp(40px, 6vw, 96px); }
+}
+
 /* ---------- Hizmet listesi: dijital yönetim ve teknik altyapı ---------- */
 /* Altı kart değil, iki sütunlu bir liste: otelin menüsü gibi. Numara, başlık, tek cümle. */
 .hizmetler {
@@ -1122,6 +1291,41 @@ a { color: inherit; }
 
 .sifre-yazi h2 { font-size: clamp(1.6rem, 2.8vw, 2.25rem); }
 .sifre-yazi p { margin-top: 14px; color: var(--tas); max-width: 56ch; }
+
+/* ---------- Diğer kapılar: başka sayfaya giden iki blok ---------- */
+/* Her sayfanın sonunda duran iki kapı. Burada hizmet ANLATILMAZ: tek cümle ve bir düğme.
+   Anlatım kendi sayfasına aittir (docs/decisions/008-vitrin-sayfa-mimarisi.md). */
+.kapilar {
+  margin-top: clamp(48px, 6vw, 72px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.kapi {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: clamp(28px, 4vw, 40px);
+  background: var(--grafit-700);
+  border: 1px solid var(--cizgi);
+  border-radius: var(--kose);
+  transition: border-color 300ms var(--gecis);
+}
+.kapi:hover { border-color: var(--cizgi-koyu); }
+.kapi h3 {
+  margin: 0;
+  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+  font-weight: 400;
+  color: var(--fildisi);
+  max-width: 30ch;
+}
+.kapi .dugme { margin-top: auto; }
+
+@media (min-width: 901px) {
+  .kapilar { grid-template-columns: 1fr 1fr; gap: clamp(24px, 3vw, 40px); }
+}
 
 /* ---------- Tarife: dört kart değil, dört satır ---------- */
 /* Ad ve oda aralığı · fiyat · neler var · tek düğme. Kabartma yalnızca Standart'ta: solda şampanya çizgi. */
@@ -1395,6 +1599,23 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   gap: 20px 32px;
 }
 .alt-marka { display: flex; flex-direction: column; gap: 10px; }
+
+/* İki grup yan yana: "Sayfalar" ve "Uygulama". Site beş sayfa olunca alt bölüm, dar ekranda
+   kısılan üst menünün yedeği oldu; o yüzden bütün sayfalar burada da listelenir. */
+.alt-gruplar { display: flex; flex-wrap: wrap; gap: 24px clamp(32px, 5vw, 64px); }
+.alt-grup { display: flex; flex-direction: column; gap: 12px; }
+.alt-baslik {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tas-soluk);
+}
+/* Gruplu listede alt çizgi yoktur: yan yana yedi bağlantı çizgiliyse sayfa gürültülü görünür. */
+.alt-grup .alt-baglantilar { flex-direction: column; gap: 8px; }
+.alt-grup .alt-baglantilar a { border-bottom-color: transparent; color: var(--tas); }
+.alt-grup .alt-baglantilar a:hover { color: var(--fildisi); border-bottom-color: var(--bronz); }
+
 .alt-baglantilar { display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 0.875rem; }
 .alt-baglantilar a {
   color: var(--fildisi);
@@ -1448,7 +1669,39 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   .hizmetler { grid-template-columns: 1fr; }
   .plan { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 28px 0 28px 20px; }
   .plan .dugme { width: 100%; }
-  .menu { display: none; }
+
+  /* Menü telefonda GİZLENMEZ. Site tek sayfayken gizlenebiliyordu (aşağı kaydırmak yetiyordu);
+     beş sayfa olunca gizlenirse ziyaretçi diğer sayfalara geçemez. Üst çubuk iki satıra ayrılır:
+     üstte marka ve tek düğme, altta beş sayfa. Beş sözcük dar ekrana sığmazsa satır yana kayar. */
+  .ust-ic {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "marka eylem"
+      "menu  menu";
+    row-gap: 2px;
+    min-height: 0;
+    padding-block: 8px 0;
+  }
+  .marka { grid-area: marka; }
+  .ust-eylem { grid-area: eylem; }
+  .menu {
+    grid-area: menu;
+    justify-self: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    margin-inline: -10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    /* Olmazsa olmaz: ızgara öğesi varsayılan olarak içeriğinden dar olamaz (min-width: auto).
+       Sıfırlanmazsa beş sözcük üst çubuğu, üst çubuk da bütün sayfayı ekrandan taşırır. */
+    min-width: 0;
+    /* Sağ kenarda yumuşak bir solma: "buradan devamı var, kaydır" demenin sessiz yolu.
+       Desteklemeyen tarayıcıda hiçbir şey olmaz, menü yine kayar. */
+    -webkit-mask-image: linear-gradient(to right, #000 86%, transparent);
+    mask-image: linear-gradient(to right, #000 86%, transparent);
+  }
+  .menu::-webkit-scrollbar { display: none; }
+  .menu a { padding: 10px; }
   /* Telefon tek sütunda ortalanır, taşma biter. Kart da sütunun içinde kalır. */
   .gorsel { justify-self: center; margin-inline-end: 0; }
   .kumanda-kart { left: 0; }
