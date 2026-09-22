@@ -1,7 +1,8 @@
 # 021 — İletişim Formu: Onay Açık Eylemle Alınır (denetim · Madde 13)
 
 > **Karar veren:** Genel Müdür · **Yazan:** Orkestratör · **Tarih:** 2026-09-22
-> **Durum:** Uygulandı ve ölçülerek doğrulandı. Göçler henüz **çalıştırılmadı** (dağıtım listesi · 6.19).
+> **Durum:** Uygulandı ve ölçülerek doğrulandı. Birinci göç 2026-09-22 günü Genel Müdür tarafından
+> çalıştırıldı ve vitrin aynı gün canlıya çıktı; **ikinci göç (zorunluluk) beklemede** (dağıtım listesi · 6.19).
 > Kaynak: `docs/denetim-brifi-2026-09-21.md` · Madde 13
 > Kod: `vitrin/iletisim.html`, `vitrin/stil.css`, `vitrin/etkilesim.js`,
 > `supabase/migrations/20260922100000_iletisim_kvkk_onayi.sql` ve `…110000_iletisim_kvkk_zorunlu.sql`
