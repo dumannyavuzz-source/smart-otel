@@ -1,6 +1,8 @@
 // Kayıt: vitrindeki "Otelimi Ücretsiz Başlat" düğmesinin arkası (Blueprint · Aşama 20).
 //
 // Dört soru sorulur: otel adı, ad soyad, e-posta, şifre. Başka hiçbir şey sorulmaz.
+// Soruların altında tek bir onay kutusu vardır (karar 026): Kullanım Şartları ve KVKK
+// Aydınlatma Metni. Kutu işaretlenmeden hesap açılmaz — aynı kural kapıda ve veritabanında da durur.
 // Kapı (otel-ac) hesabı, oteli ve ilk sahipliği birlikte açar; sonra kişi kendi şifresiyle
 // normal yoldan giriş yapar — kayıt akışı özel bir giriş yolu icat etmez.
 import { ortakBeyin } from './ortakBeyin';
@@ -10,6 +12,7 @@ export interface KayitBilgileri {
   ad: string;
   eposta: string;
   sifre: string;
+  onay: boolean;                            // Kullanım Şartları + KVKK onay kutusu
 }
 
 const EPOSTA = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -24,6 +27,7 @@ export function kayitDenetle(bilgi: KayitBilgileri): string | null {
   if (bilgi.ad.trim().length > 60) return 'Adınız çok uzun.';
   if (!EPOSTA.test(bilgi.eposta.trim())) return 'E-posta adresinizi kontrol edin.';
   if (bilgi.sifre.length < EN_KISA_SIFRE) return `Şifre en az ${EN_KISA_SIFRE} karakter olmalı.`;
+  if (!bilgi.onay) return 'Devam etmek için Kullanım Şartları ve KVKK metnini onaylayın.';
   return null;
 }
 
@@ -34,6 +38,7 @@ export async function otelAc(bilgi: KayitBilgileri): Promise<{ ok: true } | { ok
       ad: bilgi.ad.trim(),
       eposta: bilgi.eposta.trim(),
       sifre: bilgi.sifre,
+      sartlar_onayi: bilgi.onay,
     },
   });
 

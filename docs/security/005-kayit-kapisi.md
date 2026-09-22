@@ -26,6 +26,7 @@ Bu üçü tek bir yerde toplandığı için kapının kuralları açıkça yazı
 | **Yarım iş yok** | Otel açılamazsa hesap silinir; ilk sahiplik yazılamazsa otel de hesap da silinir. |
 | **E-posta zaten kayıtlıysa** | Otel hiç açılmaz; 409 ve "Giriş yapmayı deneyin." |
 | **`hotels` tablosu** | Ekleme kuralı hiç kimseye açılmadı. Yeni bir otel yalnızca bu kapıdan doğar. |
+| **Yasal onay** | Kullanım Şartları ve KVKK onayı olmadan otel açılmaz (karar 026). Kural üç katmanda durur: ekrandaki kutu, kapının denetimi (`sartlar_onayi !== true` → 400) ve veritabanındaki tetikleyici (`hotels_sartlar_onayi_zorunlu`). Ekranı atlayıp kapıyı doğrudan çağıran da geçemez. "true" metni, 1 ya da eksik alan kabul edilmez: onay açık eylemdir, tahmin değil. |
 | **Sayaç tablosu** | `kayit_denemeleri` üzerinde RLS açık, **hiç kural yok**: kimse okuyamaz, kimse yazamaz. Yalnızca kapı (ana anahtar) dokunur. Bir günden eski satırlar her denemede silinir — bu bir defter değil, sayaçtır. |
 | **Kapı anahtarsızdır** | `verify_jwt = false` (kayıt olan kişinin kartı yoktur). Bu yüzden yukarıdaki sayaç zorunludur. |
 

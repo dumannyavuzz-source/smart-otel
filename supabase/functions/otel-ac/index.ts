@@ -44,8 +44,13 @@ const dis: Bagimliliklar = {
     return { ok: true, id: data.user.id };
   },
 
-  async otelAc(ad) {
-    const { data, error } = await yonetici.from('hotels').insert({ name: ad }).select('id').single();
+  async otelAc(ad, sartlarOnayi) {
+    // Onay satırla birlikte yazılır: "şu otel, şu tarihte (created_at), açık bir hareketle onay verdi".
+    const { data, error } = await yonetici
+      .from('hotels')
+      .insert({ name: ad, sartlar_onayi: sartlarOnayi })
+      .select('id')
+      .single();
     if (error || !data) return { ok: false, hata: error?.message ?? 'otel yok' };
     return { ok: true, id: (data as { id: string }).id };
   },

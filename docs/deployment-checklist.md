@@ -24,9 +24,12 @@
 - [ ] **1.2** Projede **günlük yedeklemenin açık** olduğunu doğrula (veritabanı göçleri geri alınamaz; dönüş yolu yedektir).
 - [ ] **1.3** Bilgisayardan bağla: `supabase link --project-ref <proje-kimliği>`
 - [ ] **1.4** Veritabanını kur: `supabase db push`
-      → 18 göç dosyası sırayla çalışır: tablolar → kurallar → kilitler → fotoğraflar → misafir kapısı → arıza fotoğrafı →
+      → 22 göç dosyası sırayla çalışır: tablolar → kurallar → kilitler → fotoğraflar → misafir kapısı → arıza fotoğrafı →
       çözüm fotoğrafı → personel ve ürün → teslim kanıtı → kesirli miktar → fatura gizliliği → şifre güncelleme →
-      kayıt kapısı → sayaç kilidi → demo süresi → iletişim formu → iletişim sel kapısı → iletişim konu listesi.
+      kayıt kapısı → sayaç kilidi → demo süresi → iletişim formu → iletişim sel kapısı → iletişim konu listesi →
+      iletişim KVKK onayı → iletişim onayı zorunlu → kayıt şartlar onayı → kayıt onayı zorunlu.
+      **Son iki çift göçün sırası önemlidir:** "zorunlu" dosyaları, ilgili yayın canlıya çıktıktan sonra
+      çalıştırılır (6.19 ve 6.24). Sıfırdan kurulan yeni bir projede hepsi birden çalışabilir.
 - [ ] **1.5** Kurulumu gözle doğrula (Supabase Studio):
       - `photos` kovası **private** (public değil), dosya sınırı **2 MB**.
       - Bütün tablolarda RLS **açık**.
@@ -199,6 +202,15 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       sayfasıyla birebir aynıdır. Biri değişirse diğeri de değişmelidir.
       Canlıda dördünü de aç, alt bölümdeki bağlantıların ve formun altındaki KVKK bağlantısının
       doğru sayfaya gittiğini gör.
+- [ ] **6.24** **Kayıt ekranındaki yasal onay kutusu — SIRA ÖNEMLİ** (Genel Müdür kararı, 2026-09-22 · `docs/decisions/026`):
+      Hesap açılırken Kullanım Şartları ve KVKK onayı alınır. Kural üç yerde durur (ekran · kapı · veritabanı),
+      bu yüzden üç adım **bu sırayla** yapılır. Sıra bozulursa kayıt kapısı geçici olarak kapanır:
+      1. `supabase db push` → `…_kayit_sartlar_onayi.sql` (sütunu ekler, hiçbir şeyi zorunlu kılmaz).
+      2. Kapıyı ve uygulamayı yayınla: `supabase functions deploy otel-ac --no-verify-jwt` ve Vercel dağıtımı.
+         Kapı bu sütun yokken yayınlanırsa otel açılamaz ("column does not exist").
+      3. `supabase db push` → `…_kayit_sartlar_zorunlu.sql` (onaysız kaydı veritabanı da reddeder).
+      Sonra canlıda dene: kutu işaretlenmeden **Otelimi Başlat** çalışmamalı; işaretleyip açılan otelin
+      `hotels` satırında `sartlar_onayi = true` görünmeli. İki bağlantı da yeni sekmede açılmalı.
 - [ ] **6.23** **İletişim formu kayıtlarının 12 ayda silinmesi** (Genel Müdür kararı, 2026-09-22 · `docs/decisions/025`):
       KVKK metni artık somut bir söz veriyor: **"en fazla 12 ay"**. Bu sözü bugün tutan otomatik bir
       mekanizma **yoktur**; silme elle yapılır. Ayda bir kez Supabase Studio → SQL Editor'de

@@ -4,7 +4,8 @@
 // Vitrindeki "Otelimi Ücretsiz Başlat" düğmesinin arkası. Sistemin tek kimlik doğrulamasız
 // yazma yoludur; bu yüzden sıra katıdır ve yarım iş bırakmaz:
 //   1. Sayaç: aynı adresten saatte en fazla 3 deneme.
-//   2. Denetim: otel adı, ad, e-posta, şifre — dışarıdan gelen her şey güvenilmezdir.
+//   2. Denetim: otel adı, ad, e-posta, şifre, onay — dışarıdan gelen her şey güvenilmezdir.
+//      Onay kutusu işaretlenmemişse kapı burada durur (karar 026); veritabanında da aynı kural vardır.
 //   3. Hesap açılır. E-posta zaten kayıtlıysa burada durulur (otel oluşturulmaz).
 //   4. Otel açılır. Olmazsa hesap geri silinir.
 //   5. İlk üyelik "owner" olarak yazılır. Olmazsa otel de hesap da geri silinir.
@@ -16,6 +17,7 @@ export interface KayitIstegi {
   ad: string;
   eposta: string;
   sifre: string;
+  sartlar_onayi: true;          // ekrandaki onay kutusu; başka değer kabul edilmez
 }
 
 export const MESAJ = {
@@ -23,6 +25,7 @@ export const MESAJ = {
   ad: 'Adınız 1–60 karakter olmalı.',
   eposta: 'E-posta hatalı.',
   sifre: 'Şifre en az 8 karakter olmalı.',
+  onay: 'Kullanım Şartları ve KVKK Aydınlatma Metni onaylanmadan hesap açılamaz.',
   zatenKayitli: 'Bu e-posta zaten kayıtlı. Giriş yapmayı deneyin.',
   cokSik: 'Çok fazla deneme yapıldı. Biraz sonra tekrar deneyin.',
   genel: 'Bu işlem yapılamadı.',
@@ -51,14 +54,17 @@ export function istegiDenetle(veri: unknown): Denetim {
     return { ok: false, mesaj: MESAJ.sifre };
   }
 
-  return { ok: true, istek: { otel_adi: otelAdi, ad, eposta, sifre: v.sifre } };
+  // Onay AÇIK EYLEMLE verilir: "true" dışında hiçbir değer (1, "evet", yok) kabul edilmez.
+  if (v.sartlar_onayi !== true) return { ok: false, mesaj: MESAJ.onay };
+
+  return { ok: true, istek: { otel_adi: otelAdi, ad, eposta, sifre: v.sifre, sartlar_onayi: true } };
 }
 
 // Dış dünya ile konuşan parçalar (index.ts gerçeğini, testler sahtesini verir)
 export interface Bagimliliklar {
   denemeyiSayVeYaz: (ipOzeti: string) => Promise<number>;   // bu denemeden ÖNCEki sayı
   hesapAc: (eposta: string, sifre: string) => Promise<{ ok: true; id: string } | { ok: false; zatenVar: boolean; hata: string }>;
-  otelAc: (ad: string) => Promise<{ ok: true; id: string } | { ok: false; hata: string }>;
+  otelAc: (ad: string, sartlarOnayi: boolean) => Promise<{ ok: true; id: string } | { ok: false; hata: string }>;
   uyelikYaz: (otelId: string, kullaniciId: string, ad: string) => Promise<{ ok: boolean; hata?: string }>;
   hesapSil: (id: string) => Promise<void>;
   oteliSil: (id: string) => Promise<void>;
@@ -100,7 +106,7 @@ export async function istegiIsle(
       return cevap(500, { ok: false, mesaj: MESAJ.genel });
     }
 
-    const otel = await dis.otelAc(k.otel_adi);
+    const otel = await dis.otelAc(k.otel_adi, k.sartlar_onayi);
     if (!otel.ok) {
       await dis.hesapSil(hesap.id);                        // yarım iş kalmasın
       console.error('[otel-ac] otel açılamadı:', otel.hata);

@@ -1,6 +1,11 @@
 // Kayıt Ekranı — vitrindeki "30 Gün Ücretsiz Dene" düğmesinin indiği yer (Aşama 20).
 //
-// Dört soru, tek düğme. Kurulum sihirbazı, adım adım form, oda sayısı sorusu, kart bilgisi yoktur.
+// Dört soru, bir onay kutusu, tek düğme. Kurulum sihirbazı, adım adım form, oda sayısı sorusu,
+// kart bilgisi yoktur.
+//
+// ONAY KUTUSU (karar 026): yasal onayın en kritik anı hesabın açıldığı andır. Kutu AÇIK EYLEMLE
+// işaretlenir — "kaydolarak kabul etmiş olursunuz" gibi zımni bir cümle kullanılmaz (iletişim
+// formundaki kuralın aynısı). Metinler yeni sekmede açılır: doldurulan form kaybolmasın.
 // Görünümü vitrinle aynı dildedir ("Sakin Lüks", DESIGN_SYSTEM.md · 7.3): kişi aynı ürünün içinde olduğunu hissetmeli.
 //
 // Sayfa uygulamanın DIŞINDADIR: oturum sorulmaz, postacı çalışmaz (main.tsx).
@@ -14,6 +19,7 @@ export function KayitEkrani() {
   const [ad, setAd] = useState('');
   const [eposta, setEposta] = useState('');
   const [sifre, setSifre] = useState('');
+  const [onay, setOnay] = useState(false);
   const [durum, setDurum] = useState<'form' | 'kuruluyor'>('form');
   const [hata, setHata] = useState<string | null>(null);
 
@@ -21,7 +27,7 @@ export function KayitEkrani() {
     olay.preventDefault();
     if (durum === 'kuruluyor') return;
 
-    const bilgi = { otelAdi, ad, eposta, sifre };
+    const bilgi = { otelAdi, ad, eposta, sifre, onay };
     const sorun = kayitDenetle(bilgi);
     if (sorun) {
       setHata(sorun);
@@ -114,6 +120,22 @@ export function KayitEkrani() {
             autoComplete="new-password"
             required
           />
+
+          <div className="kapi-onay">
+            <input
+              id="onay"
+              type="checkbox"
+              checked={onay}
+              onChange={(olay) => setOnay(olay.target.checked)}
+              required
+            />
+            <label htmlFor="onay">
+              <a href="https://www.oteldijital.com/kullanim-sartlari" target="_blank" rel="noopener noreferrer">Kullanım Şartları</a>
+              {' ve '}
+              <a href="https://www.oteldijital.com/kvkk" target="_blank" rel="noopener noreferrer">KVKK Aydınlatma Metni</a>
+              'ni okudum, kabul ediyorum.
+            </label>
+          </div>
 
           {hata && <p className="kapi-hata" role="alert">{hata}</p>}
 

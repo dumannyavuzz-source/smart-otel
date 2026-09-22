@@ -24,7 +24,7 @@ Giriş (müdür, /giris) ──▶ Ana Kumanda ──┬─▶ 🔴 Süresi Geç
 
 Odadaki misafir QR'ı ──▶ /yorum/<kod> ──▶ ★ ★ ★ ★ ★ (+ isteğe bağlı yorum) ──▶ 📨 Gönder ──▶ Teşekkür ederiz
 
-Vitrindeki düğme ──▶ /kayit ──▶ Otel adı · Ad · E-posta · Şifre ──▶ Otelimi Başlat ──▶ Ana Kumanda
+Vitrindeki düğme ──▶ /kayit ──▶ Otel adı · Ad · E-posta · Şifre · ☐ yasal onay ──▶ Otelimi Başlat ──▶ Ana Kumanda
 ```
 
 **Kapının adresi `/giris`tir.** Giriş yapılmamışken hangi adres açılırsa açılsın (`/`, QR'dan gelen `/oda/<kod>`, `/panel/…`)
@@ -53,7 +53,7 @@ Canlıya çıkış adımları: `docs/deployment-checklist.md`.
 | `src/miktar.ts` | Miktar ve birim: "7,5 Kg" yazımı, hangi birim bölünür (Kg yarımşar, adet birer birer) |
 | `src/uyusmazliklar.ts` | Müdür alarmı: teslim onaylandığı gibi mi geldi? (istenen · onaylanan · gelen + kanıt fotoğrafı) |
 | `src/misafir/yorumGonder.ts` | Misafir yorumunu kapıya (Edge Function) yollar; misafir anahtar taşımaz, giriş yapmaz |
-| `src/kayit.ts` | Kayıt: dört alanın denetimi ve kayıt kapısına istek; sonra normal giriş yapılır |
+| `src/kayit.ts` | Kayıt: dört alan ve yasal onay kutusunun denetimi, kayıt kapısına istek; sonra normal giriş yapılır. Onaysız kayıt üç yerde birden durur: ekran, kapı, veritabanı (`docs/decisions/026`) |
 | `src/panel.ts` | Müdür: alarmlar (hesaplanır, saklanmaz), onaylar, personel (şifre yenileme dahil), ürünler |
 | `src/panelNobeti.ts` | Panel nöbetçisi: 30 saniyede bir sorar, yeni kırmızı alarmda çanı çalar; ekranlar cevabı buradan okur |
 | `src/ses.ts` | Yeni kırmızı alarmda çalan zarif çan sesi; "bu alarmı duyurmuş muyduk?" hafızası |

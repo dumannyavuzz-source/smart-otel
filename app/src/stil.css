@@ -650,6 +650,48 @@ a.buton { text-decoration: none; }
 /* Odak: çizgi şampanya olur; renkli parlama halkası yok */
 .kapi-alan:focus { outline: none; border-color: #c8b48a; }
 
+/* Onay kutusu (karar 026): dört sorunun altındaki tek cümle.
+   Alan etiketlerinden bilerek farklıdır — bu bir başlık değil, OKUNACAK bir cümledir;
+   o yüzden büyük harf ve geniş harf aralığı yoktur.
+   Etiket kutuya bağlı olduğu için (htmlFor) satırın tamamına dokunmak kutuyu işaretler:
+   parmakla vurulacak alan 22 pikselle sınırlı kalmaz. */
+.kapi-onay {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.kapi-onay input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 1px 0 0;
+  accent-color: #c8b48a;                       /* tarayıcının kendi kutusu, bizim şampanyamızla */
+  cursor: pointer;
+}
+.kapi-onay input:focus-visible { outline: 1px solid #c8b48a; outline-offset: 3px; }
+
+.kapi-onay label {
+  margin: 0;
+  color: #b9b3a6;
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.kapi-onay a {
+  color: #efeae0;
+  text-decoration: none;
+  padding-bottom: 1px;
+  border-bottom: 1px solid #9c7e4e;
+  transition: border-color 300ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.kapi-onay a:hover { border-color: #c8b48a; }
+
 .kapi-hata {
   margin: 14px 0 0;
   color: #b4655a;                              /* durum: sorun — kısık, bağırmaz */

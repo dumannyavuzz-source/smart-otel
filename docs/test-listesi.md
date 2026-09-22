@@ -3,7 +3,7 @@
 > **Hazırlayan:** Orkestratör · **Tarih:** 2026-09-21 · **Kimin için:** Genel Müdür
 > Canlıya çıkış adımları ayrı bir belgededir: `docs/deployment-checklist.md`.
 > Buradaki liste "sistem gerçekten çalışıyor mu?" sorusunu **elle** yanıtlamak içindir.
-> Uygulamanın kendi otomatik testleri ayrıca vardır: `cd app && npm test` (139 test).
+> Uygulamanın kendi otomatik testleri ayrıca vardır: `cd app && npm test` (141 test).
 
 ---
 
@@ -23,7 +23,9 @@ alamaz**. Tek hesapla zincirin tamamı denenemez; en az iki hesap ve iki ayrı t
 
 ## 1. Kapı ve hesap
 
-- [ ] `/kayit` — otel adı, ad, e-posta, şifre (**en az 8 karakter**) ile kaydol. Ana Kumanda açılmalı.
+- [ ] `/kayit` — otel adı, ad, e-posta, şifre (**en az 8 karakter**) ve **yasal onay kutusu** ile kaydol. Ana Kumanda açılmalı.
+- [ ] `/kayit` — **onay kutusunu işaretlemeden** gönder: form gitmemeli (karar 026).
+- [ ] `/kayit` — "Kullanım Şartları" ve "KVKK Aydınlatma Metni" bağlantıları **yeni sekmede** açılmalı; dönünce form dolu durmalı.
 - [ ] Eksik/hatalı alanla dene: her hata **tek cümleyle** söylenmeli, form kaybolmamalı.
 - [ ] Çıkış yap, `/giris` ile tekrar gir.
 - [ ] Giriş yapmadan `/panel` adresini aç: kapıya (`/giris`) gönderilmeli. Giriş yapınca **panele** dönmeli.

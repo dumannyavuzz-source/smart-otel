@@ -3,7 +3,13 @@
 import { assertEquals } from 'jsr:@std/assert@1';
 import { istegiDenetle, istegiIsle, MESAJ, type Bagimliliklar } from './kapi.ts';
 
-const GECERLI = { otel_adi: '  Deniz Otel  ', ad: '  Yavuz Duman  ', eposta: 'Yavuz@Otel.TEST', sifre: 'gizli1234' };
+const GECERLI = {
+  otel_adi: '  Deniz Otel  ',
+  ad: '  Yavuz Duman  ',
+  eposta: 'Yavuz@Otel.TEST',
+  sifre: 'gizli1234',
+  sartlar_onayi: true,
+};
 const OZET = 'a'.repeat(64);
 
 function sahteDunya(
@@ -22,8 +28,8 @@ function sahteDunya(
         ? { ok: false, zatenVar: true, hata: 'User already registered' }
         : { ok: true, id: 'yeni-kisi' };
     },
-    otelAc: async (ad) => {
-      izler.push(`otel:${ad}`);
+    otelAc: async (ad, sartlarOnayi) => {
+      izler.push(`otel:${ad}:onay=${sartlarOnayi}`);
       return ayar.otelOlmaz ? { ok: false, hata: 'olmadı' } : { ok: true, id: 'yeni-otel' };
     },
     uyelikYaz: async (otelId, kullaniciId, ad) => {
@@ -67,6 +73,23 @@ Deno.test('Denetim: eksik alanlar tek cümleyle reddedilir', () => {
   assertEquals(istegiDenetle(null).ok, false);
 });
 
+// Karar 026: onay ekranda işaretlenir ama asıl denetim burada ve veritabanındadır.
+Deno.test('Onay kutusu işaretlenmeden otel açılmaz (ekranı atlayan da geçemez)', async () => {
+  const dene = (ozel: Record<string, unknown>) => istegiDenetle({ ...GECERLI, ...ozel });
+  assertEquals((dene({ sartlar_onayi: undefined }) as { mesaj: string }).mesaj, MESAJ.onay);
+  assertEquals((dene({ sartlar_onayi: false }) as { mesaj: string }).mesaj, MESAJ.onay);
+  // "true gibi duran" değerler de geçmez: onay açık eylemdir, tahmin değil.
+  assertEquals((dene({ sartlar_onayi: 'true' }) as { mesaj: string }).mesaj, MESAJ.onay);
+  assertEquals((dene({ sartlar_onayi: 1 }) as { mesaj: string }).mesaj, MESAJ.onay);
+
+  // Kapı da açılmaz: sayaç bile çalışmaz, hiçbir şey yazılmaz.
+  const { dis, izler } = sahteDunya();
+  const cevap = await istegiIsle(istek({ ...GECERLI, sartlar_onayi: false }), dis, OZET);
+  assertEquals(cevap.status, 400);
+  assertEquals((await cevap.json()).mesaj, MESAJ.onay);
+  assertEquals(izler.length, 0);
+});
+
 Deno.test('Temiz kayıt: hesap, otel ve ilk sahiplik sırayla yazılır', async () => {
   const { dis, izler } = sahteDunya();
   const cevap = await istegiIsle(istek(GECERLI), dis, OZET);
@@ -74,7 +97,7 @@ Deno.test('Temiz kayıt: hesap, otel ve ilk sahiplik sırayla yazılır', async 
   assertEquals(izler, [
     'sayac:aaaa',
     'hesap:yavuz@otel.test',
-    'otel:Deniz Otel',
+    'otel:Deniz Otel:onay=true',
     'uyelik:yeni-otel:yeni-kisi:Yavuz Duman',
   ]);
 });
@@ -98,7 +121,7 @@ Deno.test('E-posta zaten kayıtlıysa otel HİÇ açılmaz', async () => {
   const cevap = await istegiIsle(istek(GECERLI), dis, OZET);
   assertEquals(cevap.status, 409);
   assertEquals((await cevap.json()).mesaj, MESAJ.zatenKayitli);
-  assertEquals(izler.includes('otel:Deniz Otel'), false);
+  assertEquals(izler.includes('otel:Deniz Otel:onay=true'), false);
 });
 
 Deno.test('Otel açılamazsa hesap geri silinir', async () => {

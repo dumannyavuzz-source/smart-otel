@@ -18,6 +18,7 @@ app.oteldijital.com/kayit        ← gece yarısı zemin, vitrinle aynı dil
   │ Adınız soyadınız        │     Dört soru. Başka hiçbir şey sorulmaz:
   │ E-posta                 │     oda sayısı yok, telefon yok, kart yok, sihirbaz yok.
   │ Şifre                   │
+  │ ☐ Şartları kabul ediyorum│    Onay kutusu: Kullanım Şartları + KVKK (karar 026)
   │  [ Otelimi Başlat ]     │
   └─────────────────────────┘
           │
@@ -43,6 +44,12 @@ app.oteldijital.com/kayit        ← gece yarısı zemin, vitrinle aynı dil
 - **E-posta zaten kayıtlıysa otel hiç açılmaz** ve kişiye "Giriş yapmayı deneyin" denir.
 - **Şifre gizli yazılır.** Personel eklerken şifre görünür (müdür onu söylemek zorundadır); burada kişi
   kendi şifresini yazar, kimseye söylemeyecektir — bu yüzden `type="password"`.
+- **Yasal onay açık eylemle alınır** (karar 026, 2026-09-22). Dört sorunun altında tek bir kutu vardır:
+  "Kullanım Şartları ve KVKK Aydınlatma Metni'ni okudum, kabul ediyorum." Kutu işaretlenmeden hesap
+  açılmaz. "Kaydolarak kabul etmiş olursunuz" gibi **zımni** bir cümle kullanılmaz — iletişim formundaki
+  kuralın aynısıdır. Metinler **yeni sekmede** açılır: doldurulan form kaybolmasın. Kural üç yerde durur:
+  ekran, kapı (`otel-ac`) ve veritabanı. Onay, otel satırıyla birlikte saklanır (`hotels.sartlar_onayi`);
+  onayın zamanı satırın `created_at` değeridir.
 - **Kurulum bitince kişi panele düşer.** "Hesabınız oluşturuldu, giriş yapın" diye ikinci bir kapı yoktur.
 - **İnternet giderse kişi kaybolmaz.** Otel kurulduktan sonra giriş yapılamazsa ekran şunu söyler:
   "Oteliniz kuruldu ancak giriş yapılamadı. Giriş ekranından e-posta ve şifrenizle girin."
