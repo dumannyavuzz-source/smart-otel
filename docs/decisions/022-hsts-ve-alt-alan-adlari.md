@@ -70,7 +70,5 @@ kalınsın, her şey oturduktan sonra başvurulsun. Sıra dağıtım listesinde 
 
 ## Kalan — Genel Müdür kararı bekliyor
 
-Personel uygulamasında artık HSTS var ama **başka güvenlik başlığı yok**: içerik güvenlik politikası
-(CSP), `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` — hiçbiri. Vitrinde dördü de
-var. Bu madde HSTS'ye aitti, kapsam sessizce genişletilmedi; ama uygulama asıl veriye dokunan taraf
-olduğu için bu boşluk kapatılmalıdır. Ayrı bir adım olarak yapılabilir.
+Bu boşluk **kapatıldı**: Genel Müdür kararıyla uygulamaya da içerik güvenlik politikası (CSP) ve
+diğer başlıklar kondu — `docs/decisions/023-uygulama-guvenlik-basliklari.md`.

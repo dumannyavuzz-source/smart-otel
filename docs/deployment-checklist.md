@@ -152,6 +152,15 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       2. Her iki adres de birkaç hafta bu başlıkla yayında kalsın.
       3. Ancak ondan sonra başvurulsun.
       Şifresiz çalışması gereken bir alt adres varsa başvuru **yapılmaz**.
+- [ ] **6.21** **Uygulamanın güvenlik başlıklarını canlıda doğrula** (karar 023):
+      Giriş yapılmadan görülen ekranlar yerelde sınandı (0 ihlal). **İç ekranlar sınanmadı**; canlıda
+      bir kez elle denenmeli ve tarayıcı konsolunda CSP hatası olmamalı:
+      1. QR okut — kamera açılmalı (`Permissions-Policy: camera=(self)`).
+      2. Sorun bildir + fotoğraf çek — önizleme görünmeli (`img-src blob:`), fotoğraf yüklenmeli.
+      3. Müdür paneli → uyuşmazlık → kanıt fotoğrafı görünmeli (`img-src https://*.supabase.co`).
+      4. Uçak moduna al, uygulamayı kapat-aç — açılmalı (`worker-src 'self'`).
+      Bir şey kırılırsa belirtisi net: ekran boş kalır ya da fotoğraf gelmez, konsol hangi
+      direktifin engellediğini yazar.
 - [ ] **6.15** **Yeni sayfayı canlıda doğrula:** `www.oteldijital.com/ic-operasyon` açılmalı, menüdeki
       "İç Operasyon" oraya gitmeli ve menüdeki hiçbir bağlantı kök adrese gitmemeli
       (denetim · Madde 9 ve 15 · `docs/decisions/017-ana-sayfa-ve-ic-operasyon.md`).
