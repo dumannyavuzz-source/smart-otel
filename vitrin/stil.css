@@ -2026,6 +2026,23 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   .form-not { max-width: none; }
 }
 
+/* ---------- Yazdırma: hiçbir bölüm boş basılmaz ---------- */
+/* Kaydırdıkça beliren bölümler kâğıda basılırken "kaydırma" diye bir şey yoktur; betiğin gizlediği
+   her şey burada geri açılır. Aynı kural sayfa okuyucu kiplerinde ve tam sayfa ekran görüntüsünde
+   de işe yarar (denetim · Madde 11). Betik ayrıca yazdırmadan önce gizlemeyi kendisi de kaldırır;
+   bu kural onun yedeğidir — ikisinden biri yetmezse diğeri tutar. */
+@media print {
+  .js-hikaye .hikaye-adim,
+  .js-operasyon .operasyon-blok {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .js-pano .olcum-dolgu { width: calc(var(--deger) * 1%) !important; }
+  .js-pano .halka-dolgu { stroke-dashoffset: 0 !important; }
+  /* Kâğıtta işe yaramayan parçalar basılmaz. */
+  .ust, .atla, .kapilar, .bolum-cta { display: none !important; }
+}
+
 /* ---------- Hareket istemeyenler ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

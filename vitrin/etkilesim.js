@@ -20,10 +20,25 @@
 
   // Kaydırdıkça beliren şeylerin ortak gözcüsü. Hareket istemeyende ya da eski tarayıcıda
   // hiç kurulmaz; o zaman aşağıdaki iki bölüm hiçbir şeyi gizlemez.
+  //
+  // İÇERİK ASLA BETİĞE EMANET EDİLMEZ (denetim · Madde 11). Üç katmanlı koruma vardır:
+  //   1. Gizleme sınıfını betik ekler. Betik hiç yüklenmezse ya da hata verirse hiçbir şey gizlenmez.
+  //   2. Sayfa açıldığında EKRANDA OLAN hiçbir şey gizlenmez; yalnızca aşağıda kalanlar beklemeye alınır.
+  //   3. Gözcü hiç çalışmazsa (tarayıcı hatası, garip bir ortam) üç saniye sonra her şey açılır.
+  // Ayrıca yazdırmada ve hareket istemeyen kullanıcıda gizleme hiç devreye girmez (stil.css).
   var gozcu = null;
+  var gozcuCalisti = false;
+
+  // Gizli kalmış ne varsa açar. Güvenlik ağı ve yazdırma dışında çağrılmaz.
+  function hepsiniAc() {
+    var kalanlar = document.querySelectorAll('.js-hikaye .hikaye-adim:not(.gorundu), .js-operasyon .operasyon-blok:not(.gorundu), .js-pano:not(.gorundu)');
+    for (var i = 0; i < kalanlar.length; i++) kalanlar[i].className += ' gorundu';
+  }
+
   if (!sakin && 'IntersectionObserver' in window) {
     gozcu = new IntersectionObserver(
       function (girisler) {
+        gozcuCalisti = true;                        // gözcü sağ: güvenlik ağına gerek yok
         for (var i = 0; i < girisler.length; i++) {
           if (!girisler[i].isIntersecting) continue;
           girisler[i].target.className += ' gorundu';
@@ -32,6 +47,35 @@
       },
       { rootMargin: '0px 0px -12% 0px', threshold: 0.2 }
     );
+
+    // Güvenlik ağı. Gözcü normalde ilk çağrısını hemen yapar (kesişmeyen öğeler için bile).
+    // Üç saniye geçtiği hâlde bir kez bile çalışmadıysa bir terslik var demektir: içerik açılır.
+    window.setTimeout(function () {
+      if (!gozcuCalisti) hepsiniAc();
+    }, 3000);
+  }
+
+  // Öğe şu anda ekranda mı? Ekrandakiler hiç gizlenmez.
+  function ekranda(oge) {
+    var k = oge.getBoundingClientRect();
+    return k.top < (window.innerHeight || 0) && k.bottom > 0;
+  }
+
+  // Bir bölümü "kaydırınca belirir" hâline getirir. Hata olursa gizlemeyi geri alır:
+  // yarım kalmış bir kurulum yüzünden içerik kaybolmasın.
+  function belirenleriKur(kapsayici, secici, sinif) {
+    if (!kapsayici || !gozcu) return;
+    var ogeler = kapsayici.querySelectorAll(secici);
+    if (!ogeler.length) return;
+    try {
+      kapsayici.className += ' ' + sinif;
+      for (var i = 0; i < ogeler.length; i++) {
+        if (ekranda(ogeler[i])) ogeler[i].className += ' gorundu';
+        else gozcu.observe(ogeler[i]);
+      }
+    } catch (e) {
+      kapsayici.className = kapsayici.className.replace(' ' + sinif, '');
+    }
   }
 
   // "Betik çalışıyor" işareti. Stil dosyası buna bakar: menü ancak betik varsa açılır kutuya döner.
@@ -110,30 +154,31 @@
   // ---------------------------------------------------------------
   // 1. Döngü hikâyesi — kaydırdıkça beliren adımlar
   // ---------------------------------------------------------------
-  var hikaye = document.querySelector('.hikaye');
-  if (hikaye && gozcu) {
-    // Gizleme ancak buraya gelindiyse başlar: betik çalışmıyorsa hiçbir şey gizlenmez.
-    hikaye.className += ' js-hikaye';
-
-    var adimlar = hikaye.querySelectorAll('.hikaye-adim');
-    for (var a = 0; a < adimlar.length; a++) gozcu.observe(adimlar[a]);
-  }
+  // Gizleme ancak betik buraya geldiyse başlar; ekranda olan adımlar hiç gizlenmez.
+  belirenleriKur(document.querySelector('.hikaye'), '.hikaye-adim', 'js-hikaye');
 
   // İç operasyon blokları (#operasyon) aynı şekilde belirir; betiksiz üçü de baştan görünür.
-  var operasyon = document.querySelector('.operasyon');
-  if (operasyon && gozcu) {
-    operasyon.className += ' js-operasyon';
-    var bloklar = operasyon.querySelectorAll('.operasyon-blok');
-    for (var b = 0; b < bloklar.length; b++) gozcu.observe(bloklar[b]);
+  belirenleriKur(document.querySelector('.operasyon'), '.operasyon-blok', 'js-operasyon');
+
+  // Yazdırmadan hemen önce her şey açılır: kâğıda boş bölüm basılmaz.
+  if (window.matchMedia) {
+    var yazdirma = window.matchMedia('print');
+    if (yazdirma.addEventListener) yazdirma.addEventListener('change', function (o) { if (o.matches) hepsiniAc(); });
   }
+  window.addEventListener('beforeprint', hepsiniAc);
 
   // ---------------------------------------------------------------
   // 3. Check-up panosu — görününce çubuklar ve halka dolar
   // ---------------------------------------------------------------
   var pano = document.querySelector('.pano');
   if (pano && gozcu) {
-    pano.className += ' js-pano';               // boşaltma da ancak burada başlar
-    gozcu.observe(pano);
+    try {
+      pano.className += ' js-pano';             // boşaltma da ancak burada başlar
+      if (ekranda(pano)) pano.className += ' gorundu';
+      else gozcu.observe(pano);
+    } catch (e) {
+      pano.className = pano.className.replace(' js-pano', '');   // hata olursa pano dolu kalır
+    }
   }
 
   // ---------------------------------------------------------------
