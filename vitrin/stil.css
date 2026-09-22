@@ -578,7 +578,9 @@ a { color: inherit; }
 /* ---------- Bölümler ---------- */
 /* Bölümler arasında "hiçbir şey olmayan" alan bilerek bırakılır; boşluk lükstür. */
 .bolum {
-  padding-block: clamp(96px, 12vw, 176px);
+  /* Boşluk lükstür ama sayfa da uzamamalı: denetim ana sayfa için 8.000 piksel sınırı koydu
+     (Madde 9). Ölçek 12vw yerine 11vw — gözle fark edilmez, altı bölümde ~170 piksel kazandırır. */
+  padding-block: clamp(96px, 11vw, 168px);
   border-top: 1px solid var(--cizgi);
 }
 
@@ -586,6 +588,44 @@ a { color: inherit; }
   margin-top: 20px;
   max-width: 56ch;
   color: var(--metin-soluk);
+}
+
+/* ---------- Operasyonun üç alanı: özet satırlar ---------- */
+/* Bu üç alan eskiden ana sayfanın ortasında üç zikzak blok olarak, ekran kesitleriyle birlikte
+   duruyordu. Ayrıntısı /ic-operasyon sayfasına taşındı (denetim · Madde 9); burada yalnızca üç
+   cümlelik özeti var. Hizmet listesiyle aynı dil: numara, başlık, tek cümle. */
+.alanlar {
+  list-style: none;
+  padding: 0;
+  margin: 40px 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border-top: 1px solid var(--cizgi);
+}
+.alan-ozet {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--cizgi);
+}
+.alan-no {
+  font-family: var(--govde-yazi);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--bronz);
+  padding-top: 6px;
+}
+.alan-ozet h3 { font-size: 1.25rem; }
+.alan-ozet p { margin-top: 6px; color: var(--metin-soluk); font-size: 0.95rem; }
+
+@media (min-width: 901px) {
+  .alanlar { grid-template-columns: repeat(3, 1fr); gap: 0 48px; }
+  /* Dört adımlık özet (nasıl çalışır) aynı düzeni dört sütunla kullanır. */
+  .alanlar--dort { grid-template-columns: repeat(4, 1fr); gap: 0 36px; }
 }
 
 /* ---------- Hangi sorunları çözer: iki sütunlu karşılaştırma ---------- */
@@ -1357,6 +1397,9 @@ a { color: inherit; }
 
 @media (min-width: 901px) {
   .kapilar { grid-template-columns: 1fr 1fr; gap: clamp(24px, 3vw, 40px); }
+  /* Ana sayfada üç hizmet yan yana ve EŞİT durur: hiçbiri diğerinden büyük görünmez
+     (denetim · Madde 15). Alt sayfalarda iki kapı kalır. */
+  .kapilar--uc { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ---------- Tarife: dört kart değil, dört satır ---------- */
@@ -1690,7 +1733,8 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
 /* ---------- Kapanış ---------- */
 .kapanis {
   text-align: center;
-  padding-block: clamp(96px, 12vw, 176px);
+  /* Bölümlerle aynı ritim: 11vw (bkz. .bolum) */
+  padding-block: clamp(96px, 11vw, 168px);
   border-top: 1px solid var(--cizgi);
   display: flex;
   flex-direction: column;

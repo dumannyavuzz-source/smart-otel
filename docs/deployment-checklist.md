@@ -125,6 +125,10 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       `"cleanUrls": true` sağlar; ayar Vercel panelinden değil, bu dosyadan gelir.
       `vercel.json` yorum kabul etmez; değişiklikten sonra `node -e "require(./vercel.json)"` ile geçerliliği denetlenir.
 - [ ] **6.6** `merhaba@oteldijital.com` posta kutusunun **gerçekten çalıştığını** doğrula (vitrindeki tek iletişim yolu).
+- [ ] **6.15** **Yeni sayfayı canlıda doğrula:** `www.oteldijital.com/ic-operasyon` açılmalı, menüdeki
+      "İç Operasyon" oraya gitmeli ve menüdeki hiçbir bağlantı kök adrese gitmemeli
+      (denetim · Madde 9 ve 15 · `docs/decisions/017-ana-sayfa-ve-ic-operasyon.md`).
+      Ana sayfada `<h2>` sayısı yediyi geçmemeli.
 - [ ] **6.14** **Kanonik host ve yapılandırılmış veriyi canlıda doğrula**
       (denetim · Madde 8 · `docs/decisions/016-host-birligi-ve-yapilandirilmis-veri.md`):
       Kanonik adres **`www.oteldijital.com`**. `sitemap.xml` içindeki beş adresin hiçbiri 308 üretmemeli;

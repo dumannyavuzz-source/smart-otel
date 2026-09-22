@@ -1,22 +1,26 @@
 # vitrin/ — OtelDijital Tanıtım Sayfaları
 
-Dışarıya bakan **beş sayfa**: ürünü ve hizmetleri anlatır. Birincil çağrı sitenin her yerinde aynı cümledir:
+Dışarıya bakan **altı sayfa**: ürünü ve hizmetleri anlatır. Birincil çağrı sitenin her yerinde aynı cümledir:
 **"30 Gün Ücretsiz Dene"** (denetim · Madde 7 · `docs/decisions/015-cta-birligi.md`).
 Görsel dili "Sakin Lüks — Aydınlık Premium"dur (`DESIGN_SYSTEM.md`).
 Personel yazılımı (`app/`) ile **hiçbir ortak kodu yoktur**; bilerek böyledir.
 
-## Beş sayfa, beş konu
+## Altı sayfa, altı konu
 
 Ana kural (Genel Müdür, 2026-09-21 · karar `docs/decisions/008-vitrin-sayfa-mimarisi.md`):
 **her sayfa yalnızca kendi konusunun uzmanıdır.** Bir sayfa diğer hizmetleri yeniden anlatmaz.
 
 | Sayfa | Ne anlatır |
 |---|---|
-| `index.html` — **İç Operasyon** (adres `/`) | Ana ürün: otel operasyon merkezi, ayrıntısıyla. Nedir · hangi sorunları çözer · nasıl çalışır · personel nasıl kullanır · müdür neleri görebilir · oda, arıza, depo, fire, görev · raporlama |
+| `index.html` — **Ana Sayfa** (adres `/`) | Şirket vitrini, **yedi bölüm**: hero · nedir (üç alanın özeti) · hangi sorunları çözer · nasıl çalışır (özet) · ne kazandırır · sık sorulanlar · üç hizmet eşit. Ayrıntı isteyen içerik buraya değil, `/ic-operasyon` sayfasına gider (`docs/decisions/017`) |
+| `ic-operasyon.html` (adres `/ic-operasyon`) | Ana ürünün ayrıntılı tanıtımı: operasyonun üç alanı (zikzak) · döngü hikâyesi · kim ne yapar · ekranlar · raporlama · şifre yönetimi · ne kazandırır (tam) |
 | `dijital-vitrin.html` (adres `/dijital-vitrin`) | Dijital check-up panosu, OTA yönetimi, channel manager, Google, web sitesi, online itibar, SEO |
 | `teknolojik-altyapi.html` (adres `/teknolojik-altyapi`) | Ne zaman aramalı · Wi-Fi, ağ, kamera, sunucu, NAS, kesintisiz güç · nasıl yürür |
 | `fiyatlandirma.html` (adres `/fiyatlandirma`) | Dört paket (personel yazılımındaki ödeme duvarıyla aynı) ve fiyatla ilgili dört soru |
 | `iletisim.html` (adres `/iletisim`) | Sitedeki **tek** form. Bütün "Bilgi Al" / "Teknik Destek Al" düğmeleri buraya gelir |
+
+Menüde beş sözcük vardır ve **hiçbiri kök adrese gitmez** (denetim · Madde 15): İç Operasyon → `/ic-operasyon`.
+Ana sayfaya logodan ve alt bölümdeki "Ana Sayfa" bağlantısından ulaşılır.
 
 Bunların dışında dört **yasal sayfa** vardır (`/kvkk`, `/gizlilik-politikasi`, `/cerez-politikasi`,
 `/kullanim-sartlari`). Menüde görünmezler; yalnızca alt bölümden ve iletişim formundan bağlanırlar.
@@ -37,7 +41,8 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 
 | Dosya | Ne yapar |
 |---|---|
-| `index.html` | Ana sayfa: hero (kodla çizilmiş telefon), "nedir", "hangi sorunları çözer" (iki sütunlu karşılaştırma), iç operasyonun üç alanı (zikzak), döngü hikâyesi, "kim ne yapar" (personel / müdür), keşif alanı, değerler, raporlama, şifre notu, iki kapı, kapanış |
+| `index.html` | Ana sayfa (şirket vitrini): hero (kodla çizilmiş telefon), "nedir" + üç alanın özeti, "hangi sorunları çözer" (iki sütunlu karşılaştırma), "nasıl çalışır" özeti, değerler, sık sorulanlar, üç kapı, kapanış. **Yedi bölüm sınırı vardır** |
+| `ic-operasyon.html` | Ana ürünün detay sayfası: üç zikzak blok, döngü hikâyesi (ekran kesitleriyle), "kim ne yapar", keşif alanı, raporlama, şifre notu, değerlerin tam hâli |
 | `dijital-vitrin.html` | Sayfa başı, dijital check-up panosu, altı hizmet, dört adım, iki kapı |
 | `teknolojik-altyapi.html` | Sayfa başı, dört belirti, altı hizmet, dört adım, iki kapı |
 | `fiyatlandirma.html` | Sayfa başı, tarife (dört plan), sık sorulanlar, kapanış |
