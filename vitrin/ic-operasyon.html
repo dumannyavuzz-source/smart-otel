@@ -123,6 +123,7 @@
     </div>
   </section>
 
+  <!-- ===================== OPERASYONUN ÜÇ ALANI =====================
        Üç blok, üç kutu değil: sol görsel / sağ metin, sonra tersi. Üçleme kuralı (Genel Müdür kararı,
        2026-09-18) burada korunur; sayfanın detayı bu bloklarla değil, aşağıdaki bölümlerle artar.
        Görseller kodla çizilmiş ürün arayüzü kesitleridir (fotoğraf yok). Kaydırınca beliren hareket
@@ -460,6 +461,91 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ===================== GERÇEK EKRANLAR =====================
+       Denetim (Madde 1) bunu yayın engeli saydı: sitede ürünün var olduğunu gösteren tek bir görsel
+       yoktu, bütün "ekranlar" kodla çizilmiş temsillerdi. Dört gerçek görüntü buraya gelir. -->
+  <section class="kolon bolum" id="ekranlar">
+    <p class="etiket">Gerçekten nasıl görünüyor?</p>
+    <h2>Personelin telefonunda tam olarak bu var.</h2>
+    <p class="bolum-giris">
+      Yukarıdaki maketler anlatmak içindir. Aşağıdakiler uygulamanın kendisinden alınmıştır:
+      aynı düğmeler, aynı yazılar, aynı sıra. Görsellerdeki otel adı ve kişi adları örnektir.
+    </p>
+      <!-- Yer tutucular bilerek buradadır (denetim · Madde 1). Gerçek görseller depoya eklenince
+           her kartta yorumdaki <picture> açılır. Kodla çizilen maketler SİLİNMEZ: bu görseller
+           onların yerine değil, yanında durur — denetimin açık talimatı. -->
+    <div class="ekran-galeri">
+        <figure class="ekran-kart">
+          <!-- GÖRSEL GELİNCE: aşağıdaki yorumu kaldırın, altındaki .gorsel-yer bloğunu silin.
+               İki dosya da gerekir (avif + webp): <picture> seçtiği dosyayı bulamazsa bir alttakine
+               DÜŞMEZ, kırık görsel çıkar. Ayrıntı: vitrin/gorseller/uygulama/README.md
+          <picture>
+            <source srcset="/gorseller/uygulama/kat-gorevlisi.avif" type="image/avif" />
+            <source srcset="/gorseller/uygulama/kat-gorevlisi.webp" type="image/webp" />
+            <img src="/gorseller/uygulama/kat-gorevlisi.webp" width="780" height="1688" fetchpriority="high" decoding="async"
+                 alt="Kat görevlisinin ekranı: Oda Hazır, Eksik Var ve Sorun Bildir düğmeleri." />
+          </picture>
+          -->
+          <div class="gorsel-yer" role="img" aria-label="Kat görevlisi görseli yakında eklenecek">
+            <span class="gorsel-yer-ad">Kat görevlisi</span>
+            <span class="gorsel-yer-not">Görsel yakında</span>
+          </div>
+          <figcaption>Kat görevlisinin ekranı — üç büyük düğme, başka hiçbir şey.</figcaption>
+        </figure>
+        <figure class="ekran-kart">
+          <!-- GÖRSEL GELİNCE: aşağıdaki yorumu kaldırın, altındaki .gorsel-yer bloğunu silin.
+               İki dosya da gerekir (avif + webp): <picture> seçtiği dosyayı bulamazsa bir alttakine
+               DÜŞMEZ, kırık görsel çıkar. Ayrıntı: vitrin/gorseller/uygulama/README.md
+          <picture>
+            <source srcset="/gorseller/uygulama/kumanda.avif" type="image/avif" />
+            <source srcset="/gorseller/uygulama/kumanda.webp" type="image/webp" />
+            <img src="/gorseller/uygulama/kumanda.webp" width="780" height="1688" fetchpriority="high" decoding="async"
+                 alt="Müdürün kumanda ekranı: geciken işler, bekleyen onaylar ve vardiyanın özeti tek listede." />
+          </picture>
+          -->
+          <div class="gorsel-yer" role="img" aria-label="Kumanda görseli yakında eklenecek">
+            <span class="gorsel-yer-ad">Kumanda</span>
+            <span class="gorsel-yer-not">Görsel yakında</span>
+          </div>
+          <figcaption>Müdürün kumandası — geciken iş, bekleyen onay ve günün özeti tek ekranda.</figcaption>
+        </figure>
+        <figure class="ekran-kart">
+          <!-- GÖRSEL GELİNCE: aşağıdaki yorumu kaldırın, altındaki .gorsel-yer bloğunu silin.
+               İki dosya da gerekir (avif + webp): <picture> seçtiği dosyayı bulamazsa bir alttakine
+               DÜŞMEZ, kırık görsel çıkar. Ayrıntı: vitrin/gorseller/uygulama/README.md
+          <picture>
+            <source srcset="/gorseller/uygulama/is-emri.avif" type="image/avif" />
+            <source srcset="/gorseller/uygulama/is-emri.webp" type="image/webp" />
+            <img src="/gorseller/uygulama/is-emri.webp" width="780" height="1688" loading="lazy" decoding="async"
+                 alt="İş emri ekranı: trafik lambası, kalan süre ve Aldım / Çözdüm düğmeleri." />
+          </picture>
+          -->
+          <div class="gorsel-yer" role="img" aria-label="İş emri görseli yakında eklenecek">
+            <span class="gorsel-yer-ad">İş emri</span>
+            <span class="gorsel-yer-not">Görsel yakında</span>
+          </div>
+          <figcaption>İş emri — arıza bildirimi kendiliğinden buraya düşer, süre sayar.</figcaption>
+        </figure>
+        <figure class="ekran-kart">
+          <!-- GÖRSEL GELİNCE: aşağıdaki yorumu kaldırın, altındaki .gorsel-yer bloğunu silin.
+               İki dosya da gerekir (avif + webp): <picture> seçtiği dosyayı bulamazsa bir alttakine
+               DÜŞMEZ, kırık görsel çıkar. Ayrıntı: vitrin/gorseller/uygulama/README.md
+          <picture>
+            <source srcset="/gorseller/uygulama/teslim.avif" type="image/avif" />
+            <source srcset="/gorseller/uygulama/teslim.webp" type="image/webp" />
+            <img src="/gorseller/uygulama/teslim.webp" width="780" height="1688" loading="lazy" decoding="async"
+                 alt="Teslim ekranı: istenen, onaylanan ve gelen miktar yan yana; eksik teslimde kanıt fotoğrafı." />
+          </picture>
+          -->
+          <div class="gorsel-yer" role="img" aria-label="Teslim görseli yakında eklenecek">
+            <span class="gorsel-yer-ad">Teslim</span>
+            <span class="gorsel-yer-not">Görsel yakında</span>
+          </div>
+          <figcaption>Teslim ve uyuşmazlık — istenen, onaylanan ve gelen miktar yan yana durur.</figcaption>
+        </figure>
     </div>
   </section>
 

@@ -47,7 +47,9 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 | `teknolojik-altyapi.html` | Sayfa başı, dört belirti, altı hizmet, dört adım, iki kapı |
 | `fiyatlandirma.html` | Sayfa başı, tarife (dört plan), sık sorulanlar, kapanış |
 | `iletisim.html` | Sayfa başı, adaçayı blok içinde form, "hangi konu hangi sayfada" listesi. **KVKK onayı açık eylemle alınır** (denetim · Madde 13 · `docs/decisions/021`): kutu işaretlenmeden form gönderilmez, veritabanı da onaysız satırı kabul etmez |
-| `kvkk.html` · `gizlilik-politikasi.html` · `cerez-politikasi.html` · `kullanim-sartlari.html` | Dört yasal sayfa. Bugün yalnızca iskelet: ekranın ortasında "Çok yakında." ve e-posta adresi. Dördü birebir aynıdır, yalnızca üst başlık ve sayfa adı değişir. `noindex` ve sitemap dışıdır |
+| `kvkk.html` · `gizlilik-politikasi.html` | Yazılmış iki yasal metin (2026-09-22). Ortak düzen: `.yasal--metin` — sola yaslı, satır uzunluğu 68 karakterle sınırlı. `index, follow` ve sitemap içindedirler. **Metinler siteyle uyumlu olmak zorundadır:** KVKK sayfası formda alınan altı alanı ve adres özetini tek tek sayar, Gizlilik sayfası "çerez yok, üçüncü taraf yok" der — bunlardan biri değişirse metin de değişir |
+| `cerez-politikasi.html` · `kullanim-sartlari.html` | Henüz iskelet: ekranın ortasında "Çok yakında." ve e-posta adresi. `noindex` ve sitemap dışıdır |
+| `gorseller/uygulama/` | Gerçek uygulama ekran görüntüleri (denetim · Madde 1). Bugün **boş**; sayfalarda aynı orandaki yer tutucular duruyor. Klasördeki `README.md` hangi dosyaların, neden ikişer uzantıyla gerektiğini anlatır |
 | `stil.css` | Beş sayfanın ortak görünümü: "Sakin Lüks — Aydınlık Premium" — uçuk krem zemin (#f9f8f6), antrasit yazı (#1c1c1a), adaçayı iletişim bloğu, şampanya yalnızca ana düğmenin zemininde, bronz yazı vurgusunda; serif başlık (Cormorant Garamond) + Inter — ikisi de `yazilar/` altından, kendi alan adımızdan. Tek kaynak `DESIGN_SYSTEM.md`, kararlar `docs/decisions/007`, `008` ve `009` |
 | `hareket.js` | Canlı akış animasyonu (yalnızca ana sayfada iş görür). Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |
 | `etkilesim.js` | Altı etkileşim: kaydırdıkça beliren döngü hikâyesi, keşif alanındaki ekran değiştirme, görününce dolan check-up panosu, Ortak Beyin'e yazan iletişim formu ve kaydırınca üst çubuğa gelen ince çizgi. Her biri kendi öğesini bulamazsa sessizce durur; bu yüzden aynı üç betik bütün sayfalarda durabilir. **İçerik hiçbir koşulda betiğe emanet edilmez** (denetim · Madde 11 · `docs/decisions/019`): gizlemeyi betik yapar, ekranda olan hiç gizlenmez, kurulum hata verirse gizleme geri alınır ve gözcü çalışmazsa üç saniye sonra her şey açılır |
@@ -163,6 +165,9 @@ eklenmedi). Boru hattı vitrin sayfasıyla denendi: 780×1688, 62 KB.
   Yapı `<details>`/`<summary>` üzerine kuruludur: klavye ve ekran okuyucu desteği tarayıcıdan gelir.
   **Betik yüklenmezse liste açık gelir** (HTML'de `open` yazar), yani hiçbir sayfa erişilmez kalmaz.
   Bütün sayfalar alt bölümde de listelenir.
+- **Kaynak notu sızıntısı taranır** (karar 024): bir HTML yorumunun açılış satırı silinirse iç notumuz
+  ziyaretçiye düz metin olarak görünür — bu bir kez canlıda yaşandı. Tarama, sayfaların GÖRÜNEN metninde
+  `-->`, `<!--`, `etkilesim.js`, `stil.css`, `docs/decisions`, "Genel Müdür kararı" gibi izleri arar.
 - Yatay taşma denetimi 320–1400 px arası yedi genişlikte yapıldı; **beş sayfada da hiçbir öğe sayfa dışına çıkmıyor**.
   Hero'daki telefonun kenardan taşması yalnızca yanlarda boşluk varken (≥ 1240 px) açıktır.
 

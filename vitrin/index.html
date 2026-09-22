@@ -242,6 +242,47 @@
       </li>
     </ol>
 
+    <!-- Gerçek ekranlardan ikisi. Yeni bir h2 yok: ana sayfanın yedi bölüm sınırı korunur. -->
+      <!-- Yer tutucular bilerek buradadır (denetim · Madde 1). Gerçek görseller depoya eklenince
+           her kartta yorumdaki <picture> açılır. Kodla çizilen maketler SİLİNMEZ: bu görseller
+           onların yerine değil, yanında durur — denetimin açık talimatı. -->
+    <div class="ekran-galeri ekran-galeri--ikili">
+        <figure class="ekran-kart">
+          <!-- GÖRSEL GELİNCE: aşağıdaki yorumu kaldırın, altındaki .gorsel-yer bloğunu silin.
+               İki dosya da gerekir (avif + webp): <picture> seçtiği dosyayı bulamazsa bir alttakine
+               DÜŞMEZ, kırık görsel çıkar. Ayrıntı: vitrin/gorseller/uygulama/README.md
+          <picture>
+            <source srcset="/gorseller/uygulama/kat-gorevlisi.avif" type="image/avif" />
+            <source srcset="/gorseller/uygulama/kat-gorevlisi.webp" type="image/webp" />
+            <img src="/gorseller/uygulama/kat-gorevlisi.webp" width="780" height="1688" fetchpriority="high" decoding="async"
+                 alt="Kat görevlisinin ekranı: Oda Hazır, Eksik Var ve Sorun Bildir düğmeleri." />
+          </picture>
+          -->
+          <div class="gorsel-yer" role="img" aria-label="Kat görevlisi görseli yakında eklenecek">
+            <span class="gorsel-yer-ad">Kat görevlisi</span>
+            <span class="gorsel-yer-not">Görsel yakında</span>
+          </div>
+          <figcaption>Kat görevlisinin ekranı — üç büyük düğme, başka hiçbir şey.</figcaption>
+        </figure>
+        <figure class="ekran-kart">
+          <!-- GÖRSEL GELİNCE: aşağıdaki yorumu kaldırın, altındaki .gorsel-yer bloğunu silin.
+               İki dosya da gerekir (avif + webp): <picture> seçtiği dosyayı bulamazsa bir alttakine
+               DÜŞMEZ, kırık görsel çıkar. Ayrıntı: vitrin/gorseller/uygulama/README.md
+          <picture>
+            <source srcset="/gorseller/uygulama/kumanda.avif" type="image/avif" />
+            <source srcset="/gorseller/uygulama/kumanda.webp" type="image/webp" />
+            <img src="/gorseller/uygulama/kumanda.webp" width="780" height="1688" fetchpriority="high" decoding="async"
+                 alt="Müdürün kumanda ekranı: geciken işler, bekleyen onaylar ve vardiyanın özeti tek listede." />
+          </picture>
+          -->
+          <div class="gorsel-yer" role="img" aria-label="Kumanda görseli yakında eklenecek">
+            <span class="gorsel-yer-ad">Kumanda</span>
+            <span class="gorsel-yer-not">Görsel yakında</span>
+          </div>
+          <figcaption>Müdürün kumandası — geciken iş, bekleyen onay ve günün özeti tek ekranda.</figcaption>
+        </figure>
+    </div>
+
     <div class="bolum-cta">
       <a class="dugme dugme--sessiz" href="/ic-operasyon">İç Operasyonu Ayrıntısıyla Görün →</a>
       <p class="bolum-cta-not">Ekranlar, personel ve müdür görünümü, raporlama — hepsi kendi sayfasında.</p>

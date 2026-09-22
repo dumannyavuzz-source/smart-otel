@@ -165,6 +165,12 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       4. Uçak moduna al, uygulamayı kapat-aç — açılmalı (`worker-src 'self'`).
       Bir şey kırılırsa belirtisi net: ekran boş kalır ya da fotoğraf gelmez, konsol hangi
       direktifin engellediğini yazar.
+- [ ] **6.22** **Gerçek ekran görüntüleri** (denetim · Madde 1 · `docs/decisions/024`):
+      Bugün `/` ve `/ic-operasyon` sayfalarında dört **yer tutucu** duruyor; gerçek görseller
+      henüz depoda değil. Dosyalar `vitrin/gorseller/uygulama/` klasörüne konduğunda
+      (her ekran için **avif + webp**, oran 780 × 1688) her kartta yorumdaki `<picture>` açılır ve
+      yer tutucu silinir. Adımlar o klasördeki `README.md` dosyasında yazılı.
+      Sonra ölçülmeli: hero'ya yakın görsel ≤ 250 KB, toplam sayfa ≤ 1,5 MB, mobil LCP ≤ 2,5 sn.
 - [ ] **6.15** **Yeni sayfayı canlıda doğrula:** `www.oteldijital.com/ic-operasyon` açılmalı, menüdeki
       "İç Operasyon" oraya gitmeli ve menüdeki hiçbir bağlantı kök adrese gitmemeli
       (denetim · Madde 9 ve 15 · `docs/decisions/017-ana-sayfa-ve-ic-operasyon.md`).
@@ -185,10 +191,16 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       `cleanUrls` açık olduğu için `404.html` davranışının sürdüğü özellikle bu adımda görülür;
       sürmezse çözüm `vercel.json` ile yönlendirmedir — ama **rewrite 200 döner (soft-404)**, o yüzden
       önce sağlayıcının kendi 404 davranışı denenir. `500.html` durağan sitede kullanılmayabilir; notu kararda.
-- [ ] **6.11** **Yasal metinler:** bugün dört sayfa da "Çok yakında." diyen bir iskelettir (`/kvkk`, `/gizlilik-politikasi`,
-      `/cerez-politikasi`, `/kullanim-sartlari`) ve `noindex` etiketlidir. Metinler girilince her sayfada
-      `<meta name="robots">` `index, follow` yapılır ve sayfa `vitrin/sitemap.xml` dosyasına eklenir
-      (`docs/decisions/008` · Ek). KVKK metninde iletişim formu verisinin **saklama süresi** belirtilmelidir.
+- [ ] **6.11** **Yasal metinler — ikisi yazıldı, ikisi bekliyor** (2026-09-22):
+      `/kvkk` ve `/gizlilik-politikasi` metinleri girildi; ikisi de `index, follow` oldu ve
+      `vitrin/sitemap.xml` dosyasına eklendi. **`/cerez-politikasi` ve `/kullanim-sartlari` hâlâ
+      "Çok yakında." iskeletidir** ve `noindex` etiketlidir. Bu ikisi yazıldığında aynı üç adım
+      uygulanır (metin · robots · sitemap).
+      Çerez politikası yazılırken **çerez kullanılmadığı** yazılmalıdır — Gizlilik Politikası
+      sayfası bunu şimdiden söylüyor, iki metin çelişmemelidir (`docs/decisions/013`).
+      KVKK metninde **saklama süresi** bugün somut bir sayı olarak yazılmamıştır: "talebinizle
+      ilgilenmek için gereken süre" denir ve silme talebi kabul edilir. Somut bir süre kararı
+      (örneğin 12 ay) verildiğinde metne yazılmalı ve silme işi bir düzene bağlanmalıdır.
 - [x] **6.4** ✅ **Metin–ürün doğrulaması yapıldı:** sayfa "şifreler Müdür Paneli'nden 5 saniyede güncellenir" diyor
       ve Aşama 19.1'den beri ürün bunu karşılıyor (Personel ekranı → 🔑 Şifre). Vaat ile ürün aynı.
 - [ ] **6.5** Fiyat tablosundaki plan içerikleri (hangi özellik hangi pakette) Genel Müdür onayından geçmelidir.
