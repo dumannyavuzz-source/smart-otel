@@ -24,6 +24,7 @@ Ana sayfaya logodan ve alt bölümdeki "Ana Sayfa" bağlantısından ulaşılır
 
 Bunların dışında dört **yasal sayfa** vardır (`/kvkk`, `/gizlilik-politikasi`, `/cerez-politikasi`,
 `/kullanim-sartlari`). Menüde görünmezler; yalnızca alt bölümden ve iletişim formundan bağlanırlar.
+**Dördünün de metni yazılıdır** (2026-09-22 · `docs/decisions/025`).
 
 Ana sayfadaki Dijital Vitrin ve Teknolojik Altyapı "kapıları" birer cümle ve birer düğmedir; hizmetin
 kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için de geçerlidir.
@@ -47,8 +48,7 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 | `teknolojik-altyapi.html` | Sayfa başı, dört belirti, altı hizmet, dört adım, iki kapı |
 | `fiyatlandirma.html` | Sayfa başı, tarife (dört plan), sık sorulanlar, kapanış |
 | `iletisim.html` | Sayfa başı, adaçayı blok içinde form, "hangi konu hangi sayfada" listesi. **KVKK onayı açık eylemle alınır** (denetim · Madde 13 · `docs/decisions/021`): kutu işaretlenmeden form gönderilmez, veritabanı da onaysız satırı kabul etmez |
-| `kvkk.html` · `gizlilik-politikasi.html` | Yazılmış iki yasal metin (2026-09-22). Ortak düzen: `.yasal--metin` — sola yaslı, satır uzunluğu 68 karakterle sınırlı. `index, follow` ve sitemap içindedirler. **Metinler siteyle uyumlu olmak zorundadır:** KVKK sayfası formda alınan altı alanı ve adres özetini tek tek sayar, Gizlilik sayfası "çerez yok, üçüncü taraf yok" der — bunlardan biri değişirse metin de değişir |
-| `cerez-politikasi.html` · `kullanim-sartlari.html` | Henüz iskelet: ekranın ortasında "Çok yakında." ve e-posta adresi. `noindex` ve sitemap dışıdır |
+| `kvkk.html` · `gizlilik-politikasi.html` · `cerez-politikasi.html` · `kullanim-sartlari.html` | **Dört yasal metin** (2026-09-22 · `docs/decisions/024` ve `025`). Ortak düzen: `.yasal--metin` — sola yaslı, satır uzunluğu 68 karakterle sınırlı. Dördü de `index, follow` ve sitemap içindedir. **Metinler siteyle uyumlu olmak zorundadır:** KVKK sayfası formda alınan altı alanı, adres özetini ve **12 aylık saklama süresini** sayar; Gizlilik ve Çerez sayfaları "çerez yok, üçüncü taraf yok" der; Kullanım Şartları'ndaki para birimi, KDV ve iptal cümleleri `/fiyatlandirma` sayfasıyla birebir aynıdır. Biri değişirse diğeri de değişir |
 | `gorseller/uygulama/` | Gerçek uygulama ekran görüntüleri (denetim · Madde 1). Bugün **boş**; sayfalarda aynı orandaki yer tutucular duruyor. Klasördeki `README.md` hangi dosyaların, neden ikişer uzantıyla gerektiğini anlatır |
 | `stil.css` | Beş sayfanın ortak görünümü: "Sakin Lüks — Aydınlık Premium" — uçuk krem zemin (#f9f8f6), antrasit yazı (#1c1c1a), adaçayı iletişim bloğu, şampanya yalnızca ana düğmenin zemininde, bronz yazı vurgusunda; serif başlık (Cormorant Garamond) + Inter — ikisi de `yazilar/` altından, kendi alan adımızdan. Tek kaynak `DESIGN_SYSTEM.md`, kararlar `docs/decisions/007`, `008` ve `009` |
 | `hareket.js` | Canlı akış animasyonu (yalnızca ana sayfada iş görür). Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |
@@ -59,7 +59,7 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 | `simge.svg` · `dokunma-simgesi.png` | Sekme simgesi ve telefon ana ekranı simgesi: koyu plaka üstünde şampanya kare. Sayfa aydınlık ama simge koyu kalır: krem bir simge açık renkli sekme çubuğunda kaybolurdu (`docs/decisions/009`). PNG, kütüphanesiz küçük bir Node betiğiyle üretildi (aşağıda) |
 | `paylasim.html` → `paylasim.png` | Bağlantı paylaşılınca görünen 1200×630 kart. HTML kaynaktır, PNG ondan üretilir (aşağıda). Beş sayfa da aynı kartı kullanır. **Tema değişirse bu dosya da değişir ve PNG yeniden üretilir** |
 | `404.html` · `500.html` | Markalı hata sayfaları (denetim · Madde 3). Varlık yolları **kök adreslidir** (`/stil.css`): bu sayfalar herhangi bir adreste açılabilir, göreli yol biçimsiz sayfa üretirdi. `noindex` ve sitemap dışı |
-| `robots.txt` · `sitemap.xml` | Arama motoru yönlendirmesi. **Kanonik host `www.oteldijital.com`** (denetim · Madde 8 · `docs/decisions/016`): canonical, og:url, sitemap ve robots aynı hostu gösterir. Sitemap dosyasında **beş** sayfa listelidir. `paylasim` ve dört yasal iskelet sayfa dışarıdadır; yasal metinler yazılınca sitemap dosyasına eklenir |
+| `robots.txt` · `sitemap.xml` | Arama motoru yönlendirmesi. **Kanonik host `www.oteldijital.com`** (denetim · Madde 8 · `docs/decisions/016`): canonical, og:url, sitemap ve robots aynı hostu gösterir. Sitemap dosyasında **on** adres listelidir: altı tanıtım sayfası ve dört yasal sayfa. `paylasim`, `404` ve `500` dışarıdadır |
 | `../vercel.json` (depo kökünde) | Uzantısız adresler (`cleanUrls`) ve yayın başlıkları: içerik güvenlik politikası (CSP) ile diğer koruyucu başlıklar. Vercel bu dosyayı yalnızca Root Directory içinde arar; o yüzden kökte durur. **Bu dosyaya yorum satırı yazılmaz** — aşağıdaki nota bakın. HSTS başlığı buradadır: `max-age=63072000; includeSubDomains; preload` (denetim · Madde 14 · `docs/decisions/022`); preload listesine **başvuru yapılmadı**, o ayrı ve geri alınması zor bir adımdır |
 
 ## Bakmak için
@@ -96,6 +96,7 @@ Fotoğraf yok; kart da sitenin kendisi gibi kodla çizilir. `paylasim.html` kayn
 | `tasma-denetimi.html` | Sayfayı 320–1400 px arası yedi genişlikte iframe içinde açar, sayfa dışına taşan öğeleri listeler. Geçici olarak `vitrin/` içine kopyalayıp sunucuyla açın (`http://localhost:5180/tasma-denetimi.html`); sonuç sayfanın altına yazılır. İşi bitince kopyayı silin. **Not:** dosyanın içindeki `index.html` adı elle değiştirilerek diğer sekiz sayfa da ölçülür |
 | `dokunma-simgesi-uret.js` | `dokunma-simgesi.png` üretir (180×180, koyu plaka üstünde şampanya kare): `node araclar/dokunma-simgesi-uret.js vitrin/dokunma-simgesi.png` |
 | `ekran-goruntusu-al.js` | **Gerçek uygulamadan** telefon ölçüsünde (390×844, 2x) ekran görüntüsü alır ve WebP'ye çevirir. Aşağıdaki "Ürün ekran görüntüleri" bölümüne bakın |
+| `kaynak-notu-taramasi.js` | **Kaynak notu sızıntısı taraması** (karar 024–025): `node araclar/kaynak-notu-taramasi.js`. Sayfaların GÖRÜNEN metninde dosya adı, karar numarası, "Genel Müdür kararı" gibi iç izleri arar ve her `<!--` için bir `-->` olduğunu sayar. Temizse 0, sızıntı varsa 1 döner. HTML değişen her işten sonra çalıştırılır |
 
 > **Uyarı:** Telefon genişliğini ölçmek için tarayıcıyı `--window-size=390,844` ile açmak **yanıltır**:
 > Windows pencereyi en az ~500 px yapar, sayfa 500 px'e göre dizilir, ekran görüntüsü 390 px'e kırpılır.
@@ -165,9 +166,10 @@ eklenmedi). Boru hattı vitrin sayfasıyla denendi: 780×1688, 62 KB.
   Yapı `<details>`/`<summary>` üzerine kuruludur: klavye ve ekran okuyucu desteği tarayıcıdan gelir.
   **Betik yüklenmezse liste açık gelir** (HTML'de `open` yazar), yani hiçbir sayfa erişilmez kalmaz.
   Bütün sayfalar alt bölümde de listelenir.
-- **Kaynak notu sızıntısı taranır** (karar 024): bir HTML yorumunun açılış satırı silinirse iç notumuz
-  ziyaretçiye düz metin olarak görünür — bu bir kez canlıda yaşandı. Tarama, sayfaların GÖRÜNEN metninde
-  `-->`, `<!--`, `etkilesim.js`, `stil.css`, `docs/decisions`, "Genel Müdür kararı" gibi izleri arar.
+- **Kaynak notu sızıntısı taranır** (karar 024–025): bir HTML yorumunun açılış satırı silinirse iç notumuz
+  ziyaretçiye düz metin olarak görünür — bu bir kez canlıda yaşandı. Tarama artık elle değil betikle yapılır:
+  `node araclar/kaynak-notu-taramasi.js`. Sayfaların GÖRÜNEN metninde `-->`, `<!--`, `etkilesim.js`,
+  `stil.css`, `docs/decisions`, "Genel Müdür kararı" gibi izleri arar. **13 sayfa temiz.**
 - Yatay taşma denetimi 320–1400 px arası yedi genişlikte yapıldı; **beş sayfada da hiçbir öğe sayfa dışına çıkmıyor**.
   Hero'daki telefonun kenardan taşması yalnızca yanlarda boşluk varken (≥ 1240 px) açıktır.
 
@@ -222,15 +224,19 @@ Ziyaretçi anahtarı bu tabloya yalnızca yazabilir, okuyamaz; kimse silemez. Ay
 içerik güvenlik politikası (CSP) altında yayınlanır: betik yalnızca kendi alanından, bağlantı yalnızca
 `*.supabase.co`. Ayrıntı ve canlı doğrulama: `docs/security/007-iletisim-formu.md`.
 
-Alt bölümdeki yasal bağlantılar ve formun altındaki KVKK bağlantısı artık boşluğa değil,
-**dört yasal sayfaya** gider: `/kvkk` · `/gizlilik-politikasi` · `/cerez-politikasi` · `/kullanim-sartlari`.
-Dördü de bugün yalnızca bir **iskelettir**: ortada "Çok yakında." yazar ve e-posta adresi verir.
-Metinler hukuk onayından sonra Genel Müdür tarafından girilecek. **Metin girilince iki şey yapılır:**
+Alt bölümdeki yasal bağlantılar ve formun altındaki KVKK bağlantısı **dört yasal sayfaya** gider:
+`/kvkk` · `/gizlilik-politikasi` · `/cerez-politikasi` · `/kullanim-sartlari`. **Dördünün de metni
+yazılıdır** (2026-09-22): hepsi `index, follow` etiketlidir ve `sitemap.xml` içindedir.
+
+Yeni bir yasal sayfa açılırsa metin girilene kadar `noindex` durur; metin girilince iki şey yapılır:
 
 1. O sayfanın `<meta name="robots">` etiketi `noindex, follow` → `index, follow` olur.
 2. Sayfa `sitemap.xml` dosyasına eklenir.
 
-Boş sayfa arama motoruna girmesin diye dördü de şimdilik `noindex`tir ve sitemap'te yoktur.
+**Yasal metinler ürünle aynı şeyi söylemek zorundadır.** İletişim formu kayıtları **en fazla 12 ay**
+saklanır (Genel Müdür kararı, 2026-09-22); bu süre KVKK metninde yazılıdır ve silme işi bugün
+elle yapılır (`docs/deployment-checklist.md` · 6.23). Kullanım Şartları'ndaki ücret ve iptal
+cümleleri `/fiyatlandirma` sayfasının şeffaflık bloğuyla aynıdır; biri değişirse diğeri de değişir.
 
 Hizmet sayfalarındaki **"Bilgi Al"** ve **"Teknik Destek Al"** düğmeleri kayıt sayfasına değil,
 İletişim sayfasına (`/iletisim`) gider. Bu sayfalar deneme kaydına yönlendirmez; bu, Genel Müdür'ün açık kararıdır

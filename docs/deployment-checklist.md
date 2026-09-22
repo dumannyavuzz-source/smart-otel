@@ -191,16 +191,27 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       `cleanUrls` açık olduğu için `404.html` davranışının sürdüğü özellikle bu adımda görülür;
       sürmezse çözüm `vercel.json` ile yönlendirmedir — ama **rewrite 200 döner (soft-404)**, o yüzden
       önce sağlayıcının kendi 404 davranışı denenir. `500.html` durağan sitede kullanılmayabilir; notu kararda.
-- [ ] **6.11** **Yasal metinler — ikisi yazıldı, ikisi bekliyor** (2026-09-22):
-      `/kvkk` ve `/gizlilik-politikasi` metinleri girildi; ikisi de `index, follow` oldu ve
-      `vitrin/sitemap.xml` dosyasına eklendi. **`/cerez-politikasi` ve `/kullanim-sartlari` hâlâ
-      "Çok yakında." iskeletidir** ve `noindex` etiketlidir. Bu ikisi yazıldığında aynı üç adım
-      uygulanır (metin · robots · sitemap).
-      Çerez politikası yazılırken **çerez kullanılmadığı** yazılmalıdır — Gizlilik Politikası
-      sayfası bunu şimdiden söylüyor, iki metin çelişmemelidir (`docs/decisions/013`).
-      KVKK metninde **saklama süresi** bugün somut bir sayı olarak yazılmamıştır: "talebinizle
-      ilgilenmek için gereken süre" denir ve silme talebi kabul edilir. Somut bir süre kararı
-      (örneğin 12 ay) verildiğinde metne yazılmalı ve silme işi bir düzene bağlanmalıdır.
+- [x] **6.11** ✅ **Dört yasal metnin dördü de yazıldı ve yayımlandı** (2026-09-22 · `docs/decisions/025`):
+      `/kvkk` · `/gizlilik-politikasi` · `/cerez-politikasi` · `/kullanim-sartlari`. Dördü de
+      `index, follow` etiketli ve `vitrin/sitemap.xml` içinde (sitemap artık **10 adres**).
+      Metinler birbiriyle ve ürünle tutarlıdır: çerez politikası "çerez yok" der (Gizlilik
+      Politikası da öyle diyor), kullanım şartlarındaki para birimi · KDV · iptal cümleleri fiyat
+      sayfasıyla birebir aynıdır. Biri değişirse diğeri de değişmelidir.
+      Canlıda dördünü de aç, alt bölümdeki bağlantıların ve formun altındaki KVKK bağlantısının
+      doğru sayfaya gittiğini gör.
+- [ ] **6.23** **İletişim formu kayıtlarının 12 ayda silinmesi** (Genel Müdür kararı, 2026-09-22 · `docs/decisions/025`):
+      KVKK metni artık somut bir söz veriyor: **"en fazla 12 ay"**. Bu sözü bugün tutan otomatik bir
+      mekanizma **yoktur**; silme elle yapılır. Ayda bir kez Supabase Studio → SQL Editor'de
+      şu satır çalıştırılır (yalnızca ana anahtarla silinebilir; ziyaretçi anahtarı silemez):
+      ```sql
+      delete from public.iletisim_formu
+      where olusturulma_tarihi < now() - interval '12 months';
+      ```
+      Silmeden önce kaç satırın gideceği görülmek istenirse `delete` yerine
+      `select count(*)` ile aynı koşul çalıştırılır.
+      **Kalıcı çözüm Genel Müdür kararı bekliyor:** bu silme bir zamanlanmış görevle (pg_cron)
+      otomatikleştirilebilir. Veri silen otomatik bir iş, geri alınması zor bir adımdır; onay
+      alınmadan kurulmaz.
 - [x] **6.4** ✅ **Metin–ürün doğrulaması yapıldı:** sayfa "şifreler Müdür Paneli'nden 5 saniyede güncellenir" diyor
       ve Aşama 19.1'den beri ürün bunu karşılıyor (Personel ekranı → 🔑 Şifre). Vaat ile ürün aynı.
 - [ ] **6.5** Fiyat tablosundaki plan içerikleri (hangi özellik hangi pakette) Genel Müdür onayından geçmelidir.

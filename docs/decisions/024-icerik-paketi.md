@@ -53,6 +53,10 @@ KVKK metni "talebinizle ilgilenmek için gereken süre" der ve silme talebini ka
 sayı (örneğin 12 ay) **uydurulmadı**; Genel Müdür karar verdiğinde metne yazılacak ve silme işi bir
 düzene bağlanacak (dağıtım listesi · 6.11).
 
+> **Güncelleme (2026-09-22):** Karar geldi — **12 ay**. Metne yazıldı, silme işi dağıtım listesine
+> madde 6.23 olarak bağlandı. Kalan iki yasal metin de aynı gün yazıldı:
+> `docs/decisions/025-yasal-metinlerin-tamamlanmasi.md`.
+
 ## 4. Gerçek ekran görüntüleri (Madde 1) — altyapı kuruldu, görseller bekleniyor
 
 Dosyalar depoya ulaşmadı. Genel Müdür'ün talimatıyla **altyapı kuruldu, yerine yer tutucu kondu**:
