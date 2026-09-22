@@ -71,6 +71,11 @@ Göçler iki dosyadır ve **araya yayın girer**. Sebebi sıra sorunudur, tıpk�
 2. Kapı ve uygulama yayınlanır. (Kapı sütun yokken yayınlanırsa otel açılamaz: "column does not exist".)
 3. `…_kayit_sartlar_zorunlu.sql` — onaysız kaydı veritabanı da reddeder.
 
+**`supabase db push` bu sırayı tek başına korumaz:** bekleyen bütün göçleri birden uygular, yani
+zorunluluk kapı yayınlanmadan önce yürürlüğe girer ve o aralıkta kaydolan herkes reddedilir.
+Bu yüzden birinci adım **SQL Editor'den elle** çalıştırılır; dosya `add column if not exists` olduğu
+için sonradan `db push` aynı dosyayı tekrar uygulasa da bir şey bozulmaz.
+
 Adımlar dağıtım listesinde madde **6.24** olarak yazılıdır.
 
 ## Denendi ve doğrulandı

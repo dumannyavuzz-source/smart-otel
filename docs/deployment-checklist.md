@@ -205,10 +205,16 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
 - [ ] **6.24** **Kayıt ekranındaki yasal onay kutusu — SIRA ÖNEMLİ** (Genel Müdür kararı, 2026-09-22 · `docs/decisions/026`):
       Hesap açılırken Kullanım Şartları ve KVKK onayı alınır. Kural üç yerde durur (ekran · kapı · veritabanı),
       bu yüzden üç adım **bu sırayla** yapılır. Sıra bozulursa kayıt kapısı geçici olarak kapanır:
-      1. `supabase db push` → `…_kayit_sartlar_onayi.sql` (sütunu ekler, hiçbir şeyi zorunlu kılmaz).
+      **Dikkat:** `supabase db push` bekleyen BÜTÜN göçleri birden uygular; sırayı tek başına korumaz.
+      Bu yüzden birinci adım elle yapılır:
+      1. Supabase Studio → SQL Editor'de `supabase/migrations/20260922120000_kayit_sartlar_onayi.sql`
+         dosyasının içeriğini çalıştır (sütunu ekler, hiçbir şeyi zorunlu kılmaz; `if not exists`
+         olduğu için sonradan `db push` aynı dosyayı tekrar çalıştırsa da sorun çıkmaz).
       2. Kapıyı ve uygulamayı yayınla: `supabase functions deploy otel-ac --no-verify-jwt` ve Vercel dağıtımı.
          Kapı bu sütun yokken yayınlanırsa otel açılamaz ("column does not exist").
-      3. `supabase db push` → `…_kayit_sartlar_zorunlu.sql` (onaysız kaydı veritabanı da reddeder).
+      3. `supabase db push` → kalan göçler uygulanır; `…_kayit_sartlar_zorunlu.sql` ile onaysız kaydı
+         veritabanı da reddeder. Bu komut 6.19'daki `…_iletisim_kvkk_zorunlu.sql` dosyasını da uygular —
+         vitrindeki onay kutusu canlıda olduğu için bu istenen sonuçtur, ama bilerek yapılmalıdır.
       Sonra canlıda dene: kutu işaretlenmeden **Otelimi Başlat** çalışmamalı; işaretleyip açılan otelin
       `hotels` satırında `sartlar_onayi = true` görünmeli. İki bağlantı da yeni sekmede açılmalı.
 - [ ] **6.23** **İletişim formu kayıtlarının 12 ayda silinmesi** (Genel Müdür kararı, 2026-09-22 · `docs/decisions/025`):
