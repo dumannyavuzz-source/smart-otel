@@ -1726,6 +1726,59 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
 .form-not { font-size: 0.8125rem; color: var(--metin-cok-soluk); max-width: 36ch; }
 .form-not a { color: var(--metin-soluk); }
 
+/* Formun başındaki tek cümle: hangi alanlar zorunlu? (denetim · Madde 13)
+   Yıldız işareti kullanmıyoruz; isteğe bağlı olanların yanında zaten öyle yazıyor. */
+.form-zorunlu {
+  grid-column: 1 / -1;
+  margin-bottom: -4px;
+  font-size: 0.8125rem;
+  color: var(--metin-soluk);
+}
+
+/* KVKK onay kutusu: zımni onay yerine açık eylem (denetim · Madde 13).
+   Dokunma alanı: kutunun kendisi 24 px (WCAG 2.5.8 eşiği); asıl hedef olan etiket 44 px'i geçer
+   ve kutuyu işaretler. Böylece kutu görsel olarak büyümeden hedef büyür (Madde 10'daki yöntem). */
+.onay {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+.onay input[type="checkbox"] {
+  appearance: auto;
+  -webkit-appearance: checkbox;
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  flex: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  accent-color: var(--bronz);
+  cursor: pointer;
+}
+.onay input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--sampanya);
+  outline-offset: 3px;
+}
+.onay label {
+  /* DİKKAT: buraya flex ya da grid yazılmaz — etiketin içindeki bağlantı ve düz metin ayrı
+     kutulara bölünür, cümle ikiye ayrılır. Blok kalır; 44 px hedefi dikey boşlukla sağlanır:
+     tek satırda 20 + 24 = 44 px. */
+  display: block;
+  padding: 12px 0;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  line-height: 1.55;
+  color: var(--metin-soluk);
+  cursor: pointer;
+}
+.onay label a { color: var(--bronz); }
+
 /* Gönderilemezse görünen not (betik açar); betik yoksa noscript içindeki aynı kutu görünür */
 .form-durum {
   grid-column: 1 / -1;

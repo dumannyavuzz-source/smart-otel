@@ -171,6 +171,7 @@
 
       <div class="form-kutu">
       <form class="form" method="post">
+        <p class="form-zorunlu">Sonunda <strong>(isteğe bağlı)</strong> yazmayan alanların hepsi doldurulmalıdır.</p>
         <div class="alan">
           <label for="f-ad">Ad Soyad</label>
           <input id="f-ad" name="ad_soyad" type="text" autocomplete="name" required minlength="2" maxlength="80" />
@@ -211,10 +212,19 @@
           <label for="f-bos">Bu alanı boş bırakın</label>
           <input id="f-bos" name="bos_birakin" type="text" tabindex="-1" autocomplete="off" />
         </div>
+        <!-- KVKK onayı AÇIK EYLEMLE alınır (denetim · Madde 13). Eskiden "formu göndererek kabul
+             etmiş olursunuz" yazıyordu; bu zımni onaydı ve kaldırıldı. Kutu işaretlenmeden form
+             gönderilmez; üstelik veritabanı da onaysız satırı kabul etmez, yani kural yalnızca
+             tarayıcıda değil sunucuda da durur.
+             Ticari ileti (pazarlama e-postası) izni burada İSTENMEZ: bugün öyle bir e-posta
+             göndermiyoruz. Gerekirse ayrı ve isteğe bağlı bir kutu olur; bu kutuyla birleştirilmez.
+             Metin henüz yazılmadı; bağlantı "Çok yakında" iskelet sayfasına gider (2026-09-21). -->
+        <div class="alan alan--tam onay">
+          <input id="f-kvkk" name="kvkk_onay" type="checkbox" required />
+          <label for="f-kvkk"><a href="/kvkk">KVKK Aydınlatma Metni</a>'ni okudum; iletişim bilgilerimin bu kapsamda işlenmesini kabul ediyorum.</label>
+        </div>
         <div class="alan alan--tam form-alt">
           <button type="submit" class="dugme dugme--dev">Gönder</button>
-          <!-- Metin henüz yazılmadı; bağlantı "Çok yakında" iskelet sayfasına gider (2026-09-21). -->
-          <p class="form-not">Formu göndererek <a href="/kvkk">KVKK Aydınlatma Metni</a>'ni okuduğunuzu kabul etmiş olursunuz.</p>
         </div>
         <p class="form-durum" role="alert" hidden>
           Mesaj gönderilemedi. Lütfen tekrar deneyin ya da merhaba@oteldijital.com adresine yazın.

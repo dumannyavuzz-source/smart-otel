@@ -137,6 +137,14 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       `app.oteldijital.com/giris` açılınca ağ sekmesinde `fonts.googleapis.com` görünmemeli ve
       başlık serif çıkmalı. Uygulamanın İÇİ zaten telefonun kendi yazısını kullanır; orada bir
       değişiklik beklenmez.
+- [ ] **6.19** **İletişim formu onay kutusu: göçler ve sıra** (denetim · Madde 13 · `docs/decisions/021`):
+      İki küçük göç vardır ve **sırası önemlidir**; araya vitrinin yayına girmesi girer:
+      1. `20260922100000_iletisim_kvkk_onayi.sql` — sütunu ekler, onayı henüz zorunlu kılmaz.
+         **Vitrin yayına girmeden önce** çalıştırılır. Bu hâlde eski sürüm de yeni sürüm de çalışır.
+      2. Vitrinin onay kutulu sürümü canlıya çıkar; formu bir kez gerçekten gönder.
+      3. `20260922110000_iletisim_kvkk_zorunlu.sql` — onaysız satırı reddeder. **Bundan sonra**
+         çalıştırılır. Erken çalıştırılırsa eski sürümden gelen mesajlar reddedilir.
+      Doğrulama: Supabase panelinde yeni satırda `kvkk_onay = true` görünmeli.
 - [ ] **6.15** **Yeni sayfayı canlıda doğrula:** `www.oteldijital.com/ic-operasyon` açılmalı, menüdeki
       "İç Operasyon" oraya gitmeli ve menüdeki hiçbir bağlantı kök adrese gitmemeli
       (denetim · Madde 9 ve 15 · `docs/decisions/017-ana-sayfa-ve-ic-operasyon.md`).

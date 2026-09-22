@@ -234,13 +234,17 @@
       if (!ayar.url || !ayar.anahtar) { gonderilemedi(); return; }
       if (gonderDugmesi) { gonderDugmesi.disabled = true; gonderDugmesi.textContent = 'Gönderiliyor…'; }
 
+      // KVKK onayı veriyle birlikte kaydedilir: "bu kişi şu tarihte kutuyu işaretledi" belgesi.
+      // Veritabanı onaysız satırı zaten reddeder (…_iletisim_kvkk_onayi.sql); burası o kuralın eşi.
+      var onayKutusu = form.elements['kvkk_onay'];
       var mesaj = {
         ad_soyad: al('ad_soyad'),
         otel_adi: al('otel_adi') || null,
         telefon:  al('telefon'),
         eposta:   al('eposta'),
         konu:     al('konu'),
-        mesaj:    al('mesaj') || null
+        mesaj:    al('mesaj') || null,
+        kvkk_onay: !!(onayKutusu && onayKutusu.checked)
       };
 
       // 15 saniyede cevap gelmezse bekletmeyiz: "gönderilemedi" ve e-posta adresi görünür.

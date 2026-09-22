@@ -46,7 +46,7 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 | `dijital-vitrin.html` | Sayfa başı, dijital check-up panosu, altı hizmet, dört adım, iki kapı |
 | `teknolojik-altyapi.html` | Sayfa başı, dört belirti, altı hizmet, dört adım, iki kapı |
 | `fiyatlandirma.html` | Sayfa başı, tarife (dört plan), sık sorulanlar, kapanış |
-| `iletisim.html` | Sayfa başı, adaçayı blok içinde form, "hangi konu hangi sayfada" listesi |
+| `iletisim.html` | Sayfa başı, adaçayı blok içinde form, "hangi konu hangi sayfada" listesi. **KVKK onayı açık eylemle alınır** (denetim · Madde 13 · `docs/decisions/021`): kutu işaretlenmeden form gönderilmez, veritabanı da onaysız satırı kabul etmez |
 | `kvkk.html` · `gizlilik-politikasi.html` · `cerez-politikasi.html` · `kullanim-sartlari.html` | Dört yasal sayfa. Bugün yalnızca iskelet: ekranın ortasında "Çok yakında." ve e-posta adresi. Dördü birebir aynıdır, yalnızca üst başlık ve sayfa adı değişir. `noindex` ve sitemap dışıdır |
 | `stil.css` | Beş sayfanın ortak görünümü: "Sakin Lüks — Aydınlık Premium" — uçuk krem zemin (#f9f8f6), antrasit yazı (#1c1c1a), adaçayı iletişim bloğu, şampanya yalnızca ana düğmenin zemininde, bronz yazı vurgusunda; serif başlık (Cormorant Garamond) + Inter — ikisi de `yazilar/` altından, kendi alan adımızdan. Tek kaynak `DESIGN_SYSTEM.md`, kararlar `docs/decisions/007`, `008` ve `009` |
 | `hareket.js` | Canlı akış animasyonu (yalnızca ana sayfada iş görür). Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |

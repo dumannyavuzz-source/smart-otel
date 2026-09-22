@@ -49,6 +49,7 @@ bağlı alan `null` olur; e-posta küçük harfe iner), kısıtlar sonra **ham u
 | `eposta` | zorunlu · ≤ 120 · `a@b.c` biçiminde |
 | `konu` | yalnızca altı değer: Dijital Check-up / Analiz · Teknik Altyapı · OTA & Dijital Yönetim · Web Sitesi · SEO · Diğer (altıncısı 2026-09-18 göçüyle eklendi) |
 | `mesaj` | isteğe bağlı · ≤ 2000 |
+| `kvkk_onay` | zorunlu · yalnızca "evet" kabul edilir (denetim · Madde 13). Eski satırlarda `null`: o mesajlar onay kutusu eklenmeden önce geldi, geçmişe onay uydurulmadı |
 | `ip_ozeti` | veritabanı yazar; ziyaretçi dokunamaz (sınandı: 26s) |
 | `olusturulma_tarihi` | veritabanı yazar; ziyaretçi dokunamaz (sınandı: 26e) |
 
@@ -99,6 +100,14 @@ kilidi vardır ve ayrı belgelenmiştir. **Bu tabloda** yapabildiği tek şey ya
   yalnızca kendi alanı ve `*.supabase.co`; sayfa başka bir sayfaya gömülemez. Olası bir betik
   enjeksiyonunda anahtar ve form verisi başka bir yere gönderilemez. Politika yerelde `<meta>`
   ile sınandı: ihlal yok, form çalışıyor.
+- **KVKK onayı açık eylemle alınır** (denetim · Madde 13): ziyaretçi bir onay kutusu işaretler.
+  Eskiden "formu göndererek kabul etmiş olursunuz" deniyordu; bu zımni onaydı. Kutu işaretli
+  değilse tarayıcı formu göndermez, **veritabanı da satırı kabul etmez** — kural iki yerde birden
+  durur. Ticari ileti izni istenmez: pazarlama e-postası göndermiyoruz. Gerekirse ayrı ve isteğe
+  bağlı bir kutu açılır; bu kutuyla birleştirilmez.
+- **Tuzak alan ekran okuyucuya ve klavyeye kapalıdır:** kapsayıcısında `aria-hidden="true"`,
+  alanda `tabindex="-1"`, konumu ekranın dışında (`display: none` değil — gizlenen alanı bot da
+  doldurmaz, tuzak işe yaramazdı). Ölçüldü: ekran okuyucu ağacında yok, Tab sırasında yok.
 - Gönderilemezse ekranda e-posta adresi gösterilir; betik kapalıysa `<noscript>` notu aynı adresi gösterir.
 
 ## Canlı doğrulama (2026-09-17, staging)
@@ -118,8 +127,11 @@ belgeye ve `…_sel_kapisi_v2.sql` göçüne işlendi.
 
 ## Açık kalan
 
-- **KVKK:** form kişisel veri toplar (ad, telefon, e-posta, adres özeti). Aydınlatma metni henüz
-  yazılmadı; formun altındaki bağlantı şimdilik `#`. Metin yazılınca **saklama süresi** belirlenmeli
+- **KVKK:** form kişisel veri toplar (ad, telefon, e-posta, adres özeti). Onay artık açık eylemle
+  alınıyor (yukarıya bakın) ama **aydınlatma metninin kendisi henüz yazılmadı**; onay kutusundaki
+  bağlantı "Çok yakında" diyen iskelet sayfaya gidiyor. Metin yazılana kadar onay kutusu, içeriği
+  henüz olmayan bir belgeye işaret ediyor — bu eksik canlıya çıkmadan kapatılmalıdır.
+  Metin yazılınca **saklama süresi** belirlenmeli
   (örneğin: yanıtlanmış mesajlar 12 ay sonra silinir). Şimdilik satırlar süresiz durur.
 - **Bildirim ve gözcü:** yeni mesaj geldiğinde kimseye haber gitmez; Genel Müdür Supabase panelinden
   bakar. Toplam sınıra çarpıldığında da kimse fark etmez. E-posta bildirimi ya da günlük satır
