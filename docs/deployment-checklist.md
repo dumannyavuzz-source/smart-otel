@@ -145,6 +145,13 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       3. `20260922110000_iletisim_kvkk_zorunlu.sql` — onaysız satırı reddeder. **Bundan sonra**
          çalıştırılır. Erken çalıştırılırsa eski sürümden gelen mesajlar reddedilir.
       Doğrulama: Supabase panelinde yeni satırda `kvkk_onay = true` görünmeli.
+- [ ] **6.20** **HSTS preload listesine başvuru** (denetim · Madde 14 · `docs/decisions/022`):
+      Başlık hazır (`max-age=63072000; includeSubDomains; preload`) ama **başvuru yapılmadı**.
+      Başvuru `hstspreload.org` üzerinden yapılır ve **geri alınması aylar sürer**. Sıra:
+      1. `app.oteldijital.com` açılsın ve HTTPS ile sorunsuz çalıştığı görülsün.
+      2. Her iki adres de birkaç hafta bu başlıkla yayında kalsın.
+      3. Ancak ondan sonra başvurulsun.
+      Şifresiz çalışması gereken bir alt adres varsa başvuru **yapılmaz**.
 - [ ] **6.15** **Yeni sayfayı canlıda doğrula:** `www.oteldijital.com/ic-operasyon` açılmalı, menüdeki
       "İç Operasyon" oraya gitmeli ve menüdeki hiçbir bağlantı kök adrese gitmemeli
       (denetim · Madde 9 ve 15 · `docs/decisions/017-ana-sayfa-ve-ic-operasyon.md`).

@@ -58,7 +58,7 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 | `paylasim.html` → `paylasim.png` | Bağlantı paylaşılınca görünen 1200×630 kart. HTML kaynaktır, PNG ondan üretilir (aşağıda). Beş sayfa da aynı kartı kullanır. **Tema değişirse bu dosya da değişir ve PNG yeniden üretilir** |
 | `404.html` · `500.html` | Markalı hata sayfaları (denetim · Madde 3). Varlık yolları **kök adreslidir** (`/stil.css`): bu sayfalar herhangi bir adreste açılabilir, göreli yol biçimsiz sayfa üretirdi. `noindex` ve sitemap dışı |
 | `robots.txt` · `sitemap.xml` | Arama motoru yönlendirmesi. **Kanonik host `www.oteldijital.com`** (denetim · Madde 8 · `docs/decisions/016`): canonical, og:url, sitemap ve robots aynı hostu gösterir. Sitemap dosyasında **beş** sayfa listelidir. `paylasim` ve dört yasal iskelet sayfa dışarıdadır; yasal metinler yazılınca sitemap dosyasına eklenir |
-| `../vercel.json` (depo kökünde) | Uzantısız adresler (`cleanUrls`) ve yayın başlıkları: içerik güvenlik politikası (CSP) ile diğer koruyucu başlıklar. Vercel bu dosyayı yalnızca Root Directory içinde arar; o yüzden kökte durur. **Bu dosyaya yorum satırı yazılmaz** — aşağıdaki nota bakın |
+| `../vercel.json` (depo kökünde) | Uzantısız adresler (`cleanUrls`) ve yayın başlıkları: içerik güvenlik politikası (CSP) ile diğer koruyucu başlıklar. Vercel bu dosyayı yalnızca Root Directory içinde arar; o yüzden kökte durur. **Bu dosyaya yorum satırı yazılmaz** — aşağıdaki nota bakın. HSTS başlığı buradadır: `max-age=63072000; includeSubDomains; preload` (denetim · Madde 14 · `docs/decisions/022`); preload listesine **başvuru yapılmadı**, o ayrı ve geri alınması zor bir adımdır |
 
 ## Bakmak için
 
