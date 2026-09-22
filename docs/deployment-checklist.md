@@ -129,6 +129,10 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       axe ya da Lighthouse ile kritik/ciddi ihlal olmamalı. Bu bilgisayarda axe kurulu olmadığı ve
       yeni bağımlılık eklenmediği için yerel denetim elle yazılmış ölçüm betiğiyle yapıldı:
       kontrast, dokunma alanı ve sekme yapısı geçti. Canlıda bir kez araçla teyit edilmeli.
+- [ ] **6.17** **Yazıların kendi alan adımızdan geldiğini doğrula** (denetim · Madde 12 · `docs/decisions/020`):
+      tarayıcının ağ sekmesinde `fonts.googleapis.com` ya da `fonts.gstatic.com` isteği **görünmemeli**;
+      altı woff2 dosyası `www.oteldijital.com/yazilar/` altından gelmeli ve önbellek başlığı uzun olmalı.
+      Başlıklar serif, gövde sans görünmeli — hepsi sistem yazısına düşmüşse dosya yolu bozuktur.
 - [ ] **6.15** **Yeni sayfayı canlıda doğrula:** `www.oteldijital.com/ic-operasyon` açılmalı, menüdeki
       "İç Operasyon" oraya gitmeli ve menüdeki hiçbir bağlantı kök adrese gitmemeli
       (denetim · Madde 9 ve 15 · `docs/decisions/017-ana-sayfa-ve-ic-operasyon.md`).

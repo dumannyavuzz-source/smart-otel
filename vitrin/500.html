@@ -17,9 +17,12 @@
 <link rel="icon" href="/simge.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/dokunma-simgesi.png" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<!-- Yazı tipleri kendi alan adımızdan gelir; üçüncü parti istek yoktur (denetim · Madde 12).
+     Önden istenen iki dosya, ilk ekranda görünen başlığın yazısıdır (Cormorant, latin + latin-ext).
+     Geri kalanlar stil dosyası okunurken sırası gelince inilir; font-display: swap olduğu için
+     metin o ana kadar yedek yazıyla GÖRÜNÜR durur. -->
+<link rel="preload" href="/yazilar/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/yazilar/cormorant-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="/stil.css" />
 </head>
 <body>

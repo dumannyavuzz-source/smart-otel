@@ -13,7 +13,8 @@
       ≤%5  ŞAMPANYA/BRONZ — yalnızca eylem ve vurgu: ana düğme, üst başlık (kicker), tek kelime.
    Zeytin, tek bir yerde kalır: iletişim bloğu (yumuşak adaçayı).
    Yüzey: 1 px açık gri çizgi, küçük köşe, gölge yok (telefon hariç), cam/blur yok, hap düğme yok.
-   Yazı: başlık Cormorant Garamond (serif, 400), gövde Inter, veri JetBrains Mono. DEĞİŞMEDİ.
+   Yazı: başlık Cormorant Garamond (serif, 400), gövde Inter — ikisi de kendi alan adımızdan
+   (aşağıdaki @font-face bloklarına bakın). Veri yazısı cihazın kendi monospace yazısıdır.
 
    ŞAMPANYA İLE BRONZ NEDEN İKİ AYRI RENK?
    Aydınlık zeminde açık şampanya (#c3a77d) bir YAZI rengi olarak okunmaz (kontrast ~1,9:1).
@@ -24,6 +25,74 @@
 
    Değişken ADLARI (--zemin, --yuzey, --metin, --cizgi…) korunmuştur; yalnızca değerleri değişti.
    Böylece HTML'deki sınıflar ve betikler aynen çalışır (DESIGN_SYSTEM.md · 3.5). */
+
+/* ---------- Yazı tipleri: kendi alan adımızdan ---------- */
+/* Denetim · Madde 12. Eskiden tek üçüncü parti bağımlılığımız Google Fonts'tu: sayfa açılırken
+   fonts.googleapis.com'a gidip stil, oradan da fonts.gstatic.com'a gidip dosya çekiyordu.
+   Artık dosyalar vitrin/yazilar/ içinde duruyor ve CSP'de font-src 'self' yazıyor.
+
+   ÜÇ KARAR:
+   1. İKİ AİLE. JetBrains Mono kaldırıldı (Genel Müdür, 2026-09-22): veri yazıları artık işletim
+      sisteminin kendi monospace yazısını kullanıyor — indirilecek dosya yok, "veri" hissi duruyor.
+   2. YALNIZCA KULLANILAN AĞIRLIKLAR. Ölçüldü: sayfada yalnızca 400 ve 500 geçiyor, 600 hiç
+      kullanılmıyordu ama indiriliyordu. Artık istenmiyor.
+   3. TEK DOSYA, İKİ AĞIRLIK. Her iki aile de DEĞİŞKEN fonttur: 400 ile 500 bayt bayt aynı dosyadır.
+      Bu yüzden ağırlık bir aralık olarak yazılır (400 500) ve dosya bir kez inilir.
+
+   Alt kümeler Google'ın kendi bölümlemesidir: latin ve latin-ext. Türkçenin ı, ğ, ş, İ harfleri
+   latin-ext içindedir; ikisi de gereklidir. unicode-range sayesinde tarayıcı yalnızca sayfada
+   geçen harfleri kapsayan dosyayı indirir.
+
+   font-display: swap — yazı inene kadar metin yedek yazıyla GÖRÜNÜR. Hiçbir an boş kalmaz. */
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('yazilar/cormorant-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('yazilar/cormorant-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('yazilar/cormorant-italik-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('yazilar/cormorant-italik-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('yazilar/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('yazilar/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
 
 :root {
   /* Palet (DESIGN_SYSTEM.md · 3.2) — başka renk eklenmez */
@@ -74,7 +143,9 @@
 
   --baslik-yazi: "Cormorant Garamond", "Times New Roman", Georgia, serif;
   --govde-yazi: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --veri-yazi: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  /* Veri yazısı: işletim sisteminin kendi monospace yazısı. İndirilecek dosya yok (denetim · Madde 12);
+     Genel Müdür kararı, 2026-09-22. Her sistemde zaten kurulu bir yazı seçilir, sıra öyle dizildi. */
+  --veri-yazi: ui-monospace, SFMono-Regular, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, monospace;
 }
 
 * { box-sizing: border-box; }

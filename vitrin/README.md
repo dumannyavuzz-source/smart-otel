@@ -48,11 +48,12 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 | `fiyatlandirma.html` | Sayfa başı, tarife (dört plan), sık sorulanlar, kapanış |
 | `iletisim.html` | Sayfa başı, adaçayı blok içinde form, "hangi konu hangi sayfada" listesi |
 | `kvkk.html` · `gizlilik-politikasi.html` · `cerez-politikasi.html` · `kullanim-sartlari.html` | Dört yasal sayfa. Bugün yalnızca iskelet: ekranın ortasında "Çok yakında." ve e-posta adresi. Dördü birebir aynıdır, yalnızca üst başlık ve sayfa adı değişir. `noindex` ve sitemap dışıdır |
-| `stil.css` | Beş sayfanın ortak görünümü: "Sakin Lüks — Aydınlık Premium" — uçuk krem zemin (#f9f8f6), antrasit yazı (#1c1c1a), adaçayı iletişim bloğu, şampanya yalnızca ana düğmenin zemininde, bronz yazı vurgusunda; serif başlık (Cormorant Garamond) + Inter. Tek kaynak `DESIGN_SYSTEM.md`, kararlar `docs/decisions/007`, `008` ve `009` |
+| `stil.css` | Beş sayfanın ortak görünümü: "Sakin Lüks — Aydınlık Premium" — uçuk krem zemin (#f9f8f6), antrasit yazı (#1c1c1a), adaçayı iletişim bloğu, şampanya yalnızca ana düğmenin zemininde, bronz yazı vurgusunda; serif başlık (Cormorant Garamond) + Inter — ikisi de `yazilar/` altından, kendi alan adımızdan. Tek kaynak `DESIGN_SYSTEM.md`, kararlar `docs/decisions/007`, `008` ve `009` |
 | `hareket.js` | Canlı akış animasyonu (yalnızca ana sayfada iş görür). Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |
 | `etkilesim.js` | Altı etkileşim: kaydırdıkça beliren döngü hikâyesi, keşif alanındaki ekran değiştirme, görününce dolan check-up panosu, Ortak Beyin'e yazan iletişim formu ve kaydırınca üst çubuğa gelen ince çizgi. Her biri kendi öğesini bulamazsa sessizce durur; bu yüzden aynı üç betik bütün sayfalarda durabilir. **İçerik hiçbir koşulda betiğe emanet edilmez** (denetim · Madde 11 · `docs/decisions/019`): gizlemeyi betik yapar, ekranda olan hiç gizlenmez, kurulum hata verirse gizleme geri alınır ve gözcü çalışmazsa üç saniye sonra her şey açılır |
 | `ayarlar.ornek.js` | Ayar dosyasının örneği: Supabase adresi ve ziyaretçi anahtarı. Gerçeği (`ayarlar.js`) git'e girmez |
 | `../ayarlar-uret.sh` (depo kökünde) | Vercel derleme komutu: ortam değişkenlerinden `vitrin/ayarlar.js` üretir; değişken eksik ya da anahtar gizliyse dağıtımı durdurur |
+| `yazilar/*.woff2` | İki yazı ailesinin kendi kopyası (denetim · Madde 12): Cormorant Garamond (düz + italik) ve Inter, her biri latin ve latin-ext alt kümesiyle — altı dosya, 242 KB. Dışarıdan yazı çekilmez. Bu dosyalar bir yıl önbelleğe alınır (`vercel.json`), bu yüzden **içeriği değişen dosyanın adı da değişmelidir**; yenilemek için `araclar/font-indir.js` çalıştırılır ve `stil.css` başındaki `@font-face` blokları güncellenir |
 | `simge.svg` · `dokunma-simgesi.png` | Sekme simgesi ve telefon ana ekranı simgesi: koyu plaka üstünde şampanya kare. Sayfa aydınlık ama simge koyu kalır: krem bir simge açık renkli sekme çubuğunda kaybolurdu (`docs/decisions/009`). PNG, kütüphanesiz küçük bir Node betiğiyle üretildi (aşağıda) |
 | `paylasim.html` → `paylasim.png` | Bağlantı paylaşılınca görünen 1200×630 kart. HTML kaynaktır, PNG ondan üretilir (aşağıda). Beş sayfa da aynı kartı kullanır. **Tema değişirse bu dosya da değişir ve PNG yeniden üretilir** |
 | `404.html` · `500.html` | Markalı hata sayfaları (denetim · Madde 3). Varlık yolları **kök adreslidir** (`/stil.css`): bu sayfalar herhangi bir adreste açılabilir, göreli yol biçimsiz sayfa üretirdi. `noindex` ve sitemap dışı |
@@ -146,7 +147,12 @@ eklenmedi). Boru hattı vitrin sayfasıyla denendi: 780×1688, 62 KB.
 
 - Sayfalarda `<img>` yoktur; her görsel kodla çizilir. Bu yüzden "tembel yükleme" (lazy loading) uygulanacak bir
   şey yoktur — tek görsel paylaşım kartıdır ve sayfada görünmez.
-- Yazı: başlıklar Cormorant Garamond (400–500), gövde Inter (400–600), veri JetBrains Mono. Kalın (700+) başlık yoktur.
+- Yazı: başlıklar Cormorant Garamond (400–500 + italik), gövde Inter (400–500), telefon maketindeki sayılar
+  cihazın kendi monospace yazısı. Kalın (600+) yazı yoktur.
+- **Yazı dosyaları depodadır** (denetim · Madde 12 · `docs/decisions/020-font-self-host.md`): `yazilar/` altında
+  altı woff2, toplam 242 KB. Google Fonts bağlantısı **hiçbir sayfada yoktur**; sayfalar **sıfır üçüncü taraf
+  isteği** yapar. İlk görünen iki Cormorant dosyası `<link rel="preload">` ile öne alınır, hepsinde
+  `font-display: swap` vardır. Ölçüldü: ilk boya (FCP) **460–536 ms → 208–272 ms**.
 - **Erişilebilirlik tabanları** (denetim · Madde 10 · `docs/decisions/018-erisilebilirlik.md`):
   sayfa metni en az **13 piksel**, kontrast en az **4,5:1** (dört zeminde de ölçüldü), mobilde
   dokunma alanı en az **44 piksel**. Telefon maketinin içi bu kuralların dışındadır: orası bir

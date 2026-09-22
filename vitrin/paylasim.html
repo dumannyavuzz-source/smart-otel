@@ -8,9 +8,23 @@
      Yeniden üretmek: README "Paylaşım görseli" bölümü. Site ziyaretçisi bu sayfayı görmez (noindex + robots.txt).
      Dil: "Sakin Lüks — Aydınlık Premium" (DESIGN_SYSTEM.md) — sitedeki hero ile aynı renkler ve yazı.
      Renkler sitedeki değişkenlerin birebir karşılığıdır; burada değişken kullanılamaz, çünkü bu dosya stil.css yüklemez. -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" />
+<!-- Yazı tipleri kendi klasörümüzden; üçüncü parti istek yoktur (denetim · Madde 12).
+     Bu dosya stil.css yüklemez, o yüzden @font-face burada tekrar yazılır. Yalnızca gereken
+     iki ağırlık ve italik alınır; alt kümeler latin + latin-ext (Türkçe harfler latin-ext'tedir). -->
+<style>
+  @font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 400 500; font-display: block;
+    src: url('yazilar/cormorant-latin.woff2') format('woff2'); }
+  @font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 400 500; font-display: block;
+    src: url('yazilar/cormorant-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+1E00-1E9F, U+2C60-2C7F, U+A720-A7FF; }
+  @font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 400; font-display: block;
+    src: url('yazilar/cormorant-italik-latin.woff2') format('woff2'); }
+  @font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 400; font-display: block;
+    src: url('yazilar/cormorant-italik-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+1E00-1E9F, U+2C60-2C7F, U+A720-A7FF; }
+  @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400 500; font-display: block;
+    src: url('yazilar/inter-latin.woff2') format('woff2'); }
+  @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400 500; font-display: block;
+    src: url('yazilar/inter-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+1E00-1E9F, U+2C60-2C7F, U+A720-A7FF; }
+</style>
 <style>
   * { box-sizing: border-box; margin: 0; }
   html, body { width: 1200px; height: 630px; overflow: hidden; }
@@ -28,7 +42,7 @@
   h1 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 400; font-size: 68px; line-height: 1.04; letter-spacing: -0.01em; max-width: 640px; }
   .vurgu { color: #8a6d3b; font-style: italic; }
   .alt { margin-top: 26px; font-size: 21px; line-height: 1.55; color: #5e5e5b; max-width: 520px; }
-  .adres { position: absolute; bottom: 52px; left: 72px; font-family: "JetBrains Mono", monospace; font-size: 14px; color: #757370; letter-spacing: 0.06em; }
+  .adres { position: absolute; bottom: 52px; left: 72px; font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace; font-size: 14px; color: #757370; letter-spacing: 0.06em; }
 
   /* Kodla çizilmiş telefon: sitedeki hero ile aynı dil */
   .telefon { width: 340px; background: #23231f; border: 1px solid rgba(255,255,255,0.08); border-radius: 36px; padding: 10px; box-shadow: 0 28px 64px rgba(28,28,26,0.16); transform: rotate(-4deg); justify-self: end; }
@@ -36,14 +50,14 @@
   .ust { display: flex; align-items: center; gap: 10px; padding: 16px 16px 13px; border-bottom: 1px solid #e6e4e0; font-size: 14px; }
   .nabiz { width: 7px; height: 7px; border-radius: 50%; background: #4f7343; }
   .ust b { font-weight: 500; }
-  .ust span:last-child { margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: 12px; color: #757370; }
+  .ust span:last-child { margin-left: auto; font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace; font-size: 12px; color: #757370; }
   .olay { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-bottom: 1px solid #e6e4e0; font-size: 14px; line-height: 1.35; color: #5e5e5b; }
   .olay b { color: #1c1c1a; font-weight: 500; }
   .olay:last-child { border-bottom: 0; }
   .ikon { width: 34px; height: 34px; border-radius: 8px; background: #f2f0ec; display: grid; place-items: center; font-size: 15px; flex: none; filter: grayscale(1) sepia(0.22) brightness(0.95); }
   .metin { display: flex; flex-direction: column; }
-  .metin small { color: #757370; font-family: "JetBrains Mono", monospace; font-size: 11px; }
-  .rozet { margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: 10.5px; padding: 5px 8px; border-radius: 2px; border: 1px solid #e6e4e0; color: #5e5e5b; white-space: nowrap; }
+  .metin small { color: #757370; font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace; font-size: 11px; }
+  .rozet { margin-left: auto; font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace; font-size: 10.5px; padding: 5px 8px; border-radius: 2px; border: 1px solid #e6e4e0; color: #5e5e5b; white-space: nowrap; }
   .rozet--tamam { color: #4f7343; border-color: rgba(79, 115, 67, 0.35); }
   .rozet--uyari { color: #8f6415; border-color: rgba(143, 100, 21, 0.32); }
 </style>

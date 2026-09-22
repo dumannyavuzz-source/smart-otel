@@ -6,7 +6,7 @@
 > Bu belge önceki görsel dil kararını (`docs/decisions/006` — açık zemin, turuncu marka) geçersiz kılar.
 >
 > **2026-09-21 değişikliği:** "Sakin Lüks" dili aynen sürüyor; yalnızca **tema koyudan aydınlığa döndü.**
-> Tipografi (Cormorant Garamond + Inter + JetBrains Mono), boşluk ölçeği, ızgara, zikzak düzen, hareket ve
+> Tipografi (Cormorant Garamond + Inter), boşluk ölçeği, ızgara, zikzak düzen, hareket ve
 > "fotoğraf yok" kuralı **hiç değişmedi.** Değişen tek şey renklerdir.
 >
 > Bu belge "nasıl görünecek?" sorusunun tek cevabıdır. Vitrin ya da kapı ekranı yapan herkes (insan ya da ajan)
@@ -131,12 +131,22 @@ Eklenenler: `--kasmir-0…300`, `--zeytin-50`, `--zeytin-200`, `--antrasit`, `--
 ### 4.1 İki aile, iki görev
 | Görev | Aile | Ağırlıklar | Neden |
 |---|---|---|---|
-| **Başlıklar** (h1, h2, büyük rakamlar) | **Cormorant Garamond** (serif) | 400, 500, 600 + 400 italik | Lüks otel dilinin imzası: ince, uzun, sakin serif. Kalın kullanılmaz. |
-| **Gövde, menü, düğme, form** | **Inter** (sans) | 400, 500, 600 | Zaten yüklü; temiz ve nötr. 700 ve üstü kullanılmaz. |
-| Veri (telefon ekranındaki sayılar, saatler) | JetBrains Mono | 400, 500 | Kodla çizilen arayüzde sayılar hizalı dursun |
+| **Başlıklar** (h1, h2, büyük rakamlar) | **Cormorant Garamond** (serif) | 400, 500 + 400 italik | Lüks otel dilinin imzası: ince, uzun, sakin serif. Kalın kullanılmaz. |
+| **Gövde, menü, düğme, form** | **Inter** (sans) | 400, 500 | Temiz ve nötr. 600 ve üstü kullanılmaz. |
+| Veri (telefon maketindeki sayılar, saatler) | **Cihazın kendi monospace yazısı** | — | Sayılar hizalı dursun diye; bunun için dosya indirilmez |
 
 Önceki "tek aile" kuralı (006) burada bilerek bırakılır: sakin lüks, serif başlık ile sans gövdenin karşıtlığından doğar.
-Üçüncü bir aile eklenmez. Yazı tipleri Google Fonts'tan gelir; `vercel.json` içindeki CSP zaten izin verir.
+**Üçüncü bir aile indirilmez.** Veri yazısı (`--veri-yazi`) artık bir dosya değil, işletim sisteminin hazır
+monospace'idir: `ui-monospace, SFMono-Regular, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, monospace`.
+Mac'te SF Mono, Windows'ta Cascadia/Consolas görünür; ikisi de sayıyı hizalı basar ve indirme maliyeti sıfırdır.
+
+### 4.1.1 Yazılar kendi alan adımızda durur (denetim · Madde 12)
+İki aile de **depodadır** (`vitrin/yazilar/`), Google Fonts'tan çekilmez. Ziyaretçi hiçbir üçüncü tarafa
+uğramaz; CSP `font-src 'self'` der. Kural şudur: **yalnızca kullanılan ağırlık, yalnızca gereken alfabe.**
+Altı dosya vardır — her aile için latin ve latin-ext (Türkçe harfler bu ikisindedir), artı Cormorant'ın italiği.
+Her `@font-face` bloğunda `font-display: swap` bulunur: yazı gelene kadar metin görünür kalır.
+Hero'da ilk görünen iki Cormorant dosyası her sayfada `<link rel="preload">` ile öne alınır.
+Ayrıntı: `docs/decisions/020-font-self-host.md`.
 
 ### 4.2 Ölçek
 | Öğe | Boyut | Satır aralığı | Harf aralığı | Ağırlık |
@@ -227,7 +237,7 @@ Beyaz zemin (`--kasmir-0`), 1 px çizgi, 4 px köşe, 32 px iç boşluk (telefon
 ### 7.4 Kodla çizilen telefon (mockup)
 Çerçeve `--cihaz` (`#23231F`) — sayfa yüzeyi değil, masadaki bir NESNEDİR, o yüzden koyu kalır. 36 px köşe,
 kenarında ince bir ışık çizgisi (`rgba(255,255,255,0.08)`); **ekran beyazdır.** Böylece maket, personel
-yazılımının gerçek aydınlık arayüzüyle (`app/src/stil.css`) aynı şeyi gösterir. Akış antrasit yazı, sayılar JetBrains Mono,
+yazılımının gerçek aydınlık arayüzüyle (`app/src/stil.css`) aynı şeyi gösterir. Akış antrasit yazı, sayılar cihazın kendi monospace yazısıyla,
 durumlar üç durum rengiyle. Telefon, hero'da sağ kenardan hafifçe taşar (önceki karar korunur).
 
 ### 7.5 Alt bölüm (footer)
