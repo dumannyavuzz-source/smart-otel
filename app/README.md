@@ -65,7 +65,8 @@ Canlıya çıkış adımları: `docs/deployment-checklist.md`.
 | `src/kullanici.ts` | Şu an giriş yapmış kişi; beyanlar bu kimlikle etiketlenir (ortak telefon) |
 | `src/ortakBeyin.ts` | Supabase bağlantısı (kapı anahtarıyla) |
 | `src/stil.css` | Sade görünüm: 2 renk, 2 yazı boyutu, büyük butonlar. Sonundaki `.kapi…` bloğu dış kapı ekranlarına (Giriş, Kayıt) aittir ve vitrinle aynı "Sakin Lüks" dilini konuşur (`DESIGN_SYSTEM.md`) |
-| `vercel.json` | Bütün adresleri `index.html`'e yönlendirir; olmazsa QR ile açılan adresler 404 verir |
+| `public/yazilar/*.woff2` | Dış kapı ekranlarının yazıları, kendi sunucumuzdan (karar 020): Cormorant Garamond ve Inter, latin + latin-ext, dört dosya / 201 KB. Uygulamanın İÇİ bunları kullanmaz, telefonun kendi yazısıyla çizilir; bu yüzden yazılar ne preload edilir ne de çevrimdışı önbelleğe konur |
+| `vercel.json` | Bütün adresleri `index.html`'e yönlendirir; olmazsa QR ile açılan adresler 404 verir. `/yazilar/` için bir yıllık önbellek başlığı verir |
 
 ## Çalıştırmak
 

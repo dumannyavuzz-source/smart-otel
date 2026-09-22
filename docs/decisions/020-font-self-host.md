@@ -128,11 +128,28 @@ vurgu ve maket içindeki sayılar doğru görünüyor.
 
 ## Kalan iş
 
-- **Personel uygulaması (`app/index.html`) hâlâ Google Fonts kullanıyor.** Bu madde vitrin denetimine
-  aittir, o yüzden kapsam dışında bırakıldı. Uygulama **çevrimdışı çalışabilen** bir yapı olduğu için
-  orada da yazının cihazda durması mantıklıdır; dosyalar artık depoda hazır. Genel Müdür isterse ayrı
-  bir adımda yapılır.
-- Canlıda doğrulama: dağıtım listesi · **6.17**.
+- Canlıda doğrulama: dağıtım listesi · **6.17** (vitrin) ve **6.18** (uygulama).
+
+## Ek adım: personel uygulaması da aynı yola geçti (2026-09-22)
+
+Genel Müdür kararıyla `app/` de dışarıdan yazı çekmeyi bıraktı. Oradaki durum vitrinden farklı ve daha
+kötüydü: `app/index.html` içindeki Google stil bağlantısı **uygulamanın her açılışında** çizimi
+bekletiyordu — **internet yokken bile**, boşuna. Çevrimdışı çalışması gereken bir uygulama için bu
+doğrudan bir kusurdu.
+
+- Dört dosya `app/public/yazilar/` içine kondu (Cormorant + Inter · latin + latin-ext · **201 KB**).
+  İtalik alınmadı: dış kapıda italik yazı yok.
+- `@font-face` blokları `app/src/stil.css` başına yazıldı; `index.html` içinden üç satır (iki
+  `preconnect` ve stil bağlantısı) silindi.
+- **Preload yok, çevrimdışı önbellek yok.** Sebebi basit: bu yazıları yalnızca dış kapı (`/giris`,
+  `/kayit`) kullanır. Uygulamanın içi bilerek telefonun kendi yazısıyla çizilir — ıslak elle bakan
+  görevli için en hızlısı odur. Giriş yapan kişi yazıları bir kez indirir, içerideki görevli hiç
+  indirmez. Ayrıca giriş yapmak zaten internet ister; "çevrimdışı giriş ekranı" diye bir senaryo yok.
+  Servis çalışanının önden yükleme listesi (`globPatterns`) bu yüzden **değiştirilmedi**.
+- `app/vercel.json` `/yazilar/` için bir yıllık önbellek başlığı verir.
+
+Derlendi ve göz ile denetlendi: `/giris` ekranı serif başlığı ve Türkçe harfleriyle doğru çıkıyor,
+derleme çıktısında `googleapis`/`gstatic` geçmiyor, servis çalışanı yazıları önbelleğe almıyor.
 
 ## Bu karar neyi geçersiz kılar
 

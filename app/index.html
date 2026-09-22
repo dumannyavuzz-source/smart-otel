@@ -8,11 +8,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <!-- Inter yalnızca DIŞ KAPI ekranları (/giris, /kayit) içindir; vitrinle aynı yazı.
-         İnternet yoksa sistem yazısına düşer — zaten giriş yapmak da internet ister. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" />
+    <!-- Yazı tipleri buradan ÇAĞRILMAZ. Dış kapı ekranlarının (/giris, /kayit) yazıları
+         public/yazilar/ içinde durur ve src/stil.css içinden tanımlanır; uygulama hiçbir
+         dış adrese bağlanmaz. Buraya bir stil bağlantısı konursa çizim onu beklemek
+         zorunda kalır — çevrimdışı açılışta boşuna beklenir (karar 020). -->
     <title>OtelDijital</title>
   </head>
   <body>
