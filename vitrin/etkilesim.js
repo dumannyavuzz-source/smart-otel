@@ -233,13 +233,31 @@
   var ekranlar = kesif.querySelectorAll('.kesif-ekran');
   if (!dugmeler.length || !ekranlar.length) return;
 
-  function goster(hedef) {
+  // Bunlar gerçek SEKMEdir (WAI-ARIA tab deseni · denetim · Madde 10a). Üç kuralı vardır:
+  //   1. Seçili sekme aria-selected="true" ve tabindex="0"; diğerleri "false" ve "-1".
+  //      Böylece Tab tuşu sekme listesinde BİR kez durur, içinde ok tuşlarıyla gezilir.
+  //   2. Her sekme aria-controls ile kendi panelini, her panel aria-labelledby ile sekmesini gösterir.
+  //   3. Ok tuşuyla seçilen sekme aynı anda odağı da alır; Home/End ilk ve son sekmeye gider.
+  function goster(hedef, odakla) {
     for (var d = 0; d < dugmeler.length; d++) {
-      dugmeler[d].setAttribute('aria-pressed', dugmeler[d].getAttribute('data-hedef') === hedef ? 'true' : 'false');
+      var bu = dugmeler[d].getAttribute('data-hedef') === hedef;
+      dugmeler[d].setAttribute('aria-selected', bu ? 'true' : 'false');
+      dugmeler[d].setAttribute('tabindex', bu ? '0' : '-1');
+      if (bu && odakla) dugmeler[d].focus();
     }
     for (var e = 0; e < ekranlar.length; e++) {
       ekranlar[e].hidden = ekranlar[e].getAttribute('data-ekran') !== hedef;
     }
+  }
+
+  function sirada(adim) {
+    for (var d = 0; d < dugmeler.length; d++) {
+      if (dugmeler[d].getAttribute('aria-selected') === 'true') {
+        var yeni = (d + adim + dugmeler.length) % dugmeler.length;   // başa/sona sarar
+        return dugmeler[yeni].getAttribute('data-hedef');
+      }
+    }
+    return dugmeler[0].getAttribute('data-hedef');
   }
 
   for (var i = 0; i < dugmeler.length; i++) {
@@ -249,6 +267,19 @@
       });
     })(dugmeler[i]);
   }
+
+  kesif.addEventListener('keydown', function (olay) {
+    var t = olay.target;
+    if (!t || t.getAttribute('role') !== 'tab') return;
+    var git = null;
+    if (olay.key === 'ArrowRight' || olay.key === 'ArrowDown') git = sirada(1);
+    else if (olay.key === 'ArrowLeft' || olay.key === 'ArrowUp') git = sirada(-1);
+    else if (olay.key === 'Home') git = dugmeler[0].getAttribute('data-hedef');
+    else if (olay.key === 'End') git = dugmeler[dugmeler.length - 1].getAttribute('data-hedef');
+    if (!git) return;
+    olay.preventDefault();
+    goster(git, true);
+  });
 
   // Açılışta ilk başlık seçilidir; diğer üç ekran bu satırla kapanır.
   goster(dugmeler[0].getAttribute('data-hedef'));

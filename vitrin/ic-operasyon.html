@@ -359,20 +359,20 @@
     </p>
 
     <div class="kesif">
-      <div class="kesif-dugmeler">
-        <button type="button" class="kesif-dugme" data-hedef="temizlik" aria-pressed="true">
+      <div class="kesif-dugmeler" role="tablist" aria-label="Uygulama ekranları">
+        <button type="button" class="kesif-dugme" data-hedef="temizlik" role="tab" id="sekme-temizlik" aria-controls="ekran-temizlik" aria-selected="true" tabindex="0">
           <span class="kesif-no" aria-hidden="true">01</span>
           <span class="kesif-yazi"><b>Temizlik</b><small>Oda hazır bildirimi</small></span>
         </button>
-        <button type="button" class="kesif-dugme" data-hedef="ariza" aria-pressed="false">
+        <button type="button" class="kesif-dugme" data-hedef="ariza" role="tab" id="sekme-ariza" aria-controls="ekran-ariza" aria-selected="false" tabindex="-1">
           <span class="kesif-no" aria-hidden="true">02</span>
           <span class="kesif-yazi"><b>Arıza</b><small>Bildirim, iş emrine döner</small></span>
         </button>
-        <button type="button" class="kesif-dugme" data-hedef="gorev" aria-pressed="false">
+        <button type="button" class="kesif-dugme" data-hedef="gorev" role="tab" id="sekme-gorev" aria-controls="ekran-gorev" aria-selected="false" tabindex="-1">
           <span class="kesif-no" aria-hidden="true">03</span>
           <span class="kesif-yazi"><b>Görev</b><small>Müdürün kumandası</small></span>
         </button>
-        <button type="button" class="kesif-dugme" data-hedef="malzeme" aria-pressed="false">
+        <button type="button" class="kesif-dugme" data-hedef="malzeme" role="tab" id="sekme-malzeme" aria-controls="ekran-malzeme" aria-selected="false" tabindex="-1">
           <span class="kesif-no" aria-hidden="true">04</span>
           <span class="kesif-yazi"><b>Malzeme</b><small>Talep · onay · teslim</small></span>
         </button>
@@ -382,7 +382,7 @@
         <div class="telefon">
           <div class="telefon-ic">
 
-            <div class="kesif-ekran" data-ekran="temizlik" role="group" aria-label="Temizlik ekranı">
+            <div class="kesif-ekran" data-ekran="temizlik" id="ekran-temizlik" role="tabpanel" aria-labelledby="sekme-temizlik" tabindex="0">
               <div class="uyg-ust">
                 <span class="akis-baslik">Oda 204</span>
                 <span class="akis-otel">Kat 2 · 09:40</span>
@@ -395,7 +395,7 @@
               <p class="ekran-not">Görevli kapıdaki kareyi okuttu. Üç buton, tek dokunuş, yazı yok.</p>
             </div>
 
-            <div class="kesif-ekran" data-ekran="ariza" role="group" aria-label="Arıza ekranı">
+            <div class="kesif-ekran" data-ekran="ariza" id="ekran-ariza" role="tabpanel" aria-labelledby="sekme-ariza" tabindex="0">
               <div class="uyg-ust">
                 <span class="akis-baslik">Bir şey bozuk</span>
                 <span class="akis-otel">Oda 118</span>
@@ -415,7 +415,7 @@
               <p class="ekran-not">Arıza bildirimi kendiliğinden iş emrine döner; süre o an başlar.</p>
             </div>
 
-            <div class="kesif-ekran" data-ekran="gorev" role="group" aria-label="Görev ekranı">
+            <div class="kesif-ekran" data-ekran="gorev" id="ekran-gorev" role="tabpanel" aria-labelledby="sekme-gorev" tabindex="0">
               <div class="uyg-ust">
                 <span class="nabiz" aria-hidden="true"></span>
                 <span class="akis-baslik">Kumanda</span>
@@ -429,7 +429,7 @@
               <p class="ekran-not">Kırmızı varsa en üstte, devasa. Kırmızı yoksa ekran yeşildir.</p>
             </div>
 
-            <div class="kesif-ekran" data-ekran="malzeme" role="group" aria-label="Malzeme ekranı">
+            <div class="kesif-ekran" data-ekran="malzeme" id="ekran-malzeme" role="tabpanel" aria-labelledby="sekme-malzeme" tabindex="0">
               <div class="uyg-ust">
                 <span class="akis-baslik">Teslim alındı</span>
                 <span class="akis-otel">7,5 Kg domates</span>

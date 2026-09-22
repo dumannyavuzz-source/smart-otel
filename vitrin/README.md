@@ -147,6 +147,10 @@ eklenmedi). Boru hattı vitrin sayfasıyla denendi: 780×1688, 62 KB.
 - Sayfalarda `<img>` yoktur; her görsel kodla çizilir. Bu yüzden "tembel yükleme" (lazy loading) uygulanacak bir
   şey yoktur — tek görsel paylaşım kartıdır ve sayfada görünmez.
 - Yazı: başlıklar Cormorant Garamond (400–500), gövde Inter (400–600), veri JetBrains Mono. Kalın (700+) başlık yoktur.
+- **Erişilebilirlik tabanları** (denetim · Madde 10 · `docs/decisions/018-erisilebilirlik.md`):
+  sayfa metni en az **13 piksel**, kontrast en az **4,5:1** (dört zeminde de ölçüldü), mobilde
+  dokunma alanı en az **44 piksel**. Telefon maketinin içi bu kuralların dışındadır: orası bir
+  ürün ekranının küçültülmüş resmidir. Yeni renk ya da boyut eklenirken bu tabanlar korunur.
 - Betikler `defer` ile yüklenir; sayfa metni betikleri beklemez.
 - **Menü telefonda açılır kutudur** (denetim · Madde 6 · `docs/decisions/014-mobil-menu.md`).
   Üst çubuk tek satır: marka · menü düğmesi · "30 Gün Ücretsiz Dene". Düğmeye dokununca beş sayfa listelenir.
