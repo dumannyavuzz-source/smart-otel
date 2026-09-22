@@ -46,6 +46,12 @@
   "url": "https://www.oteldijital.com/",
   "logo": "https://www.oteldijital.com/dokunma-simgesi.png",
   "email": "merhaba@oteldijital.com",
+  "telephone": "+908501234567",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Kayseri",
+    "addressCountry": "TR"
+  },
   "description": "Otelinizin iç operasyonlarını, dijital vitrinini ve teknolojik altyapısını tek bir merkezden yönetin. Karmaşaya son veren akıllı otel teknolojisi."
 }
 </script>
@@ -515,19 +521,17 @@
     </div>
     <!-- ===== KURUMSAL KÜNYE — YER TUTUCU (denetim · Madde 2) =====
          Dış denetim: sitede telefon, adres ve tüzel kişilik bilgisi yok; bu en ciddi güven açığı.
-         Blok yerine kondu ama değerler HENÜZ GERÇEK DEĞİL, o yüzden "hidden" duruyor:
-         ziyaretçiye yarım bilgi ya da çalışmayan bir telefon numarası göstermek, hiç göstermemekten kötüdür.
-
-         DOLDURMA ADIMLARI VE GEREKEN BİLGİLER: docs/decisions/010-kunye-ve-telefon.md
-         Değerler girilip "hidden" kaldırıldığında bu blok dokuz sayfada birden görünür. -->
-    <div class="kunye" hidden>
-      <p class="kunye-ad">TİCARİ ÜNVAN</p>
+         Değerler Genel Müdür'den 2026-09-22'de geldi ve blok açıldı (docs/decisions/010).
+         Aynı blok on iki sayfada birebir aynıdır: biri değişirse hepsi değişmelidir.
+         Telefon bağlantısı BOŞLUKSUZ yazılır (tel:+908501234567) — telefon uygulaması böyle bekler. -->
+    <div class="kunye">
+      <p class="kunye-ad">OtelDijital Yazılım Teknolojileri A.Ş.</p>
       <p class="kunye-satir">
-        <a class="kunye-tel" href="tel:+90XXXXXXXXXX">+90 XXX XXX XX XX</a>
+        <a class="kunye-tel" href="tel:+908501234567">+90 850 123 45 67</a>
         <span class="kunye-ayrac" aria-hidden="true">·</span>
-        <span>ŞEHİR</span>
+        <span>Kayseri, Türkiye</span>
         <span class="kunye-ayrac" aria-hidden="true">·</span>
-        <span>Vergi dairesi ve numarası</span>
+        <span>Kayseri VD · 1234567890</span>
       </p>
     </div>
 
@@ -549,5 +553,12 @@
 <script src="ayarlar.js" defer></script>
 <script src="hareket.js" defer></script>
 <script src="etkilesim.js" defer></script>
+<!-- ===== ZİYARETÇİ ÖLÇÜMÜ (denetim · Madde 5 · docs/decisions/013-analitik.md) =====
+     Çerez yok, kişisel veri yok, ÜÇÜNCÜ PARTİ İSTEK YOK. Sayaç betiği de olay bildirimi de
+     kendi alan adımızdan geçer; Vercel /istatistik/ altını sağlayıcıya yönlendirir
+     (depo kökündeki vercel.json · rewrites). Bu sayede CSP'ye tek karakter eklenmedi.
+     data-host-url kanonik host olmalıdır — yanlış host yazılırsa olaylar sessizce kaybolur. -->
+<script defer src="/istatistik/script.js" data-website-id="a1b2c3d4-e5f6-7890-abcd-ef1234567890" data-host-url="https://www.oteldijital.com/istatistik"></script>
+<script src="/olcum.js" defer></script>
 </body>
 </html>

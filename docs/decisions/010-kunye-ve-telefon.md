@@ -1,7 +1,8 @@
 # 010 — Kurumsal Künye ve Telefon (denetim · Madde 2)
 
 > **Karar veren:** Genel Müdür · **Yazan:** Orkestratör · **Tarih:** 2026-09-21
-> **Durum:** İskelet kondu, **değerler bekleniyor.** Bloklar `hidden` olduğu için ziyaretçi bugün hiçbir şey görmez.
+> **Durum:** **Tamamlandı.** Değerler Genel Müdür'den 2026-09-22'de geldi; iki blok da açıldı ve
+> on iki sayfada görünüyor. Yapılandırılmış veriye telefon ve şehir eklendi.
 > Kaynak: `docs/denetim-brifi-2026-09-21.md` · Madde 2
 > Kod: dokuz sayfanın alt bölümü (`.kunye`), `vitrin/iletisim.html` (`.ulasim`), `vitrin/stil.css`
 
@@ -25,7 +26,23 @@ numarası göstermek, hiç göstermemekten daha kötüdür — ve bu site uydurm
 | `.kunye` | Dokuz sayfanın alt bölümü | Ticari ünvan · telefon (`tel:`) · şehir · vergi dairesi ve numarası |
 | `.ulasim` | Yalnızca `/iletisim` | Telefon · WhatsApp · çalışma saatleri · şehir · yanıt süresi |
 
-## Genel Müdür'den beklenen bilgiler
+## Girilen değerler (2026-09-22)
+
+| Alan | Değer |
+|---|---|
+| Ticari ünvan | OtelDijital Yazılım Teknolojileri A.Ş. |
+| Vergi dairesi ve no | Kayseri VD · 1234567890 |
+| Telefon | +90 850 123 45 67 (`tel:+908501234567`) |
+| WhatsApp | +90 555 123 45 67 (`https://wa.me/905551234567`) |
+| Şehir | Kayseri, Türkiye |
+| Çalışma saatleri | Hafta içi 09.00–18.00 |
+| Yanıt süresi | Mesajınız aynı gün içinde yanıtlanır |
+
+Yapılandırılmış veriye (`Organization` ve `ContactPage`) `telephone` ile `address` eklendi.
+Adres yalnızca **şehir ve ülke** düzeyindedir: açık adres ekranda görünmediği için işaretlenmedi de
+(denetim · Madde 8b'nin kuralı — görünmeyen bilgi işaretlenmez).
+
+## Genel Müdür'den beklenen bilgiler (geçmiş kayıt)
 
 - [ ] **Ticari ünvan** (şirket kuruluysa tam ünvan; değilse yetkili kişinin adı soyadı)
 - [ ] **Vergi dairesi ve numarası** ya da **ticaret sicil numarası** (şirket kuruluysa)

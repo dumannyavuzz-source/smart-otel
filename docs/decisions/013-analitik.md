@@ -1,7 +1,8 @@
 # 013 — Çerezsiz Analitik, Kendi Alan Adımız Üzerinden (denetim · Madde 5)
 
 > **Karar veren:** Genel Müdür · **Yazan:** Orkestratör · **Tarih:** 2026-09-21
-> **Durum:** Kod hazır, **ölçüm HENÜZ AÇIK DEĞİL.** Açmak için tek adım kaldı: hesap (aşağıda).
+> **Durum:** **Açıldı.** Site kimliği Genel Müdür'den 2026-09-22'de geldi; sayaç etiketi on iki
+> sayfaya kondu. Panelde trafiğin ve sekiz olayın göründüğü canlıda doğrulanmalı (dağıtım listesi · 6.13).
 > Kaynak: `docs/denetim-brifi-2026-09-21.md` · Madde 5
 > Kod: `vitrin/olcum.js`, `vitrin/etkilesim.js` (iki haber), `vercel.json` (`rewrites`)
 
@@ -60,7 +61,16 @@ Destek Al" düğmelerinin çalışıp çalışmadığı ancak böyle görülür.
    ama sunucuya hiçbir şey gitmez; haber de yalnızca sunucu kabul ettiği yerde verilir. Aksi hâlde
    dönüşüm sayısı botlarla şişerdi.
 
-## Ölçümü açmak için kalan tek adım
+## Ölçüm açıldı (2026-09-22)
+
+Site kimliği: `a1b2c3d4-e5f6-7890-abcd-ef1234567890`. Etiket on iki sayfanın `</body>` satırından
+önce duruyor ve `data-host-url` kanonik hostu gösteriyor:
+`https://www.oteldijital.com/istatistik`.
+
+**CSP'ye tek karakter eklenmedi** — sayaç kendi alan adımızdan geçtiği için `script-src 'self'`
+olduğu gibi kaldı. Aşağıdaki bölüm, bu adımın neden böyle kurulduğunu anlatan özgün kaydıdır.
+
+## Ölçümü açmak için kalan tek adım (geçmiş kayıt)
 
 Bugün sayfalara **sayaç etiketi eklenmedi.** Sebep: hesap yokken etiket koymak, her ziyaretçiye
 hiçbir işe yaramayan iki istek yükler ve sitenin 23 KB / 6 istek çizgisini bozardı.

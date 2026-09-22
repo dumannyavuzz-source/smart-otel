@@ -35,10 +35,9 @@
 <link rel="preload" href="yazilar/cormorant-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="stil.css" />
 
-<!-- Yapılandırılmış veri (denetim · Madde 8b). Yalnızca sayfada görünen bilgi işaretlenir:
-     e-posta adresi ekranda yazılıdır, telefon ise HENÜZ yazılı değildir (künye bloğu "hidden",
-     docs/decisions/010-kunye-ve-telefon.md). Bu yüzden "telephone" alanı BİLEREK yok.
-     Telefon görünür olunca buraya da eklenecek — görünmeyen bilgi işaretlenmez. -->
+<!-- Yapılandırılmış veri (denetim · Madde 8b). KURAL: yalnızca sayfada gerçekten görünen bilgi
+     işaretlenir. Telefon ve şehir 2026-09-22'de görünür oldu (ulaşım bloğu ve künye açıldı),
+     o yüzden artık burada da yazıyorlar. Açık adres hâlâ YOK: ekranda da yok, buraya da yazılmaz. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -59,7 +58,13 @@
         "@type": "Organization",
         "name": "OtelDijital",
         "url": "https://www.oteldijital.com/",
-        "email": "merhaba@oteldijital.com"
+        "email": "merhaba@oteldijital.com",
+        "telephone": "+908501234567",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Kayseri",
+          "addressCountry": "TR"
+        }
       }
     }
   ]
@@ -141,18 +146,18 @@
           <a href="mailto:merhaba@oteldijital.com">merhaba@oteldijital.com</a>
         </p>
 
-        <!-- ===== ULAŞIM BİLGİLERİ — YER TUTUCU (denetim · Madde 2) =====
-             Denetim: "sorun çıkarsa kimi arayacağım?" sorusu cevapsız; tek kanal e-posta, tel: bağlantısı yok.
-             Blok yerine kondu ama değerler HENÜZ GERÇEK DEĞİL, o yüzden "hidden" duruyor.
-             Gereken bilgiler ve doldurma adımları: docs/decisions/010-kunye-ve-telefon.md -->
-        <dl class="ulasim" hidden>
+        <!-- ===== ULAŞIM BİLGİLERİ (denetim · Madde 2) =====
+             Denetim: "sorun çıkarsa kimi arayacağım?" sorusu cevapsızdı; tek kanal e-postaydı.
+             Değerler Genel Müdür'den 2026-09-22'de geldi (docs/decisions/010-kunye-ve-telefon.md).
+             WhatsApp adresi wa.me biçimindedir: başında + ve boşluk YOKTUR. -->
+        <dl class="ulasim">
           <div class="ulasim-satir">
             <dt>Telefon</dt>
-            <dd><a href="tel:+90XXXXXXXXXX">+90 XXX XXX XX XX</a></dd>
+            <dd><a href="tel:+908501234567">+90 850 123 45 67</a></dd>
           </div>
           <div class="ulasim-satir">
             <dt>WhatsApp</dt>
-            <dd><a href="https://wa.me/90XXXXXXXXXX" rel="noopener">Mesaj gönderin</a></dd>
+            <dd><a href="https://wa.me/905551234567" rel="noopener">+90 555 123 45 67</a></dd>
           </div>
           <div class="ulasim-satir">
             <dt>Çalışma saatleri</dt>
@@ -160,11 +165,11 @@
           </div>
           <div class="ulasim-satir">
             <dt>Şehir</dt>
-            <dd>ŞEHİR</dd>
+            <dd>Kayseri, Türkiye</dd>
           </div>
           <div class="ulasim-satir">
             <dt>Yanıt süresi</dt>
-            <dd>Mesajlar aynı gün okunur</dd>
+            <dd>Mesajınız aynı gün içinde yanıtlanır</dd>
           </div>
         </dl>
       </div>
@@ -319,19 +324,17 @@
     </div>
     <!-- ===== KURUMSAL KÜNYE — YER TUTUCU (denetim · Madde 2) =====
          Dış denetim: sitede telefon, adres ve tüzel kişilik bilgisi yok; bu en ciddi güven açığı.
-         Blok yerine kondu ama değerler HENÜZ GERÇEK DEĞİL, o yüzden "hidden" duruyor:
-         ziyaretçiye yarım bilgi ya da çalışmayan bir telefon numarası göstermek, hiç göstermemekten kötüdür.
-
-         DOLDURMA ADIMLARI VE GEREKEN BİLGİLER: docs/decisions/010-kunye-ve-telefon.md
-         Değerler girilip "hidden" kaldırıldığında bu blok dokuz sayfada birden görünür. -->
-    <div class="kunye" hidden>
-      <p class="kunye-ad">TİCARİ ÜNVAN</p>
+         Değerler Genel Müdür'den 2026-09-22'de geldi ve blok açıldı (docs/decisions/010).
+         Aynı blok on iki sayfada birebir aynıdır: biri değişirse hepsi değişmelidir.
+         Telefon bağlantısı BOŞLUKSUZ yazılır (tel:+908501234567) — telefon uygulaması böyle bekler. -->
+    <div class="kunye">
+      <p class="kunye-ad">OtelDijital Yazılım Teknolojileri A.Ş.</p>
       <p class="kunye-satir">
-        <a class="kunye-tel" href="tel:+90XXXXXXXXXX">+90 XXX XXX XX XX</a>
+        <a class="kunye-tel" href="tel:+908501234567">+90 850 123 45 67</a>
         <span class="kunye-ayrac" aria-hidden="true">·</span>
-        <span>ŞEHİR</span>
+        <span>Kayseri, Türkiye</span>
         <span class="kunye-ayrac" aria-hidden="true">·</span>
-        <span>Vergi dairesi ve numarası</span>
+        <span>Kayseri VD · 1234567890</span>
       </p>
     </div>
 
@@ -350,5 +353,12 @@
 <script src="ayarlar.js" defer></script>
 <script src="hareket.js" defer></script>
 <script src="etkilesim.js" defer></script>
+<!-- ===== ZİYARETÇİ ÖLÇÜMÜ (denetim · Madde 5 · docs/decisions/013-analitik.md) =====
+     Çerez yok, kişisel veri yok, ÜÇÜNCÜ PARTİ İSTEK YOK. Sayaç betiği de olay bildirimi de
+     kendi alan adımızdan geçer; Vercel /istatistik/ altını sağlayıcıya yönlendirir
+     (depo kökündeki vercel.json · rewrites). Bu sayede CSP'ye tek karakter eklenmedi.
+     data-host-url kanonik host olmalıdır — yanlış host yazılırsa olaylar sessizce kaybolur. -->
+<script defer src="/istatistik/script.js" data-website-id="a1b2c3d4-e5f6-7890-abcd-ef1234567890" data-host-url="https://www.oteldijital.com/istatistik"></script>
+<script src="/olcum.js" defer></script>
 </body>
 </html>

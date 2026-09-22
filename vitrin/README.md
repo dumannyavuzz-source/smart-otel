@@ -200,6 +200,16 @@ ve kapanışlardaki "30 Gün Ücretsiz Dene" düğmeleri gider; "Giriş Yap" (ü
 `app.oteldijital.com/giris` adresine; Kurumsal plandaki "Görüşme ayarla" ve iletişim sayfasındaki adres
 `mailto:merhaba@oteldijital.com`'a gider. Bu posta kutusunun canlıya çıkmadan çalıştığı doğrulanmalıdır.
 
+**İletişim artık tek kanal değil** (denetim · Madde 2 · `docs/decisions/010`): on iki sayfanın alt
+bölümünde kurumsal künye (ticari ünvan · telefon · şehir · vergi dairesi) görünür, `/iletisim`
+sayfasında ayrıca WhatsApp, çalışma saatleri ve yanıt süresi yazar. Telefon bağlantısı boşluksuz
+yazılır (`tel:+908501234567`), WhatsApp adresinde `+` ve boşluk yoktur (`wa.me/905551234567`).
+Künye bloğu on iki dosyada birebir aynıdır: biri değişirse hepsi değişmelidir.
+
+**Ziyaretçi ölçümü açıktır** (denetim · Madde 5 · `docs/decisions/013`): her sayfanın sonunda iki
+satır vardır — sayaç betiği ve `olcum.js`. İkisi de kendi alan adımızdan geçer, çerez kullanmaz ve
+üçüncü parti istek yapmaz; bu yüzden CSP'ye hiçbir ekleme gerekmedi.
+
 **İletişim formu Ortak Beyin'e yazar.** Form yalnızca İletişim sayfasındadır (`/iletisim`) — ikinci bir kopyası yoktur.
 "Gönder" mesajı Supabase'deki `iletisim_formu` tablosuna bırakır; sayfa yenilenmez, alanların yerini onay ekranı alır.
 Ziyaretçi anahtarı bu tabloya yalnızca yazabilir, okuyamaz; kimse silemez. Aynı adresten saatte 5, toplamda

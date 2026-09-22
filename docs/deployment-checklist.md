@@ -124,7 +124,11 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       `/dijital-vitrin.html` kalıcı olarak uzantısız adrese yönlenmelidir. Bunu `vercel.json` içindeki
       `"cleanUrls": true` sağlar; ayar Vercel panelinden değil, bu dosyadan gelir.
       `vercel.json` yorum kabul etmez; değişiklikten sonra `node -e "require(./vercel.json)"` ile geçerliliği denetlenir.
-- [ ] **6.6** `merhaba@oteldijital.com` posta kutusunun **gerçekten çalıştığını** doğrula (vitrindeki tek iletişim yolu).
+- [ ] **6.6** İletişim kanallarının **gerçekten çalıştığını** doğrula: `merhaba@oteldijital.com`
+      posta kutusu, `+90 850 123 45 67` telefonu ve `+90 555 123 45 67` WhatsApp numarası.
+      Üçü de on iki sayfanın alt bölümünde ya da `/iletisim` sayfasında yazılıdır; çalışmayan bir
+      numara göstermek hiç göstermemekten kötüdür (`docs/decisions/010`).
+      **Künye bilgilerinin doğruluğu** (ticari ünvan, vergi dairesi ve numarası) ayrıca teyit edilmeli.
 - [ ] **6.16** **Erişilebilirliği tarayıcı eklentisiyle doğrula** (denetim · Madde 10 · docs/decisions/018):
       axe ya da Lighthouse ile kritik/ciddi ihlal olmamalı. Bu bilgisayarda axe kurulu olmadığı ve
       yeni bağımlılık eklenmediği için yerel denetim elle yazılmış ölçüm betiğiyle yapıldı:
@@ -171,9 +175,8 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       her sayfanın `canonical` değeri `www` ile başlamalı. Google Rich Results Test ile `/`,
       `/dijital-vitrin`, `/teknolojik-altyapi`, `/fiyatlandirma` ve `/iletisim` hatasız geçmeli.
       Search Console'da tercih edilen adres `www` görünmeli.
-- [ ] **6.13** **Ölçümü aç ve doğrula** (denetim · Madde 5 · `docs/decisions/013-analitik.md`):
-      Umami Cloud hesabı açıldıktan sonra dokuz sayfaya iki satırlık sayaç etiketi eklenir.
-      Sonra canlıda: `oteldijital.com/istatistik/script.js` **200** dönmeli, panelde canlı trafik
+- [ ] **6.13** **Ölçümü canlıda doğrula** (denetim · Madde 5 · `docs/decisions/013-analitik.md`):
+      Sayaç etiketi on iki sayfaya kondu (site kimliği 2026-09-22'de girildi). Canlıda: `oteldijital.com/istatistik/script.js` **200** dönmeli, panelde canlı trafik
       görünmeli ve sekiz olay ayrı ayrı düşmeli. **CSP'ye dokunulmaz** — sayaç kendi alan adımızdan
       sunulduğu için `script-src 'self'` olduğu gibi kalır; gevşetme gerekirse kurulum yanlıştır.
 - [ ] **6.12** **Hata sayfalarını canlıda doğrula** (denetim · Madde 3 · `docs/decisions/011-hata-sayfalari.md`):
