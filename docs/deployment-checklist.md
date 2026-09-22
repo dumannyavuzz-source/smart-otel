@@ -168,12 +168,18 @@ Vitrin ayrı bir Vercel projesidir; uygulamayla ortak kodu yoktur (`vitrin/READM
       4. Uçak moduna al, uygulamayı kapat-aç — açılmalı (`worker-src 'self'`).
       Bir şey kırılırsa belirtisi net: ekran boş kalır ya da fotoğraf gelmez, konsol hangi
       direktifin engellediğini yazar.
-- [ ] **6.22** **Gerçek ekran görüntüleri** (denetim · Madde 1 · `docs/decisions/024`):
-      Bugün `/` ve `/ic-operasyon` sayfalarında dört **yer tutucu** duruyor; gerçek görseller
-      henüz depoda değil. Dosyalar `vitrin/gorseller/uygulama/` klasörüne konduğunda
-      (her ekran için **avif + webp**, oran 780 × 1688) her kartta yorumdaki `<picture>` açılır ve
-      yer tutucu silinir. Adımlar o klasördeki `README.md` dosyasında yazılı.
-      Sonra ölçülmeli: hero'ya yakın görsel ≤ 250 KB, toplam sayfa ≤ 1,5 MB, mobil LCP ≤ 2,5 sn.
+- [ ] **6.22** **Gerçek ekran görüntüleri** (denetim · Madde 1 · `docs/decisions/024` ve `027`):
+      `<picture>` etiketleri **açıldı**; `/` sayfasında iki, `/ic-operasyon` sayfasında dört görsel var.
+      Dosyalar bugün **geçici yer tutucudur** (grafit zemin, şampanya blok, 780 × 1688).
+      **Yapılacak tek iş:** gerçek ekran görüntülerini `vitrin/gorseller/uygulama/` klasörüne
+      **aynı sekiz adla** yazmak (`kat-gorevlisi`, `kumanda`, `is-emri`, `teslim` × `.avif`, `.webp`).
+      HTML'e dokunulmaz. Sonra:
+      1. `node araclar/kaynak-notu-taramasi.js` → sekiz dosyanın yerinde ve doğru biçimde olduğunu söyler.
+      2. Ölçüm: hero'ya yakın görsel ≤ 250 KB, toplam sayfa ≤ 1,5 MB, mobil LCP ≤ 2,5 sn.
+      3. Canlıda dört kartın da göründüğü gözle doğrulanır (kırık görsel simgesi olmamalı).
+      **Not:** `/` ve `/ic-operasyon` sayfalarındaki ilk iki görsel `fetchpriority="high"` taşır ama ikisi de
+      ilk ekranın altındadır. Gerçek dosyalar konduğunda bu, sayfanın asıl açılışıyla yarışır;
+      ölçümde LCP kötüleşirse bu iki etiketi `loading="lazy"` yapmak tek satırlık düzeltmedir.
 - [ ] **6.15** **Yeni sayfayı canlıda doğrula:** `www.oteldijital.com/ic-operasyon` açılmalı, menüdeki
       "İç Operasyon" oraya gitmeli ve menüdeki hiçbir bağlantı kök adrese gitmemeli
       (denetim · Madde 9 ve 15 · `docs/decisions/017-ana-sayfa-ve-ic-operasyon.md`).

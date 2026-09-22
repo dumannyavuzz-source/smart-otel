@@ -2186,8 +2186,10 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
 }
 .ekran-kart { margin: 0; min-width: 0; }
 .ekran-kart picture { display: block; }
-.ekran-kart img,
-.gorsel-yer {
+/* Görselin yüksekliği HTML'deki width/height'tan hesaplanır (780 × 1688): dosya inmeden önce
+   de yeri ayrılmış olur, indiğinde sayfa ZIPLAMAZ. Bu yüzden height: auto şarttır ve
+   etiketlerdeki ölçüler silinmemelidir. */
+.ekran-kart img {
   display: block;
   width: 100%;
   height: auto;
@@ -2195,25 +2197,6 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   border-radius: var(--kose);
   background: var(--kasmir-100);
 }
-/* Telefon oranı: araclar/ekran-goruntusu-al.js 780 × 1688 üretir. */
-.gorsel-yer {
-  aspect-ratio: 780 / 1688;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 18px;
-  text-align: center;
-}
-.gorsel-yer-ad {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--metin-soluk);
-}
-.gorsel-yer-not { font-size: 0.8125rem; color: var(--metin-cok-soluk); }
 .ekran-kart figcaption {
   margin-top: 14px;
   font-size: 0.8125rem;

@@ -49,7 +49,7 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 | `fiyatlandirma.html` | Sayfa başı, tarife (dört plan), sık sorulanlar, kapanış |
 | `iletisim.html` | Sayfa başı, adaçayı blok içinde form, "hangi konu hangi sayfada" listesi. **KVKK onayı açık eylemle alınır** (denetim · Madde 13 · `docs/decisions/021`): kutu işaretlenmeden form gönderilmez, veritabanı da onaysız satırı kabul etmez |
 | `kvkk.html` · `gizlilik-politikasi.html` · `cerez-politikasi.html` · `kullanim-sartlari.html` | **Dört yasal metin** (2026-09-22 · `docs/decisions/024` ve `025`). Ortak düzen: `.yasal--metin` — sola yaslı, satır uzunluğu 68 karakterle sınırlı. Dördü de `index, follow` ve sitemap içindedir. **Metinler siteyle uyumlu olmak zorundadır:** KVKK sayfası formda alınan altı alanı, adres özetini ve **12 aylık saklama süresini** sayar; Gizlilik ve Çerez sayfaları "çerez yok, üçüncü taraf yok" der; Kullanım Şartları'ndaki para birimi, KDV ve iptal cümleleri `/fiyatlandirma` sayfasıyla birebir aynıdır. Biri değişirse diğeri de değişir |
-| `gorseller/uygulama/` | Gerçek uygulama ekran görüntüleri (denetim · Madde 1). Bugün **boş**; sayfalarda aynı orandaki yer tutucular duruyor. Klasördeki `README.md` hangi dosyaların, neden ikişer uzantıyla gerektiğini anlatır |
+| `gorseller/uygulama/` | Uygulama ekran görüntüleri (denetim · Madde 1): dört ekran × iki uzantı = sekiz dosya. Bugün hepsi **geçici yer tutucudur** (`araclar/gecici-gorsel-uret.js` üretir; grafit zemin, şampanya blok, 780 × 1688). Gerçek görüntüler **aynı adlarla üzerine yazılır** — HTML'in değişmesi gerekmez. Klasördeki `README.md` ayrıntıyı anlatır |
 | `stil.css` | Beş sayfanın ortak görünümü: "Sakin Lüks — Aydınlık Premium" — uçuk krem zemin (#f9f8f6), antrasit yazı (#1c1c1a), adaçayı iletişim bloğu, şampanya yalnızca ana düğmenin zemininde, bronz yazı vurgusunda; serif başlık (Cormorant Garamond) + Inter — ikisi de `yazilar/` altından, kendi alan adımızdan. Tek kaynak `DESIGN_SYSTEM.md`, kararlar `docs/decisions/007`, `008` ve `009` |
 | `hareket.js` | Canlı akış animasyonu (yalnızca ana sayfada iş görür). Liste HTML'de zaten doludur; bu dosya yalnızca üstüne yeni satır ekler |
 | `etkilesim.js` | Altı etkileşim: kaydırdıkça beliren döngü hikâyesi, keşif alanındaki ekran değiştirme, görününce dolan check-up panosu, Ortak Beyin'e yazan iletişim formu ve kaydırınca üst çubuğa gelen ince çizgi. Her biri kendi öğesini bulamazsa sessizce durur; bu yüzden aynı üç betik bütün sayfalarda durabilir. **İçerik hiçbir koşulda betiğe emanet edilmez** (denetim · Madde 11 · `docs/decisions/019`): gizlemeyi betik yapar, ekranda olan hiç gizlenmez, kurulum hata verirse gizleme geri alınır ve gözcü çalışmazsa üç saniye sonra her şey açılır |
@@ -96,7 +96,8 @@ Fotoğraf yok; kart da sitenin kendisi gibi kodla çizilir. `paylasim.html` kayn
 | `tasma-denetimi.html` | Sayfayı 320–1400 px arası yedi genişlikte iframe içinde açar, sayfa dışına taşan öğeleri listeler. Geçici olarak `vitrin/` içine kopyalayıp sunucuyla açın (`http://localhost:5180/tasma-denetimi.html`); sonuç sayfanın altına yazılır. İşi bitince kopyayı silin. **Not:** dosyanın içindeki `index.html` adı elle değiştirilerek diğer sekiz sayfa da ölçülür |
 | `dokunma-simgesi-uret.js` | `dokunma-simgesi.png` üretir (180×180, koyu plaka üstünde şampanya kare): `node araclar/dokunma-simgesi-uret.js vitrin/dokunma-simgesi.png` |
 | `ekran-goruntusu-al.js` | **Gerçek uygulamadan** telefon ölçüsünde (390×844, 2x) ekran görüntüsü alır ve WebP'ye çevirir. Aşağıdaki "Ürün ekran görüntüleri" bölümüne bakın |
-| `kaynak-notu-taramasi.js` | **Kaynak notu sızıntısı taraması** (karar 024–025): `node araclar/kaynak-notu-taramasi.js`. Sayfaların GÖRÜNEN metninde dosya adı, karar numarası, "Genel Müdür kararı" gibi iç izleri arar ve her `<!--` için bir `-->` olduğunu sayar. Temizse 0, sızıntı varsa 1 döner. HTML değişen her işten sonra çalıştırılır |
+| `kaynak-notu-taramasi.js` | **Vitrin taraması — iki denetim** (karar 024–027): `node araclar/kaynak-notu-taramasi.js`. (1) Sayfaların GÖRÜNEN metninde dosya adı, karar numarası, "Genel Müdür kararı" gibi iç izleri arar ve her `<!--` için bir `-->` olduğunu sayar. (2) Sayfada adı geçen her görsel, stil ve betik dosyası gerçekten yerinde mi ve **gerçekten o biçimde mi** bakar (WebP'nin adını `.avif` yapmak kırık görsel demektir). Temizse 0, sorun varsa 1 döner. HTML ya da görsel değişen her işten sonra çalıştırılır |
+| `gecici-gorsel-uret.js` | **Geçici yer tutucu görselleri** yazar: `node araclar/gecici-gorsel-uret.js`. Sekiz dosya (dört ekran × avif + webp), 780 × 1688. **Gerçek görsellerin üzerine yazmaz:** klasördeki dosya yer tutucudan farklıysa dokunmaz. Baytlar betiğin içinde gömülüdür — bu bilgisayarda AVIF kodlayıcı yok, tarayıcı da AVIF yazamıyor |
 
 > **Uyarı:** Telefon genişliğini ölçmek için tarayıcıyı `--window-size=390,844` ile açmak **yanıltır**:
 > Windows pencereyi en az ~500 px yapar, sayfa 500 px'e göre dizilir, ekran görüntüsü 390 px'e kırpılır.
@@ -148,8 +149,11 @@ eklenmedi). Boru hattı vitrin sayfasıyla denendi: 780×1688, 62 KB.
 
 ## Mobil ve performans notları
 
-- Sayfalarda `<img>` yoktur; her görsel kodla çizilir. Bu yüzden "tembel yükleme" (lazy loading) uygulanacak bir
-  şey yoktur — tek görsel paylaşım kartıdır ve sayfada görünmez.
+- Sayfalarda artık **altı `<img>`** vardır: `/` sayfasında iki, `/ic-operasyon` sayfasında dört ekran görüntüsü
+  (karar 024 ve 027). Her biri `<picture>` içinde avif + webp olarak verilir, `width`/`height` her zaman
+  yazılıdır (780 × 1688) ve CSS `height: auto` der — oran bu ikisinden hesaplandığı için görsel inmeden
+  yeri ayrılır, indiğinde sayfa **zıplamaz**. İlk ikisi `fetchpriority="high"`, diğerleri `loading="lazy"`.
+  Bunların dışındaki her "ekran" hâlâ kodla çizilmiş temsildir.
 - Yazı: başlıklar Cormorant Garamond (400–500 + italik), gövde Inter (400–500), telefon maketindeki sayılar
   cihazın kendi monospace yazısı. Kalın (600+) yazı yoktur.
 - **Yazı dosyaları depodadır** (denetim · Madde 12 · `docs/decisions/020-font-self-host.md`): `yazilar/` altında
@@ -166,6 +170,10 @@ eklenmedi). Boru hattı vitrin sayfasıyla denendi: 780×1688, 62 KB.
   Yapı `<details>`/`<summary>` üzerine kuruludur: klavye ve ekran okuyucu desteği tarayıcıdan gelir.
   **Betik yüklenmezse liste açık gelir** (HTML'de `open` yazar), yani hiçbir sayfa erişilmez kalmaz.
   Bütün sayfalar alt bölümde de listelenir.
+- **Sayfada adı geçen her dosya yerinde mi?** (karar 027) Aynı betik ikinci bir denetim yapar: `<picture>`
+  seçtiği dosyayı bulamazsa bir alttakine **düşmez**, ziyaretçi kırık görsel görür. Bu yüzden her `src`,
+  `srcset` ve `href` hedefi diskte aranır, uzantısıyla içeriği karşılaştırılır. Dağıtımda üretilen
+  `ayarlar.js` ile sağlayıcıya yönlendirilen `/istatistik/` bu denetimin dışındadır.
 - **Kaynak notu sızıntısı taranır** (karar 024–025): bir HTML yorumunun açılış satırı silinirse iç notumuz
   ziyaretçiye düz metin olarak görünür — bu bir kez canlıda yaşandı. Tarama artık elle değil betikle yapılır:
   `node araclar/kaynak-notu-taramasi.js`. Sayfaların GÖRÜNEN metninde `-->`, `<!--`, `etkilesim.js`,
