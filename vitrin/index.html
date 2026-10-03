@@ -78,8 +78,8 @@
      Yeni bölüm eklenecekse önce hangisinin çıkacağına karar verilir. Ayrıntı isteyen içerik
      ana sayfaya değil, /ic-operasyon sayfasına gider.
 
-     KAYIT ADRESİ: Bütün "30 Gün Ücretsiz Dene" düğmeleri app.oteldijital.com/kayit adresine gider
-     (Genel Müdür, 2026-09-16). Adres değişirse beş sayfada birden güncellenir (docs/deployment-checklist.md · 6.3).
+     UYGULAMA ADRESİ: Bütün "30 Gün Ücretsiz Dene" ve "Giriş Yap" düğmeleri https://app.oteldijital.com adresine gider
+     (2026-10-03; önceki /giris ve /kayit yolları 404 veriyordu). Adres değişirse beş sayfada birden güncellenir (docs/deployment-checklist.md · 6.3).
      Hizmet sayfalarındaki "Bilgi Al" düğmeleri kayıt sayfasına DEĞİL, İletişim sayfasına (/iletisim) gider.
      ADRESLER UZANTISIZDIR (/dijital-vitrin): Vercel "cleanUrls" ile yayınlar, yerel sunucu da aynısını yapar.
      =================================================================== -->
@@ -117,8 +117,8 @@
          Bu düğmenin eski adı değiştirildi: takvim üzerinden ilerleyen canlı bir tanıtım akışımız
          olmadığı için o sözcük siteden tamamen kaldırıldı. Gerekçe: docs/decisions/015-cta-birligi.md -->
     <div class="ust-eylem">
-      <a class="ust-giris" href="https://app.oteldijital.com/giris">Giriş Yap</a>
-      <a class="dugme dugme--ince" href="https://app.oteldijital.com/kayit"><span class="dugme-yazi"><span class="dugme-onek">30 Gün</span> Ücretsiz Dene</span></a>
+      <a class="ust-giris" href="https://app.oteldijital.com">Giriş Yap</a>
+      <a class="dugme dugme--ince" href="https://app.oteldijital.com"><span class="dugme-yazi"><span class="dugme-onek">30 Gün</span> Ücretsiz Dene</span></a>
     </div>
   </div>
 </header>
@@ -143,7 +143,7 @@
            Önceki düzende birincil düğme yalnızca sayfayı aşağı kaydırıyordu; 30 günlük ücretsiz
            deneme ise ikincil konumdaydı. Yerleri değişti. İkincil çağrı sessiz bağlantı biçimindedir. -->
       <div class="cta-satir">
-        <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+        <a class="dugme dugme--dev" href="https://app.oteldijital.com">30 Gün Ücretsiz Dene</a>
         <a class="baglanti" href="#dongu">Nasıl çalışır?</a>
       </div>
 
@@ -508,7 +508,7 @@
   <section class="kolon kapanis">
     <h2>Bu akşamki vardiyada kullanmaya başlayın.</h2>
     <p>Kurulum 20 dakika. Personelin öğrenmesi bir kahve molası.</p>
-    <a class="dugme dugme--dev" href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+    <a class="dugme dugme--dev" href="https://app.oteldijital.com">30 Gün Ücretsiz Dene</a>
     <p class="guvence-tek">✓ Kredi kartı yok &nbsp;·&nbsp; ✓ Taahhüt yok &nbsp;·&nbsp; ✓ 30 gün boyunca tüm özellikler</p>
     <a class="baglanti" href="/fiyatlandirma">Fiyatları Gör</a>
   </section>
@@ -542,8 +542,8 @@
         <div class="alt-grup">
           <span class="alt-baslik">Hızlı erişim</span>
           <nav class="alt-baglantilar" aria-label="Hızlı erişim">
-            <a href="https://app.oteldijital.com/giris">Giriş Yap</a>
-            <a href="https://app.oteldijital.com/kayit">30 Gün Ücretsiz Dene</a>
+            <a href="https://app.oteldijital.com">Giriş Yap</a>
+            <a href="https://app.oteldijital.com">30 Gün Ücretsiz Dene</a>
             <a href="mailto:merhaba@oteldijital.com">merhaba@oteldijital.com</a>
           </nav>
         </div>

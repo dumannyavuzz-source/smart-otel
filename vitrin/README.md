@@ -191,7 +191,7 @@ ortam değişkenleri `SUPABASE_URL` ve `SUPABASE_ANON_KEY` (`docs/deployment-che
 |---|---|
 | `oteldijital.com` | Ana sayfa (iç operasyon) |
 | `oteldijital.com/dijital-vitrin` · `/teknolojik-altyapi` · `/fiyatlandirma` · `/iletisim` | Diğer dört sayfa |
-| `app.oteldijital.com` | Personel yazılımı (`app/`): giriş (`/giris`), kayıt (`/kayit`) ve misafir yorum sayfası |
+| `app.oteldijital.com` | Personel yazılımı (`app/`). Vitrindeki bütün giriş ve deneme düğmeleri doğrudan bu adrese gider |
 
 > **`vercel.json` dosyasına ASLA yorum yazılmaz.** JSON'da yorum yoktur; yaygın `"//": "..."` hilesi de burada
 > çalışmaz. Vercel dosyayı katı bir şemaya göre doğrular ve tanımadığı her anahtarda dağıtımı durdurur:
@@ -210,9 +210,9 @@ eğik çizgi konmaz, böylece aynı sayfanın iki adresi olmaz. Bilgisayarda
 (Genel Müdür kararı, 2026-09-21 · `docs/decisions/008`).
 
 Alan adları Genel Müdür tarafından onaylandı (2026-09-16). Sayfalardaki bağlantılar:
-Kayıt sayfasına (`app.oteldijital.com/kayit`) her sayfanın üst çubuğundaki düğme ile ana sayfa, fiyat sayfası
+Uygulamaya (`https://app.oteldijital.com`) her sayfanın üst çubuğundaki düğme ile ana sayfa, fiyat sayfası
 ve kapanışlardaki "30 Gün Ücretsiz Dene" düğmeleri gider; "Giriş Yap" (üst çubuk ve alt bölüm)
-`app.oteldijital.com/giris` adresine; Kurumsal plandaki "Görüşme ayarla" ve iletişim sayfasındaki adres
+de aynı adrese (2026-10-03: eski `/giris` ve `/kayit` yolları 404 veriyordu); Kurumsal plandaki "Görüşme ayarla" ve iletişim sayfasındaki adres
 `mailto:merhaba@oteldijital.com`'a gider. Bu posta kutusunun canlıya çıkmadan çalıştığı doğrulanmalıdır.
 
 **İletişim artık tek kanal değil** (denetim · Madde 2 · `docs/decisions/010`): on iki sayfanın alt

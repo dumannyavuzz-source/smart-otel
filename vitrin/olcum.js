@@ -55,9 +55,12 @@
     if (!bag) return;
     var adres = bag.getAttribute('href') || '';
 
-    if (adres.indexOf('app.oteldijital.com/kayit') !== -1) {
-      gonder('Deneme kaydı', { bolum: bolumAdi(bag), metin: (bag.textContent || '').trim().slice(0, 40) });
-    } else if (adres.indexOf('app.oteldijital.com/giris') !== -1) {
+    // İki düğme de aynı adrese (app.oteldijital.com) gider; hangisi olduğu yazısından anlaşılır.
+    var uygulamaya = adres.indexOf('app.oteldijital.com') !== -1;
+    var yazi = (bag.textContent || '').trim();
+    if (uygulamaya && yazi.indexOf('Giriş') === -1) {
+      gonder('Deneme kaydı', { bolum: bolumAdi(bag), metin: yazi.slice(0, 40) });
+    } else if (uygulamaya) {
       gonder('Giriş yap', { bolum: bolumAdi(bag) });
     } else if (adres.indexOf('mailto:') === 0) {
       gonder('E-posta', { bolum: bolumAdi(bag) });
