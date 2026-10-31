@@ -3,10 +3,12 @@
 //   * Trafik lambası: yeşil → sarı (sürenin yarısından azı kaldı) → kırmızı (süre geçti).
 //   * "Aldım": sahipsiz işi üstüne alır. "Çözdüm": kendi işini kapatır (isteğe bağlı fotoğraf).
 //   * Offline: liste telefonda durur; Aldım/Çözdüm önce telefona yazılır, postacı internet gelince gönderir.
+//     Sunucuda doğrulanana kadar iş "onay bekliyor" diye görünür (karar 028).
 //     Sunucu kuralları (yalnızca atanan çözer, çözülünce kilit) veritabanındadır; telefon sadece "der".
 import { telefonDeposu, type IsEmri } from './telefonDeposu';
+import { kuyruk, type Kayit } from './kayitDeposu';
 import { gidenKutusunaKoy } from './beyanlar';
-import { aktifKullanici } from './kullanici';
+import { aktifBaglam, aktifKullanici, ayniBaglamMi } from './kullanici';
 import { ortakBeyin } from './ortakBeyin';
 import { PAKET_OLAYI, cevrimici, haberVer } from './olaylar';
 
@@ -54,41 +56,81 @@ export function isiGetir(id: string): Promise<IsEmri | undefined> {
   return telefonDeposu.isEmirleri.get(id);
 }
 
-// "Aldım": önce telefon, sonra mektup. Sunucu "bu iş zaten başkasında" derse sunucu haklıdır (ilk alan kazanır).
-export async function isiAl(is: IsEmri): Promise<void> {
+// "Aldım": önce telefon, sonra kayıt kutusu. Telefondaki iş "onay bekliyor" diye işaretlenir; sunucu
+// doğrulayınca işaret kalkar. Sunucu "bu iş başkasında" derse sunucu haklıdır: kayıt nedeniyle saklanır,
+// liste sunucunun gerçeğine döner (karar 028).
+export async function isiAl(is: IsEmri): Promise<string> {
   const benimId = aktifKullanici();
   if (!benimId) throw new Error('Giriş gerekli.');
   const degisiklik = { assigned_to: benimId, status: 'in_progress' as const };
-  await telefonDeposu.isEmirleri.update(is.id, degisiklik);
-  await gidenKutusunaKoy('work_orders', degisiklik, { islem: 'guncelle', kosul: { id: is.id } });
+  // Önce kayıt: yazılamazsa telefondaki iş, arkasında kayıt olmayan bir "onay bekliyor"la kalmasın.
+  const id = await gidenKutusunaKoy('work_orders', degisiklik, {
+    islem: 'guncelle',
+    kosul: { id: is.id },
+    otelId: is.hotel_id,
+    ozet: `Oda ${is.oda_no} · İş emri: Aldım`,
+  });
+  await telefonDeposu.isEmirleri.update(is.id, { ...degisiklik, onayBekliyor: true });
+  return id;
 }
 
 // "Çözdüm": kim + saat sunucuda yazılır (imza). Fotoğraf varsa önce o yüklenir.
-export async function isiCoz(is: IsEmri, fotograf?: Blob | null): Promise<void> {
+export async function isiCoz(is: IsEmri, fotograf?: Blob | null): Promise<string> {
   const yol = `${is.hotel_id}/resolutions/${is.id}.jpg`;
   const degisiklik = { status: 'resolved' as const, ...(fotograf ? { resolved_photo_path: yol } : {}) };
-  await telefonDeposu.isEmirleri.update(is.id, { status: 'resolved' });
-  await gidenKutusunaKoy('work_orders', degisiklik, {
+  const id = await gidenKutusunaKoy('work_orders', degisiklik, {
     islem: 'guncelle',
     kosul: { id: is.id },
+    otelId: is.hotel_id,
+    ozet: `Oda ${is.oda_no} · İş emri: Çözdüm`,
     ...(fotograf ? { fotograf: { veri: fotograf, yol } } : {}),
   });
+  await telefonDeposu.isEmirleri.update(is.id, { status: 'resolved', onayBekliyor: true });
+  return id;
 }
 
-// Telefondaki listeye, henüz gönderilmemiş Aldım/Çözdüm'leri yeniden uygula.
-// Böylece sunucudan inen eski liste, bodrumda yapılan işi ezmez.
-export async function bekleyenleriUygula(): Promise<void> {
-  const mektuplar = await telefonDeposu.gidenKutusu.orderBy('sira').toArray();
-  for (const m of mektuplar) {
-    if (m.tablo !== 'work_orders' || m.islem !== 'guncelle') continue;
-    const id = m.kosul?.id;
+// Kuyruktaki (henüz sunucuda doğrulanmamış) Aldım/Çözdüm'ler — yalnızca GİRİŞ YAPAN kişinin, AKTİF
+// oteldeki kayıtları. Ortak telefonda başkasının ya da diğer otelin bekleyen işi bu listeyi değiştirmez;
+// sahibi o otelde tekrar girince yine uygulanır (kayıt silinmez).
+async function bekleyenGuncellemeler(): Promise<Kayit[]> {
+  const { kullanici, otel } = aktifBaglam();
+  return (await kuyruk(kullanici, otel)).filter((k) => k.tablo === 'work_orders' && k.islem === 'guncelle');
+}
+
+async function uygula(kayitlar: Kayit[]): Promise<void> {
+  for (const k of kayitlar) {
+    const id = k.kosul?.id;
     if (typeof id !== 'string') continue;
-    const { assigned_to, status } = m.icerik as Partial<Pick<IsEmri, 'assigned_to' | 'status'>>;
+    const is = await telefonDeposu.isEmirleri.get(id);
+    if (!is || is.hotel_id !== k.otelId) continue;            // iş başka otelin: dokunma
+    const { assigned_to, status } = k.icerik as Partial<Pick<IsEmri, 'assigned_to' | 'status'>>;
     await telefonDeposu.isEmirleri.update(id, {
       ...(assigned_to !== undefined ? { assigned_to } : {}),
       ...(status !== undefined ? { status } : {}),
+      onayBekliyor: true,
     });
   }
+}
+
+// Telefondaki listeye, henüz doğrulanmamış Aldım/Çözdüm'leri yeniden uygula.
+// Böylece sunucudan inen eski liste, bodrumda yapılan işi ezmez. Reddedilenler uygulanmaz:
+// onlarda sunucunun gerçeği geçerlidir.
+export async function bekleyenleriUygula(): Promise<void> {
+  await uygula(await bekleyenGuncellemeler());
+}
+
+// Postacı bir Aldım/Çözdüm'ün sonucunu (tamamlandı ya da reddedildi) öğrenince telefondaki işi
+// sunucunun gerçek haline çeker. Hâlâ kuyrukta bekleyen başka bir güncelleme varsa o yine üstüne uygulanır.
+export async function isEmriniSunucuyaGoreDuzelt(satir: Record<string, unknown>): Promise<void> {
+  const id = satir.id;
+  if (typeof id !== 'string' || !(await telefonDeposu.isEmirleri.get(id))) return;
+  await telefonDeposu.isEmirleri.update(id, {
+    assigned_to: typeof satir.assigned_to === 'string' ? satir.assigned_to : null,
+    status: satir.status as IsEmri['status'],
+    onayBekliyor: false,
+  });
+  await uygula((await bekleyenGuncellemeler()).filter((k) => k.kosul?.id === id));
+  haberVer(PAKET_OLAYI);
 }
 
 interface SunucuSatiri {
@@ -107,11 +149,14 @@ interface SunucuSatiri {
 // Açık iş emirlerini sunucudan indir (internet varken). Bekleyen yerel değişiklikler korunur.
 export async function isEmirleriniIndir(): Promise<void> {
   if (!cevrimici()) return;
+  const baglam = aktifBaglam();
   const { data, error } = await ortakBeyin()
     .from('work_orders')
     .select('id, hotel_id, room_id, severity, due_at, created_at, assigned_to, status, rooms(number), issue_reports(description)')
     .neq('status', 'resolved');
   if (error || !data) return;
+  // Liste yoldayken kişi ya da otel değiştiyse bu cevap eski kişinindir: yeni kişinin listesine yazılmaz.
+  if (!ayniBaglamMi(baglam)) return;
 
   const isler: IsEmri[] = (data as unknown as SunucuSatiri[]).map((s) => ({
     id: s.id,
@@ -126,10 +171,12 @@ export async function isEmirleriniIndir(): Promise<void> {
     status: s.status,
   }));
 
-  await telefonDeposu.transaction('rw', [telefonDeposu.isEmirleri, telefonDeposu.gidenKutusu], async () => {
+  // Kayıt kutusu ayrı bir veritabanı: bekleyenler işlemden önce okunur, işlem içinde uygulanır.
+  const bekleyenler = await bekleyenGuncellemeler();
+  await telefonDeposu.transaction('rw', [telefonDeposu.isEmirleri], async () => {
     await telefonDeposu.isEmirleri.clear();
     await telefonDeposu.isEmirleri.bulkPut(isler);
-    await bekleyenleriUygula();
+    await uygula(bekleyenler);
   });
   haberVer(PAKET_OLAYI);
 }

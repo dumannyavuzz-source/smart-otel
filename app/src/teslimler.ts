@@ -11,6 +11,7 @@
 // Offline: liste telefona iner, teslim önce telefona yazılır, fotoğraflar tepside bekler.
 // Postacı internet gelince önce fotoğrafları, sonra kaydı gönderir (eksi kattaki depo için).
 import { telefonDeposu, type Teslimat } from './telefonDeposu';
+import { KUYRUK_DURUMLARI, kayitDeposu } from './kayitDeposu';
 import { gidenKutusunaKoy } from './beyanlar';
 import { aktifKullanici, aktifProfil } from './kullanici';
 import { ortakBeyin } from './ortakBeyin';
@@ -54,7 +55,7 @@ export async function teslimAldim(
   fatura: Blob,
   hasar: Blob | null,
   not = '',
-): Promise<void> {
+): Promise<string> {
   const temizGelen = yuvarla(gelen);            // "7,456 Kg" diye bir şey yok: en çok iki ondalık
   if (!Number.isFinite(temizGelen) || temizGelen < 0 || temizGelen > EN_FAZLA_MIKTAR) {
     throw new Error('Miktar hatalı.');
@@ -80,6 +81,7 @@ export async function teslimAldim(
     },
     {
       id,
+      ozet: `Teslim · ${miktarMetni(temizGelen, teslimat.birim)} ${teslimat.urun}`,
       fotograflar: [
         { veri: fatura, yol: faturaYolu },
         ...(hasar ? [{ veri: hasar, yol: hasarYolu }] : []),
@@ -89,6 +91,7 @@ export async function teslimAldim(
 
   await telefonDeposu.teslimler.delete(teslimat.id);   // liste anında kısalır; aynı sipariş iki kez alınmaz
   haberVer(PAKET_OLAYI);
+  return id;
 }
 
 interface SunucuTalebi {
@@ -128,21 +131,25 @@ export async function teslimleriIndir(): Promise<void> {
     };
   });
 
-  await telefonDeposu.transaction('rw', [telefonDeposu.teslimler, telefonDeposu.gidenKutusu], async () => {
+  // Kayıt kutusu ayrı bir veritabanı: gönderilmemiş teslimler işlemden önce okunur.
+  const gonderilmemis = await gonderilmemisTalepler();
+  await telefonDeposu.transaction('rw', [telefonDeposu.teslimler], async () => {
     await telefonDeposu.teslimler.clear();
-    await telefonDeposu.teslimler.bulkPut(teslimler);
-    await gonderilmemisTeslimleriDus();
+    await telefonDeposu.teslimler.bulkPut(teslimler.filter((t) => !gonderilmemis.has(t.id)));
   });
   haberVer(PAKET_OLAYI);
 }
 
-// Bodrumda yazılmış ama henüz gönderilmemiş teslimler listeden düşer:
-// sunucudan inen eski liste, depoda yapılmış işi geri getirmesin.
-async function gonderilmemisTeslimleriDus(): Promise<void> {
-  const mektuplar = await telefonDeposu.gidenKutusu.toArray();
-  for (const mektup of mektuplar) {
-    if (mektup.tablo !== 'deliveries') continue;
-    const talepId = mektup.icerik.purchase_request_id;
-    if (typeof talepId === 'string') await telefonDeposu.teslimler.delete(talepId);
+// Bodrumda yazılmış ama henüz sunucuda doğrulanmamış teslimler listeden düşer:
+// sunucudan inen eski liste, depoda yapılmış işi geri getirmesin. Eski sürümün kutusunda taşınmayı
+// bekleyenler de sayılır. Reddedilen teslim düşmez: sipariş listede yeniden görünür.
+async function gonderilmemisTalepler(): Promise<Set<string>> {
+  const yeni = await kayitDeposu.kayitlar.where('durum').anyOf(KUYRUK_DURUMLARI).toArray();
+  const eski = await telefonDeposu.gidenKutusu.toArray();
+  const talepler = new Set<string>();
+  for (const kayit of [...yeni, ...eski]) {
+    const talepId = kayit.icerik.purchase_request_id;
+    if (kayit.tablo === 'deliveries' && typeof talepId === 'string') talepler.add(talepId);
   }
+  return talepler;
 }

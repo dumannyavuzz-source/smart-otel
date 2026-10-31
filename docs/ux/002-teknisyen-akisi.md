@@ -21,7 +21,7 @@ Ana Ekran ──▶ 🔧 Açık İşler (3) ──▶ Liste (en acil üstte) ─
 | Ana Ekran | Dev "QR Okut". Otelde açık iş varsa altında ikincil "🔧 Açık İşler (3)"; yoksa görünmez | QR Okut |
 | Açık İşler | Yalnızca açık işler, **en az süresi kalan en üstte**. Her kartta: Oda no · kalan süre · açıklama · Sahipsiz/Bende/Başkasında. Sol şerit trafik lambası | karta dokun |
 | İş | Oda no, Acil/Normal, kalan süre, açıklama | sahipsizse **Aldım**; bendeyse **Çözdüm** |
-| ✓ Tamam | "Oda 204 çözüldü" | İşlere Dön |
+| Tamam | "Oda 204: çözüm kaydedildi" + gerçek durum (📱 Telefona kaydedildi → ✓ Sunucuda tamamlandı · karar 028) | İşlere Dön |
 
 ## Trafik lambası (renk tek başına konuşmaz; yanında süre yazar)
 
@@ -37,9 +37,9 @@ Acil iş 30 dk, normal iş 2 saat (sunucu kuralı). Süre yazısı 30 saniyede b
 
 - **Kim teknisyen?** Veritabanında görevli/teknisyen ayrımı yok (ikisi de `staff`). Bu aşamada "Açık İşler" kapısı otelde açık iş varsa **her personele** görünür; yoksa ana ekran yalnızca "QR Okut"tur. Görev ayrımı (kat / teknik / depo) **Müdür Paneli** aşamasında, personel eklerken seçilecek.
 - **İsim yok, üç durum var:** Kartta "Ali'de" değil "Başkasında" yazar; personel adı sistemde henüz tutulmuyor (Müdür Paneli).
-- **"Aldım" ilk alan kazanır.** Bodrumda iş alan teknisyenin mektubu sunucuya geç ulaşır ve iş bu arada başkasına geçmişse sunucu reddeder; telefon "sunucu haklı" der, mektup düşer, liste bir sonraki tazelemede gerçeği gösterir. Bu bilinen ve kabul edilen sınırdır (002 · B.4).
+- **"Aldım" ilk alan kazanır.** Bodrumda iş alan teknisyenin kaydı sunucuya geç ulaşır ve iş bu arada başkasına geçmişse sunucu reddeder; telefon "sunucu haklı" der, liste sunucunun gerçeğine döner. **Kayıt artık düşmez** (Genel Müdür kararı, 2026-10-23 · karar 028): "Bu iş başkasında" nedeniyle **Kayıtlarım**'da saklanır ve otomatik yeniden gönderilmez. Sunucu doğrulayana kadar iş ekranında "Telefona kaydedildi · sunucunun onayı bekleniyor" yazar.
 - **Çözüm fotoğrafı** isteğe bağlı ve ikincil butondur; dev buton "Çözdüm"dür. Fotoğraf, arızadaki gibi telefonda bekler, önce yüklenir, sonra kayıt gider.
-- **Çözülen iş anında listeden düşer** (telefonda); sunucu kilidi (yalnızca atanan çözer, çözülünce değişmez) veritabanındadır.
+- **Çözülen iş anında listeden düşer** (telefonda); sunucu kilidi (yalnızca atanan çözer, çözülünce değişmez) veritabanındadır. Sunucu kabul etmezse iş, sunucudaki gerçek haliyle listeye döner.
 - **Şema eki:** Blueprint 3.2 "Çözdüm (isteğe bağlı fotoğraf)" için `work_orders.resolved_photo_path` sütunu ve kuralı eklendi (göç 7).
 
 ## Offline

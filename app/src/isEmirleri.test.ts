@@ -1,8 +1,10 @@
 // İş emirleri (teknisyen): trafik lambası, sıra, Aldım/Çözdüm ve bodrum (offline) senaryosu.
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { telefonDeposu, type IsEmri } from './telefonDeposu';
+import { kayitDeposu } from './kayitDeposu';
 import { acikIsler, bekleyenleriUygula, isiAl, isiCoz, kalanMs, sahiplik, sirala, sureMetni, trafikIsigi } from './isEmirleri';
-import { mektuplariGonder, type Gonderici, type Yukleyici } from './postaci';
+import { mektuplariGonder } from './postaci';
+import { isEmriSatiri, sahteSunucu, satirAl, satirEkle } from './testYardimcilari/sahteSunucu';
 import { aktifKullaniciyiAyarla } from './kullanici';
 
 const T0 = Date.parse('2026-09-15T12:00:00.000Z');
@@ -25,9 +27,9 @@ function isEmri(id: string, acilisDk: number, sureDk: number, ek: Partial<IsEmri
 }
 
 beforeEach(async () => {
-  aktifKullaniciyiAyarla('ali');
-  await telefonDeposu.gidenKutusu.clear();
-  await telefonDeposu.fotograflar.clear();
+  aktifKullaniciyiAyarla('ali', 'otel-1');
+  await kayitDeposu.kayitlar.clear();
+  await kayitDeposu.fotograflar.clear();
   await telefonDeposu.isEmirleri.clear();
 });
 
@@ -71,15 +73,18 @@ describe('Trafik lambası ve süre', () => {
 });
 
 describe('Aldım / Çözdüm', () => {
-  it('"Aldım": telefondaki kayıt anında güncellenir, güncelleme mektubu tepsiye konur', async () => {
+  it('"Aldım": telefondaki kayıt anında güncellenir ve "onay bekliyor" olur, güncelleme kaydı kutuya konur', async () => {
     await telefonDeposu.isEmirleri.put(isEmri('w1', 0, 30));
     await isiAl((await telefonDeposu.isEmirleri.get('w1'))!);
 
     const yerel = await telefonDeposu.isEmirleri.get('w1');
-    expect(yerel).toMatchObject({ assigned_to: 'ali', status: 'in_progress' });
+    expect(yerel).toMatchObject({ assigned_to: 'ali', status: 'in_progress', onayBekliyor: true });
 
-    const [m] = await telefonDeposu.gidenKutusu.toArray();
-    expect(m).toMatchObject({ tablo: 'work_orders', islem: 'guncelle', kosul: { id: 'w1' }, yazanId: 'ali' });
+    const [m] = await kayitDeposu.kayitlar.toArray();
+    expect(m).toMatchObject({
+      tablo: 'work_orders', islem: 'guncelle', kosul: { id: 'w1' }, yazanId: 'ali',
+      otelId: 'otel-1', durum: 'bekliyor', ozet: 'Oda 204 · İş emri: Aldım',
+    });
     expect(m?.icerik).toEqual({ assigned_to: 'ali', status: 'in_progress' });   // id / created_at_device eklenmez
   });
 
@@ -88,17 +93,17 @@ describe('Aldım / Çözdüm', () => {
     const foto = new Blob([new Uint8Array(3)], { type: 'image/jpeg' });
     await isiCoz((await telefonDeposu.isEmirleri.get('w1'))!, foto);
 
-    const [m] = await telefonDeposu.gidenKutusu.toArray();
+    const [m] = await kayitDeposu.kayitlar.toArray();
     expect(m?.icerik).toEqual({ status: 'resolved', resolved_photo_path: 'otel-1/resolutions/w1.jpg' });
     expect(m?.fotografYollari).toEqual(['otel-1/resolutions/w1.jpg']);
-    expect(await telefonDeposu.fotograflar.count()).toBe(1);
+    expect(await kayitDeposu.fotograflar.count()).toBe(1);
     expect(await acikIsler()).toEqual([]);
   });
 
   it('"Çözdüm" fotoğrafsız: yalnızca durum gider', async () => {
     await telefonDeposu.isEmirleri.put(isEmri('w1', 0, 30, { assigned_to: 'ali', status: 'in_progress' }));
     await isiCoz((await telefonDeposu.isEmirleri.get('w1'))!, null);
-    const [m] = await telefonDeposu.gidenKutusu.toArray();
+    const [m] = await kayitDeposu.kayitlar.toArray();
     expect(m?.icerik).toEqual({ status: 'resolved' });
     expect(m?.fotografYollari).toBeUndefined();
   });
@@ -119,44 +124,87 @@ describe('Aldım / Çözdüm', () => {
 });
 
 describe('Postacı ve iş emirleri', () => {
-  const gonderici = (kayit: string[], reddet?: (id: string) => boolean): Gonderici => async (m) => {
-    const hedef = String(m.kosul?.id ?? m.id);
-    if (reddet?.(hedef)) return { ok: false, kalici: true, hata: 'Çözülmüş iş emri değiştirilemez.' };
-    kayit.push(`${m.islem ?? 'ekle'}:${hedef}:${String(m.icerik.status ?? '')}`);
-    return { ok: true };
-  };
-  const yukleyici = (kayit: string[]): Yukleyici => async (yol) => {
-    kayit.push(`foto:${yol}`);
-    return { ok: true };
-  };
+  const durumlar = async () => (await kayitDeposu.kayitlar.orderBy('sira').toArray()).map((k) => k.durum);
 
   it('bodrum: Aldım + Çözdüm (fotoğraflı) offline yazılır; internet gelince önce Aldım, sonra fotoğraf, sonra Çözdüm', async () => {
+    const s = sahteSunucu();
+    satirEkle(s, 'work_orders', isEmriSatiri('w1'));
     vi.stubGlobal('navigator', { onLine: false });
     await telefonDeposu.isEmirleri.put(isEmri('w1', 0, 30));
     await isiAl((await telefonDeposu.isEmirleri.get('w1'))!);
     await isiCoz((await telefonDeposu.isEmirleri.get('w1'))!, new Blob([new Uint8Array(2)], { type: 'image/jpeg' }));
 
-    const kayit: string[] = [];
-    await mektuplariGonder(gonderici(kayit), yukleyici(kayit));
-    expect(kayit).toEqual([]);                                   // uçak modu: hiçbir şey gitmedi
-    expect(await telefonDeposu.gidenKutusu.count()).toBe(2);
+    await mektuplariGonder(s.gonder, s.yukle, s.sorgula);
+    expect(s.olaylar).toEqual([]);                                // uçak modu: hiçbir şey gitmedi
+    expect(await durumlar()).toEqual(['bekliyor', 'bekliyor']);
 
     vi.stubGlobal('navigator', { onLine: true });
-    await mektuplariGonder(gonderici(kayit), yukleyici(kayit));
-    expect(kayit).toEqual(['guncelle:w1:in_progress', 'foto:otel-1/resolutions/w1.jpg', 'guncelle:w1:resolved']);
-    expect(await telefonDeposu.gidenKutusu.count()).toBe(0);
-    expect(await telefonDeposu.fotograflar.count()).toBe(0);
+    await mektuplariGonder(s.gonder, s.yukle, s.sorgula);
+    const [aldim, cozdum] = await kayitDeposu.kayitlar.orderBy('sira').toArray();
+    expect(s.olaylar).toEqual([`kayit:${aldim!.id}`, 'foto:otel-1/resolutions/w1.jpg', `kayit:${cozdum!.id}`]);
+    expect(await durumlar()).toEqual(['tamamlandi', 'tamamlandi']);
+    expect(satirAl(s, 'work_orders', 'w1')).toMatchObject({ status: 'resolved', resolved_by: 'ali' });
+    expect(await kayitDeposu.fotograflar.count()).toBe(0);
+    expect(await telefonDeposu.isEmirleri.get('w1')).toMatchObject({ status: 'resolved', onayBekliyor: false });
   });
 
-  it('sunucu güncellemeyi kesin reddederse (iş çoktan kapanmış) mektup düşer, sonrakiler gider', async () => {
+  // Beklenti değişti (karar 028, Genel Müdür onayı). Eski beklenti: "kesin reddedilen güncelleme düşer,
+  // 'gönderilemedi' uyarısı yok". Yeni: düşmez, nedeniyle saklanır; telefondaki iş sunucunun gerçeğine döner.
+  it('sunucu Aldım\'ı kesin reddederse (iş başkasında) kayıt nedeniyle saklanır, liste sunucuya döner, sonrakiler gider', async () => {
+    const s = sahteSunucu();
+    satirEkle(s, 'work_orders', isEmriSatiri('w1', { assigned_to: 'tamer', status: 'in_progress' }));
+    satirEkle(s, 'work_orders', isEmriSatiri('w2'));
     await telefonDeposu.isEmirleri.bulkPut([isEmri('w1', 0, 30), isEmri('w2', 0, 30)]);
     await isiAl((await telefonDeposu.isEmirleri.get('w1'))!);
     await isiAl((await telefonDeposu.isEmirleri.get('w2'))!);
 
-    const kayit: string[] = [];
-    await mektuplariGonder(gonderici(kayit, (id) => id === 'w1'), yukleyici(kayit));
+    await mektuplariGonder(s.gonder, s.yukle, s.sorgula);
 
-    expect(kayit).toEqual(['guncelle:w2:in_progress']);
-    expect(await telefonDeposu.gidenKutusu.count()).toBe(0);      // reddedilen düştü, "gönderilemedi" uyarısı yok
+    expect(await durumlar()).toEqual(['reddedildi', 'tamamlandi']);
+    const [ret] = await kayitDeposu.kayitlar.orderBy('sira').toArray();
+    expect(ret?.neden).toMatch(/başkasında/);
+    expect(await telefonDeposu.isEmirleri.get('w1')).toMatchObject({ assigned_to: 'tamer', onayBekliyor: false });
+    expect(await telefonDeposu.isEmirleri.get('w2')).toMatchObject({ assigned_to: 'ali', onayBekliyor: false });
+
+    // Sunucudan liste yeniden indiğinde reddedilen Aldım tekrar uygulanmaz
+    await telefonDeposu.isEmirleri.put(isEmri('w1', 0, 30, { assigned_to: 'tamer', status: 'in_progress' }));
+    await bekleyenleriUygula();
+    expect(await telefonDeposu.isEmirleri.get('w1')).toMatchObject({ assigned_to: 'tamer' });
+  });
+
+  it('Çözdüm\'ün cevabı kaybolur, tekrarında "çözülmüş" ret gelir: çözen bensem tamamlandı, değilsem reddedildi', async () => {
+    const s = sahteSunucu();
+    satirEkle(s, 'work_orders', isEmriSatiri('w1', { assigned_to: 'ali', status: 'in_progress' }));
+    await telefonDeposu.isEmirleri.put(isEmri('w1', 0, 30, { assigned_to: 'ali', status: 'in_progress' }));
+    await isiCoz((await telefonDeposu.isEmirleri.get('w1'))!, null);
+    let kaybet = true;
+    s.cevabiKaybet = () => kaybet;
+
+    await mektuplariGonder(s.gonder, s.yukle, s.sorgula);
+    expect(await durumlar()).toEqual(['bekliyor']);              // sunucuda çözüldü ama telefon BİLMİYOR: başarılı denmez
+
+    kaybet = false;
+    await mektuplariGonder(s.gonder, s.yukle, s.sorgula);        // ikinci deneme: "Çözülmüş iş emri değiştirilemez."
+    expect(await durumlar()).toEqual(['tamamlandi']);            // ama çözen benim → doğrulandı
+
+    // Başkası çözmüşse: reddedildi
+    satirEkle(s, 'work_orders', isEmriSatiri('w2', { assigned_to: 'ali', status: 'resolved', resolved_by: 'tamer' }));
+    await telefonDeposu.isEmirleri.put(isEmri('w2', 0, 30, { assigned_to: 'ali', status: 'in_progress' }));
+    await isiCoz((await telefonDeposu.isEmirleri.get('w2'))!, null);
+    await mektuplariGonder(s.gonder, s.yukle, s.sorgula);
+    const ikinci = (await kayitDeposu.kayitlar.orderBy('sira').toArray())[1];
+    expect(ikinci).toMatchObject({ durum: 'reddedildi' });
+    expect(ikinci?.neden).toMatch(/Çözülmüş iş emri değiştirilemez.*başka biri tarafından çözülmüş/);
+  });
+
+  it('güncelleme hiçbir satırı değiştirmezse (iş sunucuda görünmüyor) başarılı gösterilmez: belirsiz kalır', async () => {
+    const s = sahteSunucu();                                     // w1 sunucuda yok / görünmüyor
+    await telefonDeposu.isEmirleri.put(isEmri('w1', 0, 30));
+    await isiAl((await telefonDeposu.isEmirleri.get('w1'))!);
+
+    await mektuplariGonder(s.gonder, s.yukle, s.sorgula);
+
+    expect(await durumlar()).toEqual(['belirsiz']);
+    expect(await telefonDeposu.isEmirleri.get('w1')).toMatchObject({ onayBekliyor: true });
   });
 });

@@ -71,10 +71,11 @@ export function TeslimEkrani() {
     if (!teslimat || !fatura || !hazir) return;
     setGonderiliyor(true);
     setHata(null);
+    let kayitId: string;
     try {
       // Ekranda görünmeyen fotoğraf gönderilmez: miktar tekrar tam sayıya çıkarılırsa
       // (eksik yok artık) o fotoğraf da kayda geçmez. Görünen neyse giden odur.
-      await teslimAldim(teslimat, gelen, fatura, eksik ? hasar : null, not);
+      kayitId = await teslimAldim(teslimat, gelen, fatura, eksik ? hasar : null, not);
     } catch (h) {
       setGonderiliyor(false);
       setHata(h instanceof Error ? h.message : 'Kaydedilemedi. Tekrar deneyin.');
@@ -83,7 +84,8 @@ export function TeslimEkrani() {
     git('/tamam', {
       replace: true,
       state: {
-        mesaj: `${miktarMetni(gelen, teslimat.birim)} ${teslimat.urun} teslim alındı`,
+        mesaj: `Teslim kaydedildi: ${miktarMetni(gelen, teslimat.birim)} ${teslimat.urun}`,
+        kayitId,
         donus: { yol: '/teslimler', yazi: 'Teslimlere Dön' },
       },
     });
