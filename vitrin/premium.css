@@ -1,0 +1,145 @@
+/* OtelDijital — geniş ekran tanıtım düzeni. Uygulama ekranları değiştirilmez. */
+:root { --sayfa-kenari: clamp(24px, 4.2vw, 96px); }
+.kolon { max-width: 1920px; padding-inline: var(--sayfa-kenari); }
+.ust { background: #fbfaf7; }
+.ust-ic { min-height: 88px; }
+.marka { font-size: 1rem; }
+.marka-isaret { width: 10px; height: 10px; }
+.ust .dugme { background: var(--antrasit); border-color: var(--antrasit); color: #fff; }
+.ust .dugme:hover { background: var(--bronz); border-color: var(--bronz); color: #fff; }
+.sayfa-kahraman { max-width: 1920px; padding-block: clamp(64px, 7vw, 120px); }
+.sayfa-kahraman h1 { font-size: clamp(2.6rem, 5vw, 5.25rem); max-width: 23ch; }
+.sayfa-kahraman .giris { font-size: 1.125rem; }
+.premium-anasayfa .kahraman-alan {
+  min-height: calc(100svh - 88px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(115deg, #fbfaf7 0%, #fbfaf7 50%, #f2eee7 50.1%, #ece6db 100%);
+}
+.premium-anasayfa .kahraman {
+  flex: 1;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(40px, 5vw, 112px);
+  padding-block: clamp(64px, 7vh, 112px);
+}
+.premium-anasayfa .kahraman-yazi { max-width: 790px; }
+.premium-anasayfa .kahraman h1 { max-width: none; font-size: clamp(3.5rem, 5.4vw, 6.75rem); line-height: .98; letter-spacing: -.035em; }
+.premium-anasayfa .kahraman .giris { max-width: 43ch; margin-top: 30px; font-size: clamp(1.0625rem, 1.1vw, 1.25rem); }
+.premium-anasayfa .cta-satir { margin-top: 34px; gap: 20px 28px; }
+.premium-anasayfa .cta-satir .dugme { background: var(--antrasit); border-color: var(--antrasit); color: #fff; }
+.premium-anasayfa .cta-satir .dugme:hover { background: var(--bronz); border-color: var(--bronz); }
+.premium-anasayfa .guvence { font-size: .8125rem; }
+.premium-anasayfa .gorsel { width: 100%; max-width: 720px; margin: 0; justify-self: center; padding: 16px 0 30px; }
+.premium-anasayfa .telefon { width: 100%; margin: 0; padding: 8px; border-radius: 20px; background: #292a25; box-shadow: 0 28px 64px #463e3029; }
+.premium-anasayfa .telefon-ic { border-radius: 13px; }
+.premium-anasayfa .uyg-ust { padding: 22px 24px; gap: 12px; }
+.premium-anasayfa .olay { padding: 21px 24px; gap: 16px; }
+.premium-anasayfa .olay-ikon { width: 40px; height: 40px; }
+.premium-anasayfa .olay-metin { font-size: .95rem; }
+.premium-anasayfa .olay-kim { margin-top: 4px; }
+.premium-anasayfa .kumanda-kart { left: auto; right: 22px; bottom: 24px; width: 236px; padding: 20px 22px; border-radius: 6px; }
+.premium-anasayfa .akis-dip { padding-right: 275px; margin-top: 22px; text-align: left; font-size: .8125rem; line-height: 1.55; }
+.kahraman-alt { display: flex; align-items: center; gap: 36px; padding-block: 24px; border-top: 1px solid #d9d3c7; font-size: .8125rem; }
+.kahraman-alt p { min-width: 210px; color: var(--gri); line-height: 1.6; }
+.kahraman-alt ul { display: flex; flex: 1; justify-content: center; flex-wrap: wrap; gap: 18px 44px; padding: 0; margin: 0; list-style: none; font-size: .8125rem; letter-spacing: .12em; text-transform: uppercase; }
+.asagi-baglanti { display: inline-flex; align-items: center; gap: 24px; min-height: 44px; text-decoration: none; }
+.asagi-baglanti span { font-size: 1.4rem; color: var(--bronz); }
+.premium-anasayfa #nedir { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 24px 7vw; }
+.premium-anasayfa #nedir > .etiket { grid-column: 1 / -1; margin-bottom: 0; }
+.premium-anasayfa #nedir h2 { grid-column: 1; grid-row: 2 / 4; font-size: clamp(2.6rem, 4vw, 4.6rem); max-width: 17ch; }
+.premium-anasayfa #nedir > .bolum-giris { grid-column: 2; margin: 0; }
+.premium-anasayfa #nedir .alanlar { grid-column: 1 / -1; margin-top: 36px; }
+.urun-vitrini { background: #eae5dc; border-block: 1px solid #ded8cc; scroll-margin-top: 88px; overflow: clip; }
+.urun-vitrini-ic { min-height: calc(100svh - 88px); display: grid; grid-template-columns: minmax(290px, .85fr) minmax(0, 1.65fr); gap: clamp(40px, 5vw, 108px); align-items: center; padding-block: 48px; }
+.urun-vitrini h2 { font-size: clamp(3.25rem, 4.5vw, 6rem); line-height: 1.02; letter-spacing: -.03em; }
+.urun-vitrini-giris { max-width: 36ch; margin-top: 26px; color: var(--gri); font-size: 1rem; line-height: 1.8; }
+.urun-rolleri { list-style: none; padding: 0; margin: 30px 0; }
+.urun-rolleri li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 15px; padding-block: 20px; border-top: 1px solid #cdc6b8; }
+.urun-rol-no { font: .8125rem var(--veri-yazi); padding-top: 5px; color: var(--bronz); }
+.urun-rolleri h3 { font-family: var(--govde-yazi); font-size: .9375rem; }
+.urun-rolleri p { margin-top: 7px; max-width: 33ch; font-size: .875rem; color: var(--gri); line-height: 1.75; }
+.urun-incele { display: inline-flex; gap: 36px; align-items: center; background: transparent; border-color: #7e735f; }
+.urun-ornek-notu { margin-top: 24px; font-size: .8125rem; color: #605a50; line-height: 1.6; }
+.urun-vitrini-sahne { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 56px); padding: 28px; background: linear-gradient(135deg,#f7f5f0,#e2dace); border: 1px solid #fff9; border-radius: 14px; align-items: start; }
+.urun-onizleme { --ekran-genisligi: clamp(210px, calc((100svh - 410px) * .462), 310px); margin: 0; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+.urun-onizleme--yonetim { padding-top: 24px; }
+.urun-ekran-etiketi { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; width: var(--ekran-genisligi); max-width: 100%; }
+.urun-ekran-etiketi span { font: .8125rem var(--veri-yazi); letter-spacing: .12em; color: #645a48; }
+.urun-ekran-etiketi b { font-family: var(--baslik-yazi); font-size: clamp(1.3rem, 1.8vw, 2rem); font-weight: 500; }
+.urun-cihaz { width: var(--ekran-genisligi); max-width: 100%; padding: 7px; background: #292b26; border-radius: 25px; box-shadow: 0 22px 35px #463e3024, inset 0 0 0 1px #ffffff2b; }
+.urun-cihaz img { width: 100%; height: auto; display: block; border-radius: 18px; }
+.urun-onizleme figcaption { margin-top: 20px; font-size: .8125rem; color: #605a50; }
+#ekranlar:not(.urun-vitrini) .ekran-galeri { gap: clamp(20px, 2.3vw, 44px); }
+#ekranlar:not(.urun-vitrini) .ekran-kart { padding: 16px; background: #eee9e0; border: 1px solid #e2dbcf; border-radius: 10px; }
+#ekranlar:not(.urun-vitrini) .ekran-kart img { border-radius: 12px; }
+#ekranlar:not(.urun-vitrini) .bolum-cta-not { margin-top: 22px; }
+.kapanis { background: #eee9e0; border-top: 1px solid #ded8cc; }
+.kapanis h2 { max-width: 22ch; font-size: clamp(2.5rem, 4vw, 5rem); }
+.alt { background: #e6dfd4; }
+@media (min-width: 1600px) { .bolum { padding-block: 108px; } }
+@media (max-width: 1100px) and (min-width: 901px) {
+  .premium-anasayfa .kahraman { gap: 32px; }
+  .premium-anasayfa .kahraman h1 { font-size: 3.65rem; }
+  .premium-anasayfa .olay { padding: 18px 14px; gap: 10px; }
+  .premium-anasayfa .rozet { font-size: .6875rem; padding: 4px; }
+  .urun-vitrini-ic { grid-template-columns: .8fr 1.2fr; gap: 28px; }
+  .urun-vitrini-sahne { padding: 22px; gap: 20px; }
+}
+@media (max-width: 900px) {
+  :root { --sayfa-kenari: 28px; }
+  .ust-ic { min-height: 72px; }
+  .premium-anasayfa .kahraman-alan { min-height: 0; background: linear-gradient(150deg,#fbfaf7 0%,#fbfaf7 45%,#ede7dd 100%); }
+  .premium-anasayfa .kahraman { grid-template-columns: 1fr; gap: 46px; padding-block: 64px 40px; }
+  .premium-anasayfa .kahraman-yazi { max-width: 700px; }
+  .premium-anasayfa .kahraman h1 { font-size: clamp(3.5rem, 8vw, 5.5rem); }
+  .premium-anasayfa .gorsel { max-width: 620px; }
+  .kahraman-alt { gap: 20px; flex-wrap: wrap; padding-block: 24px; }
+  .kahraman-alt ul { justify-content: flex-start; gap: 12px 24px; }
+  .asagi-baglanti { display: none; }
+  .premium-anasayfa #nedir { grid-template-columns: 1fr; gap: 22px; }
+  .premium-anasayfa #nedir h2 { grid-column: 1; grid-row: auto; max-width: 22ch; }
+  .premium-anasayfa #nedir > .bolum-giris { grid-column: 1; }
+  .premium-anasayfa #nedir .alanlar { margin-top: 20px; }
+  .urun-vitrini { scroll-margin-top: 72px; }
+  .urun-vitrini-ic { min-height: 0; grid-template-columns: 1fr; gap: 40px; padding-block: 64px; }
+  .urun-vitrini-yazi { max-width: 650px; }
+  .urun-vitrini h2 { font-size: clamp(3.5rem, 7vw, 5rem); }
+  .urun-rolleri { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .urun-vitrini-sahne { padding: 32px; gap: 32px; }
+  .urun-onizleme { --ekran-genisligi: 310px; }
+  .urun-cihaz { max-width: 310px; margin-inline: auto; }
+}
+@media (max-width: 560px) {
+  :root { --sayfa-kenari: 20px; }
+  .kolon { padding-inline: var(--sayfa-kenari); }
+  .marka { font-size: .85rem; }
+  .premium-anasayfa .kahraman { padding-block: 48px 28px; }
+  .premium-anasayfa .kahraman h1 { font-size: clamp(2.7rem, 10vw, 3.5rem); }
+  .premium-anasayfa .kahraman .etiket { font-size: .8125rem; letter-spacing: .12em; }
+  .premium-anasayfa .kahraman .giris { font-size: 1rem; margin-top: 24px; }
+  .premium-anasayfa .cta-satir { gap: 10px; margin-top: 28px; }
+  .premium-anasayfa .guvence { line-height: 1.8; margin-top: 16px; }
+  .premium-anasayfa .uyg-ust { padding: 16px 12px; gap: 7px; }
+  .premium-anasayfa .olay { padding: 16px 12px; gap: 9px; }
+  .premium-anasayfa .olay-ikon { width: 28px; height: 28px; }
+  .premium-anasayfa .olay-metin { font-size: .8125rem; }
+  .premium-anasayfa .olay-kim { font-size: .6875rem; }
+  .premium-anasayfa .rozet { font-size: .625rem; letter-spacing: 0; padding: 4px 5px; }
+  .premium-anasayfa .akis-otel { font-size: .625rem; }
+  .premium-anasayfa .kumanda-kart { position: static; width: 100%; margin-top: 16px; padding: 16px 20px; box-shadow: none; }
+  .premium-anasayfa .gorsel { padding: 0; }
+  .premium-anasayfa .akis-dip { padding: 0; margin-top: 16px; }
+  .kahraman-alt { gap: 16px; }
+  .kahraman-alt p { min-width: 0; }
+  .kahraman-alt ul { flex-basis: 100%; gap: 10px 20px; font-size: .8125rem; }
+  .premium-anasayfa #nedir h2 { font-size: 2.65rem; }
+  .urun-vitrini h2 { font-size: 3.3rem; }
+  .urun-rolleri { grid-template-columns: 1fr; gap: 0; }
+  .urun-vitrini-sahne { grid-template-columns: minmax(0, 1fr); padding: 24px; gap: 40px; }
+  .urun-onizleme--yonetim { padding-top: 0; }
+  .urun-ekran-etiketi b { font-size: 1.75rem; }
+  .urun-onizleme figcaption { margin-top: 16px; }
+  #ekranlar:not(.urun-vitrini) .ekran-kart { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

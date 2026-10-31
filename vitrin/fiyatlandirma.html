@@ -18,14 +18,14 @@
 <meta property="og:url" content="https://www.oteldijital.com/fiyatlandirma" />
 <meta property="og:title" content="Fiyatlandırma | OtelDijital" />
 <meta property="og:description" content="Oda sayısı kadar ödeyin. Kurulum ücreti yok, donanım yok, kontrat yok. 30 gün boyunca tüm özellikler açık." />
-<meta property="og:image" content="https://www.oteldijital.com/paylasim.png" />
+<meta property="og:image" content="https://www.oteldijital.com/paylasim.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="OtelDijital — otel operasyon merkezi" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Fiyatlandırma | OtelDijital" />
 <meta name="twitter:description" content="Oda sayısı kadar ödeyin. Kurulum ücreti yok, donanım yok, kontrat yok. 30 gün boyunca tüm özellikler açık." />
-<meta name="twitter:image" content="https://www.oteldijital.com/paylasim.png" />
+<meta name="twitter:image" content="https://www.oteldijital.com/paylasim.jpg" />
 
 <!-- Yazı tipleri kendi alan adımızdan gelir; üçüncü parti istek yoktur (denetim · Madde 12).
      Önden istenen iki dosya, ilk ekranda görünen başlığın yazısıdır (Cormorant, latin + latin-ext).
@@ -34,6 +34,7 @@
 <link rel="preload" href="yazilar/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="yazilar/cormorant-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="stil.css" />
+<link rel="stylesheet" href="premium.css" />
 
 <!-- Yapılandırılmış veri (denetim · Madde 8b · docs/decisions/016-host-birligi-ve-yapilandirilmis-veri.md)
      TEK KURAL: yalnızca sayfada GERÇEKTEN GÖRÜNEN bilgi işaretlenir. Burada üç şey var ve üçü de
@@ -131,8 +132,8 @@
         },
         {
           "@type": "Question",
-          "name": "Dijital Vitrin ve Teknolojik Altyapı bu fiyata dahil mi?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Hayır. İkisi de proje işidir: otele bakılır, ne gerektiği yazılır ve ayrı teklif verilir. İç operasyon aboneliği bunlardan bağımsızdır." }
+          "name": "OtelDijital aboneliğinde neler var?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Kat hizmetleri, arıza ve iş emirleri, depo, görev takibi ve müdür paneli tek OtelDijital ürünü içinde sunulur. Paket oda sayısına göre belirlenir." }
         }
       ]
     }
@@ -150,8 +151,7 @@
      olmak zorundadır. Vitrinin app/ ile ortak kodu yoktur; rakam iki yerde yazılıdır. Biri
      değişirse diğeri de değişir.
 
-     Fiyatlar yalnızca İÇ OPERASYON merkezi içindir. Dijital Vitrin ve Teknolojik Altyapı proje
-     işidir; otele bakıldıktan sonra ayrı teklif verilir (aşağıda "Sık sorulanlar" · 04).
+     Fiyatlar yalnızca OtelDijital operasyon yazılımı içindir.
      =================================================================== -->
 <a class="atla" href="#icerik">İçeriğe atla</a>
 
@@ -174,8 +174,6 @@
       </summary>
       <nav class="menu" aria-label="Sayfa menüsü">
         <a href="/ic-operasyon">İç Operasyon</a>
-        <a href="/dijital-vitrin">Dijital Vitrin</a>
-        <a href="/teknolojik-altyapi">Teknolojik Altyapı</a>
         <a href="/fiyatlandirma" aria-current="page">Fiyatlandırma</a>
         <a href="/iletisim">İletişim</a>
       </nav>
@@ -351,8 +349,8 @@
       <li class="hizmet">
         <span class="hizmet-no">04</span>
         <div>
-          <h3>Dijital Vitrin ve Teknolojik Altyapı bu fiyata dahil mi?</h3>
-          <p>Hayır. İkisi de proje işidir: otele bakılır, ne gerektiği yazılır ve ayrı teklif verilir. İç operasyon aboneliği bunlardan bağımsızdır.</p>
+          <h3>OtelDijital aboneliğinde neler var?</h3>
+          <p>Kat hizmetleri, arıza ve iş emirleri, depo, görev takibi ve müdür paneli tek OtelDijital ürünü içinde sunulur. Paket oda sayısına göre belirlenir.</p>
         </div>
       </li>
     </ul>
@@ -390,9 +388,7 @@
           <nav class="alt-baglantilar" aria-label="Sayfalar">
             <a href="/">Ana Sayfa</a>
             <a href="/ic-operasyon">İç Operasyon</a>
-            <a href="/dijital-vitrin">Dijital Vitrin</a>
-            <a href="/teknolojik-altyapi">Teknolojik Altyapı</a>
-            <a href="/fiyatlandirma">Fiyatlandırma</a>
+        <a href="/fiyatlandirma">Fiyatlandırma</a>
             <a href="/iletisim">İletişim</a>
           </nav>
         </div>

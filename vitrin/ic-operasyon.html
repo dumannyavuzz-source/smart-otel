@@ -18,14 +18,14 @@
 <meta property="og:url" content="https://www.oteldijital.com/ic-operasyon" />
 <meta property="og:title" content="İç Operasyon | OtelDijital" />
 <meta property="og:description" content="Oda durumu, arıza iş emirleri, depo ve fire takibi. Personel nasıl kullanır, müdür neleri görür, raporlama nasıl yapılır." />
-<meta property="og:image" content="https://www.oteldijital.com/paylasim.png" />
+<meta property="og:image" content="https://www.oteldijital.com/paylasim.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="OtelDijital — otel operasyon merkezi" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="İç Operasyon | OtelDijital" />
 <meta name="twitter:description" content="Oda durumu, arıza iş emirleri, depo ve fire takibi. Personel nasıl kullanır, müdür neleri görür, raporlama nasıl yapılır." />
-<meta name="twitter:image" content="https://www.oteldijital.com/paylasim.png" />
+<meta name="twitter:image" content="https://www.oteldijital.com/paylasim.jpg" />
 
 <!-- Yazı tipleri kendi alan adımızdan gelir; üçüncü parti istek yoktur (denetim · Madde 12).
      Önden istenen iki dosya, ilk ekranda görünen başlığın yazısıdır (Cormorant, latin + latin-ext).
@@ -34,6 +34,7 @@
 <link rel="preload" href="yazilar/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="yazilar/cormorant-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="stil.css" />
+<link rel="stylesheet" href="premium.css" />
 
 <!-- Yapılandırılmış veri (denetim · Madde 8b): yalnızca yol izi. Bu sayfada fiyat yoktur;
      paketler ve teklifler /fiyatlandirma sayfasında işaretlenir. -->
@@ -86,8 +87,6 @@
       </summary>
       <nav class="menu" aria-label="Sayfa menüsü">
         <a href="/ic-operasyon" aria-current="page">İç Operasyon</a>
-        <a href="/dijital-vitrin">Dijital Vitrin</a>
-        <a href="/teknolojik-altyapi">Teknolojik Altyapı</a>
         <a href="/fiyatlandirma">Fiyatlandırma</a>
         <a href="/iletisim">İletişim</a>
       </nav>
@@ -474,52 +473,38 @@
       Yukarıdaki maketler anlatmak içindir. Aşağıdakiler uygulamanın kendisinden alınmıştır:
       aynı düğmeler, aynı yazılar, aynı sıra. Görsellerdeki otel adı ve kişi adları örnektir.
     </p>
-      <!-- GERÇEK EKRAN GÖRÜNTÜLERİ (denetim · Madde 1). Kodla çizilen maketler SİLİNMEZ: bu
-           görseller onların yerine değil, yanında durur — denetimin açık talimatı.
-           Dosyalar bugün GEÇİCİ yer tutucudur (araclar/gecici-gorsel-uret.js üretir): grafit zemin
-           üstünde şampanya blok, 780 × 1688. Gerçek görüntüler AYNI ADLARLA üzerine yazılacak;
-           bu HTML'in bir daha değişmesi gerekmez.
-           Her ekran için İKİ dosya zorunludur (avif + webp): <picture> seçtiği dosyayı bulamazsa
-           bir alttakine DÜŞMEZ, kırık görsel çıkar. Bunu artık betik denetliyor:
-           node araclar/kaynak-notu-taramasi.js -->
+      <!-- Mevcut uygulama bileşenleri, yalnız örnek verilerle yerel ortamda görüntülendi. -->
     <div class="ekran-galeri">
         <figure class="ekran-kart">
           <picture>
-            <source srcset="/gorseller/uygulama/kat-gorevlisi.avif" type="image/avif" />
-            <source srcset="/gorseller/uygulama/kat-gorevlisi.webp" type="image/webp" />
-            <img src="/gorseller/uygulama/kat-gorevlisi.webp" width="780" height="1688" fetchpriority="high" decoding="async"
+            <img src="/gorseller/uygulama/kat-gorevlisi.jpg" width="390" height="843" fetchpriority="high" decoding="async"
                  alt="Kat görevlisinin ekranı: Oda Hazır, Eksik Var ve Sorun Bildir düğmeleri." />
           </picture>
-          <figcaption>Kat görevlisinin ekranı — üç büyük düğme, başka hiçbir şey.</figcaption>
+          <figcaption>Kat görevlisi — oda kontrol listesi ve üç büyük işlem düğmesi.</figcaption>
         </figure>
         <figure class="ekran-kart">
           <picture>
-            <source srcset="/gorseller/uygulama/kumanda.avif" type="image/avif" />
-            <source srcset="/gorseller/uygulama/kumanda.webp" type="image/webp" />
-            <img src="/gorseller/uygulama/kumanda.webp" width="780" height="1688" fetchpriority="high" decoding="async"
+            <img src="/gorseller/uygulama/kumanda.jpg" width="375" height="811" fetchpriority="high" decoding="async"
                  alt="Müdürün kumanda ekranı: geciken işler, bekleyen onaylar ve vardiyanın özeti tek listede." />
           </picture>
-          <figcaption>Müdürün kumandası — geciken iş, bekleyen onay ve günün özeti tek ekranda.</figcaption>
+          <figcaption>Müdürün kumandası — geciken iş ve bekleyen onaylar tek ekranda.</figcaption>
         </figure>
         <figure class="ekran-kart">
           <picture>
-            <source srcset="/gorseller/uygulama/is-emri.avif" type="image/avif" />
-            <source srcset="/gorseller/uygulama/is-emri.webp" type="image/webp" />
-            <img src="/gorseller/uygulama/is-emri.webp" width="780" height="1688" loading="lazy" decoding="async"
-                 alt="İş emri ekranı: trafik lambası, kalan süre ve Aldım / Çözdüm düğmeleri." />
+            <img src="/gorseller/uygulama/is-emri.jpg" width="390" height="843" loading="lazy" decoding="async"
+                 alt="Teknik iş ekranı: Oda 118, klima arızası, kalan süre ve Çözdüm düğmesi." />
           </picture>
           <figcaption>İş emri — arıza bildirimi kendiliğinden buraya düşer, süre sayar.</figcaption>
         </figure>
         <figure class="ekran-kart">
           <picture>
-            <source srcset="/gorseller/uygulama/teslim.avif" type="image/avif" />
-            <source srcset="/gorseller/uygulama/teslim.webp" type="image/webp" />
-            <img src="/gorseller/uygulama/teslim.webp" width="780" height="1688" loading="lazy" decoding="async"
-                 alt="Teslim ekranı: istenen, onaylanan ve gelen miktar yan yana; eksik teslimde kanıt fotoğrafı." />
+            <img src="/gorseller/uygulama/teslim.jpg" width="375" height="811" loading="lazy" decoding="async"
+                 alt="Teslim ekranı: 10 Kg onay, 7,5 Kg gelen miktar ve 2,5 Kg eksik teslim uyarısı." />
           </picture>
-          <figcaption>Teslim ve uyuşmazlık — istenen, onaylanan ve gelen miktar yan yana durur.</figcaption>
+          <figcaption>Teslim kontrolü — 10 Kg onaya karşı 7,5 Kg teslimde eksik miktar ve kanıt uyarısı.</figcaption>
         </figure>
     </div>
+    <p class="bolum-cta-not">Mevcut uygulama ekranlarıdır; gösterilen tüm bilgiler örnektir.</p>
   </section>
 
   <!-- ===================== RAPORLAMA =====================
@@ -645,26 +630,6 @@
     </ol>
   </section>
 
-  <!-- ===================== DİĞER İKİ KAPI ===================== -->
-  <section class="kolon bolum" id="kapilar">
-    <p class="etiket etiket--orta">Diğer hizmetlerimiz</p>
-    <h2 class="operasyon-baslik">Otelin içi kadar dışı da bizde.</h2>
-
-    <div class="kapilar">
-      <article class="kapi">
-        <p class="etiket">Dijital Vitrin</p>
-        <h3>Otelinizin misafirle buluştuğu tüm dijital kanalları kontrol altında tutun.</h3>
-        <a class="dugme dugme--sessiz" href="/dijital-vitrin">Dijital Vitrini Keşfet →</a>
-      </article>
-
-      <article class="kapi">
-        <p class="etiket">Teknolojik Altyapı</p>
-        <h3>Otelinizin arkasındaki teknoloji de kontrol altında.</h3>
-        <a class="dugme dugme--sessiz" href="/teknolojik-altyapi">Teknolojik Altyapıyı Keşfet →</a>
-      </article>
-    </div>
-  </section>
-
   <!-- ===================== KAPANIŞ ===================== -->
   <section class="kolon kapanis">
     <h2>Bu akşamki vardiyada kullanmaya başlayın.</h2>
@@ -694,9 +659,7 @@
           <nav class="alt-baglantilar" aria-label="Sayfalar">
             <a href="/">Ana Sayfa</a>
             <a href="/ic-operasyon">İç Operasyon</a>
-            <a href="/dijital-vitrin">Dijital Vitrin</a>
-            <a href="/teknolojik-altyapi">Teknolojik Altyapı</a>
-            <a href="/fiyatlandirma">Fiyatlandırma</a>
+        <a href="/fiyatlandirma">Fiyatlandırma</a>
             <a href="/iletisim">İletişim</a>
           </nav>
         </div>

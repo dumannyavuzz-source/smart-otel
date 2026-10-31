@@ -1,3 +1,11 @@
+> **31 Ekim 2026 — tek ürün düzenlemesi:** Tanıtım sitesi yalnız OtelDijital operasyon yazılımını sunar. Dijital Vitrin ve Teknolojik Altyapı hizmet sayfaları, menüleri ve teklif metinleri kaldırıldı. Eski adresler /ic-operasyon sayfasına yönlendirilir.
+>
+> Dört boş blok yerine mevcut uygulama bileşenlerinden, yalnız yerel örnek verilerle alınan JPEG ekran görüntüleri kullanılır. Görseller /gorseller/uygulama altında; paylaşım kartı /paylasim.jpg adresindedir. HTML artık eski boş AVIF/WebP dosyalarını seçmez. Ayrıntılar ilgili görsel klasörünün README dosyasında.
+>
+> İletişim formunda hizmet seçimi kaldırıldı; mevcut sunucu kuralıyla uyum için konu alanı Diğer olarak gönderilir. Veritabanı ve onay şartı değiştirilmedi. Aşağıdaki eski ekran alma araçları bu düzenlemede çalıştırılmadı; gerçek hesap veya profil kullanılmadı.
+>
+> Mevcut yayın altyapısı ve uygulama projesi korunur. Site değişikliği 97ade25 tabanlı ayrı dalda hazırlanmıştır; main dalında bekleyen Aşama 1 kayıtlarıyla birlikte gönderilmemelidir.
+
 # vitrin/ — OtelDijital Tanıtım Sayfaları
 
 Dışarıya bakan **altı sayfa**: ürünü ve hizmetleri anlatır. Birincil çağrı sitenin her yerinde aynı cümledir:
@@ -14,8 +22,6 @@ Ana kural (Genel Müdür, 2026-09-21 · karar `docs/decisions/008-vitrin-sayfa-m
 |---|---|
 | `index.html` — **Ana Sayfa** (adres `/`) | Şirket vitrini, **yedi bölüm**: hero · nedir (üç alanın özeti) · hangi sorunları çözer · nasıl çalışır (özet) · ne kazandırır · sık sorulanlar · üç hizmet eşit. Ayrıntı isteyen içerik buraya değil, `/ic-operasyon` sayfasına gider (`docs/decisions/017`) |
 | `ic-operasyon.html` (adres `/ic-operasyon`) | Ana ürünün ayrıntılı tanıtımı: operasyonun üç alanı (zikzak) · döngü hikâyesi · kim ne yapar · ekranlar · raporlama · şifre yönetimi · ne kazandırır (tam) |
-| `dijital-vitrin.html` (adres `/dijital-vitrin`) | Dijital check-up panosu, OTA yönetimi, channel manager, Google, web sitesi, online itibar, SEO |
-| `teknolojik-altyapi.html` (adres `/teknolojik-altyapi`) | Ne zaman aramalı · Wi-Fi, ağ, kamera, sunucu, NAS, kesintisiz güç · nasıl yürür |
 | `fiyatlandirma.html` (adres `/fiyatlandirma`) | Dört paket (personel yazılımındaki ödeme duvarıyla aynı) ve fiyatla ilgili dört soru |
 | `iletisim.html` (adres `/iletisim`) | Sitedeki **tek** form. Bütün "Bilgi Al" / "Teknik Destek Al" düğmeleri buraya gelir |
 
@@ -44,8 +50,6 @@ kendisi orada anlatılmaz. Aynı kural her sayfanın sonundaki iki kapı için d
 |---|---|
 | `index.html` | Ana sayfa (şirket vitrini): hero (kodla çizilmiş telefon), "nedir" + üç alanın özeti, "hangi sorunları çözer" (iki sütunlu karşılaştırma), "nasıl çalışır" özeti, değerler, sık sorulanlar, üç kapı, kapanış. **Yedi bölüm sınırı vardır** |
 | `ic-operasyon.html` | Ana ürünün detay sayfası: üç zikzak blok, döngü hikâyesi (ekran kesitleriyle), "kim ne yapar", keşif alanı, raporlama, şifre notu, değerlerin tam hâli |
-| `dijital-vitrin.html` | Sayfa başı, dijital check-up panosu, altı hizmet, dört adım, iki kapı |
-| `teknolojik-altyapi.html` | Sayfa başı, dört belirti, altı hizmet, dört adım, iki kapı |
 | `fiyatlandirma.html` | Sayfa başı, tarife (dört plan), sık sorulanlar, kapanış |
 | `iletisim.html` | Sayfa başı, adaçayı blok içinde form, "hangi konu hangi sayfada" listesi. **KVKK onayı açık eylemle alınır** (denetim · Madde 13 · `docs/decisions/021`): kutu işaretlenmeden form gönderilmez, veritabanı da onaysız satırı kabul etmez |
 | `kvkk.html` · `gizlilik-politikasi.html` · `cerez-politikasi.html` · `kullanim-sartlari.html` | **Dört yasal metin** (2026-09-22 · `docs/decisions/024` ve `025`). Ortak düzen: `.yasal--metin` — sola yaslı, satır uzunluğu 68 karakterle sınırlı. Dördü de `index, follow` ve sitemap içindedir. **Metinler siteyle uyumlu olmak zorundadır:** KVKK sayfası formda alınan altı alanı, adres özetini ve **12 aylık saklama süresini** sayar; Gizlilik ve Çerez sayfaları "çerez yok, üçüncü taraf yok" der; Kullanım Şartları'ndaki para birimi, KDV ve iptal cümleleri `/fiyatlandirma` sayfasıyla birebir aynıdır. Biri değişirse diğeri de değişir |

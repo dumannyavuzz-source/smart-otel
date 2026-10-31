@@ -3,8 +3,14 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/istatistik/script.js", "destination": "https://cloud.umami.is/script.js" },
-    { "source": "/istatistik/api/send", "destination": "https://cloud.umami.is/api/send" }
+    {
+      "source": "/istatistik/script.js",
+      "destination": "https://cloud.umami.is/script.js"
+    },
+    {
+      "source": "/istatistik/api/send",
+      "destination": "https://cloud.umami.is/api/send"
+    }
   ],
   "headers": [
     {
@@ -40,6 +46,28 @@
           "value": "camera=(), microphone=(), geolocation=()"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/dijital-vitrin",
+      "destination": "/ic-operasyon",
+      "permanent": true
+    },
+    {
+      "source": "/dijital-vitrin.html",
+      "destination": "/ic-operasyon",
+      "permanent": true
+    },
+    {
+      "source": "/teknolojik-altyapi",
+      "destination": "/ic-operasyon",
+      "permanent": true
+    },
+    {
+      "source": "/teknolojik-altyapi.html",
+      "destination": "/ic-operasyon",
+      "permanent": true
     }
   ]
 }

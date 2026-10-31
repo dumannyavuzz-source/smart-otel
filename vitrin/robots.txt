@@ -1,5 +1,5 @@
-# OtelDijital vitrin — beş sayfa, hepsi arama motorlarına açık
-# Adresler uzantısızdır: /dijital-vitrin · /teknolojik-altyapi · /fiyatlandirma · /iletisim
+# OtelDijital operasyon yazılımı — tanıtım sitesi
+# Adresler uzantısızdır: /ic-operasyon · /fiyatlandirma · /iletisim
 User-agent: *
 Allow: /
 # paylasim yalnızca paylaşım görselinin kaynağıdır; ziyaretçi sayfası değildir

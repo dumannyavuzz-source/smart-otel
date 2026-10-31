@@ -2247,9 +2247,11 @@ button.dugme { font: inherit; font-size: 0.8125rem; letter-spacing: 0.12em; text
   background: var(--bronz);
 }
 
-/* Ana sayfada yalnızca iki kart var: genişliği serbest bırakılırsa telefon görüntüsü devleşir.
-   Kartlar sola yaslanır ve en fazla 260 px olur; dar ekranda yine iki sütun kalır. */
+/* Ana sayfadaki iki ürün ekranı ortalanır; telefonda okunabilir tek sütuna geçer. */
 .ekran-galeri--ikili {
   grid-template-columns: repeat(auto-fit, minmax(150px, 260px));
-  justify-content: start;
+  justify-content: center;
+}
+@media (max-width: 560px) {
+  .ekran-galeri--ikili { grid-template-columns: minmax(0, 320px); }
 }
