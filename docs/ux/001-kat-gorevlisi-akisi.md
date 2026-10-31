@@ -28,7 +28,7 @@ En sık iş: **QR Okut → tikle → Oda Hazır** = 3 dokunuş. Eksik bildirmek 
 | Kaç tane? | − 1 + | **Gönder** |
 | Ne oldu? | 🔧 Bir şey bozuk · 🐜 Böcek var | dokun (Böcek var anında gider) |
 | Ne bozuk? | kısa not | **Gönder** |
-| Tamam | "Oda 204: temizlik kaydedildi" / "Eksik kaydedildi: 2 × Havlu" + altında gerçek durum: 📱 Telefona kaydedildi → ✓ Sunucuda tamamlandı (ya da ! Sunucu kabul etmedi) — karar 028 | **Oda 204'e Dön** veya **Ana Ekran** |
+| ✓ Tamam | "Oda 204 hazır" / "Eksik bildirildi: 2 × Havlu" | **Oda 204'e Dön** veya **Ana Ekran** |
 
 ## Kararlar (UX denetiminden çıkan)
 
@@ -62,8 +62,8 @@ Ne oldu? ──▶ [🔧 Bir şey bozuk | 🐜 Böcek var] ──▶ Tek ekran:
 ```
 
 - Kamera, telefonun kendi kamera uygulamasıdır (galeri yok, düzenleme yok). Fotoğraf telefonda küçültülür (en uzun kenar 1280 px, JPEG; ~200–600 KB).
-- Gönder'e basınca fotoğraf + kayıt **tek seferde** telefona yazılır; ekran anında tepki verir ve "📱 Telefona kaydedildi" der. İnternet beklenmez. "✓ Sunucuda tamamlandı" ancak sunucudaki kayıt kişi + otel + içerikle eşleşince görünür; sunucu kabul etmezse kayıt silinmez, nedeniyle **Kayıtlarım**'da saklanır (Genel Müdür kararı, 2026-10-23 · karar 028 — eski kural "ekran anında ✓ der" idi).
-- Postacı: **önce fotoğraf, sonra kayıt**. Yüklenen fotoğrafın telefondaki kopyası, asıl kayıt sunucuda doğrulanana kadar korunur; kayıt reddedilir ya da doğrulanamazsa fotoğraf telefonda saklanır (karar 028 · 2026-10-24 — eski kural "yüklenen fotoğraf telefondan silinir" idi). Yarım kalan yükleme tekrar denenir; aynı fotoğraf sunucuya iki kez gitmez.
+- Gönder'e basınca fotoğraf + kayıt **tek seferde** telefona yazılır; ekran anında ✓ der. İnternet beklenmez.
+- Postacı: **önce fotoğraf, sonra kayıt**. Yüklenen fotoğraf telefondan silinir. Yarım kalan yükleme tekrar denenir; aynı fotoğraf sunucuya iki kez gitmez.
 - Tepside 50 fotoğraf birikirse ekran "Bekleyen fotoğraf çok. İnternete bağlanın." der; sorun yine fotoğrafsız bildirilebilir.
 - Gönder'e çift dokunma ikinci kayıt oluşturmaz (tüm gönderme butonlarında). Fotoğraf hazırlanırken Gönder kilitlidir.
 

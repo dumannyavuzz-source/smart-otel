@@ -49,18 +49,16 @@ export function IsEkrani() {
     if (!is || calisiyor || fotoIsleniyor) return;
     setCalisiyor(true);
     setHata(null);
-    let kayitId: string;
     try {
-      kayitId = await isiCoz(is, fotograf);
+      await isiCoz(is, fotograf);
     } catch {
       setCalisiyor(false);
       setHata('Kaydedilemedi. Tekrar deneyin.');
       return;
     }
-    // "Çözüldü" denmez: sunucu doğrulayana kadar yalnızca kaydedildi (karar 028)
     git('/tamam', {
       replace: true,
-      state: { mesaj: `Oda ${is.oda_no}: çözüm kaydedildi`, kayitId, donus: { yol: '/isler', yazi: 'İşlere Dön' } },
+      state: { mesaj: `Oda ${is.oda_no} çözüldü`, donus: { yol: '/isler', yazi: 'İşlere Dön' } },
     });
   }
 
@@ -68,14 +66,6 @@ export function IsEkrani() {
     return (
       <Sayfa baslik="İş" geri="/isler">
         <p className="soluk orta">Aranıyor…</p>
-      </Sayfa>
-    );
-  }
-
-  if (is?.status === 'resolved' && is.onayBekliyor) {
-    return (
-      <Sayfa baslik={`Oda ${is.oda_no}`} geri="/isler">
-        <p>Çözüm telefona kaydedildi. Sunucunun onayı bekleniyor.</p>
       </Sayfa>
     );
   }
@@ -99,9 +89,6 @@ export function IsEkrani() {
       </div>
 
       {durum === 'baskasinda' && <p className="soluk orta">Bu iş başkasında.</p>}
-      {is.onayBekliyor && (
-        <p className="soluk orta" aria-live="polite">Telefona kaydedildi · sunucunun onayı bekleniyor.</p>
-      )}
 
       {durum === 'bende' && (
         <FotografSecici fotograf={fotograf} onSec={setFotograf} onIsleniyor={setFotoIsleniyor} kucuk />

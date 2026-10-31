@@ -54,11 +54,8 @@ export interface IsEmri {
   created_at: string;
   assigned_to: string | null;          // kimde? (kullanıcı kimliği)
   status: 'open' | 'in_progress' | 'resolved';
-  onayBekliyor?: boolean;              // telefonda Aldım/Çözdüm denildi, sunucu henüz doğrulamadı
 }
 
-// ESKİ SÜRÜMÜN giden kutusu. Yeni sürüm buraya YAZMAZ; yalnızca kayitDeposu.ts'teki yeni kutuya taşır
-// (tasima.ts · karar 028). Tablo ve sürüm numarası değiştirilmez: eski sürüme dönülürse uygulama açılabilmeli.
 // Giden kutusundaki bir "mektup" = sunucuya gidecek bir iş
 //   islem yoksa   → yeni satır eklenir (beyan). Aynı UUID varsa sunucu yok sayar.
 //   'guncelle'    → var olan satır güncellenir (iş emri: Aldım / Çözdüm). Koşul tutmazsa sunucu neyse o kalır.
@@ -99,9 +96,6 @@ class TelefonDeposu extends Dexie {
 
   constructor() {
     super('smartotel');
-    // DİKKAT: Buraya yeni bir sürüm (version) eklemek eski uygulamanın bu telefonda açılmasını engeller
-    // (Dexie, kendinden yeni bir veritabanını açmaz). Yeni tablo gerekiyorsa kayitDeposu gibi ayrı bir
-    // veritabanı kullanın. Dizinsiz yeni alanlar (ör. onayBekliyor) sürüm gerektirmez.
     this.version(1).stores({
       odalar: 'id, staff_code, hotel_id',
       kontrolListeleri: 'id, hotel_id',

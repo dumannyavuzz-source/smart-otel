@@ -3,7 +3,7 @@
 > **Hazırlayan:** Orkestratör · **Tarih:** 2026-09-21 · **Kimin için:** Genel Müdür
 > Canlıya çıkış adımları ayrı bir belgededir: `docs/deployment-checklist.md`.
 > Buradaki liste "sistem gerçekten çalışıyor mu?" sorusunu **elle** yanıtlamak içindir.
-> Uygulamanın kendi otomatik testleri ayrıca vardır: `cd app && npm test` (19 dosya · 180 test · 2026-10-24).
+> Uygulamanın kendi otomatik testleri ayrıca vardır: `cd app && npm test` (141 test).
 
 ---
 
@@ -76,16 +76,9 @@ alamaz**. Tek hesapla zincirin tamamı denenemez; en az iki hesap ve iki ayrı t
 ## 7. İnternetsiz çalışma (offline)
 
 - [ ] Tarayıcı geliştirici araçlarından ağı kapat (Network → Offline).
-- [ ] Oda Hazır bildir: ekran anında "📱 Telefona kaydedildi" demeli (✓ **dememeli**), ana ekranda "… kayıt telefona kaydedildi, internet gelince gönderilecek" yazmalı.
-- [ ] Ağı aç: kayıt kendiliğinden gitmeli, ana ekrandaki satır kaybolmalı; **Kayıtlarım**'da "Sunucuda tamamlandı" altında görünmeli.
+- [ ] Oda Hazır bildir: ekran anında "✓" demeli, ana ekranda "… bildirim internet gelince gönderilecek" yazmalı.
+- [ ] Ağı aç: kayıt kendiliğinden gitmeli, sayaç sıfırlanmalı.
 - [ ] Fotoğraflı bir bildirimi de aynı şekilde dene (önce fotoğraf, sonra kayıt gider).
-
-## 7b. Kayıt durumları (karar 028)
-
-- [ ] İki telefonda (ya da iki tarayıcıda) aynı işe "Aldım" de; ikincisi internetsizken desin. İnternet gelince ikincisinin **Kayıtlarım**'ında "Sunucu kabul etmedi · Bu iş başkasında" görünmeli; iş listesi gerçek sahibi göstermeli; kayıt silinmemeli.
-- [ ] Reddedilen kayıtta "Gördüm, arşivle"ye bas: ana ekrandaki uyarı kaybolmalı, kayıt **Arşiv**'de durmalı.
-- [ ] Ortak telefon: A kişisi internetsiz bir kayıt bıraksın ve çıksın; B girsin. B, A'nın kaydını ve fotoğrafını **görmemeli** (yalnızca "Başka kullanıcının 1 bekleyen kaydı var"). A tekrar girince kayıt gitmeli.
-- [ ] İki otelli hesap: A otelindeyken internetsiz kayıt bırak, B oteline geç, interneti aç. Kayıt **gitmemeli**, "Başka otelinizde 1 kayıt bekliyor" yazmalı. A oteline dönünce gitmeli.
 
 ## 8. Yetki sınırları (en az yetki ilkesi)
 

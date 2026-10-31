@@ -3,11 +3,6 @@
 // ve eksi kattaki depoda yazılan teslim internet gelince fotoğraflarıyla sırayla gidiyor mu?
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { telefonDeposu, type Teslimat } from './telefonDeposu';
-import { kayitDeposu, kuyruktaMi } from './kayitDeposu';
-
-// Gönderilmeyi bekleyen (kuyruktaki) kayıt sayısı. Tamamlanan kayıt kuyruktan çıkar ama özet olarak
-// geçmişte kalır (karar 028); bu yüzden "telefon boşaldı" kuyruğa bakılarak ölçülür.
-const kuyruktakiSayisi = async () => (await kayitDeposu.kayitlar.toArray()).filter(kuyruktaMi).length;
 import { eksikMetni, hasarFotografiGerekli, teslimAlabilirMi, teslimAldim, teslimBekleyenler } from './teslimler';
 import { birimSorusu, miktarMetni } from './miktar';
 import { mektuplariGonder, type Gonderici, type Yukleyici } from './postaci';
@@ -43,8 +38,7 @@ function sahteAg() {
   const gonder: Gonderici = async (mektup) => {
     if (!bagli) return { ok: false, kalici: false, hata: 'Failed to fetch' };
     olaylar.push('kayit:' + mektup.id);
-    // Sunucu yazdığı satırı geri verir; teslim imzasını (received_by) karttaki kişiden yazar
-    return { ok: true, satir: { ...mektup.icerik, received_by: ALI } };
+    return { ok: true };
   };
   const yukle: Yukleyici = async (yol) => {
     if (!bagli) return { ok: false, kalici: false, hata: 'Failed to fetch' };
@@ -69,9 +63,9 @@ function ucakModu(acik: boolean) {
 }
 
 beforeEach(async () => {
-  aktifKullaniciyiAyarla(ALI, 'otel-1');
-  await kayitDeposu.kayitlar.clear();
-  await kayitDeposu.fotograflar.clear();
+  aktifKullaniciyiAyarla(ALI);
+  await telefonDeposu.gidenKutusu.clear();
+  await telefonDeposu.fotograflar.clear();
   await telefonDeposu.teslimler.clear();
   ucakModu(false);
 });
@@ -110,7 +104,7 @@ describe('Kanıt şartı', () => {
 
   it('eksik teslim, hasar fotoğrafı olmadan telefona bile yazılmaz', async () => {
     await expect(teslimAldim(siparis(), 7, sahteFoto(), null)).rejects.toThrow(/hasar fotoğrafı/i);
-    expect(await kayitDeposu.kayitlar.count()).toBe(0);
+    expect(await telefonDeposu.gidenKutusu.count()).toBe(0);
   });
 });
 
@@ -139,33 +133,33 @@ describe('Teslim alma (beyan)', () => {
     await telefonDeposu.teslimler.put(siparis());
     await teslimAldim(siparis(), 10, sahteFoto(), null, '  Hepsi geldi  ');
 
-    const mektup = (await kayitDeposu.kayitlar.toArray())[0]!;
+    const mektup = (await telefonDeposu.gidenKutusu.toArray())[0]!;
     expect(mektup.tablo).toBe('deliveries');
     expect(mektup.icerik.received_quantity).toBe(10);
     expect(mektup.icerik.purchase_request_id).toBe('talep-1');
     expect(mektup.icerik.damage_photo_path).toBeUndefined();
     expect(mektup.icerik.note).toBe('Hepsi geldi');
     expect(mektup.fotografYollari).toHaveLength(1);
-    expect(await kayitDeposu.fotograflar.count()).toBe(1);
+    expect(await telefonDeposu.fotograflar.count()).toBe(1);
     expect(await telefonDeposu.teslimler.count()).toBe(0);      // aynı sipariş iki kez alınmaz
   });
 
   it('eksik teslim: iki fotoğraf ve kayıtta hasar fotoğrafının yolu', async () => {
     await teslimAldim(siparis(), 7, sahteFoto(), sahteFoto(), '3 Kg çürük çıktı');
 
-    const mektup = (await kayitDeposu.kayitlar.toArray())[0]!;
+    const mektup = (await telefonDeposu.gidenKutusu.toArray())[0]!;
     expect(mektup.icerik.received_quantity).toBe(7);
     expect(mektup.icerik.invoice_photo_path).toMatch(/^otel-1\/deliveries\/.*-fatura\.jpg$/);
     expect(mektup.icerik.damage_photo_path).toMatch(/^otel-1\/deliveries\/.*-hasar\.jpg$/);
     expect(mektup.fotografYollari).toHaveLength(2);
-    expect(await kayitDeposu.fotograflar.count()).toBe(2);
+    expect(await telefonDeposu.fotograflar.count()).toBe(2);
   });
 
   it('kesirli teslim: "7,5 Kg onaylandı, 6,5 Kg geldi" kayda öyle geçer', async () => {
     const kesirli = siparis({ onaylanan: 7.5 });
     await teslimAldim(kesirli, 6.5, sahteFoto(), sahteFoto());
 
-    const mektup = (await kayitDeposu.kayitlar.toArray())[0]!;
+    const mektup = (await telefonDeposu.gidenKutusu.toArray())[0]!;
     expect(mektup.icerik.received_quantity).toBe(6.5);
     expect(eksikMetni(6.5, kesirli)).toBe('1 Kg eksik geldi');
   });
@@ -181,8 +175,8 @@ describe('Eksi kattaki depo (offline)', () => {
     await mektuplariGonder(ag.gonder, ag.yukle);
 
     expect(ag.olaylar).toEqual([]);                              // uçak modunda ağa dokunulmaz
-    expect(await kuyruktakiSayisi()).toBe(1);
-    expect(await kayitDeposu.fotograflar.count()).toBe(2);
+    expect(await telefonDeposu.gidenKutusu.count()).toBe(1);
+    expect(await telefonDeposu.fotograflar.count()).toBe(2);
 
     ucakModu(false);                                             // depodan çıkıldı, internet geldi
     ag.kabloyuTak();
@@ -192,15 +186,15 @@ describe('Eksi kattaki depo (offline)', () => {
     expect(ag.olaylar[0]).toMatch(/^foto:.*-fatura\.jpg$/);      // önce fatura
     expect(ag.olaylar[1]).toMatch(/^foto:.*-hasar\.jpg$/);       // sonra kanıt
     expect(ag.olaylar[2]).toMatch(/^kayit:/);                    // en son kayıt (sunucu kuralı bunu ister)
-    expect(await kuyruktakiSayisi()).toBe(0);
-    expect(await kayitDeposu.fotograflar.count()).toBe(0);     // telefon boşaldı
+    expect(await telefonDeposu.gidenKutusu.count()).toBe(0);
+    expect(await telefonDeposu.fotograflar.count()).toBe(0);     // telefon boşaldı
   });
 
   it('hasar fotoğrafında internet kesilirse kayıt GİTMEZ; yüklenen fotoğraf tekrar yüklenmez', async () => {
     const ag = sahteAg();
     await teslimAldim(siparis(), 7, sahteFoto(), sahteFoto(), '');
 
-    const yollar = (await kayitDeposu.kayitlar.toArray())[0]?.fotografYollari ?? [];
+    const yollar = (await telefonDeposu.gidenKutusu.toArray())[0]?.fotografYollari ?? [];
     const yarimYukleyici: Yukleyici = async (yol, veri) => {
       if (yol === yollar[1]) return { ok: false, kalici: false, hata: 'Failed to fetch' };
       return ag.yukle(yol, veri);
@@ -208,15 +202,11 @@ describe('Eksi kattaki depo (offline)', () => {
 
     await mektuplariGonder(ag.gonder, yarimYukleyici);
     expect(ag.olaylar).toEqual([expect.stringMatching(/^foto:.*-fatura\.jpg$/)]);
-    expect(await kuyruktakiSayisi()).toBe(1);     // kayıt hâlâ bekliyor
-    // Beklenti değişti (Genel Müdür, 2026-10-24). Eski: "yalnızca hasar fotoğrafı kaldı". Yeni: yüklenen
-    // fatura da kayıt doğrulanana kadar telefonda kalır; yalnızca "yüklendi" diye işaretlenir.
-    expect(await kayitDeposu.fotograflar.count()).toBe(2);
-    expect((await kayitDeposu.kayitlar.toArray())[0]?.yuklenenFotograflar).toEqual([yollar[0]]);
+    expect(await telefonDeposu.gidenKutusu.count()).toBe(1);     // kayıt hâlâ bekliyor
+    expect(await telefonDeposu.fotograflar.count()).toBe(1);     // yalnızca hasar fotoğrafı kaldı
 
     await mektuplariGonder(ag.gonder, ag.yukle);                 // ikinci fırsat
     expect(ag.olaylar).toHaveLength(3);                          // fatura ikinci kez yüklenmedi
-    expect(await kuyruktakiSayisi()).toBe(0);
-    expect(await kayitDeposu.fotograflar.count()).toBe(0);     // doğrulandı: ikisi de telefondan silindi
+    expect(await telefonDeposu.gidenKutusu.count()).toBe(0);
   });
 });

@@ -35,9 +35,8 @@ export function EksikVarEkrani() {
     if (!oda || !secili || gonderiliyor) return;
     setGonderiliyor(true);
     setHata(null);
-    let kayitId: string;
     try {
-      kayitId = await eksikVarBeyani(oda, secili.id, adet);
+      await eksikVarBeyani(oda, secili.id, adet);
     } catch {
       setGonderiliyor(false);
       setHata('Kaydedilemedi. Tekrar deneyin.');
@@ -46,8 +45,7 @@ export function EksikVarEkrani() {
     git('/tamam', {
       replace: true,
       state: {
-        mesaj: `Eksik kaydedildi: ${miktarMetni(adet, secili.unit)} ${secili.name}`,
-        kayitId,
+        mesaj: `Eksik bildirildi: ${miktarMetni(adet, secili.unit)} ${secili.name}`,
         donus: { yol: `/oda/${kod}`, yazi: `Oda ${oda.number}’e Dön` },
       },
     });

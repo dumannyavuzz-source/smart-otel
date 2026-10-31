@@ -79,9 +79,8 @@
 - [ ] **3.5** **Gerçek telefonda duman testi** (en az iki telefon: biri görevli, biri müdür):
       1. Görevli girişi → QR okut → oda açılır.
       2. "Oda Hazır" · "Eksik Var" (kesirli dene: 1,5 Kg) · "Sorun Bildir" (fotoğraflı).
-      3. **Uçak modu aç** → aynı beyanları yap → ekran anında "📱 Telefona kaydedildi" demeli (✓ dememeli), ana ekran "internet gelince gönderilecek" demeli (karar 028).
-      4. Uçak modunu kapat → kayıtlar gitmeli, ana ekrandaki satır kaybolmalı; **Kayıtlarım**'da "Sunucuda tamamlandı" görünmeli.
-      4b. **Eski sürüme dönüş provası (karar 028 · bölüm 7):** bekleyen kayıt varken önceki yayına dön → uygulama açılmalı, kayıt kaybolmamalı → yeni yayına geç → kayıt gitmeli. Yalnızca deneme oteli ve deneme hesaplarıyla.
+      3. **Uçak modu aç** → aynı beyanları yap → ekran anında "✓" demeli, ana ekran "internet gelince gönderilecek" demeli.
+      4. Uçak modunu kapat → kayıtlar gitmeli, sayaç sıfırlanmalı.
       5. Müdür panelinde bekleyen onay görünmeli; onayla → depo görevlisinde "📦 Teslim Al" çıkmalı.
       6. Eksik teslim al (kanıt fotoğrafıyla) → müdür panelinde **kırmızı uyuşmazlık kutusu** ve **çan sesi**.
       7. Misafir sayfası: `/yorum/<guest_code>` → 2 yıldız ver → müdüre "mutsuz misafir" alarmı düşmeli.

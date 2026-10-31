@@ -18,7 +18,6 @@ import { OdaEkrani } from './ekranlar/OdaEkrani';
 import { EksikVarEkrani } from './ekranlar/EksikVarEkrani';
 import { SorunBildirEkrani } from './ekranlar/SorunBildirEkrani';
 import { TamamEkrani } from './ekranlar/TamamEkrani';
-import { KayitlarimEkrani } from './ekranlar/KayitlarimEkrani';
 import { IslerEkrani } from './ekranlar/IslerEkrani';
 import { IsEkrani } from './ekranlar/IsEkrani';
 import { TeslimlerEkrani } from './ekranlar/TeslimlerEkrani';
@@ -124,7 +123,6 @@ export function App() {
         <Route path="/teslimler" element={<TeslimlerEkrani />} />
         <Route path="/teslim/:id" element={<TeslimEkrani />} />
         <Route path="/tamam" element={<TamamEkrani />} />
-        <Route path="/kayitlarim" element={<KayitlarimEkrani />} />
         <Route path="/panel/gecikenler" element={yalnizYonetici(<GecikenlerEkrani />)} />
         <Route path="/panel/misafirler" element={yalnizYonetici(<MisafirlerEkrani />)} />
         <Route path="/panel/uyusmazliklar" element={yalnizYonetici(<UyusmazliklarEkrani />)} />

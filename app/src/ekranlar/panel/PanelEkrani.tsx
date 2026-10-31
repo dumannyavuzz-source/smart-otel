@@ -91,10 +91,6 @@ export function PanelEkrani() {
         <BuyukButon ikon="📷" onClick={() => git('/qr')}>
           QR Okut
         </BuyukButon>
-        {/* Müdürün de QR ile yazdığı kayıtlar olur; reddedilenleri görebilmeli (karar 028) */}
-        <BuyukButon ikon="📋" onClick={() => git('/kayitlarim')}>
-          Kayıtlarım
-        </BuyukButon>
       </div>
     </main>
   );
