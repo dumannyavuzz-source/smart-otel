@@ -31,8 +31,9 @@ export function SorunBildirEkrani() {
     if (!oda || !tur || gonderiliyor || fotoIsleniyor) return;
     setGonderiliyor(true);
     setHata(null);
+    let kayitId: string;
     try {
-      await sorunBildirBeyani(oda, tur, not, fotograf);
+      kayitId = await sorunBildirBeyani(oda, tur, not, fotograf);
     } catch {
       setGonderiliyor(false);
       setHata('Kaydedilemedi. Tekrar deneyin.');
@@ -41,7 +42,8 @@ export function SorunBildirEkrani() {
     git('/tamam', {
       replace: true,
       state: {
-        mesaj: `Sorun bildirildi: ${tur.etiket}`,
+        mesaj: `Sorun kaydedildi: ${tur.etiket}`,
+        kayitId,
         donus: { yol: `/oda/${kod}`, yazi: `Oda ${oda.number}’e Dön` },
       },
     });

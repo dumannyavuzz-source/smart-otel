@@ -2,7 +2,12 @@
 // Gerçek Dexie kodu + sahte IndexedDB + sahte ağ. Amaç: internet kesildiğinde beyanlar ve fotoğraflar
 // telefonda güvenle bekliyor mu, internet gelince postacı çökmeden, sırayla, tekrar etmeden gönderiyor mu?
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { telefonDeposu, type Oda } from './telefonDeposu';
+import { type Oda } from './telefonDeposu';
+import { kayitDeposu, kuyruktaMi } from './kayitDeposu';
+
+// Gönderilmeyi bekleyen (kuyruktaki) kayıt sayısı. Tamamlanan kayıt kuyruktan çıkar ama özet olarak
+// geçmişte kalır (karar 028); bu yüzden "telefon boşaldı" kuyruğa bakılarak ölçülür.
+const kuyruktakiSayisi = async () => (await kayitDeposu.kayitlar.toArray()).filter(kuyruktaMi).length;
 import { SORUN_TURLERI, eksikVarBeyani, odaHazirBeyani, sorunBildirBeyani } from './beyanlar';
 import { mektuplariGonder, type Gonderici, type Yukleyici } from './postaci';
 import { aktifKullaniciyiAyarla } from './kullanici';
@@ -38,7 +43,8 @@ function sahteAg() {
     if (kopukMu()) return { ok: false, kalici: false, hata: 'Failed to fetch' };
     ag.gidenKayitlar.push(m.id);
     ag.olaylar.push(`kayit:${m.id}`);
-    return { ok: true };
+    // Sunucu yazdığı satırı geri verir; imzayı karttaki kişiden yazar (eşleştirme bunu doğrular)
+    return { ok: true, satir: { ...m.icerik, created_by: 'ayse' } };
   };
   const yukle: Yukleyici = async (yol) => {
     if (kopukMu()) return { ok: false, kalici: false, hata: 'Failed to fetch' };
@@ -56,9 +62,9 @@ function ucakModu(acik: boolean) {
 }
 
 beforeEach(async () => {
-  aktifKullaniciyiAyarla('ayse');
-  await telefonDeposu.gidenKutusu.clear();
-  await telefonDeposu.fotograflar.clear();
+  aktifKullaniciyiAyarla('ayse', 'otel-1');
+  await kayitDeposu.kayitlar.clear();
+  await kayitDeposu.fotograflar.clear();
   ucakModu(false);
 });
 
@@ -78,9 +84,9 @@ describe('Uçak modu', () => {
     await mektuplariGonder(gonder, yukle);          // uçak modunda çağrıldı
 
     expect(ag.cagri).toBe(0);                       // ağa hiç dokunmadı
-    expect(await telefonDeposu.gidenKutusu.count()).toBe(3);
-    expect(await telefonDeposu.fotograflar.count()).toBe(1);
-    expect((await telefonDeposu.gidenKutusu.orderBy('sira').primaryKeys())).toEqual([temizlik, sorun, eksik]);
+    expect(await kuyruktakiSayisi()).toBe(3);
+    expect(await kayitDeposu.fotograflar.count()).toBe(1);
+    expect((await kayitDeposu.kayitlar.orderBy('sira').primaryKeys())).toEqual([temizlik, sorun, eksik]);
   });
 
   it('internet gelince: önce fotoğraf, sonra kaydı; sıra eskiden yeniye; telefon boşalır', async () => {
@@ -95,8 +101,8 @@ describe('Uçak modu', () => {
     await mektuplariGonder(gonder, yukle);
 
     expect(ag.olaylar).toEqual([`kayit:${temizlik}`, `foto:${fotoYolu}`, `kayit:${sorun}`, `kayit:${eksik}`]);
-    expect(await telefonDeposu.gidenKutusu.count()).toBe(0);
-    expect(await telefonDeposu.fotograflar.count()).toBe(0);   // yüklenen fotoğraf telefondan silindi
+    expect(await kuyruktakiSayisi()).toBe(0);
+    expect(await kayitDeposu.fotograflar.count()).toBe(0);   // yüklenen fotoğraf telefondan silindi
   });
 
   it('bağlantı yarı yolda koparsa: gidenler gitti, kalanlar bekler; ikinci turda kimse iki kez gitmez', async () => {
@@ -111,10 +117,13 @@ describe('Uçak modu', () => {
     await mektuplariGonder(gonder, yukle);
 
     expect(ag.olaylar).toEqual([`kayit:${a}`, `foto:otel-1/issues/${b}.jpg`]);
-    expect(await telefonDeposu.gidenKutusu.count()).toBe(2);           // b ve c bekliyor
-    expect(await telefonDeposu.fotograflar.count()).toBe(0);           // fotoğraf yüklendi, silindi
-    expect((await telefonDeposu.gidenKutusu.get(b))?.deneme).toBe(1);
-    expect((await telefonDeposu.gidenKutusu.get(c))?.deneme).toBe(0);  // ona sıra gelmedi
+    expect(await kuyruktakiSayisi()).toBe(2);           // b ve c bekliyor
+    // Beklenti değişti (Genel Müdür, 2026-10-24). Eski: "fotoğraf yüklendi, silindi". Yeni: yüklenen
+    // fotoğrafın kopyası, kayıt sunucuda doğrulanana kadar telefonda kalır.
+    expect(await kayitDeposu.fotograflar.count()).toBe(1);
+    expect((await kayitDeposu.kayitlar.get(b))?.yuklenenFotograflar).toEqual([`otel-1/issues/${b}.jpg`]);
+    expect((await kayitDeposu.kayitlar.get(b))?.deneme).toBe(1);
+    expect((await kayitDeposu.kayitlar.get(c))?.deneme).toBe(0);  // ona sıra gelmedi
 
     // internet geri geldi
     ag.bagli = true;
@@ -123,7 +132,7 @@ describe('Uçak modu', () => {
 
     expect(ag.gidenKayitlar).toEqual([a, b, c]);                       // her biri tam bir kez
     expect(ag.yuklenenler.length).toBe(1);                             // fotoğraf yeniden yüklenmedi
-    expect(await telefonDeposu.gidenKutusu.count()).toBe(0);
+    expect(await kuyruktakiSayisi()).toBe(0);
   });
 
   it('fotoğraf yüklenirken kablo çekilirse fotoğraf telefonda kalır, sonra yüklenir; sunucuda tek kopya', async () => {
@@ -134,15 +143,15 @@ describe('Uçak modu', () => {
 
     ag.kabloyuCekSonra = 0;                          // ilk çağrı (fotoğraf) kopar
     await mektuplariGonder(gonder, yukle);
-    expect(await telefonDeposu.fotograflar.count()).toBe(1);
-    expect(await telefonDeposu.gidenKutusu.count()).toBe(1);
+    expect(await kayitDeposu.fotograflar.count()).toBe(1);
+    expect(await kuyruktakiSayisi()).toBe(1);
 
     ag.bagli = true;
     ag.kabloyuCekSonra = Infinity;
     await mektuplariGonder(gonder, yukle);
     expect(ag.sunucudakiFotograflar.size).toBe(1);
     expect(ag.gidenKayitlar).toEqual([sorun]);
-    expect(await telefonDeposu.fotograflar.count()).toBe(0);
+    expect(await kayitDeposu.fotograflar.count()).toBe(0);
   });
 
   it('fotoğraf sunucuda zaten varsa (önceki yarım deneme) yeniden yüklenmez, kayıt yine gider', async () => {
@@ -154,10 +163,10 @@ describe('Uçak modu', () => {
 
     expect(ag.yuklenenler).toEqual([]);
     expect(ag.gidenKayitlar).toEqual([sorun]);
-    expect(await telefonDeposu.fotograflar.count()).toBe(0);
+    expect(await kayitDeposu.fotograflar.count()).toBe(0);
   });
 
-  it('sunucu fotoğrafı kalıcı olarak reddederse (kilit) mektup işaretlenir, diğerleri yine gider', async () => {
+  it('sunucu fotoğrafı kalıcı olarak reddederse (kilit) kayıt nedeniyle reddedildi olur, diğerleri yine gider', async () => {
     const { ag, gonder } = sahteAg();
     const sorun = await sorunBildirBeyani(ODA, ARIZA, 'kapı', sahteFoto());
     const temizlik = await odaHazirBeyani(ODA, []);
@@ -166,8 +175,9 @@ describe('Uçak modu', () => {
     await mektuplariGonder(gonder, reddeden);
 
     expect(ag.gidenKayitlar).toEqual([temizlik]);                      // sorun kaydı fotoğrafsız GİTMEDİ
-    expect((await telefonDeposu.gidenKutusu.get(sorun))?.sonHata).toContain('row-level security');
-    expect(await telefonDeposu.fotograflar.count()).toBe(1);           // fotoğraf hâlâ telefonda, kanıt kaybolmaz
+    expect(await kayitDeposu.kayitlar.get(sorun)).toMatchObject({ durum: 'reddedildi' });
+    expect((await kayitDeposu.kayitlar.get(sorun))?.neden).toContain('row-level security');
+    expect(await kayitDeposu.fotograflar.count()).toBe(1);           // fotoğraf hâlâ telefonda, kanıt kaybolmaz
   });
 
   it('postacı aynı anda iki kez çağrılsa da mektuplar bir kez gider', async () => {
@@ -181,7 +191,9 @@ describe('Uçak modu', () => {
     expect(ag.gidenKayitlar.length).toBe(2);
   });
 
-  it('kalıcı reddedilen fotoğraf sonraki turda yeniden denenir (deneme artar), asla silinmez', async () => {
+  // Beklenti değişti (karar 028, Genel Müdür onayı): kesin reddedilen kayıt artık OTOMATİK yeniden
+  // denenmez. Eski beklenti "sonraki turda yeniden denenir (deneme artar)" idi. Değişmeyen: asla silinmez.
+  it('kalıcı reddedilen fotoğraf otomatik yeniden denenmez; kayıt ve fotoğraf asla silinmez', async () => {
     const { gonder } = sahteAg();
     const sorun = await sorunBildirBeyani(ODA, ARIZA, 'kapı', sahteFoto());
     let yuklemeDenemesi = 0;
@@ -192,8 +204,8 @@ describe('Uçak modu', () => {
 
     await mektuplariGonder(gonder, reddeden);
     await mektuplariGonder(gonder, reddeden);
-    expect(yuklemeDenemesi).toBe(2);
-    expect((await telefonDeposu.gidenKutusu.get(sorun))?.deneme).toBe(2);
-    expect(await telefonDeposu.fotograflar.count()).toBe(1);
+    expect(yuklemeDenemesi).toBe(1);
+    expect(await kayitDeposu.kayitlar.get(sorun)).toMatchObject({ durum: 'reddedildi', deneme: 1 });
+    expect(await kayitDeposu.fotograflar.count()).toBe(1);
   });
 });

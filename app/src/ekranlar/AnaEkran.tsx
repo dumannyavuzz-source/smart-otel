@@ -4,13 +4,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { BuyukButon } from '../parcalar/BuyukButon';
-import { kutuDurumu } from '../postaci';
+import { benimKutuOzetim } from '../postaci';
 import { acikIsler } from '../isEmirleri';
 import { teslimBekleyenler } from '../teslimler';
 import { cikisYap } from '../oturum';
 import { KUTU_DEGISTI_OLAYI, PAKET_OLAYI, YENI_MEKTUP_OLAYI } from '../olaylar';
+import type { KutuOzeti } from '../kayitDeposu';
 
-type Durum = Awaited<ReturnType<typeof kutuDurumu>>;
+type Durum = KutuOzeti;
 
 const OLAYLAR = [YENI_MEKTUP_OLAYI, KUTU_DEGISTI_OLAYI, PAKET_OLAYI];
 
@@ -29,16 +30,18 @@ function useSayim<T>(say: () => Promise<T>, baslangic: T): T {
 const acikIsSayisi = () => acikIsler().then((isler) => isler.length);
 const teslimSayisi = () => teslimBekleyenler().then((liste) => liste.length);
 
-function durumMetni({ bekleyen, gonderilemeyen, baskasinin }: Durum): string {
-  if (gonderilemeyen > 0) return `${gonderilemeyen} kayıt gönderilemedi. Müdürünüze haber verin.`;
-  if (bekleyen > 0) return `${bekleyen} bildirim internet gelince gönderilecek`;
+// Telefona kaydedilen, sunucuda tamamlanan ve reddedilen ayrı söylenir (karar 028).
+function durumMetni({ bekleyen, digerOtelde, dikkat, baskasinin }: Durum): string {
+  if (dikkat > 0) return `${dikkat} kaydınız sunucuda kabul edilmedi. Kayıtlarım'a bakın.`;
+  if (bekleyen > 0) return `${bekleyen} kayıt telefona kaydedildi, internet gelince gönderilecek`;
+  if (digerOtelde > 0) return `Başka otelinizde ${digerOtelde} kayıt bekliyor; o otele geçince gönderilir`;
   if (baskasinin > 0) return `Başka kullanıcının ${baskasinin} bekleyen kaydı var`;
-  return ' ';
+  return ' ';
 }
 
 export function AnaEkran() {
   const git = useNavigate();
-  const durum = useSayim(kutuDurumu, { bekleyen: 0, gonderilemeyen: 0, baskasinin: 0 });
+  const durum = useSayim(benimKutuOzetim, { bekleyen: 0, digerOtelde: 0, dikkat: 0, baskasinin: 0 });
   const acikIs = useSayim(acikIsSayisi, 0);
   const teslim = useSayim(teslimSayisi, 0);
 
@@ -68,17 +71,22 @@ export function AnaEkran() {
       <p className="soluk" aria-live="polite">
         {durumMetni(durum)}
       </p>
-      <button type="button" className="buton buton--geri" onClick={() => void cikis(durum)}>
-        Çıkış
-      </button>
+      <div className="ikili" style={{ width: '100%' }}>
+        <button type="button" className="buton buton--geri" onClick={() => git('/kayitlarim')}>
+          {durum.dikkat > 0 ? `Kayıtlarım (${durum.dikkat})` : 'Kayıtlarım'}
+        </button>
+        <button type="button" className="buton buton--geri" onClick={() => void cikis(durum)}>
+          Çıkış
+        </button>
+      </div>
     </main>
   );
 }
 
-// Vardiya değişiminde ortak telefondan çıkış. Gönderilmemiş bildirim varsa önce söylenir:
-// bildirimler telefonda kalır ama ancak sahibi tekrar girince gider (postaci · kimin mektubu).
+// Vardiya değişiminde ortak telefondan çıkış. Gönderilmemiş kayıt varsa önce söylenir:
+// kayıtlar telefonda kalır ama ancak sahibi tekrar girince gider (postaci · kimin kaydı).
 async function cikis(durum: Durum): Promise<void> {
-  const bekleyen = durum.bekleyen + durum.gonderilemeyen;
+  const bekleyen = durum.bekleyen + durum.digerOtelde;
   const uyari = `${bekleyen} bildiriminiz henüz gönderilmedi. Çıkarsanız siz tekrar girene kadar telefonda bekler. Çıkılsın mı?`;
   if (bekleyen > 0 && !window.confirm(uyari)) return;
   await cikisYap();

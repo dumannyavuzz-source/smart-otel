@@ -58,15 +58,17 @@ export function OdaEkrani() {
     if (!oda || gonderiliyor) return;
     setGonderiliyor(true);
     setHata(null);
+    let kayitId: string;
     try {
-      await odaHazirBeyani(oda, maddeler.filter((m) => tiklenen.includes(m)));
+      kayitId = await odaHazirBeyani(oda, maddeler.filter((m) => tiklenen.includes(m)));
     } catch {
       setGonderiliyor(false);
       setHata('Kaydedilemedi. Tekrar deneyin.');
       return;
     }
     tiklenenleriSil(kod);
-    git('/tamam', { replace: true, state: { mesaj: `Oda ${oda.number} hazır` } });
+    // "Oda hazır" denmez: sunucu doğrulayana kadar yalnızca kaydedildi (karar 028)
+    git('/tamam', { replace: true, state: { mesaj: `Oda ${oda.number}: temizlik kaydedildi`, kayitId } });
   }
 
   if (oda === undefined) {

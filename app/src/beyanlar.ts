@@ -1,9 +1,10 @@
-// Beyanlar: personelin üç sözü. Hepsi ÖNCE telefona (giden kutusu) yazılır; ekran anında tepki verir.
-// Sunucuya gitmek postacının işidir, personel bunu görmez (002 · B.1).
+// Beyanlar: personelin üç sözü. Hepsi ÖNCE telefona (kayıt kutusu) yazılır; ekran anında tepki verir
+// ve "Telefona kaydedildi" der. Sunucuda tamamlandığını postacı doğrular (002 · B.1 · karar 028).
 //
 // "Kim yazdı" ve "sunucu saati" burada yazılmaz — veritabanı karttan kendisi doldurur (security · 2.8).
 // Telefonun saati bilgi amaçlı ayrıca gider (created_at_device).
-import { EN_FAZLA_BEKLEYEN_FOTOGRAF, telefonDeposu, type Mektup, type Oda } from './telefonDeposu';
+import { EN_FAZLA_BEKLEYEN_FOTOGRAF, telefonDeposu, type Oda } from './telefonDeposu';
+import { KUYRUK_DURUMLARI, kayitDeposu, sonrakiSira, tabloAdi, type Kayit } from './kayitDeposu';
 import { YENI_MEKTUP_OLAYI, haberVer } from './olaylar';
 import { aktifKullanici } from './kullanici';
 
@@ -11,16 +12,18 @@ const EN_UZUN_ACIKLAMA = 500;
 
 export interface MektupEki {
   id?: string;                                   // beyanın kimliği (verilmezse üretilir)
-  fotograf?: { veri: Blob; yol: string };        // mektubun yanında tepside bekler; postacı önce onu yükler
+  fotograf?: { veri: Blob; yol: string };        // kaydın yanında tepside bekler; postacı önce onu yükler
   fotograflar?: { veri: Blob; yol: string }[];   // birden fazla olabilir (teslimde: fatura + hasar)
   islem?: 'guncelle';                            // var olan satırı güncelle (iş emri)
   kosul?: Record<string, unknown>;               // güncellemede hangi satır
+  otelId?: string;                               // verilmezse içerikteki hotel_id
+  ozet?: string;                                 // "Oda 204 · Temizlik" — Kayıtlarım listesinde
 }
 
 // Her iş ÖNCE telefona yazılır. Beyanlarda satırın kimliği ve telefon saati içeriğe eklenir;
-// güncellemelerde içerik olduğu gibi gider.
+// güncellemelerde içerik olduğu gibi gider. Kayıt, yazıldığı andaki oteli taşır — sonra değişmez.
 export async function gidenKutusunaKoy(
-  tablo: Mektup['tablo'],
+  tablo: Kayit['tablo'],
   icerik: Record<string, unknown>,
   ek: MektupEki = {},
 ): Promise<string> {
@@ -31,28 +34,31 @@ export async function gidenKutusunaKoy(
   const simdi = new Date().toISOString();
   const beyan = ek.islem !== 'guncelle';
   const fotograflar = [...(ek.fotograf ? [ek.fotograf] : []), ...(ek.fotograflar ?? [])];
+  const otelId = ek.otelId ?? (typeof icerik.hotel_id === 'string' ? icerik.hotel_id : null);
+  if (!otelId) throw new Error('Kaydın oteli belli değil.');
+  if (fotograflar.length > 0 && (await bekleyenFotografSayisi()) + fotograflar.length > EN_FAZLA_BEKLEYEN_FOTOGRAF) {
+    throw new Error('Bekleyen fotoğraf çok. İnternete bağlanın.');
+  }
 
-  // Mektup ve fotoğrafları tek seferde yaz: ya hepsi tepside, ya hiçbiri
-  await telefonDeposu.transaction('rw', [telefonDeposu.gidenKutusu, telefonDeposu.fotograflar], async () => {
+  // Kayıt ve fotoğrafları tek seferde yaz: ya hepsi tepside, ya hiçbiri
+  await kayitDeposu.transaction('rw', [kayitDeposu.kayitlar, kayitDeposu.fotograflar], async () => {
     if (fotograflar.length > 0) {
-      if ((await telefonDeposu.fotograflar.count()) + fotograflar.length > EN_FAZLA_BEKLEYEN_FOTOGRAF) {
-        throw new Error('Bekleyen fotoğraf çok. İnternete bağlanın.');
-      }
       for (const foto of fotograflar) {
-        await telefonDeposu.fotograflar.add({ yol: foto.yol, veri: foto.veri, olusturuldu: simdi });
+        await kayitDeposu.fotograflar.add({ yol: foto.yol, veri: foto.veri, yazanId, olusturuldu: simdi });
       }
     }
-    // Sıra numarası: tepsideki en büyük + 1. Saate güvenilmez (aynı milisaniye, geri alınan saat).
-    const sonMektup = await telefonDeposu.gidenKutusu.orderBy('sira').last();
-    await telefonDeposu.gidenKutusu.add({
+    await kayitDeposu.kayitlar.add({
       id,
-      sira: (sonMektup?.sira ?? 0) + 1,
+      sira: await sonrakiSira(),               // saate güvenilmez (aynı milisaniye, geri alınan saat)
       yazanId,
+      otelId,
       tablo,
       icerik: beyan ? { id, created_at_device: simdi, ...icerik } : icerik,
       ...(ek.islem ? { islem: ek.islem } : {}),
       ...(ek.kosul ? { kosul: ek.kosul } : {}),
+      ozet: ek.ozet ?? tabloAdi(tablo, icerik),
       olusturuldu: simdi,
+      durum: 'bekliyor',
       deneme: 0,
       ...(fotograflar.length > 0 ? { fotografYollari: fotograflar.map((f) => f.yol) } : {}),
     });
@@ -64,21 +70,29 @@ export async function gidenKutusunaKoy(
 
 // "Oda Hazır": hangi maddeler tiklendi
 export function odaHazirBeyani(oda: Oda, tiklenenMaddeler: string[]): Promise<string> {
-  return gidenKutusunaKoy('room_cleanings', {
-    hotel_id: oda.hotel_id,
-    room_id: oda.id,
-    checked_items: tiklenenMaddeler,
-  });
+  return gidenKutusunaKoy(
+    'room_cleanings',
+    {
+      hotel_id: oda.hotel_id,
+      room_id: oda.id,
+      checked_items: tiklenenMaddeler,
+    },
+    { ozet: `Oda ${oda.number} · Temizlik` },
+  );
 }
 
 // "Eksik Var": hangi ürün, kaç adet
 export function eksikVarBeyani(oda: Oda, urunId: string, adet: number): Promise<string> {
-  return gidenKutusunaKoy('supply_reports', {
-    hotel_id: oda.hotel_id,
-    room_id: oda.id,
-    product_id: urunId,
-    quantity: adet,
-  });
+  return gidenKutusunaKoy(
+    'supply_reports',
+    {
+      hotel_id: oda.hotel_id,
+      room_id: oda.id,
+      product_id: urunId,
+      quantity: adet,
+    },
+    { ozet: `Oda ${oda.number} · Eksik bildirimi` },
+  );
 }
 
 // "Sorun Bildir": iki tür (Blueprint · 3.1): Arıza / Haşere. Ekranda sade sözlerle sorulur.
@@ -111,11 +125,17 @@ export function sorunBildirBeyani(oda: Oda, tur: SorunTuru, not: string, fotogra
       severity: tur.severity,
       ...(fotograf ? { photo_path: yol } : {}),
     },
-    { id, ...(fotograf ? { fotograf: { veri: fotograf, yol } } : {}) },
+    { id, ozet: `Oda ${oda.number} · Sorun bildirimi (${tur.etiket})`, ...(fotograf ? { fotograf: { veri: fotograf, yol } } : {}) },
   );
 }
 
-// Tepside kaç fotoğraf bekliyor? (50'yi aşarsa ekran "İnternete bağlanın" der — 002 · B.6)
-export function bekleyenFotografSayisi(): Promise<number> {
-  return telefonDeposu.fotograflar.count();
+// Tepside kaç fotoğraf GÖNDERİLMEYİ bekliyor? (50'yi aşarsa ekran "İnternete bağlanın" der — 002 · B.6)
+// Eski sürümün tepsisinde taşınmayı bekleyenler de sayılır. Reddedilip saklanan kayıtların fotoğrafları
+// sayılmaz: onlar gönderilmeyecek, internete bağlanmak onları azaltmaz — yeni bildirimi engellememeli.
+// Yüklenmiş ama kaydı henüz doğrulanmamış fotoğraflar sayılır: telefonda yer tutarlar, doğrulanınca silinirler.
+export async function bekleyenFotografSayisi(): Promise<number> {
+  const kuyruktakiler = await kayitDeposu.kayitlar.where('durum').anyOf(KUYRUK_DURUMLARI).toArray();
+  const yollar = kuyruktakiler.flatMap((k) => k.fotografYollari ?? []);
+  const bulunan = (await kayitDeposu.fotograflar.bulkGet(yollar)).filter(Boolean).length;
+  return bulunan + (await telefonDeposu.fotograflar.count());
 }
