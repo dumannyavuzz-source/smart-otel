@@ -10,6 +10,7 @@ import { kuyruk, type Kayit } from './kayitDeposu';
 import { gidenKutusunaKoy } from './beyanlar';
 import { aktifBaglam, aktifKullanici, ayniBaglamMi } from './kullanici';
 import { ortakBeyin } from './ortakBeyin';
+import { kimlikliKart } from './kimlik';
 import { PAKET_OLAYI, cevrimici, haberVer } from './olaylar';
 
 export type Isik = 'yesil' | 'sari' | 'kirmizi';
@@ -147,14 +148,21 @@ interface SunucuSatiri {
 }
 
 // Açık iş emirlerini sunucudan indir (internet varken). Bekleyen yerel değişiklikler korunur.
+// Karar 029: kart yoksa liste hiç sorulmaz ve telefondaki liste SİLİNMEZ. Geçerli kartla gelen boş liste
+// ("açık iş yok") gerçektir ve yazılır. Bağlam son yazma anında, işlemin içinde yeniden denetlenir.
+let indirmeSirasi = 0;
 export async function isEmirleriniIndir(): Promise<void> {
   if (!cevrimici()) return;
   const baglam = aktifBaglam();
+  const kart = await kimlikliKart(baglam.kullanici);
+  if (!kart) return;
+  const benimSiram = ++indirmeSirasi;
   const { data, error } = await ortakBeyin()
     .from('work_orders')
     .select('id, hotel_id, room_id, severity, due_at, created_at, assigned_to, status, rooms(number), issue_reports(description)')
-    .neq('status', 'resolved');
-  if (error || !data) return;
+    .neq('status', 'resolved')
+    .setHeader('Authorization', kart.yetki);
+  if (error || !Array.isArray(data)) return;
   // Liste yoldayken kişi ya da otel değiştiyse bu cevap eski kişinindir: yeni kişinin listesine yazılmaz.
   if (!ayniBaglamMi(baglam)) return;
 
@@ -173,10 +181,14 @@ export async function isEmirleriniIndir(): Promise<void> {
 
   // Kayıt kutusu ayrı bir veritabanı: bekleyenler işlemden önce okunur, işlem içinde uygulanır.
   const bekleyenler = await bekleyenGuncellemeler();
+  let yazildi = false;
   await telefonDeposu.transaction('rw', [telefonDeposu.isEmirleri], async () => {
+    // Son yazma anı: bekleyenler okunurken de kişi/otel değişmiş ya da daha yeni bir indirme başlamış olabilir.
+    if (!ayniBaglamMi(baglam) || benimSiram !== indirmeSirasi) return;
     await telefonDeposu.isEmirleri.clear();
     await telefonDeposu.isEmirleri.bulkPut(isler);
     await uygula(bekleyenler);
+    yazildi = true;
   });
-  haberVer(PAKET_OLAYI);
+  if (yazildi) haberVer(PAKET_OLAYI);
 }

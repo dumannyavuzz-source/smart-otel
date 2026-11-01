@@ -21,6 +21,7 @@ import {
 } from './kayitDeposu';
 import { eskiKutuyuTasi } from './tasima';
 import { ortakBeyin } from './ortakBeyin';
+import { kimlikliKart } from './kimlik';
 import { KUTU_DEGISTI_OLAYI, YENI_MEKTUP_OLAYI, cevrimici, haberVer } from './olaylar';
 import { aktifBaglam, aktifKullanici, aktifProfil, ayniBaglamMi, type Baglam } from './kullanici';
 import { isEmirleriniIndir, isEmriniSunucuyaGoreDuzelt } from './isEmirleri';
@@ -64,15 +65,29 @@ export function kaliciMi(kod: string | undefined, durum?: number): boolean {
   return true;
 }
 
+// Kart yoksa (kütüphane kartı yenileyemedi) gerçek gönderici/sorgulayıcı/yükleyici sunucuya hiç gitmez:
+// hata GEÇİCİDİR, kayıt kuyrukta kalır. Kimliksiz bir istek ne "reddedildi" ne de "sunucuda yok" sonucu
+// üretmez (karar 029). Kart her isteğin KENDİ başlığına konur; ortak istemcinin ayarı değişmez.
+export const OTURUM_KARTI_YOK = 'Oturum kartı yok ya da yenilenemedi; internet ve oturum düzelince yeniden denenecek.';
+
 // Gerçek gönderici: Ortak Beyin'e yazar ve yazılan satırı GERİ İSTER.
 //   Beyan      → yeni satır; aynı kimlik zaten varsa sunucu yok sayar ve satır dönmez (sonra sorulur).
 //   Güncelleme → koşula uyan satır güncellenir; hiçbir satır değişmezse satır dönmez (sonra sorulur).
 export const ortakBeyneGonder: Gonderici = async (kayit) => {
+  const kart = await kimlikliKart(kayit.yazanId);
+  if (!kart) return { ok: false, kalici: false, hata: OTURUM_KARTI_YOK };
   const tablo = ortakBeyin().from(kayit.tablo);
   const yanit =
     kayit.islem === 'guncelle'
-      ? await tablo.update(kayit.icerik).match(kayit.kosul ?? { id: kayit.id }).select(IS_EMRI_SUTUNLARI)
-      : await tablo.upsert(kayit.icerik, { onConflict: 'id', ignoreDuplicates: true }).select(eklemeSutunlari(kayit));
+      ? await tablo
+          .update(kayit.icerik)
+          .match(kayit.kosul ?? { id: kayit.id })
+          .select(IS_EMRI_SUTUNLARI)
+          .setHeader('Authorization', kart.yetki)
+      : await tablo
+          .upsert(kayit.icerik, { onConflict: 'id', ignoreDuplicates: true })
+          .select(eklemeSutunlari(kayit))
+          .setHeader('Authorization', kart.yetki);
 
   if (yanit.error) {
     return {
@@ -90,20 +105,25 @@ export const ortakBeyneGonder: Gonderici = async (kayit) => {
 export const ortakBeyindenSor: Sorgulayici = async (kayit) => {
   const guncelleme = kayit.islem === 'guncelle';
   const hedef = guncelleme ? (kayit.kosul?.id ?? kayit.id) : kayit.id;
+  const kart = await kimlikliKart(kayit.yazanId);
+  if (!kart) return { ok: false, hata: OTURUM_KARTI_YOK };   // "bilinmiyor": kimliksiz boş cevap "yok" sanılmaz
   const { data, error } = await ortakBeyin()
     .from(kayit.tablo)
     .select(guncelleme ? IS_EMRI_SUTUNLARI : eklemeSutunlari(kayit))
     .eq('id', hedef as string)
-    .maybeSingle();
+    .maybeSingle()
+    .setHeader('Authorization', kart.yetki);
   if (error) return { ok: false, hata: error.message };
   return { ok: true, satir: (data as unknown as SunucuSatiri | null) ?? null };
 };
 
 // Gerçek yükleyici: kilitli "photos" deposuna, otelin klasörüne.
 export const ortakBeyneYukle: Yukleyici = async (yol, veri) => {
+  const kart = await kimlikliKart(aktifKullanici());
+  if (!kart) return { ok: false, kalici: false, hata: OTURUM_KARTI_YOK };
   const { error } = await ortakBeyin()
     .storage.from('photos')
-    .upload(yol, veri, { contentType: 'image/jpeg', upsert: false });
+    .upload(yol, veri, { contentType: 'image/jpeg', upsert: false, headers: { Authorization: kart.yetki } });
 
   if (!error) return { ok: true };
 
@@ -400,20 +420,34 @@ async function guvenle<T extends { ok: boolean }>(is: () => Promise<T>): Promise
 }
 
 // Vardiya paketi: internet varken iner, telefonda saklanır. İnmezse eski paketle devam edilir.
+// Paket kişinin BÜTÜN otellerini kapsar (sunucu kuralı süzer): zincir sahibi diğer otelde de çevrimdışı çalışır.
+// Karar 029: kart yoksa paket hiç sorulmaz ve telefondaki paket SİLİNMEZ. Cevap yoldayken kişi/otel değiştiyse
+// ya da daha yeni bir indirme başladıysa cevap, son yazma anında (işlemin içinde) reddedilir.
+let paketSirasi = 0;
 export async function paketiIndir(): Promise<void> {
   if (!cevrimici()) return;
+  const baglam = aktifBaglam();
+  const kart = await kimlikliKart(baglam.kullanici);
+  if (!kart) return;
+  const benimSiram = ++paketSirasi;
   const beyin = ortakBeyin();
   const [odalar, listeler, urunler] = await Promise.all([
-    beyin.from('rooms').select('id, hotel_id, number, floor, staff_code').eq('is_active', true),
-    beyin.from('checklist_templates').select('id, hotel_id, name, items').eq('is_active', true),
-    beyin.from('products').select('id, hotel_id, name, unit').eq('is_active', true),
+    beyin
+      .from('rooms')
+      .select('id, hotel_id, number, floor, staff_code')
+      .eq('is_active', true)
+      .setHeader('Authorization', kart.yetki),
+    beyin.from('checklist_templates').select('id, hotel_id, name, items').eq('is_active', true).setHeader('Authorization', kart.yetki),
+    beyin.from('products').select('id, hotel_id, name, unit').eq('is_active', true).setHeader('Authorization', kart.yetki),
   ]);
   if (odalar.error || listeler.error || urunler.error) return;
+  if (!Array.isArray(odalar.data) || !Array.isArray(listeler.data) || !Array.isArray(urunler.data)) return;
 
   await telefonDeposu.transaction(
     'rw',
     [telefonDeposu.odalar, telefonDeposu.kontrolListeleri, telefonDeposu.urunler],
     async () => {
+      if (!ayniBaglamMi(baglam) || benimSiram !== paketSirasi) return;   // son yazma anı denetimi
       await telefonDeposu.odalar.clear();
       await telefonDeposu.odalar.bulkPut(odalar.data as Oda[]);
       await telefonDeposu.kontrolListeleri.clear();

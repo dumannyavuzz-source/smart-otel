@@ -3,7 +3,7 @@
 > **Hazırlayan:** Orkestratör · **Tarih:** 2026-09-21 · **Kimin için:** Genel Müdür
 > Canlıya çıkış adımları ayrı bir belgededir: `docs/deployment-checklist.md`.
 > Buradaki liste "sistem gerçekten çalışıyor mu?" sorusunu **elle** yanıtlamak içindir.
-> Uygulamanın kendi otomatik testleri ayrıca vardır: `cd app && npm test` (19 dosya · 180 test · 2026-10-24).
+> Uygulamanın kendi otomatik testleri ayrıca vardır: `cd app && npm test` (23 dosya · 222 test · 2026-11-01).
 
 ---
 
@@ -86,6 +86,23 @@ alamaz**. Tek hesapla zincirin tamamı denenemez; en az iki hesap ve iki ayrı t
 - [ ] Reddedilen kayıtta "Gördüm, arşivle"ye bas: ana ekrandaki uyarı kaybolmalı, kayıt **Arşiv**'de durmalı.
 - [ ] Ortak telefon: A kişisi internetsiz bir kayıt bıraksın ve çıksın; B girsin. B, A'nın kaydını ve fotoğrafını **görmemeli** (yalnızca "Başka kullanıcının 1 bekleyen kaydı var"). A tekrar girince kayıt gitmeli.
 - [ ] İki otelli hesap: A otelindeyken internetsiz kayıt bırak, B oteline geç, interneti aç. Kayıt **gitmemeli**, "Başka otelinizde 1 kayıt bekliyor" yazmalı. A oteline dönünce gitmeli.
+
+## 7c. Uzun bağlantı kesintisi ve oturum kartı (karar 029)
+
+- [ ] Giriş yap, oteli seç. İnterneti, giriş kartının süresi dolacak kadar uzun kes (kart ~1 saatliktir; kesinti
+  sırasında kalan süresi bitmesi yeter). İnterneti aç: ekran **asla "Otel bulunamadı" dememeli**; çalışma
+  ekranı ve odalar yerinde kalmalı. Birkaç dakika içinde bilgiler sunucudan sessizce tazelenmeli.
+- [ ] Aynı kesinti sırasında uygulamayı kapatıp aç: telefonda bilinen oteller varsa çalışma ekranı, yoksa
+  **"Bağlantı yok · Tekrar dene"** görünmeli (asla "Otel bulunamadı" değil).
+- [ ] Kesintide bırakılan kayıt (fotoğraflı da) internet gelince **bir kez** gitmeli; "Sunucu kabul etmedi"
+  olmamalı; fotoğraf kaybolmamalı.
+- [ ] Gerçek yetki iptali (yalnız deneme otelinde): müdür bir görevlinin **tek** üyeliğini kaldırsın. Görevli
+  internet varken uygulamayı açınca "Otel bulunamadı" görmeli. Üyelik geri eklenince düzelmeli.
+- [ ] Ortak telefon: A çıkar, B girer. B'nin ekranında A'nın otelleri, odaları ya da işleri hiç görünmemeli.
+- [ ] İki otelli B girişinde otel seçim ekranı gelince, seçim yapmadan bekle: A'nın odaları B'nin telefonuna
+  inmemeli; B otelini seçince yalnızca kendi otellerinin bilgileri görünmeli.
+- [ ] Çıkış'a bas ve hemen ekrana bak: giriş ekranı gelmeli ve birkaç saniye bekleyince **kendiliğinden geri
+  açılmamalı**. Ardından yeniden giriş yapınca normal açılmalı.
 
 ## 8. Yetki sınırları (en az yetki ilkesi)
 

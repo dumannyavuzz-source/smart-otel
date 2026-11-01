@@ -14,19 +14,32 @@ const sunucu = vi.hoisted(() => ({
   istekGeldi: () => {},
 }));
 
-vi.mock('./ortakBeyin', () => ({
-  ortakBeyin: () => ({
-    from: () => ({
-      select: () => ({
-        neq: async () => {
-          sunucu.istekGeldi();
-          if (sunucu.bekle) await sunucu.bekle;
-          return { data: sunucu.satirlar, error: null };
-        },
+// Karar 029: liste yalnızca geçerli kartla sorulur ve kart sorgunun kendi başlığına konur (setHeader).
+// Taklit, o anda giriş yapmış kişinin geçerli kartını verir.
+vi.mock('./ortakBeyin', async () => {
+  const { aktifKullanici } = await import('./kullanici');
+  return {
+    ortakBeyin: () => ({
+      auth: {
+        getSession: async () => ({
+          data: { session: { access_token: 'deneme-karti', expires_at: Math.floor(Date.now() / 1000) + 3600, user: { id: aktifKullanici() } } },
+          error: null,
+        }),
+      },
+      from: () => ({
+        select: () => ({
+          neq: () => ({
+            setHeader: async () => {
+              sunucu.istekGeldi();
+              if (sunucu.bekle) await sunucu.bekle;
+              return { data: sunucu.satirlar, error: null };
+            },
+          }),
+        }),
       }),
     }),
-  }),
-}));
+  };
+});
 
 function satir(id: string, otel: string, ek: Record<string, unknown> = {}): Record<string, unknown> {
   return {

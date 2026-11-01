@@ -13,8 +13,9 @@
 import { telefonDeposu, type Teslimat } from './telefonDeposu';
 import { KUYRUK_DURUMLARI, kayitDeposu } from './kayitDeposu';
 import { gidenKutusunaKoy } from './beyanlar';
-import { aktifKullanici, aktifProfil } from './kullanici';
+import { aktifBaglam, aktifKullanici, aktifProfil, ayniBaglamMi } from './kullanici';
 import { ortakBeyin } from './ortakBeyin';
+import { kimlikliKart } from './kimlik';
 import { PAKET_OLAYI, cevrimici, haberVer } from './olaylar';
 import { birimAdi, miktarMetni, yuvarla } from './miktar';
 
@@ -106,15 +107,23 @@ interface SunucuTalebi {
 
 // Onaylanmış ama henüz teslim alınmamış siparişleri telefona indir (internet varken).
 // Yalnızca çalışılan otelin siparişleri: zincir sahibi iki otelin listesini bir arada görmesin.
+// Karar 029: kart yoksa liste hiç sorulmaz ve telefondaki liste SİLİNMEZ. Cevap yoldayken kişi ya da otel
+// değiştiyse (zincir sahibi otel değiştirdi) ya da daha yeni bir indirme başladıysa son yazma anında reddedilir.
+let indirmeSirasi = 0;
 export async function teslimleriIndir(): Promise<void> {
-  const otelId = aktifProfil()?.otelId;
+  const baglam = aktifBaglam();
+  const otelId = baglam.otel;
   if (!cevrimici() || !otelId) return;
+  const kart = await kimlikliKart(baglam.kullanici);
+  if (!kart) return;
+  const benimSiram = ++indirmeSirasi;
   const { data, error } = await ortakBeyin()
     .from('purchase_requests')
     .select('id, hotel_id, quantity, created_by, created_at, products(name, unit), approvals(approved_quantity, created_by)')
     .eq('hotel_id', otelId)
-    .eq('status', 'approved');
-  if (error || !data) return;
+    .eq('status', 'approved')
+    .setHeader('Authorization', kart.yetki);
+  if (error || !Array.isArray(data)) return;
 
   const teslimler: Teslimat[] = (data as unknown as SunucuTalebi[]).map((talep) => {
     const onay = Array.isArray(talep.approvals) ? talep.approvals[0] : talep.approvals;
@@ -133,11 +142,14 @@ export async function teslimleriIndir(): Promise<void> {
 
   // Kayıt kutusu ayrı bir veritabanı: gönderilmemiş teslimler işlemden önce okunur.
   const gonderilmemis = await gonderilmemisTalepler();
+  let yazildi = false;
   await telefonDeposu.transaction('rw', [telefonDeposu.teslimler], async () => {
+    if (!ayniBaglamMi(baglam) || benimSiram !== indirmeSirasi) return;   // son yazma anı denetimi
     await telefonDeposu.teslimler.clear();
     await telefonDeposu.teslimler.bulkPut(teslimler.filter((t) => !gonderilmemis.has(t.id)));
+    yazildi = true;
   });
-  haberVer(PAKET_OLAYI);
+  if (yazildi) haberVer(PAKET_OLAYI);
 }
 
 // Bodrumda yazılmış ama henüz sunucuda doğrulanmamış teslimler listeden düşer:
